@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox spacing="25.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <GridPane hgap="25.0" prefHeight="503.0" prefWidth="1245.0" vgap="15.0">
+            <children>
+                <Label text="Dato: ">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Tidspunkt: " GridPane.rowIndex="1">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal elever:" GridPane.rowIndex="2">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal hold: " GridPane.rowIndex="3">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal lærere: " GridPane.rowIndex="4">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Klassetrin:" GridPane.rowIndex="6">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Valg af emne:" GridPane.rowIndex="5">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Skolens navn:" GridPane.columnIndex="2">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Postnummer:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="By:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Aalborg Kommune (Ja/Nej):" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Telefonnummer: " GridPane.columnIndex="2" GridPane.rowIndex="4">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Kontaktperson:" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Email: " GridPane.columnIndex="2" GridPane.rowIndex="6">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <TextField minWidth="300.0" prefWidth="200.0" text="12:30" GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+                <DatePicker minWidth="200.0" prefWidth="200.0" promptText="10/10/2018" GridPane.columnIndex="1"/>
+                <TextField minWidth="300.0" prefWidth="200.0" text="22" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <TextField minWidth="300.0" prefWidth="200.0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <TextField minWidth="300.0" prefWidth="200.0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <TextField minWidth="300.0" prefWidth="200.0" text="5" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <TextField minWidth="400.0" prefWidth="200.0" text="Aalborg Skole" GridPane.columnIndex="3"/>
+                <TextField minWidth="400.0" prefWidth="200.0" text="9000" GridPane.columnIndex="3"
+                           GridPane.rowIndex="1"/>
+                <TextField minWidth="400.0" prefWidth="400.0" text="Aalborg" GridPane.columnIndex="3"
+                           GridPane.rowIndex="2"/>
+                <TextField minWidth="400.0" prefWidth="200.0" text="12345678" GridPane.columnIndex="3"
+                           GridPane.rowIndex="4"/>
+                <TextField minWidth="400.0" prefWidth="200.0" text="mail@mail.dk" GridPane.columnIndex="3"
+                           GridPane.rowIndex="6"/>
+                <TextField minWidth="400.0" prefWidth="200.0" text="Peter Petersen" GridPane.columnIndex="3"
+                           GridPane.rowIndex="5"/>
+                <ChoiceBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="25.0"
+                      GridPane.columnIndex="3" GridPane.rowIndex="3">
+                    <children>
+                        <RadioButton mnemonicParsing="false" selected="true" text="Ja"/>
+                        <RadioButton mnemonicParsing="false" text="Nej"/>
+                    </children>
+                </HBox>
+                <Label text="Kommentar:" GridPane.rowIndex="9">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <TextArea prefHeight="150.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                <Label text="Lokale valgt:" GridPane.rowIndex="7">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Underviser valgt:" GridPane.rowIndex="8">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <TextField minWidth="300.0" prefWidth="200.0" text="Navn på underviser" GridPane.columnIndex="1"
+                           GridPane.rowIndex="8"/>
+                <Label text="Ændrer kategori:" GridPane.rowIndex="10">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="565.0" minWidth="10.0" prefWidth="154.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="410.0" minWidth="300.0" prefWidth="356.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="536.0" minWidth="10.0" prefWidth="205.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="400.0" prefWidth="400.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0"/>
+        <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="25.0">
+            <children>
+                <Button mnemonicParsing="false" text="Gem &amp; Luk">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</VBox>
