@@ -18,7 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Path"));
+            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/Pending.fxml"));
             primaryStage.setScene(new Scene(root));
             //primaryStage.setTitle("");
             primaryStage.setMaximized(true);
