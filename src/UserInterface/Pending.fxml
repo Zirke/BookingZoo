@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.PendingController">
     <children>
-        <VBox fx:id="bookingBox" layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="100.0">
+        <VBox fx:id="bookingBox" layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
             <padding>
                 <Insets left="10.0" right="10.0" top="10.0" />
             </padding>
@@ -42,137 +42,13 @@
                     </padding>
                 </HBox>
                 <Separator prefWidth="200.0" />
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0" style="-fx-border-color: lightblue;">
-                    <children>
-                        <Label text="Skoletjeneste">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="Peter Petersen      ">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="DD/MM/YYYY">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0" style="-fx-border-color: lightgrey;">
-                    <children>
-                        <Label text="Skoletjeneste">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="Fornavn Efternavn">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="DD/MM/YYYY">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0" style="-fx-border-color: lightgrey;">
-                    <children>
-                        <Label text="Skoletjeneste">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="Fornavn Efternavn">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="DD/MM/YYYY">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0" style="-fx-border-color: lightgrey;">
-                    <children>
-                        <Label text="Skoletjeneste">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="Fornavn Efternavn">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="DD/MM/YYYY">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0" style="-fx-border-color: lightgrey;">
-                    <children>
-                        <Label text="Skoletjeneste">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="Fornavn Efternavn">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <Label text="DD/MM/YYYY">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
+            <ListView fx:id="bookingList" />
             </children>
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0">
+        <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
                 <Separator prefWidth="200.0" />
                 <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Opdater">
@@ -232,7 +108,7 @@
                 <Insets left="10.0" right="10.0" />
             </padding>
         </VBox>
-        <VBox layoutX="770.0" layoutY="133.0" prefHeight="200.0" prefWidth="100.0" spacing="25.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="790.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+        <VBox layoutX="770.0" layoutY="133.0" prefHeight="200.0" prefWidth="100.0" spacing="25.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="770.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
                 <VBox>
                     <children>
@@ -364,19 +240,19 @@
                                 <Font size="16.0" />
                             </font>
                         </Label>
-                        <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
+                        <ChoiceBox fx:id="roomChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" />
                         <Label text="Tilføj underviser:" GridPane.rowIndex="1">
                             <font>
                                 <Font size="16.0" />
                             </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="300.0" text="Underviser tilføjes her" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField prefHeight="25.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Tilføj kommentar:" GridPane.rowIndex="2">
                             <font>
                                 <Font size="16.0" />
                             </font>
                         </Label>
-                        <TextArea maxHeight="150.0" maxWidth="300.0" prefHeight="150.0" prefWidth="300.0" text="Eventuelle kommentarer til bookingen skrives her." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextArea maxHeight="150.0" maxWidth="300.0" prefHeight="150.0" prefWidth="300.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -409,12 +285,5 @@
                 <Insets right="10.0" />
             </opaqueInsets>
         </VBox>
-        <ScrollBar layoutX="759.0" layoutY="100.0" orientation="VERTICAL" prefHeight="963.0" prefWidth="14.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="100.0" />
-        <HBox layoutX="25.0" layoutY="-23.0" prefHeight="80.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-        <Label layoutX="10.0" layoutY="10.0" text="Afventende">
-            <font>
-                <Font size="24.0" />
-            </font>
-        </Label>
     </children>
 </AnchorPane>
