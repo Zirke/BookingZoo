@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="UserInterface.ActiveController">
     <children>
         <VBox layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0"
               style="-fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="260.0"
@@ -209,7 +210,7 @@
                     <graphic>
                         <ImageView fitHeight="21.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@sync-512.png"/>
+                                <Image url="@../../../../../Users/Simon Park Kærgaard/Dropbox/Software AAU/3. semester/P3/sync-512.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -220,13 +221,13 @@
                         <Font size="24.0"/>
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0"
-                        style="-fx-background-color: lightblue;" text="Afventende">
+                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Afventende">
                     <font>
                         <Font size="24.0"/>
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Aktive">
+                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0"
+                        style="-fx-background-color: lightblue;" text="Aktive">
                     <font>
                         <Font size="24.0"/>
                     </font>
@@ -364,7 +365,7 @@
                                         <Font size="24.0"/>
                                     </font>
                                 </Label>
-                                <Label text="Afventende" GridPane.columnIndex="1">
+                                <Label text="Aktiv" GridPane.columnIndex="1">
                                     <font>
                                         <Font size="24.0"/>
                                     </font>
@@ -378,7 +379,8 @@
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <TextArea prefHeight="200.0" prefWidth="200.0" text="Eventuelle kundekommentarer vil blive vist her.">
+                <TextArea prefHeight="200.0" prefWidth="200.0"
+                          text="Eventuelle kommentarer fra kunden vil blive vist her.">
                     <font>
                         <Font size="16.0"/>
                     </font>
@@ -395,45 +397,51 @@
                         <RowConstraints vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Label text="Vælg lokale:">
+                        <Label text="Lokale valgt:">
                             <font>
                                 <Font size="16.0"/>
                             </font>
                         </Label>
-                        <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1"/>
-                        <Label text="Tilføj underviser:" GridPane.rowIndex="1">
+                        <Label text="Underviser valgt:" GridPane.rowIndex="1">
                             <font>
                                 <Font size="16.0"/>
                             </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="300.0" text="Underviser tilføjes her"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                        <Label text="Tilføj kommentar:" GridPane.rowIndex="2">
+                        <Label text="Kommentar:" GridPane.rowIndex="2">
                             <font>
                                 <Font size="16.0"/>
                             </font>
                         </Label>
                         <TextArea maxHeight="150.0" maxWidth="300.0" prefHeight="150.0" prefWidth="300.0"
-                                  text="Eventuelle kommentarer til bookingen skrives her." wrapText="true"
+                                  text="Eventuelle kommentarer til bookingen vises her." wrapText="true"
                                   GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <font>
                                 <Font size="14.0"/>
                             </font>
                         </TextArea>
+                        <Label text="Savannelokale" GridPane.columnIndex="1">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Label>
+                        <Label text="Lokale valgt:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Label>
                     </children>
                 </GridPane>
                 <VBox prefHeight="200.0" prefWidth="100.0">
                     <children>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                             <children>
-                                <Button mnemonicParsing="false" style="-fx-background-color: #30c237;"
-                                        text="Accepter booking" textFill="WHITE">
+                                <Button mnemonicParsing="false" style="-fx-background-color: #FF0000;"
+                                        text="Annuller booking" textFill="WHITE">
                                     <font>
                                         <Font size="16.0"/>
                                     </font>
                                 </Button>
-                                <Button mnemonicParsing="false" style="-fx-background-color: #FF0000;"
-                                        text="Annuller booking" textFill="WHITE">
+                                <Button mnemonicParsing="false" text="Rediger booking">
                                     <font>
                                         <Font size="16.0"/>
                                     </font>
@@ -454,7 +462,7 @@
                    style="-fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="100.0"/>
         <HBox layoutX="25.0" layoutY="-23.0" prefHeight="80.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0"
               AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"/>
-        <Label layoutX="10.0" layoutY="10.0" text="Afventende">
+        <Label layoutX="10.0" layoutY="10.0" text="Aktiv">
             <font>
                 <Font size="24.0"/>
             </font>
