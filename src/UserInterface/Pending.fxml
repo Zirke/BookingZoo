@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.PendingController">
     <children>
         <VBox fx:id="bookingBox" layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
@@ -130,86 +127,231 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="Dato: 10/10/2018" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Tidspunkt: 12:30" GridPane.rowIndex="3">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Antal elever: 22" GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Antal hold: 1" GridPane.rowIndex="5">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Antal lærere: 1" GridPane.rowIndex="6">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Klassetrin: 5" GridPane.rowIndex="8">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Valg af emne: Dyr derhjemme" GridPane.rowIndex="7">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Skolens navn: Aalborg Skole" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Postnummer: 9000" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="By: Aalborg" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Aalborg Kommune (Ja/Nej): Ja" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Telefonnummer: 12345678" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Kontaktperson: Peter Petersen" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label text="Email: mail@mail.dk" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                <Label GridPane.rowIndex="6">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
                                 </Label>
                                 <Label text="Skoletjeneste">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </Label>
                                 <Label text="Afventende" GridPane.columnIndex="1">
                                     <font>
-                                        <Font size="24.0" />
+                                        <Font size="24.0"/>
                                     </font>
                                 </Label>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Dato: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="dateLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="3">
+                                    <children>
+                                        <Label text="Tidspunkt: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="timeLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="4">
+                                    <children>
+                                        <Label text="Antal elever: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="pupilNoLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="5">
+                                    <children>
+                                        <Label text="Antal hold: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="teamNoLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="6">
+                                    <children>
+                                        <Label text="Antal lærere: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="teacherNoLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="8">
+                                    <children>
+                                        <Label text="Valg af emne: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="topicChoiceLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.rowIndex="7">
+                                    <children>
+                                        <Label text="Klassetrin: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="gradeLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Skolens navn: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="schoolNameLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <children>
+                                        <Label text="Postnummer: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="zipcodeLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <children>
+                                        <Label text="By: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="cityLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                    <children>
+                                        <Label text="Aalborg Kommune (Ja/Nej): ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="communeLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                    <children>
+                                        <Label text="Telefonnummer: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="phoneNumberLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                    <children>
+                                        <Label text="Kontaktperson: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="contactPersonLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                    <children>
+                                        <Label text="Email: ">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="emailLabel" text="Label">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
                             </children>
                         </GridPane>
                     </children>
