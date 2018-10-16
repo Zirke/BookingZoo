@@ -1,19 +1,33 @@
 package Bookings;
 
 public abstract class Booking {
-    public enum bookingType {Skoletjeneste, Boernefoedselsdag}
+    public enum bookingType {
+        Skoletjeneste {
+            @Override
+            public String toString() {
+                return "Skoletjeneste";
+            }
+        },
+        Boernefoedselsdag {
+            @Override
+            public String toString() {
+                return "Børnefødselsdag";
+            }
+        }
+    }
 
-    ;
+    public enum bookingStatus {Afventende, Aktiv, Faerdig, Arkiveret}
 
-    private bookingType type;
+    bookingType type;
+    private bookingStatus status;
     private String date;
     private String time;
     private String contactPerson;
-    private int phoneNumber;
+    private String phoneNumber;
     private String email;
     private String comment;
 
-    public Booking(bookingType type, String date, String time, String contactPerson, int phoneNumber, String email, String comment) {
+    public Booking(bookingType type, String date, String time, String contactPerson, String phoneNumber, String email, String comment) {
         this.type = type;
         this.date = date;
         this.time = time;
@@ -23,13 +37,6 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(bookingType type) {
-        this.type = type;
-    }
-
-    public bookingType getType() {
-        return type;
-    }
 
     public String getDate() {
         return date;
@@ -43,7 +50,7 @@ public abstract class Booking {
         return contactPerson;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -71,7 +78,7 @@ public abstract class Booking {
         this.contactPerson = contactPerson;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

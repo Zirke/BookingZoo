@@ -3,19 +3,22 @@ package Bookings;
 import java.util.Objects;
 
 public class LectureBooking extends Booking {
-    private int noOfPupils;
-    private int noOfTeams;
-    private int noOfTeachers;
-    private int grade;
+    private String noOfPupils;
+    private String noOfTeams;
+    private String noOfTeachers;
+    private String grade;
     private String choiceOfTopic;
     private String schoolName;
-    private int zipCode;
+    private String zipCode;
     private String city;
     private String commune;
-    private int schoolPhoneNumber;
-    private int eanNumber;
+    private String schoolPhoneNumber;
+    private String eanNumber;
 
-    public LectureBooking(bookingType type, String date, String time, String contactPerson, int phoneNumber, String email, String comment, int noOfPupils, int noOfTeams, int noOfTeachers, int grade, String choiceOfTopic, String schoolName, int zipCode, String city, int schoolPhoneNumber, int eanNumber) {
+    public LectureBooking(bookingType type, String date, String time, String contactPerson, String phoneNumber,
+                          String email, String comment, String noOfPupils, String noOfTeams, String noOfTeachers,
+                          String grade, String choiceOfTopic, String schoolName, String zipCode, String city,
+                          String commune, String schoolPhoneNumber, String eanNumber) {
         super(type, date, time, contactPerson, phoneNumber, email, comment);
         this.noOfPupils = noOfPupils;
         this.noOfTeams = noOfTeams;
@@ -25,39 +28,44 @@ public class LectureBooking extends Booking {
         this.schoolName = schoolName;
         this.zipCode = zipCode;
         this.city = city;
+        this.commune = commune;
         this.schoolPhoneNumber = schoolPhoneNumber;
         this.eanNumber = eanNumber;
     }
 
-    public int getNoOfPupils() {
+    public bookingType getType() {
+        return type;
+    }
+
+    public String getNoOfPupils() {
         return noOfPupils;
     }
 
-    public void setNoOfPupils(int noOfPupils) {
+    public void setNoOfPupils(String noOfPupils) {
         this.noOfPupils = noOfPupils;
     }
 
-    public int getNoOfTeams() {
+    public String getNoOfTeams() {
         return noOfTeams;
     }
 
-    public void setNoOfTeams(int noOfTeams) {
+    public void setNoOfTeams(String noOfTeams) {
         this.noOfTeams = noOfTeams;
     }
 
-    public int getNoOfTeachers() {
+    public String getNoOfTeachers() {
         return noOfTeachers;
     }
 
-    public void setNoOfTeachers(int noOfTeachers) {
+    public void setNoOfTeachers(String noOfTeachers) {
         this.noOfTeachers = noOfTeachers;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 
@@ -77,11 +85,11 @@ public class LectureBooking extends Booking {
         this.schoolName = schoolName;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 
@@ -93,19 +101,27 @@ public class LectureBooking extends Booking {
         this.city = city;
     }
 
-    public int getSchoolPhoneNumber() {
+    public String getCommune() {
+        return commune;
+    }
+
+    public void setCommune(String commune) {
+        this.commune = commune;
+    }
+
+    public String getSchoolPhoneNumber() {
         return schoolPhoneNumber;
     }
 
-    public void setSchoolPhoneNumber(int schoolPhoneNumber) {
+    public void setSchoolPhoneNumber(String schoolPhoneNumber) {
         this.schoolPhoneNumber = schoolPhoneNumber;
     }
 
-    public int getEanNumber() {
+    public String getEanNumber() {
         return eanNumber;
     }
 
-    public void setEanNumber(int eanNumber) {
+    public void setEanNumber(String eanNumber) {
         this.eanNumber = eanNumber;
     }
 
@@ -118,12 +134,18 @@ public class LectureBooking extends Booking {
                 Objects.equals(noOfTeams, that.noOfTeams) &&
                 Objects.equals(noOfTeachers, that.noOfTeachers) &&
                 Objects.equals(grade, that.grade) &&
-                Objects.equals(schoolName, that.schoolName);
+                Objects.equals(choiceOfTopic, that.choiceOfTopic) &&
+                Objects.equals(schoolName, that.schoolName) &&
+                Objects.equals(zipCode, that.zipCode) &&
+                Objects.equals(city, that.city) &&
+                Objects.equals(commune, that.commune) &&
+                Objects.equals(schoolPhoneNumber, that.schoolPhoneNumber) &&
+                Objects.equals(eanNumber, that.eanNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noOfPupils, noOfTeams, noOfTeachers, grade, schoolName);
+        return Objects.hash(noOfPupils, noOfTeams, noOfTeachers, grade, choiceOfTopic, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
     }
 
     @Override
