@@ -7,12 +7,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.PendingController">
     <children>
-        <VBox layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0"
-              style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0"
-              AnchorPane.topAnchor="10.0">
+        <VBox layoutX="418.0" layoutY="320.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;"
+              AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
             <padding>
                 <Insets left="10.0" right="10.0" top="10.0" />
             </padding>
@@ -43,7 +42,7 @@
                     </padding>
                 </HBox>
                 <Separator prefWidth="200.0" />
-                <ListView fx:id="bookingListView"/>
+                <ListView fx:id="bookingListView" prefHeight="990.0" prefWidth="478.0"/>
             </children>
             <opaqueInsets>
                 <Insets />
