@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.PendingController">
     <children>
         <VBox fx:id="bookingBox" layoutX="418.0" layoutY="320.0" prefHeight="200.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
@@ -73,7 +73,7 @@
                         <Font size="18.0" />
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Aktive">
+                <Button fx:id="activeButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Aktive">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -92,7 +92,8 @@
                 <Separator prefWidth="200.0" />
                 <VBox alignment="BOTTOM_CENTER" prefHeight="736.0" prefWidth="230.0">
                     <children>
-                        <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="178.0" text="Opret ny booking">
+                        <Button fx:id="createNewBookingButton" mnemonicParsing="false" prefHeight="42.0"
+                                prefWidth="178.0" text="Opret ny booking">
                             <font>
                                 <Font size="19.0" />
                             </font>

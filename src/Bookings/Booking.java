@@ -19,7 +19,7 @@ public abstract class Booking {
     public enum bookingStatus {Afventende, Aktiv, Faerdig, Arkiveret}
 
     bookingType type;
-    private bookingStatus status;
+    private bookingStatus status = bookingStatus.Afventende;
     private String date;
     private String time;
     private String contactPerson;
@@ -37,6 +37,13 @@ public abstract class Booking {
         this.comment = comment;
     }
 
+    public bookingType getType() {
+        return type;
+    }
+
+    public bookingStatus getStatus() {
+        return status;
+    }
 
     public String getDate() {
         return date;

@@ -1,7 +1,5 @@
 package Bookings;
 
-import java.util.Objects;
-
 public class LectureBooking extends Booking {
     private String noOfPupils;
     private String noOfTeams;
@@ -125,6 +123,7 @@ public class LectureBooking extends Booking {
         this.eanNumber = eanNumber;
     }
 
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,7 +146,7 @@ public class LectureBooking extends Booking {
     public int hashCode() {
         return Objects.hash(noOfPupils, noOfTeams, noOfTeachers, grade, choiceOfTopic, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
     }
-
+    */
     @Override
     public String toString() {
         return getType() + "\t" + "\t" + "\t" + "\t" +
