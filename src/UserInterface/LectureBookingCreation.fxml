@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox prefHeight="700.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="700.0" spacing="10.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.LectureBookingCreationController">
     <children>
         <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                   vgap="10.0">
@@ -95,7 +96,7 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label text="Lokale valgt:" GridPane.rowIndex="8">
+                <Label text="Lokale valg:" GridPane.rowIndex="8">
                     <padding>
                         <Insets left="10.0"/>
                     </padding>
@@ -103,7 +104,7 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <Label text="Underviser valgt:" GridPane.rowIndex="9">
+                <Label text="Underviser valg:" GridPane.rowIndex="9">
                     <padding>
                         <Insets left="10.0"/>
                     </padding>
@@ -189,8 +190,10 @@
                 <TextField GridPane.columnIndex="3" GridPane.rowIndex="7"/>
                 <TextField GridPane.columnIndex="3" GridPane.rowIndex="8"/>
                 <TextField GridPane.columnIndex="3" GridPane.rowIndex="9"/>
-                <ChoiceBox prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-                <ChoiceBox prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <ChoiceBox fx:id="topicChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="6"/>
+                <ChoiceBox fx:id="lectureRoomChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="8"/>
                 <Label text="EAN nummer:" GridPane.columnIndex="2" GridPane.rowIndex="6">
                     <padding>
                         <Insets left="10.0"/>
@@ -253,7 +256,6 @@
                           GridPane.rowIndex="1"/>
             </children>
         </GridPane>
-        <HBox alignment="CENTER_LEFT" spacing="35.0"/>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="0.0" prefWidth="596.0" spacing="25.0">
             <children>
                 <Button fx:id="createAndCloseButton" mnemonicParsing="false" text="Opret &amp; Luk">
@@ -261,16 +263,15 @@
                         <Font size="14.0"/>
                     </font>
                 </Button>
-                <Button fx:id="cancelButton" mnemonicParsing="false" text="Annuller">
+                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindow" text="Annuller">
                     <font>
                         <Font size="14.0"/>
                     </font>
                 </Button>
             </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" spacing="40.0"/>
     </children>
     <padding>
-        <Insets bottom="10.0" left="25.0" right="35.0" top="10.0"/>
+        <Insets bottom="10.0" left="35.0" right="35.0" top="10.0"/>
     </padding>
 </VBox>

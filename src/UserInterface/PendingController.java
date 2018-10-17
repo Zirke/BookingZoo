@@ -6,25 +6,15 @@ import Bookings.LectureBooking;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class PendingController {
+public class PendingController extends GeneralController {
     @FXML
-    private ChoiceBox roomChoiceBox;
+    private Button activeButton;
     @FXML
-    private GridPane bookingInformationPane;
-    @FXML
-    private Button createNewBookingButton, activeButton;
+    private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
     private TextArea customerCommentArea;
     @FXML
@@ -61,11 +51,16 @@ public class PendingController {
         loadBookingsToListView(listOfBookings);
 
         /* Event handlers */
+
+        //Displays information of the clicked booking in ListView
         bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
-        createNewBookingButton.setOnMouseClicked(e -> changeToActiveBookings());
+        //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
+        lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
+        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
     }
 
+    //Takes an ArrayList of bookings to load into ListView of bookings
     private void loadBookingsToListView(ArrayList<Booking> listOfBookings) {
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking booking : listOfBookings) {
@@ -75,7 +70,6 @@ public class PendingController {
     }
 
     private void showSelectedBookingInformation() {
-        //for (Booking temp : listOfBookings) {
         if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             lectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
         } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
@@ -83,51 +77,61 @@ public class PendingController {
         }
     }
 
-    //TODO change the statusLabel according to the status of the booking
-    private void lectureBookingInformation(LectureBooking selectedBooking) {
-        bookingTypeLabel.setText((selectedBooking.getType().toString()));
-        bookingStatusLabel.setText(selectedBooking.getStatus().toString());
-        dateLabel.setText(selectedBooking.getDate());
-        timeLabel.setText(selectedBooking.getTime());
-        pupilNoLabel.setText(selectedBooking.getNoOfPupils());
-        teamNoLabel.setText(selectedBooking.getNoOfTeams());
-        teacherNoLabel.setText(selectedBooking.getNoOfTeachers());
-        gradeLabel.setText(selectedBooking.getGrade());
-        topicChoiceLabel.setText(selectedBooking.getChoiceOfTopic());
-        schoolNameLabel.setText(selectedBooking.getSchoolName());
-        schoolPhoneNumberLabel.setText(selectedBooking.getSchoolPhoneNumber());
-        zipcodeLabel.setText(selectedBooking.getZipCode());
-        cityLabel.setText(selectedBooking.getCity());
-        communeLabel.setText(selectedBooking.getCommune());
-        phoneNumberLabel.setText(selectedBooking.getPhoneNumber());
-        contactPersonLabel.setText(selectedBooking.getContactPerson());
-        emailLabel.setText(selectedBooking.getEmail());
-        eanLabel.setText(selectedBooking.getEanNumber());
-        customerCommentArea.setText(selectedBooking.getComment());
+    //Changes text on all labels corresponding to the chosen booking in ListView
+    private void lectureBookingInformation(LectureBooking selectedLectureBooking) {
+        bookingTypeLabel.setText(selectedLectureBooking.getType().toString());
+        bookingStatusLabel.setText(selectedLectureBooking.getStatus().toString());
+        dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
+        timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getTime());
+        pupilNoLabel.setText("Antal elever " + selectedLectureBooking.getNoOfPupils());
+        teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
+        teacherNoLabel.setText("Antal lærere: " + selectedLectureBooking.getNoOfTeachers());
+        gradeLabel.setText("Klassetrin: " + selectedLectureBooking.getGrade());
+        topicChoiceLabel.setText("Valg af emne: " + selectedLectureBooking.getChoiceOfTopic());
+        communeLabel.setText("Aalborg Kommune (Ja/Nej): " + selectedLectureBooking.getCommune());
+        schoolNameLabel.setText("Skolens navn: " + selectedLectureBooking.getSchoolName());
+        schoolPhoneNumberLabel.setText("Skolens telefonnummer: " + selectedLectureBooking.getSchoolPhoneNumber());
+        zipcodeLabel.setText("Postnummer: " + selectedLectureBooking.getZipCode());
+        cityLabel.setText("By: " + selectedLectureBooking.getCity());
+        contactPersonLabel.setText("Kontaktperson: " + selectedLectureBooking.getContactPerson());
+        phoneNumberLabel.setText("Telefonnummer: " + selectedLectureBooking.getPhoneNumber());
+        emailLabel.setText("E-mail: " + selectedLectureBooking.getEmail());
+        eanLabel.setText("EAN nummer: " + selectedLectureBooking.getEanNumber());
+        customerCommentArea.setText(selectedLectureBooking.getComment());
+        customerCommentArea.setEditable(false);
+
+        communeLabel.setVisible(true);
+        cityLabel.setVisible(true);
+        contactPersonLabel.setVisible(true);
+        phoneNumberLabel.setVisible(true);
+        emailLabel.setVisible(true);
+        eanLabel.setVisible(true);
+    }
+
+    private void arrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
+        bookingTypeLabel.setText(selectedArrangementBooking.getType().toString());
+        bookingStatusLabel.setText(selectedArrangementBooking.getStatus().toString());
+        dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
+        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getTime());
+        pupilNoLabel.setText("Antal børn " + selectedArrangementBooking.getNoOfChildren());
+        teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
+        teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
+        gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
+        topicChoiceLabel.setText("Valg af menu: " + selectedArrangementBooking.getMenuChosen());
+        schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getContactPerson());
+        schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getPhoneNumber());
+        zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getEmail());
+
+        communeLabel.setVisible(false);
+        cityLabel.setVisible(false);
+        contactPersonLabel.setVisible(false);
+        phoneNumberLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        eanLabel.setVisible(false);
+        customerCommentArea.setText(selectedArrangementBooking.getComment());
         customerCommentArea.setEditable(false);
     }
 
-    private void arrangementBookingInformation(ArrangementBooking selectedBooking) {
-        System.out.println("Arrangement booking clicked: " + selectedBooking.toString());
-    }
-
-    @FXML
-    private void changeToActiveBookings() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateNewBooking.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (root != null) {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.DECORATED);
-            stage.showAndWait();
-        }
-    }
 
 }
 
