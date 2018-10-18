@@ -7,54 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.PendingController">
     <children>
-        <VBox layoutX="418.0" layoutY="320.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;"
-              AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
-            <padding>
-                <Insets left="10.0" right="10.0" top="10.0" />
-            </padding>
-            <children>
-                <TextField fx:id="searchField" promptText="Søg efter booking">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </TextField>
-                <Separator prefWidth="200.0"/>
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <Label text="Type           ">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                        <Label text="Kontaktperson       " GridPane.columnIndex="1">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                        <Label text="Dato" GridPane.columnIndex="2">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                    </children>
-                </GridPane>
-                <ListView fx:id="bookingListView" prefHeight="925.0" prefWidth="478.0"/>
-            </children>
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-        </VBox>
         <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
@@ -77,8 +32,7 @@
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0"
-                        style="-fx-background-color: lightblue;" text="Afventende">
+                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Afventende">
                     <font>
                         <Font size="16.0"/>
                     </font>
@@ -121,6 +75,55 @@
             <padding>
                 <Insets left="10.0" right="10.0" />
             </padding>
+        </VBox>
+        <VBox layoutX="418.0" layoutY="320.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;"
+              AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="10.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <TextField fx:id="searchField" promptText="Søg efter booking">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+                <Separator prefWidth="200.0"/>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label text="Type           ">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Label>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Kontaktperson       "
+                               GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                            <padding>
+                                <Insets left="25.0"/>
+                            </padding>
+                        </Label>
+                        <Label text="Dato" GridPane.columnIndex="2">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </GridPane>
+                <ListView fx:id="bookingListView" prefWidth="478.0" VBox.vgrow="ALWAYS"/>
+            </children>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
         </VBox>
         <VBox layoutX="770.0" layoutY="133.0" prefHeight="200.0" prefWidth="100.0" spacing="25.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="770.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
@@ -307,7 +310,7 @@
                         </HBox>
                     </children>
                 </GridPane>
-                <Label text="Kundekommentar:">
+                <Label fx:id="customerCommentLabel" text="Kundekommentar:">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -319,14 +322,14 @@
                 </TextArea>
                 <HBox prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                     <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #30c237;" text="Accepter booking"
-                                textFill="WHITE">
+                        <Button fx:id="acceptBookingButton" mnemonicParsing="false"
+                                style="-fx-background-color: #30c237;" text="Accepter booking" textFill="WHITE">
                             <font>
                                 <Font size="16.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #FF0000;" text="Annuller booking"
-                                textFill="WHITE">
+                        <Button fx:id="cancelBookingButton" mnemonicParsing="false"
+                                style="-fx-background-color: #FF0000;" text="Annuller booking" textFill="WHITE">
                             <font>
                                 <Font size="16.0"/>
                             </font>

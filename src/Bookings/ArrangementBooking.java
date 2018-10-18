@@ -116,8 +116,9 @@ public class ArrangementBooking extends Booking {
 
     @Override
     public String toString() {
-        return getType() + "\t" + "\t" + "\t" +
-                getContactPerson() + "\t" + "\t" + "\t" + "\t" + "\t" +
-                getDate();
+        return getType() + "\t" +
+                getContactPerson() + "\t" +
+                getDate() + "\t" +
+                getStatus();
     }
 }

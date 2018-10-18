@@ -10,26 +10,36 @@ import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PendingController extends GeneralController {
+
     @FXML
-    private Button activeButton;
+    private Button activeBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
+
     @FXML
     private TextField searchField;
     @FXML
-    private TextArea customerCommentArea;
-    @FXML
     private ListView bookingListView;
+
+    //Nodes for booking information display area
     @FXML
-    private Label bookingTypeLabel, bookingStatusLabel, dateLabel, timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel,
+    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, dateLabel, timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel,
             gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel,
             phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
+    @FXML
+    private TextArea customerCommentArea;
+    @FXML
+    private Button acceptBookingButton, cancelBookingButton;
 
     @FXML
     public void initialize() {
+        customerCommentLabel.setVisible(false);
+        customerCommentArea.setVisible(false);
+        acceptBookingButton.setVisible(false);
+        cancelBookingButton.setVisible(false);
+
         LectureBooking booking1 = new LectureBooking(Booking.bookingType.Skoletjeneste, "12/10/2019",
                 "12:45", "Jens Jensen", "30406010", "mail@mail.com",
                 "Kommentaren her er lol", "5", "5", "5", "5",
@@ -59,27 +69,26 @@ public class PendingController extends GeneralController {
         for (Booking temp : listOfBookings) {
             listOfContactPersonNames.add(temp.getContactPerson());
         }
-        List<String> contactPersons = listOfContactPersonNames;
         String[] options = listOfContactPersonNames.toArray(new String[0]);
         TextFields.bindAutoCompletion(searchField, options);
 
-        searchField.setOnAction(e -> {
-            if (searchField.getText().isEmpty()) {
-                loadBookingsToListView(listOfBookings);
-            }
-        });
-
         /* Event handlers */
-
         //Displays information of the clicked booking in ListView
         bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
         //Shows searched for booking in ListView
-        searchField.setOnAction(e -> showSearchedForBookingsInListView(listOfBookings));
+        searchField.setOnKeyTyped(e -> {
+            if (searchField.getText().isEmpty()) {
+                loadBookingsToListView(listOfBookings);
+            } else showSearchedForBookingsInListView(listOfBookings);
+        });
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
         arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
+
+        //Accepting the selected booking when pressing acceptBookingButton
+        //acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking());
     }
 
     //Takes an ArrayList of bookings to load into ListView of bookings
@@ -111,8 +120,22 @@ public class PendingController extends GeneralController {
         }
     }
 
+    private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
+
+        if (bookingListView.getSelectionModel().getSelectedItem() != null) {
+            //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
+
+        }
+    }
+
+
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void lectureBookingInformation(LectureBooking selectedLectureBooking) {
+        customerCommentLabel.setVisible(true);
+        customerCommentArea.setVisible(true);
+        acceptBookingButton.setVisible(true);
+        cancelBookingButton.setVisible(true);
+
         bookingTypeLabel.setText(selectedLectureBooking.getType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getStatus().toString());
         dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
@@ -143,6 +166,11 @@ public class PendingController extends GeneralController {
     }
 
     private void arrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
+        customerCommentLabel.setVisible(true);
+        customerCommentArea.setVisible(true);
+        acceptBookingButton.setVisible(true);
+        cancelBookingButton.setVisible(true);
+
         bookingTypeLabel.setText(selectedArrangementBooking.getType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getStatus().toString());
         dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
