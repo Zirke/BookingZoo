@@ -1,5 +1,5 @@
 package UserInterface;
-//
+
 import Bookings.ArrangementBooking;
 import Bookings.Booking;
 import Bookings.LectureBooking;
