@@ -1,5 +1,6 @@
 package Bookings;
 
+//
 public abstract class Booking {
     public enum bookingType {
         Skoletjeneste {
