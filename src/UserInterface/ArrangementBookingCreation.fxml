@@ -158,19 +158,19 @@
                </font>
             </Label>
              <RadioButton mnemonicParsing="false" text="Kakao, boller og kage" GridPane.columnIndex="3"
-                          GridPane.rowIndex="3">
+                          GridPane.rowIndex="4">
                <toggleGroup>
                    <ToggleGroup fx:id="menuGroup"/>
                </toggleGroup>
             </RadioButton>
              <RadioButton mnemonicParsing="false" text="Frikadeller og dessert" toggleGroup="$menuGroup"
-                          GridPane.columnIndex="3" GridPane.rowIndex="4"/>
-             <RadioButton mnemonicParsing="false" text="Pasta m. kødsovs og dessert" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="5"/>
-             <RadioButton mnemonicParsing="false" text="Nuggets og pommes frites" toggleGroup="$menuGroup"
+             <RadioButton mnemonicParsing="false" text="Pasta m. kødsovs og dessert" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-             <RadioButton mnemonicParsing="false" text="Ingen mad" toggleGroup="$menuGroup" GridPane.columnIndex="3"
-                          GridPane.rowIndex="7"/>
+             <RadioButton mnemonicParsing="false" text="Nuggets og pommes frites" toggleGroup="$menuGroup"
+                          GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+             <RadioButton mnemonicParsing="false" selected="true" text="Ingen mad" toggleGroup="$menuGroup"
+                          GridPane.columnIndex="3" GridPane.rowIndex="3"/>
              <TextField fx:id="contactPersonTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
                         GridPane.rowIndex="6"/>
              <TextField fx:id="emailTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
