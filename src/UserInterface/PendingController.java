@@ -9,10 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class PendingController extends GeneralController {
     @FXML
@@ -31,7 +29,7 @@ public class PendingController extends GeneralController {
             phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
 
     @FXML
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize() {
         LectureBooking booking1 = new LectureBooking(Booking.bookingType.Skoletjeneste, "12/10/2019",
                 "12:45", "Jens Jensen", "30406010", "mail@mail.com",
                 "Kommentaren her er lol", "5", "5", "5", "5",
@@ -57,17 +55,27 @@ public class PendingController extends GeneralController {
         loadBookingsToListView(listOfBookings);
 
         /* Search field controlsfx */
-
-        List<Booking> booking = new ArrayList<>();
-        booking = listOfBookings; //TODO tilføj listen af bookings her
-        Booking[] options = booking.toArray(new Booking[0]);
-
+        ArrayList<String> listOfContactPersonNames = new ArrayList<>();
+        for (Booking temp : listOfBookings) {
+            listOfContactPersonNames.add(temp.getContactPerson());
+        }
+        List<String> contactPersons = listOfContactPersonNames;
+        String[] options = listOfContactPersonNames.toArray(new String[0]);
         TextFields.bindAutoCompletion(searchField, options);
+
+        searchField.setOnAction(e -> {
+            if (searchField.getText().isEmpty()) {
+                loadBookingsToListView(listOfBookings);
+            }
+        });
 
         /* Event handlers */
 
         //Displays information of the clicked booking in ListView
         bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
+
+        //Shows searched for booking in ListView
+        searchField.setOnAction(e -> showSearchedForBookingsInListView(listOfBookings));
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
@@ -88,6 +96,18 @@ public class PendingController extends GeneralController {
             lectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
         } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
             arrangementBookingInformation((ArrangementBooking) bookingListView.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    private void showSearchedForBookingsInListView(ArrayList<Booking> listOfBookings) {
+        for (Booking temp : listOfBookings) {
+            String enteredBooking = searchField.getText();
+            if (temp.getContactPerson().equals(enteredBooking)) {
+                bookingListView.getSelectionModel().clearSelection();
+                ObservableList<Booking> bookings = FXCollections.observableArrayList();
+                bookings.add(temp);
+                bookingListView.setItems(bookings);
+            }
         }
     }
 

@@ -165,7 +165,7 @@
             </RadioButton>
              <RadioButton mnemonicParsing="false" text="Frikadeller og dessert" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="4"/>
-             <RadioButton mnemonicParsing="false" text="Kødsovs og dessert" toggleGroup="$menuGroup"
+             <RadioButton mnemonicParsing="false" text="Pasta m. kødsovs og dessert" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="5"/>
              <RadioButton mnemonicParsing="false" text="Nuggets og pommes frites" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
