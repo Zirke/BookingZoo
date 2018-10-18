@@ -1,5 +1,6 @@
 package Bookings;
 
+//
 public class LectureBooking extends Booking {
     private String noOfPupils;
     private String noOfTeams;
