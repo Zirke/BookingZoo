@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.PendingController">
     <children>
         <VBox layoutX="418.0" layoutY="320.0" prefWidth="500.0" spacing="10.0" style="-fx-border-color: black;"
@@ -16,39 +16,47 @@
                 <Insets left="10.0" right="10.0" top="10.0" />
             </padding>
             <children>
-                <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="40.0">
+                <TextField fx:id="searchField" promptText="Søg efter booking">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextField>
+                <Separator prefWidth="200.0"/>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                    </rowConstraints>
                     <children>
                         <Label text="Type           ">
                             <font>
-                                <Font name="System Bold" size="18.0" />
+                                <Font size="16.0"/>
                             </font>
                         </Label>
-                        <Label text="Kontaktperson       ">
+                        <Label text="Kontaktperson       " GridPane.columnIndex="1">
                             <font>
-                                <Font name="System Bold" size="18.0" />
+                                <Font size="16.0"/>
                             </font>
                         </Label>
-                        <Label text="Dato">
+                        <Label text="Dato" GridPane.columnIndex="2">
                             <font>
-                                <Font name="System Bold" size="18.0" />
+                                <Font size="16.0"/>
                             </font>
                         </Label>
                     </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <padding>
-                        <Insets left="25.0" />
-                    </padding>
-                </HBox>
-                <Separator prefWidth="200.0" />
-                <ListView fx:id="bookingListView" prefHeight="990.0" prefWidth="478.0"/>
+                </GridPane>
+                <ListView fx:id="bookingListView" prefHeight="925.0" prefWidth="478.0"/>
             </children>
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+        <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
                 <Separator prefWidth="200.0" />
                 <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Opdater">

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox prefHeight="700.0" spacing="10.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1"
+<VBox prefHeight="700.0" spacing="10.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.LectureBookingCreationController">
     <children>
         <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -177,19 +177,24 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
-                <DatePicker prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                <TextField prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="7"/>
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="8"/>
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="9"/>
+                <TextField fx:id="timeTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <TextField fx:id="noOfPupilsTextField" prefWidth="250.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="3"/>
+                <TextField fx:id="noOfTeamsTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <TextField fx:id="noOfTeachersTextField" prefWidth="250.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="5"/>
+                <TextField fx:id="gradeTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <TextField fx:id="lecturerChosenTextField" prefWidth="250.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="9"/>
+                <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
+                            GridPane.rowIndex="1"/>
+                <TextField fx:id="schoolNameTextField" prefWidth="250.0" GridPane.columnIndex="3"
+                           GridPane.rowIndex="1"/>
+                <TextField fx:id="zipCodeTextField" prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                <TextField fx:id="cityTextField" prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                <TextField fx:id="contactPersonTextField" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+                <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="3" GridPane.rowIndex="8"/>
+                <TextField fx:id="emailTextField" GridPane.columnIndex="3" GridPane.rowIndex="9"/>
                 <ChoiceBox fx:id="topicChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
                            GridPane.rowIndex="6"/>
                 <ChoiceBox fx:id="lectureRoomChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
@@ -213,13 +218,17 @@
                         <Font size="14.0"/>
                     </font>
                 </Label>
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+                <TextField fx:id="eanNumberTextField" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+                <TextField fx:id="schoolPhoneNumberTextField" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0"
                       GridPane.columnIndex="3" GridPane.rowIndex="4">
                     <children>
-                        <RadioButton mnemonicParsing="false" text="Ja"/>
-                        <RadioButton mnemonicParsing="false" text="Nej"/>
+                        <RadioButton mnemonicParsing="false" text="Ja">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="communeGroup"/>
+                            </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$communeGroup"/>
                     </children>
                 </HBox>
             </children>
@@ -250,10 +259,10 @@
                         <Insets left="10.0"/>
                     </padding>
                 </Label>
-                <TextArea prefHeight="125.0" prefWidth="325.0" promptText="Kommentar fra kunden"
-                          GridPane.columnIndex="1"/>
-                <TextArea prefHeight="125.0" prefWidth="325.0" promptText="Egen kommentar" GridPane.columnIndex="1"
-                          GridPane.rowIndex="1"/>
+                <TextArea fx:id="customerCommentTextArea" prefHeight="125.0" prefWidth="325.0"
+                          promptText="Kommentar fra kunden" GridPane.columnIndex="1"/>
+                <TextArea fx:id="commentTextArea" prefHeight="125.0" prefWidth="325.0" promptText="Egen kommentar"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
         </GridPane>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="0.0" prefWidth="596.0" spacing="25.0">

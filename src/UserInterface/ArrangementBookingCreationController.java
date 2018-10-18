@@ -15,7 +15,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     private TextField noOfChildrenTextField, childNameTextField, childAgeTextField, contactPersonTextField,
             phoneNumberTextField, emailTextField;
     @FXML
-    private TextArea customerCommentTextField, commentTextField;
+    private TextArea customerCommentTextArea, commentTextArea;
 
     @FXML
     private Button createAndCloseButton, cancelButton;
@@ -33,7 +33,10 @@ public class ArrangementBookingCreationController extends GeneralController {
         String participant = participantGroup.getSelectedToggle().toString();
         String menuChoice = menuGroup.getSelectedToggle().toString();
 
-        System.out.println("Booking created:\n" + date + time + noOfChildren + childName + childAge + contactPerson + phoneNumber + email + participant + menuChoice);
+        String customerComment = customerCommentTextArea.getText();
+        String comment = commentTextArea.getText();
+
+        System.out.println("Booking created:\n" + date + time + noOfChildren + childName + childAge + contactPerson + phoneNumber + email + participant + menuChoice + customerComment + comment);
 
         showAlertBox(Alert.AlertType.CONFIRMATION, "", "Er den indtastede information korrekt?");
     }
