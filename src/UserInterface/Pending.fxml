@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.PendingController">
     <children>
         <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
@@ -330,6 +330,11 @@
                         </Button>
                         <Button fx:id="cancelBookingButton" mnemonicParsing="false"
                                 style="-fx-background-color: #FF0000;" text="Annuller booking" textFill="WHITE">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Button>
+                        <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking">
                             <font>
                                 <Font size="16.0"/>
                             </font>

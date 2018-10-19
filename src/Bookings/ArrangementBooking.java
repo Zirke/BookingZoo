@@ -1,63 +1,47 @@
 package Bookings;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Objects;
+import Customers.Customer;
+import enums.BookingStatus;
+import enums.BookingType;
+import facilities.Restaurant;
 
 public class ArrangementBooking extends Booking {
-    /*
-    public enum choiceOfMenu {
-        MENU_ONE {
-            @Override
-            public String toString() {
-                return "Klassisk menu med kakao, boller og kage 98,-";
-            }
-        },
-        MENU_TWO {
-            @Override
-            public String toString() {
-                return "Menu med frikadeller og dessert 75,-";
-            }
-        },
-        MENU_THREE {
-            @Override
-            public String toString() {
-                return "Menu med pasta og kødsovs og dessert 75,-";
-            }
-        },
-        MENU_FOUR {
-            @Override
-            public String toString() {
-                return "Menu med nuggets og pommes frites 50,-";
-            }
-        },
-        NO_FOOD {
-            @Override
-            public String toString() {
-                return "Mad fra Skovbakken ikke ønsket";
-            }
-        },
-    }
-    */
+    private FoodOrder menuChosen;
+    private Restaurant restaurant;
     private String noOfChildren;
     private String birthdayChildName;
     private String birthdayChildAge;
     private String formerParticipant;
-    private String menuChosen;
+    private String guide;
 
-    public ArrangementBooking(int id, bookingType type, String date, String time, String contactPerson, String phoneNumber,
-                              String email, String comment, String noOfChildren, String birthdayChildName,
-                              String birthdayChildAge, String formerParticipant, String menuChosen) {
-        super(id, type, date, time, contactPerson, phoneNumber, email, comment);
+    public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
+                              String creationDate, String date, String time, String participants, String customerComment,
+                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren, String birthdayChildName,
+                              String birthdayChildAge, String formerParticipant, String guide, String customerContactPerson, String customerPhoneNumber, String customerEmail) {
+        super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail), creationDate, date, time, participants, customerComment, comment);
+        this.menuChosen = menuChosen;
+        this.restaurant = restaurant;
         this.noOfChildren = noOfChildren;
         this.birthdayChildName = birthdayChildName;
         this.birthdayChildAge = birthdayChildAge;
         this.formerParticipant = formerParticipant;
+        this.guide = guide;
+    }
+
+    public FoodOrder getMenuChosen() {
+        return menuChosen;
+    }
+
+    public void setMenuChosen(FoodOrder menuChosen) {
         this.menuChosen = menuChosen;
     }
 
-    public bookingType getType() {
-        return type;
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public String getNoOfChildren() {
@@ -92,14 +76,15 @@ public class ArrangementBooking extends Booking {
         this.formerParticipant = formerParticipant;
     }
 
-    public String getMenuChosen() {
-        return menuChosen;
+    public String getGuide() {
+        return guide;
     }
 
-    public void setMenuChosen(String menuChosen) {
-        this.menuChosen = menuChosen;
+    public void setGuide(String guide) {
+        this.guide = guide;
     }
 
+    /*
     public static ArrayList<ArrangementBooking> fetchArrBooks(Connection con) throws SQLException {
 
         ArrayList<ArrangementBooking> arr = new ArrayList<>();
@@ -145,30 +130,5 @@ public class ArrangementBooking extends Booking {
 
         pstmt.executeUpdate();
     }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ArrangementBooking)) return false;
-        ArrangementBooking that = (ArrangementBooking) o;
-        return Objects.equals(noOfChildren, that.noOfChildren) &&
-                Objects.equals(birthdayChildName, that.birthdayChildName) &&
-                Objects.equals(birthdayChildAge, that.birthdayChildAge) &&
-                Objects.equals(formerParticipant, that.formerParticipant) &&
-                menuChosen.equals(that.menuChosen);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(noOfChildren, birthdayChildName, birthdayChildAge, formerParticipant, menuChosen);
-    }
-
-    @Override
-    public String toString() {
-        return getType() + "\t" +
-                getContactPerson() + "\t" +
-                getDate() + "\t" +
-                getStatus();
-    }
+    */
 }

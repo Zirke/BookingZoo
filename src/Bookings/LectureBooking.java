@@ -1,45 +1,59 @@
 package Bookings;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Objects;
+import Customers.LectureBookingCustomer;
+import enums.BookingStatus;
+import enums.BookingType;
+import facilities.LectureRoom;
 
 public class LectureBooking extends Booking {
+    private LectureRoom lectureRoom;
+    private Lecturer lecturer;
+    private String choiceOfTopic;
     private String noOfPupils;
     private String noOfTeams;
     private String noOfTeachers;
     private String grade;
-    private String choiceOfTopic;
-    private String schoolName;
-    private String zipCode;
-    private String city;
-    private String commune;
-    private String schoolPhoneNumber;
-    private String eanNumber;
 
-    public LectureBooking(int id, bookingType type, String date, String time, String contactPerson, String phoneNumber,
-                          String email, String comment, String noOfPupils, String noOfTeams, String noOfTeachers,
-                          String grade, String choiceOfTopic, String schoolName, String zipCode, String city,
+    public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
+                          String creationDate, String date, String time, String participants, String customerComment,
+                          String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
+                          String noOfPupils, String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
+                          String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,
                           String commune, String schoolPhoneNumber, String eanNumber) {
-        super(id, type, date, time, contactPerson, phoneNumber, email, comment);
+        super(id, bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
+                        customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
+                time, participants, customerComment, comment);
+        this.lectureRoom = lectureRoom;
+        this.lecturer = lecturer;
+        this.choiceOfTopic = choiceOfTopic;
         this.noOfPupils = noOfPupils;
         this.noOfTeams = noOfTeams;
         this.noOfTeachers = noOfTeachers;
         this.grade = grade;
-        this.choiceOfTopic = choiceOfTopic;
-        this.schoolName = schoolName;
-        this.zipCode = zipCode;
-        this.city = city;
-        this.commune = commune;
-        this.schoolPhoneNumber = schoolPhoneNumber;
-        this.eanNumber = eanNumber;
     }
 
-    public bookingType getType() {
-        return type;
+    public LectureRoom getLectureRoom() {
+        return lectureRoom;
+    }
+
+    public void setLectureRoom(LectureRoom lectureRoom) {
+        this.lectureRoom = lectureRoom;
+    }
+
+    public Lecturer getLecturer() {
+        return lecturer;
+    }
+
+    public void setLecturer(Lecturer lecturer) {
+        this.lecturer = lecturer;
+    }
+
+    public String getChoiceOfTopic() {
+        return choiceOfTopic;
+    }
+
+    public void setChoiceOfTopic(String choiceOfTopic) {
+        this.choiceOfTopic = choiceOfTopic;
     }
 
     public String getNoOfPupils() {
@@ -74,62 +88,7 @@ public class LectureBooking extends Booking {
         this.grade = grade;
     }
 
-    public String getChoiceOfTopic() {
-        return choiceOfTopic;
-    }
-
-    public void setChoiceOfTopic(String choiceOfTopic) {
-        this.choiceOfTopic = choiceOfTopic;
-    }
-
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCommune() {
-        return commune;
-    }
-
-    public void setCommune(String commune) {
-        this.commune = commune;
-    }
-
-    public String getSchoolPhoneNumber() {
-        return schoolPhoneNumber;
-    }
-
-    public void setSchoolPhoneNumber(String schoolPhoneNumber) {
-        this.schoolPhoneNumber = schoolPhoneNumber;
-    }
-
-    public String getEanNumber() {
-        return eanNumber;
-    }
-
-    public void setEanNumber(String eanNumber) {
-        this.eanNumber = eanNumber;
-    }
-
+    /*
     public static ArrayList<LectureBooking> fetchSchoolBookings(Connection con) throws SQLException {
 
         ArrayList<LectureBooking> sch = new ArrayList<>();
@@ -139,7 +98,7 @@ public class LectureBooking extends Booking {
         ResultSet rs = stmt.executeQuery(sql);
 
         while (rs.next()) {
-            LectureBooking sbook = new LectureBooking(rs.getInt(1), bookingType.Skoletjeneste,
+            LectureBooking sbook = new LectureBooking(rs.getInt(1), BookingType.Skoletjeneste,
                     rs.getString(2), rs.getString(3),
                     rs.getString(17), rs.getString(18),
                     rs.getString(19), rs.getString(20),
@@ -155,35 +114,5 @@ public class LectureBooking extends Booking {
         }
         return sch;
     }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LectureBooking)) return false;
-        LectureBooking that = (LectureBooking) o;
-        return Objects.equals(noOfPupils, that.noOfPupils) &&
-                Objects.equals(noOfTeams, that.noOfTeams) &&
-                Objects.equals(noOfTeachers, that.noOfTeachers) &&
-                Objects.equals(grade, that.grade) &&
-                Objects.equals(choiceOfTopic, that.choiceOfTopic) &&
-                Objects.equals(schoolName, that.schoolName) &&
-                Objects.equals(zipCode, that.zipCode) &&
-                Objects.equals(city, that.city) &&
-                Objects.equals(commune, that.commune) &&
-                Objects.equals(schoolPhoneNumber, that.schoolPhoneNumber) &&
-                Objects.equals(eanNumber, that.eanNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(noOfPupils, noOfTeams, noOfTeachers, grade, choiceOfTopic, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
-    }
-
-    @Override
-    public String toString() {
-        return getType() + "\t" + "\t" + "\t" + "\t" +
-                getContactPerson() + "\t" + "\t" + "\t" + "\t" + "\t" +
-                getDate();
-    }
+    */
 }

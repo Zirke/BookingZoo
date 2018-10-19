@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox prefWidth="900.0" spacing="25.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.EditLectureBookingController">
+    <children>
+        <GridPane hgap="10.0" prefHeight="376.0" prefWidth="1245.0" vgap="10.0">
+            <children>
+                <Label text="Dato: " GridPane.rowIndex="1">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Tidspunkt: " GridPane.rowIndex="2">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal elever:" GridPane.rowIndex="3">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal hold: " GridPane.rowIndex="4">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Antal lærere: " GridPane.rowIndex="5">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Klassetrin:" GridPane.rowIndex="7">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Valg af emne:" GridPane.rowIndex="6">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Skolens navn:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Postnummer:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="By:" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Aalborg Kommune (Ja/Nej):" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Telefonnummer: " GridPane.columnIndex="2" GridPane.rowIndex="5">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Kontaktperson:" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Email: " GridPane.columnIndex="2" GridPane.rowIndex="7">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="timeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="datePicker" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                            GridPane.rowIndex="1"/>
+                <TextField fx:id="noOfPupilsTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <TextField fx:id="noOfTeamsTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <TextField fx:id="noOfTeachersTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <TextField fx:id="gradeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <TextField fx:id="schoolNameTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <TextField fx:id="zipCodeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                <TextField fx:id="cityTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+                <TextField fx:id="emailTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+                <TextField fx:id="contactPersonTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+                <ChoiceBox fx:id="topicChoiceChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="6"/>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="25.0"
+                      GridPane.columnIndex="3" GridPane.rowIndex="4">
+                    <children>
+                        <RadioButton mnemonicParsing="false" text="Ja">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="communeGroup"/>
+                            </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$communeGroup"/>
+                    </children>
+                </HBox>
+                <Label text="Lokale valgt:" GridPane.rowIndex="8">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="Underviser valgt:" GridPane.rowIndex="9">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="lectureRoomChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="8"/>
+                <TextField fx:id="lecturerTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                <Label text="Ændrer kategori:" GridPane.rowIndex="10">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <ChoiceBox fx:id="categoryChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+                <Label text="Rediger Skoletjeneste">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Label>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0"/>
+        <GridPane prefHeight="200.0" prefWidth="755.0" vgap="20.0">
+            <children>
+                <Label text="Kundekommentar:">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="10.0"/>
+                    </padding>
+                </Label>
+                <Label text="Egen kommentar:" GridPane.rowIndex="1">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="10.0"/>
+                    </padding>
+                </Label>
+                <TextArea fx:id="customerCommentTextArea" prefHeight="125.0" prefWidth="325.0"
+                          promptText="Kommentar fra kunden" GridPane.columnIndex="1"/>
+                <TextArea fx:id="commentTextArea" prefHeight="125.0" prefWidth="325.0" promptText="Egen kommentar"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="371.0" minWidth="10.0" prefWidth="184.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="649.0" minWidth="10.0" prefWidth="646.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+        <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="25.0">
+            <children>
+                <Button fx:id="saveAndCloseButton" mnemonicParsing="false" text="Gem &amp; Luk">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindow" text="Annuller">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="35.0" right="35.0" top="20.0"/>
+    </padding>
+</VBox>

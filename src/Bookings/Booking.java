@@ -1,42 +1,32 @@
 package Bookings;
 
-//
+import Customers.Customer;
+import enums.BookingStatus;
+import enums.BookingType;
+
 public abstract class Booking {
-    public enum bookingType {
-        Skoletjeneste {
-            @Override
-            public String toString() {
-                return "Skoletjeneste";
-            }
-        },
-        Boernefoedselsdag {
-            @Override
-            public String toString() {
-                return "Børnefødselsdag";
-            }
-        }
-    }
 
-    public enum bookingStatus {Afventende, Aktiv, Faerdig, Arkiveret}
-
-    int id;
-    bookingType type;
-    private bookingStatus status = bookingStatus.Afventende;
+    private int id;
+    private enums.BookingType bookingType;
+    private enums.BookingStatus bookingStatus;
+    private Customer customer;
+    private String creationDate;
     private String date;
     private String time;
-    private String contactPerson;
-    private String phoneNumber;
-    private String email;
+    private String participants;
+    private String customerComment;
     private String comment;
 
-    public Booking(int id, bookingType type, String date, String time, String contactPerson, String phoneNumber, String email, String comment) {
+    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, String creationDate, String date, String time, String participants, String customerComment, String comment) {
         this.id = id;
-        this.type = type;
+        this.bookingType = bookingType;
+        this.bookingStatus = bookingStatus;
+        this.customer = customer;
+        this.creationDate = creationDate;
         this.date = date;
         this.time = time;
-        this.contactPerson = contactPerson;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
+        this.participants = participants;
+        this.customerComment = customerComment;
         this.comment = comment;
     }
 
@@ -44,60 +34,76 @@ public abstract class Booking {
         return id;
     }
 
-    public bookingType getType() {
-        return type;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public bookingStatus getStatus() {
-        return status;
+    public BookingType getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(BookingType bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getDate() {
         return date;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public String getContactPerson() {
-        return contactPerson;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setType(bookingType type) {
-        this.type = type;
-    }
-
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public void setTime(String time) {
         this.time = time;
     }
 
-    public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
+    public String getParticipants() {
+        return participants;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setParticipants(String participants) {
+        this.participants = participants;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getCustomerComment() {
+        return customerComment;
+    }
+
+    public void setCustomerComment(String customerComment) {
+        this.customerComment = customerComment;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public void setComment(String comment) {
