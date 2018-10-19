@@ -51,18 +51,18 @@ public class PendingController extends GeneralController {
         editBookingButton.setVisible(false);
 
         //LectureBooking booking1 = new LectureBooking(1, BookingType.LectureBooking, BookingStatus.STATUS_PENDING, "12/12/2018", "12/12/2018", "10:00", "22", "Hej med dig", "Ingenting", , "97744210", "mail@mail.com");
-        LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
+       /* LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                 "12/10-2018", "12/10-2018", "10:00", "38", "kommento",
                 "Bailando", new LectureRoom(FacilityState.occupied, LectureRoomType.biologicalType), new Lecturer(), "aber kan flyve",
                 "25", "1", "1", "3", "Simon kærgaard",
                 "123243131", "skarga@hotmail.dk", "Gl. Lindholm skole", "123123", "Aalborg",
                 "Aalborg kommune", "2342312222", "123456");
-
+*/
         ArrayList<Booking> listOfBookings = new ArrayList<>();
 
-        listOfBookings.add(booking1);
+  /*      listOfBookings.add(booking1);*/
 
-        //listOfBookings.addAll(ArrangementBooking.fetchArrBooks(connect()));
+        listOfBookings.addAll(ArrangementBooking.fetchArrBooks(connect()));
         //listOfBookings.addAll(LectureBooking.fetchSchoolBookings(connect()));
 
         loadBookingsToListView(listOfBookings);
