@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class PendingController extends GeneralController {
 
     @FXML
-    private Button activeBookingsButton, editBookingButton;
+    private Button activeBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -40,7 +40,7 @@ public class PendingController extends GeneralController {
     @FXML
     private TextArea customerCommentArea;
     @FXML
-    private Button acceptBookingButton, cancelBookingButton;
+    private Button acceptBookingButton, cancelBookingButton, editBookingButton;
 
     @FXML
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -48,6 +48,7 @@ public class PendingController extends GeneralController {
         customerCommentArea.setVisible(false);
         acceptBookingButton.setVisible(false);
         cancelBookingButton.setVisible(false);
+        editBookingButton.setVisible(false);
 
         //LectureBooking booking1 = new LectureBooking(1, BookingType.LectureBooking, BookingStatus.STATUS_PENDING, "12/12/2018", "12/12/2018", "10:00", "22", "Hej med dig", "Ingenting", , "97744210", "mail@mail.com");
         LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
@@ -56,19 +57,6 @@ public class PendingController extends GeneralController {
                 "25", "1", "1", "3", "Simon kærgaard",
                 "123243131", "skarga@hotmail.dk", "Gl. Lindholm skole", "123123", "Aalborg",
                 "Aalborg kommune", "2342312222", "123456");
-
-        /*
-        ArrangementBooking booking2 = new ArrangementBooking(Booking.bookingType.Boernefoedselsdag, "28/12/2018",
-                "10:00", "Gitte Hansen", "97744210", "mail@mail.com",
-                "Min datter har nøddeallergi", "17", "Laura Hansen",
-                "9", "Nej", ArrangementBooking.choiceOfMenu.MENU_ONE, "");
-
-        LectureBooking booking3 = new LectureBooking(Booking.bookingType.Skoletjeneste, "12/10/2019",
-                "12:45", "Peter Petersen", "30406010", "mail@mail.com",
-                "Kommentaren her er lol", "5", "5", "5", "5",
-                "Dyr Derhjemme", "Aalborg Skole", "9000", "Aalborg",
-                "30124531", "324324", "1561561561");
-        */
 
         ArrayList<Booking> listOfBookings = new ArrayList<>();
 
@@ -88,6 +76,7 @@ public class PendingController extends GeneralController {
         TextFields.bindAutoCompletion(searchField, options);
 
         /* Event handlers */
+
         //Displays information of the clicked booking in ListView
         bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
@@ -162,21 +151,21 @@ public class PendingController extends GeneralController {
         customerCommentArea.setVisible(true);
         acceptBookingButton.setVisible(true);
         cancelBookingButton.setVisible(true);
+        editBookingButton.setVisible(true);
+
+        LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
 
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getBookingStatus().toString());
         //TODO Represent creation date
         dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
         timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getTime());
-        pupilNoLabel.setText("Antal elever " + selectedLectureBooking.getNoOfPupils());
+        pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getNoOfPupils());
         teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
         teacherNoLabel.setText("Antal lærere: " + selectedLectureBooking.getNoOfTeachers());
         gradeLabel.setText("Klassetrin: " + selectedLectureBooking.getGrade());
         topicChoiceLabel.setText("Valg af emne: " + selectedLectureBooking.getChoiceOfTopic());
-
-        LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
         communeLabel.setText("Aalborg Kommune (Ja/Nej): " + temp.getCommune());
-        //communeLabel.setText("Aalborg Kommune (Ja/Nej): " + (LectureBookingCustomer)(selectedLectureBooking.getCustomer().getCommune()));
         schoolNameLabel.setText("Skolens navn: " + temp.getSchoolName());
         schoolPhoneNumberLabel.setText("Skolens telefonnummer: " + temp.getSchoolPhoneNumber());
         zipcodeLabel.setText("Postnummer: " + temp.getZipCode());
@@ -184,7 +173,7 @@ public class PendingController extends GeneralController {
         contactPersonLabel.setText("Kontaktperson: " + selectedLectureBooking.getCustomer().getContactPerson());
         phoneNumberLabel.setText("Telefonnummer: " + selectedLectureBooking.getCustomer().getPhoneNumber());
         emailLabel.setText("E-mail: " + selectedLectureBooking.getCustomer().getEmail());
-        //eanLabel.setText("EAN nummer: " + selectedLectureBooking.getCustomer().getEanNumber());
+        eanLabel.setText("EAN nummer: " + temp.getEanNumber());
         customerCommentArea.setText(selectedLectureBooking.getComment());
         customerCommentArea.setEditable(false);
 
@@ -201,12 +190,13 @@ public class PendingController extends GeneralController {
         customerCommentArea.setVisible(true);
         acceptBookingButton.setVisible(true);
         cancelBookingButton.setVisible(true);
+        editBookingButton.setVisible(true);
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
         dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
         timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getTime());
-        pupilNoLabel.setText("Antal børn " + selectedArrangementBooking.getNoOfChildren());
+        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getNoOfChildren());
         teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
         teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
         gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
@@ -224,7 +214,5 @@ public class PendingController extends GeneralController {
         customerCommentArea.setText(selectedArrangementBooking.getComment());
         customerCommentArea.setEditable(false);
     }
-
-
 }
 

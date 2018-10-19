@@ -5,6 +5,8 @@ import enums.BookingStatus;
 import enums.BookingType;
 import facilities.LectureRoom;
 
+import java.util.Objects;
+
 public class LectureBooking extends Booking {
     private LectureRoom lectureRoom;
     private Lecturer lecturer;
@@ -115,4 +117,29 @@ public class LectureBooking extends Booking {
         return sch;
     }
     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LectureBooking)) return false;
+        LectureBooking that = (LectureBooking) o;
+        return Objects.equals(lectureRoom, that.lectureRoom) &&
+                Objects.equals(lecturer, that.lecturer) &&
+                Objects.equals(choiceOfTopic, that.choiceOfTopic) &&
+                Objects.equals(noOfPupils, that.noOfPupils) &&
+                Objects.equals(noOfTeams, that.noOfTeams) &&
+                Objects.equals(noOfTeachers, that.noOfTeachers) &&
+                Objects.equals(grade, that.grade);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(lectureRoom, lecturer, choiceOfTopic, noOfPupils, noOfTeams, noOfTeachers, grade);
+    }
+
+    @Override
+    public String toString() {
+        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDate();
+    }
 }

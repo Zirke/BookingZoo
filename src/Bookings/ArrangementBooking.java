@@ -5,6 +5,8 @@ import enums.BookingStatus;
 import enums.BookingType;
 import facilities.Restaurant;
 
+import java.util.Objects;
+
 public class ArrangementBooking extends Booking {
     private FoodOrder menuChosen;
     private Restaurant restaurant;
@@ -16,9 +18,11 @@ public class ArrangementBooking extends Booking {
 
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,
-                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren, String birthdayChildName,
-                              String birthdayChildAge, String formerParticipant, String guide, String customerContactPerson, String customerPhoneNumber, String customerEmail) {
-        super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail), creationDate, date, time, participants, customerComment, comment);
+                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren,
+                              String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
+                              String customerContactPerson, String customerPhoneNumber, String customerEmail) {
+        super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
+                creationDate, date, time, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
         this.noOfChildren = noOfChildren;
@@ -131,4 +135,29 @@ public class ArrangementBooking extends Booking {
         pstmt.executeUpdate();
     }
     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ArrangementBooking)) return false;
+        ArrangementBooking that = (ArrangementBooking) o;
+        return Objects.equals(menuChosen, that.menuChosen) &&
+                Objects.equals(restaurant, that.restaurant) &&
+                Objects.equals(noOfChildren, that.noOfChildren) &&
+                Objects.equals(birthdayChildName, that.birthdayChildName) &&
+                Objects.equals(birthdayChildAge, that.birthdayChildAge) &&
+                Objects.equals(formerParticipant, that.formerParticipant) &&
+                Objects.equals(guide, that.guide);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(menuChosen, restaurant, noOfChildren, birthdayChildName, birthdayChildAge, formerParticipant, guide);
+    }
+
+    @Override
+    public String toString() {
+        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDate();
+    }
 }
