@@ -9,6 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PendingController extends GeneralController {
@@ -89,6 +92,19 @@ public class PendingController extends GeneralController {
 
         //Accepting the selected booking when pressing acceptBookingButton
         //acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking());
+    }
+
+    Connection connect() throws ClassNotFoundException, SQLException {
+
+        Class.forName("org.postgresql.Driver");
+
+        String host = "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth";
+        String user = "jyjczxth";
+        String pass = "nw51BNKhctporjIFT5Qhhm72jwGVJK95";
+
+        Connection con = DriverManager.getConnection(host, user, pass);
+
+        return con;
     }
 
     //Takes an ArrayList of bookings to load into ListView of bookings

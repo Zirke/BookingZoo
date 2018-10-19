@@ -1,5 +1,12 @@
 package Bookings;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class LectureBooking extends Booking {
     private String noOfPupils;
     private String noOfTeams;
@@ -13,11 +20,11 @@ public class LectureBooking extends Booking {
     private String schoolPhoneNumber;
     private String eanNumber;
 
-    public LectureBooking(bookingType type, String date, String time, String contactPerson, String phoneNumber,
+    public LectureBooking(int id, bookingType type, String date, String time, String contactPerson, String phoneNumber,
                           String email, String comment, String noOfPupils, String noOfTeams, String noOfTeachers,
                           String grade, String choiceOfTopic, String schoolName, String zipCode, String city,
                           String commune, String schoolPhoneNumber, String eanNumber) {
-        super(type, date, time, contactPerson, phoneNumber, email, comment);
+        super(id, type, date, time, contactPerson, phoneNumber, email, comment);
         this.noOfPupils = noOfPupils;
         this.noOfTeams = noOfTeams;
         this.noOfTeachers = noOfTeachers;
@@ -123,7 +130,33 @@ public class LectureBooking extends Booking {
         this.eanNumber = eanNumber;
     }
 
-    /*
+    public static ArrayList<LectureBooking> fetchSchoolBookings(Connection con) throws SQLException {
+
+        ArrayList<LectureBooking> sch = new ArrayList<>();
+        String sql = "SELECT * FROM school_booking";
+
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            LectureBooking sbook = new LectureBooking(rs.getInt(1), bookingType.Skoletjeneste,
+                    rs.getString(2), rs.getString(3),
+                    rs.getString(17), rs.getString(18),
+                    rs.getString(19), rs.getString(20),
+                    String.valueOf(rs.getInt(4)), String.valueOf(rs.getString(5)),
+                    String.valueOf(rs.getInt(6)), String.valueOf(rs.getInt(8)),
+                    rs.getString(7), rs.getString(11), String.valueOf(rs.getString(12)),
+                    rs.getString("city"), String.valueOf(rs.getString("aalborg_county")),
+                    rs.getString("school_phone"), String.valueOf(rs.getString("ean_number"))
+            );
+
+            sch.add(sbook);
+
+        }
+        return sch;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,7 +179,7 @@ public class LectureBooking extends Booking {
     public int hashCode() {
         return Objects.hash(noOfPupils, noOfTeams, noOfTeachers, grade, choiceOfTopic, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
     }
-    */
+
     @Override
     public String toString() {
         return getType() + "\t" + "\t" + "\t" + "\t" +

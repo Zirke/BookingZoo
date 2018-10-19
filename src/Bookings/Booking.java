@@ -19,6 +19,7 @@ public abstract class Booking {
 
     public enum bookingStatus {Afventende, Aktiv, Faerdig, Arkiveret}
 
+    int id;
     bookingType type;
     private bookingStatus status = bookingStatus.Afventende;
     private String date;
@@ -28,7 +29,8 @@ public abstract class Booking {
     private String email;
     private String comment;
 
-    public Booking(bookingType type, String date, String time, String contactPerson, String phoneNumber, String email, String comment) {
+    public Booking(int id, bookingType type, String date, String time, String contactPerson, String phoneNumber, String email, String comment) {
+        this.id = id;
         this.type = type;
         this.date = date;
         this.time = time;
@@ -36,6 +38,10 @@ public abstract class Booking {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.comment = comment;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public bookingType getType() {
