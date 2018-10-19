@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox prefHeight="640.0" prefWidth="900.0" spacing="10.0" style="-fx-border-color: black;"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="UserInterface.ArrangementBookingCreationController">
    <padding>
        <Insets bottom="10.0" left="35.0" right="35.0" top="10.0"/>
@@ -104,26 +104,7 @@
                    <Font size="14.0"/>
                </font>
             </Label>
-             <TextField fx:id="noOfChildrenTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="3"/>
-             <TextField fx:id="childNameTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="4"/>
-             <TextField fx:id="childAgeTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="5"/>
-             <TextField fx:id="phoneNumberTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="7"/>
              <DatePicker fx:id="datePicker" minWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="3"
-                   GridPane.rowIndex="1">
-               <children>
-                  <RadioButton mnemonicParsing="false" text="Ja">
-                     <toggleGroup>
-                         <ToggleGroup fx:id="participantGroup"/>
-                     </toggleGroup>
-                  </RadioButton>
-                   <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$participantGroup"/>
-               </children>
-            </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="13.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <RadioButton mnemonicParsing="false" text="10:00 - 12:00">
@@ -141,6 +122,29 @@
                   </RadioButton>
                </children>
             </HBox>
+             <TextField fx:id="noOfChildrenTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="3"/>
+             <TextField fx:id="childNameTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="4"/>
+             <TextField fx:id="childAgeTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="5"/>
+             <TextField fx:id="contactPersonTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="6"/>
+             <TextField fx:id="phoneNumberTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="7"/>
+             <TextField fx:id="emailTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
+                        GridPane.rowIndex="8"/>
+             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="3"
+                   GridPane.rowIndex="1">
+                 <children>
+                     <RadioButton mnemonicParsing="false" text="Ja">
+                         <toggleGroup>
+                             <ToggleGroup fx:id="participantGroup"/>
+                         </toggleGroup>
+                     </RadioButton>
+                     <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$participantGroup"/>
+                 </children>
+             </HBox>
             <Label text="Tidligere deltagelse:" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <padding>
                    <Insets left="10.0"/>
@@ -171,10 +175,6 @@
                           GridPane.columnIndex="3" GridPane.rowIndex="7"/>
              <RadioButton mnemonicParsing="false" selected="true" text="Ingen mad" toggleGroup="$menuGroup"
                           GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-             <TextField fx:id="contactPersonTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="6"/>
-             <TextField fx:id="emailTextField" minWidth="180.0" prefWidth="180.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="8"/>
          </children>
       </GridPane>
       <GridPane prefHeight="200.0" prefWidth="755.0" vgap="20.0">
