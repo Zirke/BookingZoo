@@ -1,10 +1,26 @@
 package UserInterface;
 
+import Bookings.ArrangementBooking;
+import Bookings.BookingDataAccessor;
+import Bookings.FoodOrder;
+import enums.BookingStatus;
+import enums.BookingType;
+import enums.FacilityState;
+import facilities.Restaurant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.util.Date;
+
 public class ArrangementBookingCreationController extends GeneralController {
+    private BookingDataAccessor bda;
+
+    public void setBda(BookingDataAccessor bda) {
+        this.bda = bda;
+    }
+
     @FXML
     private DatePicker datePicker;
 
@@ -21,7 +37,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     private Button createAndCloseButton, cancelButton;
 
     @FXML
-    public void createArrangementBookingFromInput() {
+    public void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
         String date = datePicker.getValue().toString();
         String time = timeGroup.getSelectedToggle().toString();
         String noOfChildren = noOfChildrenTextField.getText();
@@ -32,13 +48,29 @@ public class ArrangementBookingCreationController extends GeneralController {
         String email = emailTextField.getText();
         String participant = participantGroup.getSelectedToggle().toString();
         String menuChoice = menuGroup.getSelectedToggle().toString();
-
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
-        System.out.println("Booking created:\n" + date + time + noOfChildren + childName + childAge + contactPerson + phoneNumber + email + participant + menuChoice + customerComment + comment);
+        bda = new BookingDataAccessor(
+                "org.postgresql.Driver",
+                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+                "jyjczxth",
+                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
+        );
 
-        showAlertBox(Alert.AlertType.CONFIRMATION, "", "Er den indtastede information korrekt?");
+        ArrangementBooking abook = new ArrangementBooking(
+                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time, noOfChildren,
+                customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.unoccupied), noOfChildren, childName,
+                childAge, participant, "Jens", contactPerson, phoneNumber, email
+        );
+
+        try {
+            bda.createArrBookManually(abook);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //showAlertBox(Alert.AlertType.CONFIRMATION, "", "Er den indtastede information korrekt?");
     }
 
     @FXML

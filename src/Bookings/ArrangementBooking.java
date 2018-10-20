@@ -3,11 +3,8 @@ package Bookings;
 import Customers.Customer;
 import enums.BookingStatus;
 import enums.BookingType;
-import enums.FacilityState;
 import facilities.Restaurant;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class ArrangementBooking extends Booking {
@@ -23,9 +20,24 @@ public class ArrangementBooking extends Booking {
                               String creationDate, String date, String time, String participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren,
                               String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
-                              String customerContactPerson, String customerPhoneNumber, String customerEmail)
-    {
+                              String customerContactPerson, String customerPhoneNumber, String customerEmail) {
         super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
+                creationDate, date, time, participants, customerComment, comment);
+        this.menuChosen = menuChosen;
+        this.restaurant = restaurant;
+        this.noOfChildren = noOfChildren;
+        this.birthdayChildName = birthdayChildName;
+        this.birthdayChildAge = birthdayChildAge;
+        this.formerParticipant = formerParticipant;
+        this.guide = guide;
+    }
+
+    public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus,
+                              String creationDate, String date, String time, String participants, String customerComment,
+                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren,
+                              String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
+                              String customerContactPerson, String customerPhoneNumber, String customerEmail) {
+        super(bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
                 creationDate, date, time, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
@@ -90,52 +102,6 @@ public class ArrangementBooking extends Booking {
 
     public void setGuide(String guide) {
         this.guide = guide;
-    }
-
-
-    public static ArrayList<ArrangementBooking> fetchArrBooks(Connection con) throws SQLException {
-
-        ArrayList<ArrangementBooking> arr = new ArrayList<>();
-
-        String typeSpecific = "SELECT bookingid,food,restaurant," +
-                "birthdaychildname,birthdaychildage,formerparticipant,guide FROM arrangement_booking";
-
-        String general = "SELECT bookingid,status," +
-                "customerid,creationdate,date,time,participants,customercomment,usercomment FROM booking";
-
-        Statement stmt = con.createStatement();
-        Statement stmt2 = con.createStatement();
-        ResultSet rsTypeSpecific = stmt.executeQuery(typeSpecific);
-        ResultSet rsGeneral = stmt2.executeQuery(general);
-
-
-        while (rsGeneral.next()) {
-            ArrangementBooking abook = null;
-            if (rsTypeSpecific.next() && rsTypeSpecific.getInt("bookingid") == rsGeneral.getInt("bookingid")) {
-
-                String customer = "SELECT customerid,contactperson,phonenumber,email FROM customer WHERE customerid = (?)";
-                PreparedStatement pstmt = con.prepareStatement(customer);
-                pstmt.setInt(1, rsGeneral.getInt("customerid"));
-                ResultSet rsCustomer = pstmt.executeQuery();
-                rsCustomer.next();
-
-                abook = new ArrangementBooking(
-                        rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE,
-                        rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
-                        Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                        rsGeneral.getString("usercomment"), new FoodOrder(), new Restaurant(FacilityState.occupied),
-                        Integer.toString(rsGeneral.getInt("participants")), rsTypeSpecific.getString("birthdaychildname"),
-                        Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), Boolean.toString(rsTypeSpecific.getBoolean("formerparticipant")),
-                        rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
-                        rsCustomer.getString("phonenumber"), rsCustomer.getString("email")
-                );
-                rsTypeSpecific.next();
-            }
-            if(abook != null) {
-                arr.add(abook);
-            }
-        }
-        return arr;
     }
 
     /*public void updateArrangementDatabase(ArrangementBooking arb, Connection con) throws SQLException {

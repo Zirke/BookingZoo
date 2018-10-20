@@ -90,34 +90,6 @@ public class LectureBooking extends Booking {
         this.grade = grade;
     }
 
-    /*
-    public static ArrayList<LectureBooking> fetchSchoolBookings(Connection con) throws SQLException {
-
-        ArrayList<LectureBooking> sch = new ArrayList<>();
-        String sql = "SELECT * FROM school_booking";
-
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-
-        while (rs.next()) {
-            LectureBooking sbook = new LectureBooking(rs.getInt(1), BookingType.Skoletjeneste,
-                    rs.getString(2), rs.getString(3),
-                    rs.getString(17), rs.getString(18),
-                    rs.getString(19), rs.getString(20),
-                    String.valueOf(rs.getInt(4)), String.valueOf(rs.getString(5)),
-                    String.valueOf(rs.getInt(6)), String.valueOf(rs.getInt(8)),
-                    rs.getString(7), rs.getString(11), String.valueOf(rs.getString(12)),
-                    rs.getString("city"), String.valueOf(rs.getString("aalborg_county")),
-                    rs.getString("school_phone"), String.valueOf(rs.getString("ean_number"))
-            );
-
-            sch.add(sbook);
-
-        }
-        return sch;
-    }
-    */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

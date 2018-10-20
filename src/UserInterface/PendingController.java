@@ -2,26 +2,22 @@ package UserInterface;
 
 import Bookings.ArrangementBooking;
 import Bookings.Booking;
+import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
-import Bookings.Lecturer;
 import Customers.LectureBookingCustomer;
-import enums.BookingStatus;
-import enums.BookingType;
-import enums.FacilityState;
-import enums.LectureRoomType;
-import facilities.LectureRoom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PendingController extends GeneralController {
+    private BookingDataAccessor bda;
 
     @FXML
     private Button activeBookingsButton;
@@ -50,20 +46,17 @@ public class PendingController extends GeneralController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
 
-        //LectureBooking booking1 = new LectureBooking(1, BookingType.LectureBooking, BookingStatus.STATUS_PENDING, "12/12/2018", "12/12/2018", "10:00", "22", "Hej med dig", "Ingenting", , "97744210", "mail@mail.com");
-       /* LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                "12/10-2018", "12/10-2018", "10:00", "38", "kommento",
-                "Bailando", new LectureRoom(FacilityState.occupied, LectureRoomType.biologicalType), new Lecturer(), "aber kan flyve",
-                "25", "1", "1", "3", "Simon kærgaard",
-                "123243131", "skarga@hotmail.dk", "Gl. Lindholm skole", "123123", "Aalborg",
-                "Aalborg kommune", "2342312222", "123456");
-*/
+        bda = new BookingDataAccessor(
+                "org.postgresql.Driver",
+                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+                "jyjczxth",
+                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
+        );
+
         ArrayList<Booking> listOfBookings = new ArrayList<>();
 
-  /*      listOfBookings.add(booking1);*/
-
-        listOfBookings.addAll(ArrangementBooking.fetchArrBooks(connect()));
-        //listOfBookings.addAll(LectureBooking.fetchSchoolBookings(connect()));
+        listOfBookings.addAll(bda.fetchArrBooks());
+        listOfBookings.addAll(bda.fetchLecBooks());
 
         loadBookingsToListView(listOfBookings);
 
@@ -89,23 +82,25 @@ public class PendingController extends GeneralController {
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
-        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
+        arrangementBookingItem.setOnAction(e -> {
+            /*
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArrangementBookingCreation.fxml"));
+            try {
+                VBox box = (VBox) loader.load();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            ArrangementBookingCreationController controller = loader.<ArrangementBookingCreationController>getController();
+            controller.setBda(bda);
+            */
+            openNewPopUpWindow("ArrangementBookingCreation.fxml");
+        });
+
+        //Opens edit pop-up window corresponding to chosen Booking in ListView
+        //editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
 
         //Accepting the selected booking when pressing acceptBookingButton
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
-    }
-
-    private Connection connect() throws ClassNotFoundException, SQLException {
-
-        Class.forName("org.postgresql.Driver");
-
-        String host = "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth";
-        String user = "jyjczxth";
-        String pass = "nw51BNKhctporjIFT5Qhhm72jwGVJK95";
-
-        Connection con = DriverManager.getConnection(host, user, pass);
-
-        return con;
     }
 
     //Takes an ArrayList of bookings to load into ListView of bookings
@@ -137,12 +132,30 @@ public class PendingController extends GeneralController {
         }
     }
 
+    private void editSelectedBooking(ArrayList<Booking> listOfBookings) {
+        for (Booking temp : listOfBookings) {
+            if (bookingListView.getSelectionModel().getSelectedItem().equals(temp)) {
+                try {
+                    FXMLLoader loader = FXMLLoader.load(getClass().getResource("EditLectureBooking.fxml"));
+                    EditLectureBookingController controller = loader.getController();
+                    controller.setSelectedLectureBooking((LectureBooking) temp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
 
         if (bookingListView.getSelectionModel().getSelectedItem() != null) {
             //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
 
         }
+    }
+
+    private void changeBookingStatus() {
+
     }
 
     //Changes text on all labels corresponding to the chosen booking in ListView

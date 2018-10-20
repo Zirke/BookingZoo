@@ -30,6 +30,18 @@ public abstract class Booking {
         this.comment = comment;
     }
 
+    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, String creationDate, String date, String time, String participants, String customerComment, String comment) {
+        this.bookingType = bookingType;
+        this.bookingStatus = bookingStatus;
+        this.customer = customer;
+        this.creationDate = creationDate;
+        this.date = date;
+        this.time = time;
+        this.participants = participants;
+        this.customerComment = customerComment;
+        this.comment = comment;
+    }
+
     public int getId() {
         return id;
     }

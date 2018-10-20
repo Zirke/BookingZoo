@@ -11,6 +11,14 @@ import javafx.stage.Stage;
 public class EditLectureBookingController {
     private LectureBooking selectedLectureBooking;
 
+    public LectureBooking getSelectedLectureBooking() {
+        return selectedLectureBooking;
+    }
+
+    public void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
+        this.selectedLectureBooking = selectedLectureBooking;
+    }
+
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -26,12 +34,13 @@ public class EditLectureBookingController {
     private void initialize() {
         //timeTextField.setText(this.selectedLectureBooking.);
 
-
+/*
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
+        */
     }
 
     @FXML
