@@ -176,4 +176,59 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(4, abook.getCustomer().getEmail());
         pstmtCustomer.executeUpdate();
     }
+
+        //remove booking from database
+    public void deleteBooking(Booking book) throws SQLException {
+
+        //Get CustomerID
+        String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
+        PreparedStatement pstmtCustomerID = connection.prepareStatement(getCustomerID);
+        pstmtCustomerID.setInt(1,book.getId());
+        ResultSet rsCustomerID = pstmtCustomerID.executeQuery(); rsCustomerID.next();
+        int customerID = rsCustomerID.getInt(1);
+
+        String removeTypeBooking = null;
+        String removeTypeCustomer = null;
+        String removeCustomer = null;
+        String removeBooking = null;
+
+        //Check if booking is of type Arrangement Booking or Lecture Booking
+        if (book instanceof ArrangementBooking) {
+            //Create query strings
+            removeTypeBooking = "DELETE FROM arrangement_booking WHERE bookingid=(?)";
+            removeCustomer = "DELETE FROM customer WHERE customerid=(?)";
+            removeBooking = "DELETE FROM booking WHERE bookingid=(?)";
+            //Insert values
+            PreparedStatement pstmtTypeBooking = connection.prepareStatement(removeTypeBooking);
+            pstmtTypeBooking.setInt(1,book.getId());
+            PreparedStatement pstmtCustomer = connection.prepareStatement(removeCustomer);
+            pstmtCustomer.setInt(1,customerID);
+            PreparedStatement pstmtBooking = connection.prepareStatement(removeBooking);
+            pstmtBooking.setInt(1,book.getId());
+            //Execute updates in correct order
+            pstmtTypeBooking.executeUpdate();
+            pstmtCustomer.executeUpdate();
+            pstmtBooking.executeUpdate();
+        } else if (book instanceof LectureBooking) {
+            //Create query strings
+            removeTypeBooking = "DELETE FROM lecture_booking WHERE bookingid=(?)";
+            removeTypeCustomer= "DELETE FROM lecture_booking_customer WHERE customerid=(?)";
+            removeCustomer = "DELETE FROM customer WHERE customerid=(?)";
+            removeBooking = "DELETE FROM booking WHERE bookingid=(?)";
+            //Insert values
+            PreparedStatement pstmtTypeBooking = connection.prepareStatement(removeTypeBooking);
+            pstmtTypeBooking.setInt(1,book.getId());
+            PreparedStatement pstmtTypeCustomer = connection.prepareStatement(removeTypeCustomer);
+            pstmtTypeCustomer.setInt(1,customerID);
+            PreparedStatement pstmtCustomer = connection.prepareStatement(removeCustomer);
+            pstmtCustomer.setInt(1,customerID);
+            PreparedStatement pstmtBooking = connection.prepareStatement(removeBooking);
+            pstmtBooking.setInt(1,book.getId());
+            //Execute updates in correct order
+            pstmtTypeBooking.executeUpdate();
+            pstmtTypeCustomer.executeUpdate();
+            pstmtCustomer.executeUpdate();
+            pstmtBooking.executeUpdate();
+        }
+    }
 }
