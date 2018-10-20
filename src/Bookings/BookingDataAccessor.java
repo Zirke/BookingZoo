@@ -140,7 +140,7 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(5, Integer.valueOf(abook.getParticipants()));
         pstmtGeneral.setString(6, abook.getCustomerComment());
         pstmtGeneral.setString(7, abook.getComment());
-        pstmtGeneral.executeQuery();
+        pstmtGeneral.executeUpdate();
 
         //Get Auto-Generated ID of this booking and customer
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
@@ -158,12 +158,12 @@ public class BookingDataAccessor {
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
         pstmtTypeSpecific.setInt(1, currentBookingID);
         pstmtTypeSpecific.setString(2, abook.getMenuChosen().toString());
-        pstmtTypeSpecific.setString(3, abook.getRestaurant().toString());
+        pstmtTypeSpecific.setInt(3, 2);
         pstmtTypeSpecific.setString(4, abook.getBirthdayChildName());
         pstmtTypeSpecific.setInt(5, Integer.valueOf(abook.getBirthdayChildAge()));
         pstmtTypeSpecific.setBoolean(6, Boolean.parseBoolean(abook.getFormerParticipant()));
         pstmtTypeSpecific.setString(7, abook.getGuide());
-        pstmtTypeSpecific.executeQuery();
+        pstmtTypeSpecific.executeUpdate();
 
         //Insert data into customer table
         String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
@@ -174,6 +174,6 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(2, abook.getCustomer().getContactPerson());
         pstmtCustomer.setString(3, abook.getCustomer().getPhoneNumber());
         pstmtCustomer.setString(4, abook.getCustomer().getEmail());
-        pstmtCustomer.executeQuery();
+        pstmtCustomer.executeUpdate();
     }
 }
