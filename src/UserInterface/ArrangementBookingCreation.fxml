@@ -211,13 +211,12 @@
       </GridPane>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="0.0" prefWidth="596.0" spacing="25.0">
          <children>
-             <Button fx:id="createAndCloseButton" mnemonicParsing="false" onAction="#createArrangementBookingFromInput"
-                     text="Opret &amp; Luk">
+             <Button fx:id="createAndCloseButton" mnemonicParsing="false" text="Opret &amp; Luk">
                <font>
                    <Font size="14.0"/>
                </font>
             </Button>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindow" text="Annuller">
+             <Button fx:id="cancelButton" mnemonicParsing="false" text="Annuller">
                <font>
                    <Font size="14.0"/>
                </font>

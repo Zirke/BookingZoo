@@ -51,11 +51,13 @@ class GeneralController {
         }
     }
 
-    void showAlertBox(Alert.AlertType alertType, String title, String message) {
+    Alert showAlertBox(Alert.AlertType alertType, String title, String message) {
         Alert userCreationAlert = new Alert(alertType);
         userCreationAlert.setTitle(title);
         userCreationAlert.setHeaderText(null);
         userCreationAlert.setContentText(message);
         userCreationAlert.show();
+
+        return userCreationAlert;
     }
 }

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
@@ -36,8 +37,29 @@ public class ArrangementBookingCreationController extends GeneralController {
     @FXML
     private Button createAndCloseButton, cancelButton;
 
-    @FXML
-    public void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
+    public void initialize() {
+        createAndCloseButton.setOnMouseClicked(e -> {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Vil du oprette?");
+            alert.setContentText("Er den indtastede information korrekt?");
+
+            Optional<ButtonType> foo = alert.showAndWait();
+
+            if (foo.get() == ButtonType.OK) {
+                try {
+                    createArrangementBookingFromInput();
+                    closeWindow();
+                } catch (SQLException | ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        cancelButton.setOnMouseClicked(e -> closeWindow());
+    }
+
+    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
         String date = datePicker.getValue().toString();
         String time = timeGroup.getSelectedToggle().toString();
         String noOfChildren = noOfChildrenTextField.getText();
@@ -51,6 +73,12 @@ public class ArrangementBookingCreationController extends GeneralController {
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
+
+        //TODO Finish
+        if (!(datePicker.getValue() != null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty())) {
+            System.out.println("TOM!");
+        }
+
         bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
                 "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
@@ -61,20 +89,16 @@ public class ArrangementBookingCreationController extends GeneralController {
         ArrangementBooking abook = new ArrangementBooking(
                 BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time, noOfChildren,
                 customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.unoccupied), noOfChildren, childName,
-                childAge, participant, "Jens", contactPerson, phoneNumber, email
-        );
-
+                childAge, participant, "Jens", contactPerson, phoneNumber, email);
         try {
             bda.createArrBookManually(abook);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        //showAlertBox(Alert.AlertType.CONFIRMATION, "", "Er den indtastede information korrekt?");
     }
 
-    @FXML
-    public void closeWindow() {
+
+    private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

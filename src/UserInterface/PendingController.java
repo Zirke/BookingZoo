@@ -1,12 +1,10 @@
 package UserInterface;
 
-import Bookings.*;
+import Bookings.ArrangementBooking;
+import Bookings.Booking;
+import Bookings.BookingDataAccessor;
+import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
-import enums.BookingStatus;
-import enums.BookingType;
-import enums.FacilityState;
-import enums.LectureRoomType;
-import facilities.LectureRoom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,7 +36,6 @@ public class PendingController extends GeneralController {
     @FXML
     private Button acceptBookingButton, cancelBookingButton, editBookingButton;
 
-    @FXML
     public void initialize() throws SQLException, ClassNotFoundException {
         customerCommentLabel.setVisible(false);
         customerCommentArea.setVisible(false);
@@ -108,6 +105,10 @@ public class PendingController extends GeneralController {
 
         //Accepting the selected booking when pressing acceptBookingButton
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
+
+        //Cancelling the selected booking when pressing cancelBookingButton
+        cancelBookingButton.setOnMouseClicked(e -> removeBookingFromListView());
+
     }
 
     //Takes an ArrayList of bookings to load into ListView of bookings
@@ -117,6 +118,11 @@ public class PendingController extends GeneralController {
             bookings.addAll(booking);
         }
         bookingListView.setItems(bookings);
+    }
+
+    private void removeBookingFromListView() {
+        Booking bookingToRemove = (Booking) bookingListView.getSelectionModel().getSelectedItem();
+        bookingListView.getItems().remove(bookingToRemove);
     }
 
     private void showSelectedBookingInformation() {
