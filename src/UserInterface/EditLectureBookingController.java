@@ -11,10 +11,6 @@ import javafx.stage.Stage;
 public class EditLectureBookingController {
     private LectureBooking selectedLectureBooking;
 
-    public LectureBooking getSelectedLectureBooking() {
-        return selectedLectureBooking;
-    }
-
     public void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         this.selectedLectureBooking = selectedLectureBooking;
     }
@@ -26,13 +22,32 @@ public class EditLectureBookingController {
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
     @FXML
-    private ChoiceBox topicChoiceBox, lectureRoomChoiceBox;
+    private ChoiceBox topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
     private Button saveAndCloseButton, cancelButton;
 
     @FXML
     private void initialize() {
-        //timeTextField.setText(this.selectedLectureBooking.);
+        //LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
+
+        //datePicker.setValue(LocalDate.of(2018,15,15)); //TODO does not work HARDCODED
+        //timeTextField.setText(selectedLectureBooking.getTime());
+        //noOfPupilsTextField.setText(selectedLectureBooking.getParticipants());
+        //noOfTeamsTextField.setText(selectedLectureBooking.getNoOfTeams());
+        noOfTeachersTextField.setText(selectedLectureBooking.getNoOfTeachers());
+        //topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic());
+        //gradeTextField.setText(selectedLectureBooking.getGrade());
+        //lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
+        //lecturerChosenTextField.setText(selectedLectureBooking.getLecturer().toString());
+        //categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus());
+        //schoolNameTextField.setText(temp.getSchoolName());
+        //zipCodeTextField.setText(temp.getZipCode());
+        //cityTextField.setText(temp.getCity());
+        //schoolPhoneNumberTextField.setText(temp.getSchoolPhoneNumber());
+        //eanNumberTextField.setText(temp.getEanNumber());
+        //contactPersonTextField.setText(temp.getContactPerson());
+        //phoneNumberTextField.setText(temp.getPhoneNumber());
+        //emailTextField.setText(temp.getEmail());
 
 /*
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",

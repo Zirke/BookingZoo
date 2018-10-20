@@ -4,10 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox prefWidth="900.0" spacing="25.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.EditLectureBookingController">
+<VBox minHeight="800.0" prefWidth="900.0" spacing="25.0" style="-fx-border-color: black;"
+      xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="UserInterface.EditLectureBookingController">
     <children>
-        <GridPane hgap="10.0" prefHeight="376.0" prefWidth="1245.0" vgap="10.0">
+        <GridPane hgap="10.0" prefHeight="450.0" prefWidth="828.0" vgap="10.0">
             <children>
                 <Label text="Dato: " GridPane.rowIndex="1">
                     <font>
@@ -79,32 +80,31 @@
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <TextField fx:id="timeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <DatePicker fx:id="datePicker" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1"
                             GridPane.rowIndex="1"/>
+                <TextField fx:id="timeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <TextField fx:id="noOfPupilsTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 <TextField fx:id="noOfTeamsTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                 <TextField fx:id="noOfTeachersTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <ChoiceBox fx:id="topicChoiceChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="6"/>
                 <TextField fx:id="gradeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <ChoiceBox fx:id="lectureRoomChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="8"/>
+                <TextField fx:id="lecturerTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                <ChoiceBox fx:id="categoryChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
                 <TextField fx:id="schoolNameTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                 <TextField fx:id="zipCodeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="3" GridPane.rowIndex="2"/>
                 <TextField fx:id="cityTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-                <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="3" GridPane.rowIndex="5"/>
-                <TextField fx:id="emailTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="3" GridPane.rowIndex="7"/>
-                <TextField fx:id="contactPersonTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-                <ChoiceBox fx:id="topicChoiceChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
-                           GridPane.rowIndex="6"/>
                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="25.0"
                       GridPane.columnIndex="3" GridPane.rowIndex="4">
                     <children>
@@ -116,6 +116,12 @@
                         <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$communeGroup"/>
                     </children>
                 </HBox>
+                <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+                <TextField fx:id="contactPersonTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+                <TextField fx:id="emailTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="7"/>
                 <Label text="Lokale valgt:" GridPane.rowIndex="8">
                     <font>
                         <Font size="16.0"/>
@@ -126,16 +132,11 @@
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <ChoiceBox fx:id="lectureRoomChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
-                           GridPane.rowIndex="8"/>
-                <TextField fx:id="lecturerTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="1" GridPane.rowIndex="9"/>
                 <Label text="Ændrer kategori:" GridPane.rowIndex="10">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <ChoiceBox fx:id="categoryChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
                 <Label text="Rediger Skoletjeneste">
                     <font>
                         <Font name="System Bold" size="16.0"/>

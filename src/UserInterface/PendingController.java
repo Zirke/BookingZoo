@@ -1,18 +1,18 @@
 package UserInterface;
 
-import Bookings.ArrangementBooking;
-import Bookings.Booking;
-import Bookings.BookingDataAccessor;
-import Bookings.LectureBooking;
+import Bookings.*;
 import Customers.LectureBookingCustomer;
+import enums.BookingStatus;
+import enums.BookingType;
+import enums.FacilityState;
+import enums.LectureRoomType;
+import facilities.LectureRoom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -52,11 +52,18 @@ public class PendingController extends GeneralController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
+        LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
+                "12/10-2018", "12/10-2018", "10:00", "38", "kommento",
+                "Bailando", new LectureRoom(FacilityState.occupied, LectureRoomType.biologicalType), new Lecturer(), "aber kan flyve",
+                "25", "1", "1", "3", "Simon kærgaard",
+                "123243131", "skarga@hotmail.dk", "Gl. Lindholm skole", "123123", "Aalborg",
+                "Aalborg kommune", "2342312222", "123456");
+
 
         ArrayList<Booking> listOfBookings = new ArrayList<>();
-
-        listOfBookings.addAll(bda.fetchArrBooks());
-        listOfBookings.addAll(bda.fetchLecBooks());
+        listOfBookings.add(booking1);
+        //listOfBookings.addAll(bda.fetchArrBooks());
+        //listOfBookings.addAll(bda.fetchLecBooks());
 
         loadBookingsToListView(listOfBookings);
 
@@ -97,7 +104,7 @@ public class PendingController extends GeneralController {
         });
 
         //Opens edit pop-up window corresponding to chosen Booking in ListView
-        //editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
+        editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
 
         //Accepting the selected booking when pressing acceptBookingButton
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
@@ -135,13 +142,7 @@ public class PendingController extends GeneralController {
     private void editSelectedBooking(ArrayList<Booking> listOfBookings) {
         for (Booking temp : listOfBookings) {
             if (bookingListView.getSelectionModel().getSelectedItem().equals(temp)) {
-                try {
-                    FXMLLoader loader = FXMLLoader.load(getClass().getResource("EditLectureBooking.fxml"));
-                    EditLectureBookingController controller = loader.getController();
-                    controller.setSelectedLectureBooking((LectureBooking) temp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                openEditLectureBooking("EditLectureBooking.fxml", (LectureBooking) temp);
             }
         }
     }
