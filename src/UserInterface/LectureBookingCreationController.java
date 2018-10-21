@@ -79,6 +79,42 @@ public class LectureBookingCreationController {
             }
         });
 
+        noOfPupilsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                noOfPupilsTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        noOfTeamsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                noOfTeamsTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        noOfTeachersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                noOfTeachersTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        gradeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                gradeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        zipCodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                zipCodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        eanNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                eanNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
