@@ -192,7 +192,7 @@ public class PendingController extends GeneralController {
         //TODO Represent creation date
         dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
         timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getTime());
-        pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getNoOfPupils());
+        pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getParticipants());
         teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
         teacherNoLabel.setText("Antal lærere: " + selectedLectureBooking.getNoOfTeachers());
         gradeLabel.setText("Klassetrin: " + selectedLectureBooking.getGrade());
@@ -228,7 +228,7 @@ public class PendingController extends GeneralController {
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
         dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
         timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getTime());
-        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getNoOfChildren());
+        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
         teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
         teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
         gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());

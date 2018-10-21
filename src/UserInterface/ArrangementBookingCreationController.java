@@ -88,9 +88,9 @@ public class ArrangementBookingCreationController extends GeneralController {
         );
 
         ArrangementBooking abook = new ArrangementBooking(
-                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time, noOfChildren,
-                customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.UNOCCUPIED), noOfChildren, childName,
-                childAge, participant, guide, contactPerson, phoneNumber, email);
+                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time,
+                noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.UNOCCUPIED),
+                childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
         bda.createArrBookManually(abook);
     }

@@ -15,6 +15,7 @@ public class ArrangementBooking extends Booking {
     private String formerParticipant;
     private String guide;
 
+    /*
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
@@ -29,10 +30,11 @@ public class ArrangementBooking extends Booking {
         this.formerParticipant = formerParticipant;
         this.guide = guide;
     }
+    */
 
     public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,
-                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren,
+                              String comment, FoodOrder menuChosen, Restaurant restaurant,
                               String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
                               String customerContactPerson, String customerPhoneNumber, String customerEmail) {
         super(bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
