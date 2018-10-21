@@ -136,7 +136,7 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(5, Integer.valueOf(abook.getParticipants()));
         pstmtGeneral.setString(6, abook.getCustomerComment());
         pstmtGeneral.setString(7, abook.getComment());
-        pstmtGeneral.executeUpdate();
+
 
         //Get Auto-Generated ID of this booking and customer
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
@@ -159,7 +159,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setInt(5, abook.getBirthdayChildAge());
         pstmtTypeSpecific.setString(6, abook.getFormerParticipant());
         pstmtTypeSpecific.setString(7, abook.getGuide());
-        pstmtTypeSpecific.executeUpdate();
+
 
         //Insert data into customer table
         String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
@@ -170,6 +170,10 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(2, abook.getCustomer().getContactPerson());
         pstmtCustomer.setString(3, abook.getCustomer().getPhoneNumber());
         pstmtCustomer.setString(4, abook.getCustomer().getEmail());
+
+        //Execute Updates
+        pstmtGeneral.executeUpdate();
+        pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
     }
 
@@ -241,7 +245,7 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(5, Integer.valueOf(lbook.getParticipants()));
         pstmtGeneral.setString(6, lbook.getCustomerComment());
         pstmtGeneral.setString(7, lbook.getComment());
-        pstmtGeneral.executeUpdate();
+
 
         //Get Auto-Generated ID of this booking and customer
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
@@ -264,7 +268,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setInt(5, lbook.getNoOfTeams());
         pstmtTypeSpecific.setInt(6, lbook.getNoOfTeachers());
         pstmtTypeSpecific.setInt(7, lbook.getGrade());
-        pstmtTypeSpecific.executeUpdate();
+
 
         //Insert data into customer table
         String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
@@ -275,7 +279,7 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(2, lbook.getCustomer().getContactPerson());
         pstmtCustomer.setString(3, lbook.getCustomer().getPhoneNumber());
         pstmtCustomer.setString(4, lbook.getCustomer().getEmail());
-        pstmtCustomer.executeUpdate();
+
 
         //Insert data into lecture_booking_customer table
         LectureBookingCustomer temp = (LectureBookingCustomer) lbook.getCustomer();
@@ -290,6 +294,12 @@ public class BookingDataAccessor {
         pstmtCustomerSpecific.setString(5, temp.getCommune());
         pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
         pstmtCustomerSpecific.setLong(7, temp.getEanNumber());
+
+
+        //Execute updates
+        pstmtGeneral.executeUpdate();
+        pstmtTypeSpecific.executeUpdate();
+        pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
     }
 
@@ -299,5 +309,59 @@ public class BookingDataAccessor {
         PreparedStatement pstmt = connection.prepareStatement(changeStatus);
         pstmt.setString(1,status.name()); pstmt.setInt(1,book.getId());
         pstmt.executeUpdate();
+    }
+
+    public void editArrBook(ArrangementBooking abook){}
+
+    public void editLecBook(LectureBooking lbook) throws SQLException{
+
+        String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
+        PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
+        pstmtGetCustomerID.setInt(1,lbook.getId());
+        ResultSet rsCustomerID = pstmtGetCustomerID.executeQuery();
+        rsCustomerID.next();
+        int currentCustomerID = rsCustomerID.getInt(1);
+
+        String editBooking = "UPDATE booking SET date=(?), time=(?), participants=(?), customercomment=(?), usercomment=(?)" +
+                "WHERE bookingid=(?)";
+        String editLectureBooking = "UPDATE lecture_booking SET lectureroom=(?), lecturer=(?), choiceoftopic=(?), noofteams=(?), noofteachers=(?), grade=(?)" +
+                "WHERE bookingid=(?)";
+        String editCustomer = "UPDATE customer SET contactperson=(?), phonenumber=(?), email=(?)" +
+                "WHERE customerid=(?)";
+        String editLectureCustomer = "UPDATE lecture_booking_customer SET schoolname=(?), zipcode=(?), city=(?), commune=(?), schoolphonenumber=(?), eannumber=(?)" +
+                "WHERE customerid=(?)";
+
+        PreparedStatement pstmtGeneral = connection.prepareStatement(editBooking);
+        pstmtGeneral.setDate(1,java.sql.Date.valueOf(lbook.getDate())); pstmtGeneral.setString(2,lbook.getTime());
+        pstmtGeneral.setInt(3,lbook.getParticipants()); pstmtGeneral.setString(4,lbook.getCustomerComment());
+        pstmtGeneral.setString(5,lbook.getComment()); pstmtGeneral.setInt(6,lbook.getId());
+
+
+        PreparedStatement pstmtTypeSpecific = connection.prepareStatement(editLectureBooking);
+        pstmtTypeSpecific.setString(1,lbook.getLectureRoom().getType().name()); pstmtTypeSpecific.setString(2,lbook.getLecturer().toString());
+        pstmtTypeSpecific.setString(3,lbook.getChoiceOfTopic().name()); pstmtTypeSpecific.setInt(4,lbook.getNoOfTeams());
+        pstmtTypeSpecific.setInt(5,lbook.getNoOfTeachers()); pstmtTypeSpecific.setInt(6,lbook.getGrade());
+        pstmtTypeSpecific.setInt(7,lbook.getId());
+
+        PreparedStatement pstmtCustomer = connection.prepareStatement(editCustomer);
+        pstmtCustomer.setString(1,lbook.getCustomer().getContactPerson()); pstmtCustomer.setString(2,lbook.getCustomer().getPhoneNumber());
+        pstmtCustomer.setString(3,lbook.getCustomer().getEmail()); pstmtCustomer.setInt(4,currentCustomerID);
+
+        LectureBookingCustomer temp = (LectureBookingCustomer) lbook.getCustomer();
+        PreparedStatement pstmtCustomerSpecific = connection.prepareStatement(editLectureCustomer);
+        pstmtCustomerSpecific.setString(1,temp.getSchoolName()); pstmtCustomerSpecific.setInt(2,temp.getZipCode());
+        pstmtCustomerSpecific.setString(3,temp.getCity()); pstmtCustomerSpecific.setString(4,temp.getCommune());
+        pstmtCustomerSpecific.setString(5,temp.getSchoolPhoneNumber()); pstmtCustomerSpecific.setLong(6,temp.getEanNumber());
+        pstmtCustomerSpecific.setInt(7,currentCustomerID);
+
+        //Execute Updates
+        pstmtGeneral.executeUpdate();
+        changeBookingStatus(lbook, lbook.getBookingStatus());
+        pstmtTypeSpecific.executeUpdate();
+        pstmtCustomer.executeUpdate();
+        pstmtCustomerSpecific.executeUpdate();
+
+
+
     }
 }
