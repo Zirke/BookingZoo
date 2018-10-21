@@ -29,8 +29,8 @@ public class PendingController extends GeneralController {
 
     //Nodes for booking information display area
     @FXML
-    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, dateLabel, timeLabel, pupilNoLabel,
-            teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel,
+    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel, timeLabel,
+            pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel,
             zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
     @FXML
     private TextArea customerCommentArea;
@@ -95,10 +95,7 @@ public class PendingController extends GeneralController {
         });
 
         //Reloads the bookings from database into ListView
-        refreshBookingsButton.setOnMouseClicked(e -> {
-            refreshBookingListView();
-            System.out.println("LOL");
-        });
+        refreshBookingsButton.setOnMouseClicked(e -> refreshBookingListView());
 
         //Opens edit pop-up window corresponding to chosen Booking in ListView
         editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
@@ -207,7 +204,7 @@ public class PendingController extends GeneralController {
 
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getBookingStatus().toString());
-        //TODO Represent creation date
+        creationDateLabel.setText("Oprettet: " + selectedLectureBooking.getCreationDate().toString());
         dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
         timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getTime());
         pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getParticipants());

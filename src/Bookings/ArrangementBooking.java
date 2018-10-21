@@ -16,7 +16,6 @@ public class ArrangementBooking extends Booking {
     private String formerParticipant;
     private String guide;
 
-
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                               LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
