@@ -15,11 +15,11 @@ public class LectureBooking extends Booking {
     private String noOfTeachers;
     private String grade;
 
-    /*
+
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                           String creationDate, String date, String time, String participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
-                          String noOfPupils, String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
+                          String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,
                           String commune, String schoolPhoneNumber, String eanNumber) {
         super(id, bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
@@ -28,12 +28,12 @@ public class LectureBooking extends Booking {
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;
         this.choiceOfTopic = choiceOfTopic;
-        this.noOfPupils = noOfPupils;
+
         this.noOfTeams = noOfTeams;
         this.noOfTeachers = noOfTeachers;
         this.grade = grade;
     }
-*/
+
     public LectureBooking(BookingType bookingType, BookingStatus bookingStatus,
                           String creationDate, String date, String time, String participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,

@@ -10,4 +10,7 @@ public class Lecturer {
         this.lecturerName = lecturerName;
         this.lecturerStatus = lecturerStatus;
     }
+
+    public Lecturer() {
+    }
 }
