@@ -214,7 +214,7 @@ public class PendingController extends GeneralController {
         teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
         teacherNoLabel.setText("Antal lærere: " + selectedLectureBooking.getNoOfTeachers());
         gradeLabel.setText("Klassetrin: " + selectedLectureBooking.getGrade());
-        topicChoiceLabel.setText("Valg af emne: " + selectedLectureBooking.getChoiceOfTopic());
+        topicChoiceLabel.setText("Valg af emne: " + selectedLectureBooking.getChoiceOfTopic().toString());
         communeLabel.setText("Aalborg Kommune (Ja/Nej): " + temp.getCommune());
         schoolNameLabel.setText("Skolens navn: " + temp.getSchoolName());
         schoolPhoneNumberLabel.setText("Skolens telefonnummer: " + temp.getSchoolPhoneNumber());

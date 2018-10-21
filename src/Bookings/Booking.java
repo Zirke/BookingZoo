@@ -5,7 +5,6 @@ import enums.BookingStatus;
 import enums.BookingType;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public abstract class Booking {
 
@@ -16,11 +15,11 @@ public abstract class Booking {
     private LocalDate creationDate;
     private LocalDate date;
     private String time;
-    private String participants;
+    private int participants;
     private String customerComment;
     private String comment;
 
-    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, String participants, String customerComment, String comment) {
+    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, int participants, String customerComment, String comment) {
         this.id = id;
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
@@ -33,7 +32,7 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, String participants, String customerComment, String comment) {
+    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, int participants, String customerComment, String comment) {
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.customer = customer;
@@ -101,11 +100,11 @@ public abstract class Booking {
         this.time = time;
     }
 
-    public String getParticipants() {
+    public int getParticipants() {
         return participants;
     }
 
-    public void setParticipants(String participants) {
+    public void setParticipants(int participants) {
         this.participants = participants;
     }
 

@@ -122,12 +122,33 @@ public class LectureBookingCreationController {
     public void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate date = datePicker.getValue();
         String time = timeTextField.getText();
-        String numberOfPupils = noOfPupilsTextField.getText();
-        String numberOfTeams = noOfTeamsTextField.getText();
-        String numberOfTeachers = noOfTeachersTextField.getText();
-        String topicChoice = topicChoiceBox.getSelectionModel().getSelectedItem().toString();
-        String grade = gradeTextField.getText();
+        int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
+        int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
+        int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
+        ChoiceOfTopic topicChoice = null;
+        if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Dyr derhjemme")){
+            topicChoice = ChoiceOfTopic.DYR_DERHJEMME;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Hverdagen i Zoo")){
+            topicChoice = ChoiceOfTopic.HVERDAG_ZOO;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Krybdyr")){
+            topicChoice = ChoiceOfTopic.KRYBDYR;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Grønlands dyr")){
+            topicChoice = ChoiceOfTopic.GROENDLANDS_DYR;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Afrikas savanner")){
+            topicChoice = ChoiceOfTopic.AFRIKAS_SAVANNER;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Aktiveringsværksted")){
+            topicChoice = ChoiceOfTopic.AKTIVERINGSVAERKSTED;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Sanseoplevelser")){
+            topicChoice = ChoiceOfTopic.SANSEOPLEVELSER;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Dyrs tilpasning og forskelligheder (Udskoling)")){
+            topicChoice = ChoiceOfTopic.DYRS_TILPASNING;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Evolution/Klassifikation (Gymnasium)")){
+            topicChoice = ChoiceOfTopic.EVOLUTION;
+        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Aalborg Zoo som virksomhed (Handelsskole)")){
+            topicChoice = ChoiceOfTopic.ZOO_SOM_VIRKSOMHED;
+        }
 
+        int grade = Integer.parseInt(gradeTextField.getText());
         LectureRoom lectureRoomChosen = null;
         if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Savannelokale")) {
             lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE);
@@ -137,12 +158,12 @@ public class LectureBookingCreationController {
 
         String lecturerChosen = lecturerChosenTextField.getText();
         String schoolName = schoolNameTextField.getText();
-        String zipCode = zipCodeTextField.getText();
+        int zipCode = Integer.parseInt(zipCodeTextField.getText());
         String city = cityTextField.getText();
         RadioButton selectedCommuneBtn = (RadioButton) communeGroup.getSelectedToggle();
         String commune = selectedCommuneBtn.getText();
         String schoolPhoneNumber = schoolPhoneNumberTextField.getText();
-        String eanNumber = eanNumberTextField.getText();
+        long eanNumber = Long.parseLong(eanNumberTextField.getText());
         String contactPerson = contactPersonTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
         String email = emailTextField.getText();

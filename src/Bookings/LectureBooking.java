@@ -3,27 +3,27 @@ package Bookings;
 import Customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
+import enums.ChoiceOfTopic;
 import facilities.LectureRoom;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
 
 public class LectureBooking extends Booking {
     private LectureRoom lectureRoom;
     private Lecturer lecturer;
-    private String choiceOfTopic;
-    private String noOfTeams;
-    private String noOfTeachers;
-    private String grade;
+    private ChoiceOfTopic choiceOfTopic;
+    private int noOfTeams;
+    private int noOfTeachers;
+    private int grade;
 
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
-                          LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
-                          String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
-                          String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
-                          String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,
-                          String commune, String schoolPhoneNumber, String eanNumber) {
+                          LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                          String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
+                          int noOfTeams, int noOfTeachers, int grade, String customerContactPerson,
+                          String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
+                          String commune, String schoolPhoneNumber, long eanNumber) {
         super(id, bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
                         customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
                 time, participants, customerComment, comment);
@@ -37,11 +37,11 @@ public class LectureBooking extends Booking {
     }
 
     public LectureBooking(BookingType bookingType, BookingStatus bookingStatus,
-                          LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
-                          String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
-                          String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
-                          String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,
-                          String commune, String schoolPhoneNumber, String eanNumber) {
+                          LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                          String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
+                          int noOfTeams, int noOfTeachers, int grade, String customerContactPerson,
+                          String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
+                          String commune, String schoolPhoneNumber, long eanNumber) {
         super(bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
                         customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
                 time, participants, customerComment, comment);
@@ -71,35 +71,35 @@ public class LectureBooking extends Booking {
         this.lecturer = lecturer;
     }
 
-    public String getChoiceOfTopic() {
+    public ChoiceOfTopic getChoiceOfTopic() {
         return choiceOfTopic;
     }
 
-    public void setChoiceOfTopic(String choiceOfTopic) {
+    public void setChoiceOfTopic(ChoiceOfTopic choiceOfTopic) {
         this.choiceOfTopic = choiceOfTopic;
     }
 
-    public String getNoOfTeams() {
+    public int getNoOfTeams() {
         return noOfTeams;
     }
 
-    public void setNoOfTeams(String noOfTeams) {
+    public void setNoOfTeams(int noOfTeams) {
         this.noOfTeams = noOfTeams;
     }
 
-    public String getNoOfTeachers() {
+    public int getNoOfTeachers() {
         return noOfTeachers;
     }
 
-    public void setNoOfTeachers(String noOfTeachers) {
+    public void setNoOfTeachers(int noOfTeachers) {
         this.noOfTeachers = noOfTeachers;
     }
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 

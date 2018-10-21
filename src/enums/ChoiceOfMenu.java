@@ -4,31 +4,31 @@ public enum ChoiceOfMenu {
     MENU_ONE {
         @Override
         public String toString() {
-            return "Klassisk menu med kakao, boller og kage 98,-";
+            return "Kakao, boller og kage";
         }
     },
     MENU_TWO {
         @Override
         public String toString() {
-            return "Menu med frikadeller og dessert 75,-";
+            return "Frikadeller og dessert";
         }
     },
     MENU_THREE {
         @Override
         public String toString() {
-            return "Menu med pasta og kødsovs og dessert 75,-";
+            return "Pasta m. kødsovs og dessert";
         }
     },
     MENU_FOUR {
         @Override
         public String toString() {
-            return "Menu med nuggets og pommes frites 50,-";
+            return "Nuggets og pommes frites";
         }
     },
     NO_FOOD {
         @Override
         public String toString() {
-            return "Mad fra Skovbakken ikke ønsket";
+            return "Ingen mad";
         }
     },
 }

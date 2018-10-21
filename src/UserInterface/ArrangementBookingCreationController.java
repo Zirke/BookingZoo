@@ -5,6 +5,7 @@ import Bookings.BookingDataAccessor;
 import Bookings.FoodOrder;
 import enums.BookingStatus;
 import enums.BookingType;
+import enums.ChoiceOfMenu;
 import enums.FacilityState;
 import facilities.Restaurant;
 import javafx.fxml.FXML;
@@ -83,9 +84,9 @@ public class ArrangementBookingCreationController extends GeneralController {
         LocalDate date = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         String time = selectedTimeBtn.getText();
-        String noOfChildren = noOfChildrenTextField.getText();
+        int noOfChildren = Integer.parseInt(noOfChildrenTextField.getText());
         String childName = childNameTextField.getText();
-        String childAge = childAgeTextField.getText();
+        int childAge = Integer.parseInt(childAgeTextField.getText());
         String contactPerson = contactPersonTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
         String email = emailTextField.getText();
@@ -93,7 +94,24 @@ public class ArrangementBookingCreationController extends GeneralController {
         RadioButton selectedParticipantBtn = (RadioButton) participantGroup.getSelectedToggle();
         String participant = selectedParticipantBtn.getText();
         RadioButton selectedMenuBtn = (RadioButton) menuGroup.getSelectedToggle();
-        String menuChoice = selectedMenuBtn.getText();
+        ChoiceOfMenu menuChoice = null;
+        switch (selectedMenuBtn.getText()) {
+            case "Kakao, boller og kage":
+                menuChoice = ChoiceOfMenu.MENU_ONE;
+                break;
+            case "Frikadeller og dessert":
+                menuChoice = ChoiceOfMenu.MENU_TWO;
+                break;
+            case "Pasta m. kødsovs og dessert":
+                menuChoice = ChoiceOfMenu.MENU_THREE;
+                break;
+            case "Nuggets og pommes frites":
+                menuChoice = ChoiceOfMenu.MENU_FOUR;
+                break;
+            case "Ingen mad":
+                menuChoice = ChoiceOfMenu.NO_FOOD;
+                break;
+        }
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 

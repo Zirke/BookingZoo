@@ -2,14 +2,14 @@ package Customers;
 
 public class LectureBookingCustomer extends Customer {
     private String schoolName;
-    private String zipCode;
+    private int zipCode;
     private String city;
     private String commune;
     private String schoolPhoneNumber;
-    private String eanNumber;
+    private long eanNumber;
 
     public LectureBookingCustomer(String contactPerson, String phoneNumber, String email, String schoolName,
-                                  String zipCode, String city, String commune, String schoolPhoneNumber, String eanNumber) {
+                                  int zipCode, String city, String commune, String schoolPhoneNumber, long eanNumber) {
         super(contactPerson, phoneNumber, email);
         this.schoolName = schoolName;
         this.zipCode = zipCode;
@@ -27,11 +27,11 @@ public class LectureBookingCustomer extends Customer {
         this.schoolName = schoolName;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
 
@@ -59,11 +59,11 @@ public class LectureBookingCustomer extends Customer {
         this.schoolPhoneNumber = schoolPhoneNumber;
     }
 
-    public String getEanNumber() {
+    public long getEanNumber() {
         return eanNumber;
     }
 
-    public void setEanNumber(String eanNumber) {
+    public void setEanNumber(long eanNumber) {
         this.eanNumber = eanNumber;
     }
 }

@@ -1,10 +1,7 @@
 package Bookings;
 
 import Customers.LectureBookingCustomer;
-import enums.BookingStatus;
-import enums.BookingType;
-import enums.FacilityState;
-import enums.LectureRoomType;
+import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 
@@ -57,9 +54,9 @@ public class BookingDataAccessor {
             abook = new ArrangementBooking(
                     rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
-                    Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new FoodOrder(rsTypeSpecific.getString("food")), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
-                    Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), rsTypeSpecific.getString("formerparticipant"),
+                    rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
+                    rsGeneral.getString("usercomment"), new FoodOrder(ChoiceOfMenu.valueOf(rsTypeSpecific.getString("food"))), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
+                    rsTypeSpecific.getInt("birthdaychildage"), rsTypeSpecific.getString("formerparticipant"),
                     rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
                     rsCustomer.getString("phonenumber"), rsCustomer.getString("email")
             );
@@ -108,15 +105,15 @@ public class BookingDataAccessor {
             lbook = new LectureBooking(
                     rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
-                    Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.BIOLOGICAL_TYPE),
-                    new Lecturer(), rsTypeSpecific.getString("choiceoftopic"), Integer.toString(rsTypeSpecific.getInt("noofteams")),
-                    Integer.toString(rsTypeSpecific.getInt("noofteachers")), rsTypeSpecific.getString("grade"),
+                    rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
+                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
+                    new Lecturer(), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
+                    rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getInt("grade"),
                     rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
                     rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),
-                    Integer.toString(rsCustomerSpecific.getInt("zipcode")), rsCustomerSpecific.getString("city"),
+                    rsCustomerSpecific.getInt("zipcode"), rsCustomerSpecific.getString("city"),
                     rsCustomerSpecific.getString("commune"), rsCustomerSpecific.getString("schoolphonenumber"),
-                    Long.toString(rsCustomerSpecific.getLong("eannumber"))
+                    rsCustomerSpecific.getLong("eannumber")
             );
 
             if (lbook != null) {
@@ -156,10 +153,10 @@ public class BookingDataAccessor {
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
         pstmtTypeSpecific.setInt(1, currentBookingID);
-        pstmtTypeSpecific.setString(2, abook.getMenuChosen().toString());
+        pstmtTypeSpecific.setString(2, abook.getMenuChosen().getChoiceOfMenu().name());
         pstmtTypeSpecific.setInt(3, 2);
         pstmtTypeSpecific.setString(4, abook.getBirthdayChildName());
-        pstmtTypeSpecific.setInt(5, Integer.valueOf(abook.getBirthdayChildAge()));
+        pstmtTypeSpecific.setInt(5, abook.getBirthdayChildAge());
         pstmtTypeSpecific.setString(6, abook.getFormerParticipant());
         pstmtTypeSpecific.setString(7, abook.getGuide());
         pstmtTypeSpecific.executeUpdate();
@@ -261,12 +258,12 @@ public class BookingDataAccessor {
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
         pstmtTypeSpecific.setInt(1, currentBookingID);
-        pstmtTypeSpecific.setInt(2,2); //Integer.valueOf(lbook.getLectureRoom().toString())
-        pstmtTypeSpecific.setInt(3, 3); //Integer.valueOf(lbook.getLecturer().toString())
-        pstmtTypeSpecific.setInt(4, 4); //Integer.valueOf(lbook.getChoiceOfTopic())
-        pstmtTypeSpecific.setInt(5, Integer.valueOf(lbook.getNoOfTeams()));
-        pstmtTypeSpecific.setInt(6, Integer.valueOf(lbook.getNoOfTeachers()));
-        pstmtTypeSpecific.setString(7, lbook.getGrade());
+        pstmtTypeSpecific.setString(2,lbook.getLectureRoom().getType().name());
+        pstmtTypeSpecific.setString(3, lbook.getLecturer().toString());
+        pstmtTypeSpecific.setString(4, lbook.getChoiceOfTopic().name());
+        pstmtTypeSpecific.setInt(5, lbook.getNoOfTeams());
+        pstmtTypeSpecific.setInt(6, lbook.getNoOfTeachers());
+        pstmtTypeSpecific.setInt(7, lbook.getGrade());
         pstmtTypeSpecific.executeUpdate();
 
         //Insert data into customer table
@@ -288,11 +285,11 @@ public class BookingDataAccessor {
         PreparedStatement pstmtCustomerSpecific = connection.prepareStatement(lecture_customer);
         pstmtCustomerSpecific.setInt(1, currentCustomerID);
         pstmtCustomerSpecific.setString(2, temp.getSchoolName());
-        pstmtCustomerSpecific.setInt(3, Integer.valueOf(temp.getZipCode()));
+        pstmtCustomerSpecific.setInt(3, temp.getZipCode());
         pstmtCustomerSpecific.setString(4, temp.getCity());
         pstmtCustomerSpecific.setString(5, temp.getCommune());
         pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
-        pstmtCustomerSpecific.setLong(7,Long.valueOf(temp.getEanNumber()));
+        pstmtCustomerSpecific.setLong(7, temp.getEanNumber());
         pstmtCustomerSpecific.executeUpdate();
     }
 }

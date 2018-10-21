@@ -1,30 +1,37 @@
 package Bookings;
 
+import enums.ChoiceOfMenu;
+
 public class FoodOrder {
     private String orderDate;
     private String cancellationDate;
-    private String menuChosen;
+    private ChoiceOfMenu choiceOfMenu;
 
-    public FoodOrder(String orderDate, String cancellationDate, String menuChosen) {
+    public FoodOrder(String orderDate, String cancellationDate, ChoiceOfMenu choiceOfMenu) {
         this.orderDate = orderDate;
         this.cancellationDate = cancellationDate;
-        this.menuChosen = menuChosen;
+        this.choiceOfMenu = choiceOfMenu;
     }
 
-    public FoodOrder(String menuChosen) {
-        this.menuChosen = menuChosen;
+    public FoodOrder(ChoiceOfMenu choiceOfMenu) {
+        this.choiceOfMenu = choiceOfMenu;
     }
 
-    public FoodOrder(String orderDate, String menuChosen) {
+    public FoodOrder(String orderDate, ChoiceOfMenu choiceOfMenu) {
         this.orderDate = orderDate;
-        this.menuChosen = menuChosen;
+        this.choiceOfMenu = choiceOfMenu;
     }
 
     public FoodOrder() {
     }
 
+
+    public ChoiceOfMenu getChoiceOfMenu() {
+        return choiceOfMenu;
+    }
+
     @Override
     public String toString() {
-        return menuChosen;
+        return choiceOfMenu.toString();
     }
 }

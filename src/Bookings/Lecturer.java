@@ -13,4 +13,9 @@ public class Lecturer {
 
     public Lecturer() {
     }
+
+    @Override
+    public String toString() {
+        return lecturerName;
+    }
 }

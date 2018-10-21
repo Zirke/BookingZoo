@@ -34,7 +34,7 @@ public class EditLectureBookingController {
         //timeTextField.setText(selectedLectureBooking.getTime());
         //noOfPupilsTextField.setText(selectedLectureBooking.getParticipants());
         //noOfTeamsTextField.setText(selectedLectureBooking.getNoOfTeams());
-        noOfTeachersTextField.setText(selectedLectureBooking.getNoOfTeachers());
+        //noOfTeachersTextField.setText(selectedLectureBooking.getNoOfTeachers());
         //topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic());
         //gradeTextField.setText(selectedLectureBooking.getGrade());
         //lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
