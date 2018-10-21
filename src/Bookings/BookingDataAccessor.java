@@ -8,6 +8,7 @@ import enums.LectureRoomType;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -284,7 +285,7 @@ public class BookingDataAccessor {
         LectureBookingCustomer temp = (LectureBookingCustomer) lbook.getCustomer();
         String lecture_customer = "INSERT INTO lecture_booking_customer (customerid,schoolname,zipcode,city,commune,schoolphonenumber,eannumber)" +
                 "VALUES ((?),(?),(?),(?),(?),(?),(?))";
-
+        
         PreparedStatement pstmtCustomerSpecific = connection.prepareStatement(lecture_customer);
         pstmtCustomerSpecific.setInt(1, currentCustomerID);
         pstmtCustomerSpecific.setString(2, temp.getSchoolName());
@@ -292,7 +293,7 @@ public class BookingDataAccessor {
         pstmtCustomerSpecific.setString(4, temp.getCity());
         pstmtCustomerSpecific.setBoolean(5, Boolean.parseBoolean(temp.getCommune()));
         pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
-        pstmtCustomerSpecific.setInt(7, Integer.valueOf(temp.getEanNumber()));
+        pstmtCustomerSpecific.setLong(7,Long.valueOf(temp.getEanNumber()));
         pstmtCustomerSpecific.executeUpdate();
     }
 }
