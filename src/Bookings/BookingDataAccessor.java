@@ -129,7 +129,7 @@ public class BookingDataAccessor {
                 "VALUES ((2),(?),(?),(?),(?),(?),(?),(?))";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
-        pstmtGeneral.setString(1, abook.getBookingStatus().toString());
+        pstmtGeneral.setString(1, abook.getBookingStatus().name());
         pstmtGeneral.setDate(2, java.sql.Date.valueOf(abook.getCreationDate()));
         pstmtGeneral.setDate(3, java.sql.Date.valueOf(abook.getDate()));
         pstmtGeneral.setString(4, abook.getTime());
@@ -234,7 +234,7 @@ public class BookingDataAccessor {
                 "VALUES ((1),(?),(?),(?),(?),(?),(?),(?))";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
-        pstmtGeneral.setString(1, lbook.getBookingStatus().toString());
+        pstmtGeneral.setString(1, lbook.getBookingStatus().name());
         pstmtGeneral.setDate(2, java.sql.Date.valueOf(lbook.getCreationDate()));
         pstmtGeneral.setDate(3, java.sql.Date.valueOf(lbook.getDate()));
         pstmtGeneral.setString(4, lbook.getTime());
