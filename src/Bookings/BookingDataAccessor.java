@@ -261,9 +261,9 @@ public class BookingDataAccessor {
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
         pstmtTypeSpecific.setInt(1, currentBookingID);
-        pstmtTypeSpecific.setInt(2, Integer.valueOf(lbook.getLectureRoom().toString()));
-        pstmtTypeSpecific.setInt(3, Integer.valueOf(lbook.getLecturer().toString()));
-        pstmtTypeSpecific.setInt(4, Integer.valueOf(lbook.getChoiceOfTopic()));
+        pstmtTypeSpecific.setInt(2,2); //Integer.valueOf(lbook.getLectureRoom().toString())
+        pstmtTypeSpecific.setInt(3, 3); //Integer.valueOf(lbook.getLecturer().toString())
+        pstmtTypeSpecific.setInt(4, 4); //Integer.valueOf(lbook.getChoiceOfTopic())
         pstmtTypeSpecific.setInt(5, Integer.valueOf(lbook.getNoOfTeams()));
         pstmtTypeSpecific.setInt(6, Integer.valueOf(lbook.getNoOfTeachers()));
         pstmtTypeSpecific.setString(7, lbook.getGrade());
