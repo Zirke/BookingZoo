@@ -15,7 +15,7 @@ public class ArrangementBooking extends Booking {
     private String formerParticipant;
     private String guide;
 
-    /*
+
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
@@ -30,7 +30,6 @@ public class ArrangementBooking extends Booking {
         this.formerParticipant = formerParticipant;
         this.guide = guide;
     }
-    */
 
     public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,

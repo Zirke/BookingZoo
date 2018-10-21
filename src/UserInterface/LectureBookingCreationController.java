@@ -3,9 +3,7 @@ package UserInterface;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Bookings.Lecturer;
-import enums.BookingStatus;
-import enums.BookingType;
-import enums.LecturerStatus;
+import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -71,7 +69,7 @@ public class LectureBookingCreationController {
         String numberOfTeachers = noOfTeachersTextField.getText();
         String topicChoice = topicChoiceBox.getSelectionModel().getSelectedItem().toString();
         String grade = gradeTextField.getText();
-        LectureRoom lectureRoomChosen = (LectureRoom) lectureRoomChoiceBox.getSelectionModel().getSelectedItem();
+        //LectureRoom lectureRoomChosen = (LectureRoom) lectureRoomChoiceBox.getSelectionModel().getSelectedItem();
         String lecturerChosen = lecturerChosenTextField.getText();
         String schoolName = schoolNameTextField.getText();
         String zipCode = zipCodeTextField.getText();
@@ -87,7 +85,7 @@ public class LectureBookingCreationController {
         String comment = commentTextArea.getText();
 
         LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                new Date().toString(), date, time, numberOfPupils, customerComment, comment, lectureRoomChosen,
+                new Date().toString(), date, time, numberOfPupils, customerComment, comment, new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers, grade, contactPerson, phoneNumber,
                 email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
