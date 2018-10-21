@@ -45,9 +45,10 @@ public class ArrangementBookingCreationController extends GeneralController {
                 Alert alert1 = new Alert(Alert.AlertType.WARNING);
                 alert1.setHeaderText("Tjek alle felter");
                 alert1.setContentText("Et eller flere felter mangler information");
+
+                Optional<ButtonType> alertChoice1 = alert1.showAndWait();
             } else {
                 Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert2.setHeaderText("Vil du oprette?");
                 alert2.setContentText("Er den indtastede information korrekt?");
 
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
@@ -67,7 +68,8 @@ public class ArrangementBookingCreationController extends GeneralController {
 
     private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
         String date = datePicker.getValue().toString();
-        String time = timeGroup.getSelectedToggle().toString();
+        RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
+        String time = selectedTimeBtn.getText();
         String noOfChildren = noOfChildrenTextField.getText();
         String childName = childNameTextField.getText();
         String childAge = childAgeTextField.getText();
@@ -75,8 +77,10 @@ public class ArrangementBookingCreationController extends GeneralController {
         String phoneNumber = phoneNumberTextField.getText();
         String email = emailTextField.getText();
         String guide = guideTextField.getText();
-        String participant = participantGroup.getSelectedToggle().toString();
-        String menuChoice = menuGroup.getSelectedToggle().toString();
+        RadioButton selectedParticipantBtn = (RadioButton) participantGroup.getSelectedToggle();
+        String participant = selectedParticipantBtn.getText();
+        RadioButton selectedMenuBtn = (RadioButton) menuGroup.getSelectedToggle();
+        String menuChoice = selectedMenuBtn.getText();
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
@@ -94,7 +98,6 @@ public class ArrangementBookingCreationController extends GeneralController {
 
         bda.createArrBookManually(abook);
     }
-
 
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();

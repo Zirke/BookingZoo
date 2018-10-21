@@ -8,7 +8,6 @@ import enums.LectureRoomType;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -59,8 +58,8 @@ public class BookingDataAccessor {
                     rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new FoodOrder(), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
-                    Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), Boolean.toString(rsTypeSpecific.getBoolean("formerparticipant")),
+                    rsGeneral.getString("usercomment"), new FoodOrder(rsTypeSpecific.getString("food")), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
+                    Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), rsTypeSpecific.getString("formerparticipant"),
                     rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
                     rsCustomer.getString("phonenumber"), rsCustomer.getString("email")
             );
@@ -116,8 +115,8 @@ public class BookingDataAccessor {
                     rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
                     rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),
                     Integer.toString(rsCustomerSpecific.getInt("zipcode")), rsCustomerSpecific.getString("city"),
-                    Boolean.toString(rsCustomerSpecific.getBoolean("commune")), rsCustomerSpecific.getString("schoolphonenumber"),
-                    Integer.toString(rsCustomerSpecific.getInt("eannumber"))
+                    rsCustomerSpecific.getString("commune"), rsCustomerSpecific.getString("schoolphonenumber"),
+                    Long.toString(rsCustomerSpecific.getLong("eannumber"))
             );
 
             if (lbook != null) {
@@ -161,7 +160,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setInt(3, 2);
         pstmtTypeSpecific.setString(4, abook.getBirthdayChildName());
         pstmtTypeSpecific.setInt(5, Integer.valueOf(abook.getBirthdayChildAge()));
-        pstmtTypeSpecific.setBoolean(6, Boolean.parseBoolean(abook.getFormerParticipant()));
+        pstmtTypeSpecific.setString(6, abook.getFormerParticipant());
         pstmtTypeSpecific.setString(7, abook.getGuide());
         pstmtTypeSpecific.executeUpdate();
 
@@ -291,7 +290,7 @@ public class BookingDataAccessor {
         pstmtCustomerSpecific.setString(2, temp.getSchoolName());
         pstmtCustomerSpecific.setInt(3, Integer.valueOf(temp.getZipCode()));
         pstmtCustomerSpecific.setString(4, temp.getCity());
-        pstmtCustomerSpecific.setBoolean(5, Boolean.parseBoolean(temp.getCommune()));
+        pstmtCustomerSpecific.setString(5, temp.getCommune());
         pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
         pstmtCustomerSpecific.setLong(7,Long.valueOf(temp.getEanNumber()));
         pstmtCustomerSpecific.executeUpdate();

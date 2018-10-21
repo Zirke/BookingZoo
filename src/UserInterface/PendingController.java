@@ -19,7 +19,7 @@ public class PendingController extends GeneralController {
     private BookingDataAccessor bda;
 
     @FXML
-    private Button activeBookingsButton;
+    private Button refreshBookingsButton, activeBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -29,9 +29,9 @@ public class PendingController extends GeneralController {
 
     //Nodes for booking information display area
     @FXML
-    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, dateLabel, timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel,
-            gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel,
-            phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
+    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, dateLabel, timeLabel, pupilNoLabel,
+            teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel,
+            zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
     @FXML
     private TextArea customerCommentArea;
     @FXML
@@ -94,6 +94,12 @@ public class PendingController extends GeneralController {
             openNewPopUpWindow("ArrangementBookingCreation.fxml");
         });
 
+        //Reloads the bookings from database into ListView
+        refreshBookingsButton.setOnMouseClicked(e -> {
+            refreshBookingListView();
+            System.out.println("LOL");
+        });
+
         //Opens edit pop-up window corresponding to chosen Booking in ListView
         editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
 
@@ -122,6 +128,19 @@ public class PendingController extends GeneralController {
             bookings.addAll(booking);
         }
         bookingListView.setItems(bookings);
+    }
+
+    private void refreshBookingListView() {
+        try {
+            ArrayList<Booking> refreshedListOfBookings = new ArrayList<>();
+
+            refreshedListOfBookings.addAll(bda.fetchArrBooks());
+            refreshedListOfBookings.addAll(bda.fetchLecBooks());
+
+            loadBookingsToListView(refreshedListOfBookings);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void removeBookingFromListView() {
@@ -170,7 +189,6 @@ public class PendingController extends GeneralController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private void changeBookingStatus() {

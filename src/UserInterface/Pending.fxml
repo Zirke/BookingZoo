@@ -14,7 +14,8 @@
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
                 <Separator prefWidth="200.0" />
-                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Opdater">
+                <Button fx:id="refreshBookingsButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0"
+                        text="Opdater">
                     <font>
                         <Font size="16.0"/>
                     </font>

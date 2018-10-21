@@ -22,4 +22,9 @@ public class FoodOrder {
 
     public FoodOrder() {
     }
+
+    @Override
+    public String toString() {
+        return menuChosen;
+    }
 }
