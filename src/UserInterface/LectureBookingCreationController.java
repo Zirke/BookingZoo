@@ -10,7 +10,10 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.Optional;
 
 public class LectureBookingCreationController {
     private BookingDataAccessor bda;
@@ -48,21 +51,42 @@ public class LectureBookingCreationController {
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
 
         createAndCloseButton.setOnMouseClicked(e -> {
-            try {
-                createNewLecturetBookingFromInput();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();
+            if (datePicker.getValue() == null || timeTextField.getText().isEmpty() || noOfPupilsTextField.getText().isEmpty() ||
+                    noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    gradeTextField.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
+                    zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
+                    schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
+                    contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()) {
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setHeaderText("Tjek alle felter");
+                alert1.setContentText("Et eller flere felter mangler information");
+                alert1.showAndWait();
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setContentText("Er den indtastede information korrekt?");
+
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        createNewLectureBookingFromInput();
+                        closeWindow();
+                    } catch (SQLException | ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
         });
+
+        cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
     /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
 
     @FXML
-    public void createNewLecturetBookingFromInput() throws SQLException, ClassNotFoundException {
-        String date = datePicker.getValue().toString();
+    public void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
+        LocalDate date = datePicker.getValue();
         String time = timeTextField.getText();
         String numberOfPupils = noOfPupilsTextField.getText();
         String numberOfTeams = noOfTeamsTextField.getText();
@@ -74,7 +98,8 @@ public class LectureBookingCreationController {
         String schoolName = schoolNameTextField.getText();
         String zipCode = zipCodeTextField.getText();
         String city = cityTextField.getText();
-        String commune = communeGroup.getSelectedToggle().getProperties().toString();
+        RadioButton selectedCommuneBtn = (RadioButton) communeGroup.getSelectedToggle();
+        String commune = selectedCommuneBtn.getText();
         String schoolPhoneNumber = schoolPhoneNumberTextField.getText();
         String eanNumber = eanNumberTextField.getText();
         String contactPerson = contactPersonTextField.getText();
@@ -85,7 +110,7 @@ public class LectureBookingCreationController {
         String comment = commentTextArea.getText();
 
         LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                new Date().toString(), date, time, numberOfPupils, customerComment, comment, new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
+                LocalDate.now(), date, time, numberOfPupils, customerComment, comment, new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers, grade, contactPerson, phoneNumber,
                 email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 

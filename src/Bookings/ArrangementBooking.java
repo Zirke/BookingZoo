@@ -5,6 +5,8 @@ import enums.BookingStatus;
 import enums.BookingType;
 import facilities.Restaurant;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class ArrangementBooking extends Booking {
@@ -17,7 +19,7 @@ public class ArrangementBooking extends Booking {
 
 
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
-                              String creationDate, String date, String time, String participants, String customerComment,
+                              LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
                               String birthdayChildAge, String formerParticipant, String guide, String customerContactPerson,
                               String customerPhoneNumber, String customerEmail) {
@@ -32,7 +34,7 @@ public class ArrangementBooking extends Booking {
     }
 
     public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus,
-                              String creationDate, String date, String time, String participants, String customerComment,
+                              LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant,
                               String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
                               String customerContactPerson, String customerPhoneNumber, String customerEmail) {

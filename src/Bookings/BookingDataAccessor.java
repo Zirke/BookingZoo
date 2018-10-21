@@ -9,6 +9,7 @@ import facilities.LectureRoom;
 import facilities.Restaurant;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class BookingDataAccessor {
@@ -56,7 +57,7 @@ public class BookingDataAccessor {
 
             abook = new ArrangementBooking(
                     rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE,
-                    rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
+                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new FoodOrder(rsTypeSpecific.getString("food")), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
                     Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), rsTypeSpecific.getString("formerparticipant"),
@@ -107,7 +108,7 @@ public class BookingDataAccessor {
 
             lbook = new LectureBooking(
                     rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                    rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
+                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
                     new Lecturer(), rsTypeSpecific.getString("choiceoftopic"), Integer.toString(rsTypeSpecific.getInt("noofteams")),
@@ -133,8 +134,8 @@ public class BookingDataAccessor {
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
         pstmtGeneral.setString(1, abook.getBookingStatus().toString());
-        pstmtGeneral.setString(2, abook.getCreationDate());
-        pstmtGeneral.setString(3, abook.getDate());
+        pstmtGeneral.setDate(2, java.sql.Date.valueOf(abook.getCreationDate()));
+        pstmtGeneral.setDate(3, java.sql.Date.valueOf(abook.getDate()));
         pstmtGeneral.setString(4, abook.getTime());
         pstmtGeneral.setInt(5, Integer.valueOf(abook.getParticipants()));
         pstmtGeneral.setString(6, abook.getCustomerComment());
@@ -238,8 +239,8 @@ public class BookingDataAccessor {
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
         pstmtGeneral.setString(1, lbook.getBookingStatus().toString());
-        pstmtGeneral.setString(2, lbook.getCreationDate());
-        pstmtGeneral.setString(3, lbook.getDate());
+        pstmtGeneral.setDate(2, java.sql.Date.valueOf(lbook.getCreationDate()));
+        pstmtGeneral.setDate(3, java.sql.Date.valueOf(lbook.getDate()));
         pstmtGeneral.setString(4, lbook.getTime());
         pstmtGeneral.setInt(5, Integer.valueOf(lbook.getParticipants()));
         pstmtGeneral.setString(6, lbook.getCustomerComment());

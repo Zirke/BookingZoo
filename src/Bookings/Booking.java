@@ -4,20 +4,23 @@ import Customers.Customer;
 import enums.BookingStatus;
 import enums.BookingType;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public abstract class Booking {
 
     private int id;
     private enums.BookingType bookingType;
     private enums.BookingStatus bookingStatus;
     private Customer customer;
-    private String creationDate;
-    private String date;
+    private LocalDate creationDate;
+    private LocalDate date;
     private String time;
     private String participants;
     private String customerComment;
     private String comment;
 
-    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, String creationDate, String date, String time, String participants, String customerComment, String comment) {
+    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, String participants, String customerComment, String comment) {
         this.id = id;
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
@@ -30,7 +33,7 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, String creationDate, String date, String time, String participants, String customerComment, String comment) {
+    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, String participants, String customerComment, String comment) {
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.customer = customer;
@@ -74,19 +77,19 @@ public abstract class Booking {
         this.customer = customer;
     }
 
-    public String getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

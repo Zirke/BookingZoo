@@ -5,6 +5,8 @@ import enums.BookingStatus;
 import enums.BookingType;
 import facilities.LectureRoom;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class LectureBooking extends Booking {
@@ -17,7 +19,7 @@ public class LectureBooking extends Booking {
 
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
-                          String creationDate, String date, String time, String participants, String customerComment,
+                          LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
                           String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,
@@ -35,7 +37,7 @@ public class LectureBooking extends Booking {
     }
 
     public LectureBooking(BookingType bookingType, BookingStatus bookingStatus,
-                          String creationDate, String date, String time, String participants, String customerComment,
+                          LocalDate creationDate, LocalDate date, String time, String participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, String choiceOfTopic,
                           String noOfTeams, String noOfTeachers, String grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, String zipCode, String city,

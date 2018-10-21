@@ -12,7 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.*;
 import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
@@ -38,6 +38,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     private Button createAndCloseButton, cancelButton;
 
     public void initialize() {
+
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
                     childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
@@ -63,11 +64,23 @@ public class ArrangementBookingCreationController extends GeneralController {
                 }
             }
         });
+
+        noOfChildrenTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                noOfChildrenTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        childAgeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                childAgeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
     private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
-        String date = datePicker.getValue().toString();
+        LocalDate date = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         String time = selectedTimeBtn.getText();
         String noOfChildren = noOfChildrenTextField.getText();
@@ -92,7 +105,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         );
 
         ArrangementBooking abook = new ArrangementBooking(
-                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time,
+                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date, time,
                 noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.UNOCCUPIED),
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
