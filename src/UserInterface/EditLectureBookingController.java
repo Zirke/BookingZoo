@@ -1,11 +1,9 @@
 package UserInterface;
 
 import Bookings.LectureBooking;
+import Customers.LectureBookingCustomer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class EditLectureBookingController {
@@ -19,43 +17,51 @@ public class EditLectureBookingController {
     private DatePicker datePicker;
     @FXML
     private TextField timeTextField, noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
-            lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
+            lecturerTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
+    @FXML
+    private TextArea customerCommentTextArea, commentTextArea;
     @FXML
     private ChoiceBox topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
     private Button saveAndCloseButton, cancelButton;
 
-    @FXML
-    private void initialize() {
-        //LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
-
-        //datePicker.setValue(LocalDate.of(2018,15,15)); //TODO does not work HARDCODED
-        //timeTextField.setText(selectedLectureBooking.getTime());
-        //noOfPupilsTextField.setText(selectedLectureBooking.getParticipants());
-        //noOfTeamsTextField.setText(selectedLectureBooking.getNoOfTeams());
-        //noOfTeachersTextField.setText(selectedLectureBooking.getNoOfTeachers());
-        //topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic());
-        //gradeTextField.setText(selectedLectureBooking.getGrade());
-        //lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
-        //lecturerChosenTextField.setText(selectedLectureBooking.getLecturer().toString());
-        //categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus());
-        //schoolNameTextField.setText(temp.getSchoolName());
-        //zipCodeTextField.setText(temp.getZipCode());
-        //cityTextField.setText(temp.getCity());
-        //schoolPhoneNumberTextField.setText(temp.getSchoolPhoneNumber());
-        //eanNumberTextField.setText(temp.getEanNumber());
-        //contactPersonTextField.setText(temp.getContactPerson());
-        //phoneNumberTextField.setText(temp.getPhoneNumber());
-        //emailTextField.setText(temp.getEmail());
-
-/*
+    public void initialize() {
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
-        */
+
+    }
+
+    public void initData() {
+        LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
+
+        //Lecture information
+        datePicker.setValue(selectedLectureBooking.getDate());
+        timeTextField.setText(selectedLectureBooking.getTime());
+        noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
+        noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
+        noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
+        topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic().toString());
+        gradeTextField.setText(String.valueOf(selectedLectureBooking.getGrade()));
+        lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
+        lecturerTextField.setText(selectedLectureBooking.getLecturer().toString());
+        categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus());
+
+        //Customer information
+        schoolNameTextField.setText(temp.getSchoolName());
+        zipCodeTextField.setText(String.valueOf(temp.getZipCode()));
+        cityTextField.setText(temp.getCity());
+        schoolPhoneNumberTextField.setText(temp.getSchoolPhoneNumber());
+        eanNumberTextField.setText(String.valueOf(temp.getEanNumber()));
+        contactPersonTextField.setText(temp.getContactPerson());
+        phoneNumberTextField.setText(temp.getPhoneNumber());
+        emailTextField.setText(temp.getEmail());
+
+        customerCommentTextArea.setText(selectedLectureBooking.getCustomerComment());
+        commentTextArea.setText(selectedLectureBooking.getComment());
     }
 
     @FXML

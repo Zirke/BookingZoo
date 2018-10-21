@@ -65,17 +65,17 @@
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label text="Telefonnummer: " GridPane.columnIndex="2" GridPane.rowIndex="5">
+                <Label text="Skolens telefonnummer:" GridPane.columnIndex="2" GridPane.rowIndex="5">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label text="Kontaktperson:" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                <Label text="EAN nummer:" GridPane.columnIndex="2" GridPane.rowIndex="6">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label text="Email: " GridPane.columnIndex="2" GridPane.rowIndex="7">
+                <Label text="Kontaktperson:" GridPane.columnIndex="2" GridPane.rowIndex="7">
                     <font>
                         <Font size="16.0"/>
                     </font>
@@ -90,8 +90,7 @@
                            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                 <TextField fx:id="noOfTeachersTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                <ChoiceBox fx:id="topicChoiceChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
-                           GridPane.rowIndex="6"/>
+                <ChoiceBox fx:id="topicChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
                 <TextField fx:id="gradeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="1" GridPane.rowIndex="7"/>
                 <ChoiceBox fx:id="lectureRoomChoiceBox" prefWidth="200.0" GridPane.columnIndex="1"
@@ -116,12 +115,12 @@
                         <RadioButton mnemonicParsing="false" text="Nej" toggleGroup="$communeGroup"/>
                     </children>
                 </HBox>
-                <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                <TextField fx:id="schoolPhoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="3" GridPane.rowIndex="5"/>
                 <TextField fx:id="contactPersonTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
-                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
-                <TextField fx:id="emailTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
                            GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+                <TextField fx:id="emailTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="9"/>
                 <Label text="Lokale valgt:" GridPane.rowIndex="8">
                     <font>
                         <Font size="16.0"/>
@@ -142,6 +141,20 @@
                         <Font name="System Bold" size="16.0"/>
                     </font>
                 </Label>
+                <Label text="Telefonnummer:" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Label text="E-mail:" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="eanNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+                <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"
+                           GridPane.columnIndex="3" GridPane.rowIndex="8"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES"/>

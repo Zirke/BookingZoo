@@ -8,9 +8,16 @@ import Customers.LectureBookingCustomer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -80,25 +87,13 @@ public class MainScreenController extends GeneralController {
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
-        arrangementBookingItem.setOnAction(e -> {
-            /*
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArrangementBookingCreation.fxml"));
-            try {
-                VBox box = (VBox) loader.load();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            ArrangementBookingCreationController controller = loader.<ArrangementBookingCreationController>getController();
-            controller.setBda(bda);
-            */
-            openNewPopUpWindow("ArrangementBookingCreation.fxml");
-        });
+        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreationController.fxml"));
 
         //Reloads the bookings from database into ListView
         refreshBookingsButton.setOnMouseClicked(e -> refreshBookingListView());
 
         //Opens edit pop-up window corresponding to chosen Booking in ListView
-        editBookingButton.setOnMouseClicked(e -> editSelectedBooking(listOfBookings));
+        editBookingButton.setOnMouseClicked(e -> editSelectedBooking((LectureBooking) (bookingListView.getSelectionModel().getSelectedItem())));
 
         //Accepting the selected booking when pressing acceptBookingButton
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
@@ -165,12 +160,26 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void editSelectedBooking(ArrayList<Booking> listOfBookings) {
-        for (Booking temp : listOfBookings) {
-            if (bookingListView.getSelectionModel().getSelectedItem().equals(temp)) {
-                // openEditLectureBooking("EditLectureBooking.fxml", (LectureBooking) temp);
-            }
+    private void editSelectedBooking(LectureBooking selectedLectureBooking) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditLectureBooking.fxml"));
+            Parent root = loader.load();
+
+            EditLectureBookingController controller = loader.getController();
+            controller.setSelectedLectureBooking(selectedLectureBooking);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            //stage.setTitle(windowTitle);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
     }
 
     private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {

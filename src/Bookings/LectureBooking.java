@@ -53,8 +53,6 @@ public class LectureBooking extends Booking {
         this.grade = grade;
     }
 
-
-
     public LectureRoom getLectureRoom() {
         return lectureRoom;
     }
