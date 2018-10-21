@@ -292,4 +292,12 @@ public class BookingDataAccessor {
         pstmtCustomerSpecific.setLong(7, temp.getEanNumber());
         pstmtCustomerSpecific.executeUpdate();
     }
+
+    public void changeBookingStatus(Booking book, BookingStatus status) throws SQLException {
+
+        String changeStatus = "UPDATE booking SET status = (?) WHERE bookingid=(?)";
+        PreparedStatement pstmt = connection.prepareStatement(changeStatus);
+        pstmt.setString(1,status.name()); pstmt.setInt(1,book.getId());
+        pstmt.executeUpdate();
+    }
 }
