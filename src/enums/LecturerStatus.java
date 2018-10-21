@@ -1,6 +1,6 @@
 package enums;
 
-public enum FacilityState {
+public enum LecturerStatus {
     OCCUPIED {
         @Override
         public String toString() {

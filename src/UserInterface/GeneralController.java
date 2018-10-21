@@ -1,6 +1,5 @@
 package UserInterface;
 
-import Bookings.LectureBooking;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +11,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 class GeneralController {
-
+    /*
     void openEditLectureBooking(String path, LectureBooking lectureBooking) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root = null;
@@ -32,7 +31,7 @@ class GeneralController {
             stage.showAndWait();
         }
     }
-
+    */
     void openNewPopUpWindow(String path) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root = null;

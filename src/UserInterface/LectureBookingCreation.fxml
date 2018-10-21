@@ -199,7 +199,7 @@
                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0"
                       GridPane.columnIndex="3" GridPane.rowIndex="4">
                     <children>
-                        <RadioButton mnemonicParsing="false" text="Ja">
+                        <RadioButton mnemonicParsing="false" selected="true" text="Ja">
                             <toggleGroup>
                                 <ToggleGroup fx:id="communeGroup"/>
                             </toggleGroup>

@@ -13,6 +13,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class PendingController extends GeneralController {
     private BookingDataAccessor bda;
@@ -49,16 +50,9 @@ public class PendingController extends GeneralController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
-        /*LectureBooking booking1 = new LectureBooking(223, BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                "12/10-2018", "12/10-2018", "10:00", "38", "kommento",
-                "Bailando", new LectureRoom(FacilityState.occupied, LectureRoomType.biologicalType), new Lecturer(), "aber kan flyve",
-                "25", "1", "1", "3", "Simon kærgaard",
-                "123243131", "skarga@hotmail.dk", "Gl. Lindholm skole", "123123", "Aalborg",
-                "Aalborg kommune", "2342312222", "123456");
-*/
 
         ArrayList<Booking> listOfBookings = new ArrayList<>();
-        //listOfBookings.add(booking1);
+
         listOfBookings.addAll(bda.fetchArrBooks());
         listOfBookings.addAll(bda.fetchLecBooks());
 
@@ -107,8 +101,18 @@ public class PendingController extends GeneralController {
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
 
         //Cancelling the selected booking when pressing cancelBookingButton
-        cancelBookingButton.setOnMouseClicked(e -> removeBookingFromListView());
+        cancelBookingButton.setOnMouseClicked(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Vil du slette bookingen?");
+            alert.setContentText("Handlingen vil slette bookingen");
 
+            Optional<ButtonType> alertChoice = alert.showAndWait();
+
+            if (alertChoice.get() == ButtonType.OK) {
+                deleteSelectedBooking();
+                removeBookingFromListView();
+            }
+        });
     }
 
     //Takes an ArrayList of bookings to load into ListView of bookings
@@ -127,9 +131,9 @@ public class PendingController extends GeneralController {
 
     private void showSelectedBookingInformation() {
         if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
-            lectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
+            showLectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
         } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
-            arrangementBookingInformation((ArrangementBooking) bookingListView.getSelectionModel().getSelectedItem());
+            showArrangementBookingInformation((ArrangementBooking) bookingListView.getSelectionModel().getSelectedItem());
         }
     }
 
@@ -148,17 +152,25 @@ public class PendingController extends GeneralController {
     private void editSelectedBooking(ArrayList<Booking> listOfBookings) {
         for (Booking temp : listOfBookings) {
             if (bookingListView.getSelectionModel().getSelectedItem().equals(temp)) {
-                openEditLectureBooking("EditLectureBooking.fxml", (LectureBooking) temp);
+                // openEditLectureBooking("EditLectureBooking.fxml", (LectureBooking) temp);
             }
         }
     }
 
     private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
-
         if (bookingListView.getSelectionModel().getSelectedItem() != null) {
             //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
 
         }
+    }
+
+    private void deleteSelectedBooking() {
+        try {
+            bda.deleteBooking((Booking) bookingListView.getSelectionModel().getSelectedItem());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void changeBookingStatus() {
@@ -166,7 +178,7 @@ public class PendingController extends GeneralController {
     }
 
     //Changes text on all labels corresponding to the chosen booking in ListView
-    private void lectureBookingInformation(LectureBooking selectedLectureBooking) {
+    private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
         customerCommentLabel.setVisible(true);
         customerCommentArea.setVisible(true);
         acceptBookingButton.setVisible(true);
@@ -205,7 +217,7 @@ public class PendingController extends GeneralController {
         eanLabel.setVisible(true);
     }
 
-    private void arrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
+    private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
         customerCommentLabel.setVisible(true);
         customerCommentArea.setVisible(true);
         acceptBookingButton.setVisible(true);
@@ -231,7 +243,7 @@ public class PendingController extends GeneralController {
         phoneNumberLabel.setVisible(false);
         emailLabel.setVisible(false);
         eanLabel.setVisible(false);
-        customerCommentArea.setText(selectedArrangementBooking.getComment());
+        customerCommentArea.setText(selectedArrangementBooking.getCustomerComment());
         customerCommentArea.setEditable(false);
     }
 }

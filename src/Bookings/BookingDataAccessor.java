@@ -1,5 +1,6 @@
 package Bookings;
 
+import Customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.FacilityState;
@@ -57,7 +58,7 @@ public class BookingDataAccessor {
                     rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new FoodOrder(), new Restaurant(FacilityState.occupied),
+                    rsGeneral.getString("usercomment"), new FoodOrder(), new Restaurant(FacilityState.OCCUPIED),
                     Integer.toString(rsGeneral.getInt("participants")), rsTypeSpecific.getString("birthdaychildname"),
                     Integer.toString(rsTypeSpecific.getInt("birthdaychildage")), Boolean.toString(rsTypeSpecific.getBoolean("formerparticipant")),
                     rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
@@ -109,7 +110,7 @@ public class BookingDataAccessor {
                     rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getString("creationdate"), rsGeneral.getString("date"), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.occupied, LectureRoomType.biologicalType),
+                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
                     new Lecturer(), rsTypeSpecific.getString("choiceoftopic"),
                     Integer.toString(rsGeneral.getInt("participants")), Integer.toString(rsTypeSpecific.getInt("noofteams")),
                     Integer.toString(rsTypeSpecific.getInt("noofteachers")), rsTypeSpecific.getString("grade"),
@@ -175,5 +176,125 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(3, abook.getCustomer().getPhoneNumber());
         pstmtCustomer.setString(4, abook.getCustomer().getEmail());
         pstmtCustomer.executeUpdate();
+    }
+
+    public void deleteBooking(Booking book) throws SQLException {
+
+        //Get CustomerID
+        String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
+        PreparedStatement pstmtCustomerID = connection.prepareStatement(getCustomerID);
+        pstmtCustomerID.setInt(1, book.getId());
+        ResultSet rsCustomerID = pstmtCustomerID.executeQuery();
+        rsCustomerID.next();
+        int customerID = rsCustomerID.getInt(1);
+
+        String removeTypeBooking = null;
+        String removeTypeCustomer = null;
+        String removeCustomer = null;
+        String removeBooking = null;
+
+        //Check if booking is of type Arrangement Booking or Lecture Booking
+        if (book instanceof ArrangementBooking) {
+            //Create query strings
+            removeTypeBooking = "DELETE FROM arrangement_booking WHERE bookingid=(?)";
+            removeCustomer = "DELETE FROM customer WHERE customerid=(?)";
+            removeBooking = "DELETE FROM booking WHERE bookingid=(?)";
+            //Insert values
+            PreparedStatement pstmtTypeBooking = connection.prepareStatement(removeTypeBooking);
+            pstmtTypeBooking.setInt(1, book.getId());
+            PreparedStatement pstmtCustomer = connection.prepareStatement(removeCustomer);
+            pstmtCustomer.setInt(1, customerID);
+            PreparedStatement pstmtBooking = connection.prepareStatement(removeBooking);
+            pstmtBooking.setInt(1, book.getId());
+            //Execute updates in correct order
+            pstmtTypeBooking.executeUpdate();
+            pstmtCustomer.executeUpdate();
+            pstmtBooking.executeUpdate();
+        } else if (book instanceof LectureBooking) {
+            //Create query strings
+            removeTypeBooking = "DELETE FROM lecture_booking WHERE bookingid=(?)";
+            removeTypeCustomer = "DELETE FROM lecture_booking_customer WHERE customerid=(?)";
+            removeCustomer = "DELETE FROM customer WHERE customerid=(?)";
+            removeBooking = "DELETE FROM booking WHERE bookingid=(?)";
+            //Insert values
+            PreparedStatement pstmtTypeBooking = connection.prepareStatement(removeTypeBooking);
+            pstmtTypeBooking.setInt(1, book.getId());
+            PreparedStatement pstmtTypeCustomer = connection.prepareStatement(removeTypeCustomer);
+            pstmtTypeCustomer.setInt(1, customerID);
+            PreparedStatement pstmtCustomer = connection.prepareStatement(removeCustomer);
+            pstmtCustomer.setInt(1, customerID);
+            PreparedStatement pstmtBooking = connection.prepareStatement(removeBooking);
+            pstmtBooking.setInt(1, book.getId());
+            //Execute updates in correct order
+            pstmtTypeBooking.executeUpdate();
+            pstmtTypeCustomer.executeUpdate();
+            pstmtCustomer.executeUpdate();
+            pstmtBooking.executeUpdate();
+        }
+    }
+
+    public void createLecBookManually(LectureBooking lbook) throws SQLException {
+        //Insert data into booking table
+        String general = "INSERT INTO booking (bookingtypeid, status, creationdate, date, time, participants, customercomment, usercomment)" +
+                "VALUES ((1),(?),(?),(?),(?),(?),(?),(?))";
+
+        PreparedStatement pstmtGeneral = connection.prepareStatement(general);
+        pstmtGeneral.setString(1, lbook.getBookingStatus().toString());
+        pstmtGeneral.setString(2, lbook.getCreationDate());
+        pstmtGeneral.setString(3, lbook.getDate());
+        pstmtGeneral.setString(4, lbook.getTime());
+        pstmtGeneral.setInt(5, Integer.valueOf(lbook.getParticipants()));
+        pstmtGeneral.setString(6, lbook.getCustomerComment());
+        pstmtGeneral.setString(7, lbook.getComment());
+        pstmtGeneral.executeUpdate();
+
+        //Get Auto-Generated ID of this booking and customer
+        String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
+
+        Statement stmt = connection.prepareStatement(getLastID);
+        ResultSet rs = ((PreparedStatement) stmt).executeQuery();
+        rs.next();
+        int currentBookingID = rs.getInt(1);
+        int currentCustomerID = rs.getInt(2);
+
+        //Insert data into arrangement_booking table
+        String typeSpecific = "INSERT INTO lecture_booking (bookingid,bookingtypeid,lectureroom,lecturer,choiceoftopic,noofteams,noofteachers,grade)" +
+                "VALUES ((?),(1),(?),(?),(?),(?),(?),(?))";
+
+        PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
+        pstmtTypeSpecific.setInt(1, currentBookingID);
+        pstmtTypeSpecific.setInt(2, Integer.valueOf(lbook.getLectureRoom().toString()));
+        pstmtTypeSpecific.setInt(3, Integer.valueOf(lbook.getLecturer().toString()));
+        pstmtTypeSpecific.setInt(4, Integer.valueOf(lbook.getChoiceOfTopic()));
+        pstmtTypeSpecific.setInt(5, Integer.valueOf(lbook.getNoOfTeams()));
+        pstmtTypeSpecific.setInt(6, Integer.valueOf(lbook.getNoOfTeachers()));
+        pstmtTypeSpecific.setString(7, lbook.getGrade());
+        pstmtTypeSpecific.executeUpdate();
+
+        //Insert data into customer table
+        String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
+                "VALUES ((?),(?),(?),(?))";
+
+        PreparedStatement pstmtCustomer = connection.prepareStatement(customer);
+        pstmtCustomer.setInt(1, currentCustomerID);
+        pstmtCustomer.setString(2, lbook.getCustomer().getContactPerson());
+        pstmtCustomer.setString(3, lbook.getCustomer().getPhoneNumber());
+        pstmtCustomer.setString(4, lbook.getCustomer().getEmail());
+        pstmtCustomer.executeUpdate();
+
+        //Insert data into lecture_booking_customer table
+        LectureBookingCustomer temp = (LectureBookingCustomer) lbook.getCustomer();
+        String lecture_customer = "INSERT INTO lecture_booking_customer (customerid,schoolname,zipcode,city,commune,schoolphonenumber,eannumber)" +
+                "VALUES ((?),(?),(?),(?),(?),(?),(?))";
+
+        PreparedStatement pstmtCustomerSpecific = connection.prepareStatement(lecture_customer);
+        pstmtCustomerSpecific.setInt(1, currentCustomerID);
+        pstmtCustomerSpecific.setString(2, temp.getSchoolName());
+        pstmtCustomerSpecific.setInt(3, Integer.valueOf(temp.getZipCode()));
+        pstmtCustomerSpecific.setString(4, temp.getCity());
+        pstmtCustomerSpecific.setBoolean(5, Boolean.parseBoolean(temp.getCommune()));
+        pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
+        pstmtCustomerSpecific.setInt(7, Integer.valueOf(temp.getEanNumber()));
+        pstmtCustomerSpecific.executeUpdate();
     }
 }

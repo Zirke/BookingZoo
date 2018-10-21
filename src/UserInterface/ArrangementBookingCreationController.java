@@ -30,7 +30,7 @@ public class ArrangementBookingCreationController extends GeneralController {
 
     @FXML
     private TextField noOfChildrenTextField, childNameTextField, childAgeTextField, contactPersonTextField,
-            phoneNumberTextField, emailTextField;
+            phoneNumberTextField, emailTextField, guideTextField;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
@@ -39,23 +39,29 @@ public class ArrangementBookingCreationController extends GeneralController {
 
     public void initialize() {
         createAndCloseButton.setOnMouseClicked(e -> {
+            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
+                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
+                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setHeaderText("Tjek alle felter");
+                alert1.setContentText("Et eller flere felter mangler information");
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setHeaderText("Vil du oprette?");
+                alert2.setContentText("Er den indtastede information korrekt?");
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Vil du oprette?");
-            alert.setContentText("Er den indtastede information korrekt?");
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
-            Optional<ButtonType> foo = alert.showAndWait();
-
-            if (foo.get() == ButtonType.OK) {
-                try {
-                    createArrangementBookingFromInput();
-                    closeWindow();
-                } catch (SQLException | ClassNotFoundException e1) {
-                    e1.printStackTrace();
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        createArrangementBookingFromInput();
+                        closeWindow();
+                    } catch (SQLException | ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
-
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
@@ -68,16 +74,11 @@ public class ArrangementBookingCreationController extends GeneralController {
         String contactPerson = contactPersonTextField.getText();
         String phoneNumber = phoneNumberTextField.getText();
         String email = emailTextField.getText();
+        String guide = guideTextField.getText();
         String participant = participantGroup.getSelectedToggle().toString();
         String menuChoice = menuGroup.getSelectedToggle().toString();
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
-
-
-        //TODO Finish
-        if (!(datePicker.getValue() != null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty())) {
-            System.out.println("TOM!");
-        }
 
         bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
@@ -88,13 +89,10 @@ public class ArrangementBookingCreationController extends GeneralController {
 
         ArrangementBooking abook = new ArrangementBooking(
                 BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, new Date().toString(), date, time, noOfChildren,
-                customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.unoccupied), noOfChildren, childName,
-                childAge, participant, "Jens", contactPerson, phoneNumber, email);
-        try {
-            bda.createArrBookManually(abook);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.UNOCCUPIED), noOfChildren, childName,
+                childAge, participant, guide, contactPerson, phoneNumber, email);
+
+        bda.createArrBookManually(abook);
     }
 
 

@@ -10,7 +10,6 @@ import java.util.Objects;
 public class ArrangementBooking extends Booking {
     private FoodOrder menuChosen;
     private Restaurant restaurant;
-    private String noOfChildren;
     private String birthdayChildName;
     private String birthdayChildAge;
     private String formerParticipant;
@@ -18,14 +17,13 @@ public class ArrangementBooking extends Booking {
 
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                               String creationDate, String date, String time, String participants, String customerComment,
-                              String comment, FoodOrder menuChosen, Restaurant restaurant, String noOfChildren,
-                              String birthdayChildName, String birthdayChildAge, String formerParticipant, String guide,
-                              String customerContactPerson, String customerPhoneNumber, String customerEmail) {
+                              String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
+                              String birthdayChildAge, String formerParticipant, String guide, String customerContactPerson,
+                              String customerPhoneNumber, String customerEmail) {
         super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
                 creationDate, date, time, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
-        this.noOfChildren = noOfChildren;
         this.birthdayChildName = birthdayChildName;
         this.birthdayChildAge = birthdayChildAge;
         this.formerParticipant = formerParticipant;
@@ -41,7 +39,6 @@ public class ArrangementBooking extends Booking {
                 creationDate, date, time, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
-        this.noOfChildren = noOfChildren;
         this.birthdayChildName = birthdayChildName;
         this.birthdayChildAge = birthdayChildAge;
         this.formerParticipant = formerParticipant;
@@ -62,14 +59,6 @@ public class ArrangementBooking extends Booking {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
-    }
-
-    public String getNoOfChildren() {
-        return noOfChildren;
-    }
-
-    public void setNoOfChildren(String noOfChildren) {
-        this.noOfChildren = noOfChildren;
     }
 
     public String getBirthdayChildName() {
@@ -135,7 +124,6 @@ public class ArrangementBooking extends Booking {
         ArrangementBooking that = (ArrangementBooking) o;
         return Objects.equals(menuChosen, that.menuChosen) &&
                 Objects.equals(restaurant, that.restaurant) &&
-                Objects.equals(noOfChildren, that.noOfChildren) &&
                 Objects.equals(birthdayChildName, that.birthdayChildName) &&
                 Objects.equals(birthdayChildAge, that.birthdayChildAge) &&
                 Objects.equals(formerParticipant, that.formerParticipant) &&
@@ -145,7 +133,7 @@ public class ArrangementBooking extends Booking {
     @Override
     public int hashCode() {
 
-        return Objects.hash(menuChosen, restaurant, noOfChildren, birthdayChildName, birthdayChildAge, formerParticipant, guide);
+        return Objects.hash(menuChosen, restaurant, birthdayChildName, birthdayChildAge, formerParticipant, guide);
     }
 
     @Override
