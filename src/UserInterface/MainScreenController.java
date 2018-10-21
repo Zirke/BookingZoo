@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class PendingController extends GeneralController {
+public class MainScreenController extends GeneralController {
     private BookingDataAccessor bda;
 
     @FXML
@@ -242,6 +242,7 @@ public class PendingController extends GeneralController {
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
         dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
+        creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
         timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getTime());
         pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
         teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());

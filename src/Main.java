@@ -23,7 +23,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws SQLException, ClassNotFoundException {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/Pending.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/MainScreen.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("Aalborg Zoo Booking System");
             primaryStage.setMaximized(true);
