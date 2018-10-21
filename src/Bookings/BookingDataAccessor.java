@@ -9,7 +9,6 @@ import facilities.LectureRoom;
 import facilities.Restaurant;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class BookingDataAccessor {
@@ -110,7 +109,7 @@ public class BookingDataAccessor {
                     rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                     rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
                     Integer.toString(rsGeneral.getInt("participants")), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
+                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.BIOLOGICAL_TYPE),
                     new Lecturer(), rsTypeSpecific.getString("choiceoftopic"), Integer.toString(rsTypeSpecific.getInt("noofteams")),
                     Integer.toString(rsTypeSpecific.getInt("noofteachers")), rsTypeSpecific.getString("grade"),
                     rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),

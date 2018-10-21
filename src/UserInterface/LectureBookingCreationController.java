@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 import java.util.Optional;
 
 public class LectureBookingCreationController {
@@ -129,7 +127,14 @@ public class LectureBookingCreationController {
         String numberOfTeachers = noOfTeachersTextField.getText();
         String topicChoice = topicChoiceBox.getSelectionModel().getSelectedItem().toString();
         String grade = gradeTextField.getText();
-        //LectureRoom lectureRoomChosen = (LectureRoom) lectureRoomChoiceBox.getSelectionModel().getSelectedItem();
+
+        LectureRoom lectureRoomChosen = null;
+        if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Savannelokale")) {
+            lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE);
+        } else if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Biologisk lokale")) {
+            lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.BIOLOGICAL_TYPE);
+        }
+
         String lecturerChosen = lecturerChosenTextField.getText();
         String schoolName = schoolNameTextField.getText();
         String zipCode = zipCodeTextField.getText();
@@ -146,10 +151,9 @@ public class LectureBookingCreationController {
         String comment = commentTextArea.getText();
 
         LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                LocalDate.now(), date, time, numberOfPupils, customerComment, comment, new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.biologicalType),
-                new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers, grade, contactPerson, phoneNumber,
-                email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
-
+                LocalDate.now(), date, time, numberOfPupils, customerComment, comment, lectureRoomChosen,
+                new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
+                grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
         bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
@@ -157,7 +161,6 @@ public class LectureBookingCreationController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
-
         bda.createLecBookManually(lbook);
     }
 

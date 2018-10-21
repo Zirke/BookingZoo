@@ -1,13 +1,13 @@
 package enums;
 
 public enum LectureRoomType {
-    savannahType {
+    SAVANNAH_TYPE {
         @Override
         public String toString() {
             return "Savannelokale";
         }
     },
-    biologicalType {
+    BIOLOGICAL_TYPE {
         @Override
         public String toString() {
             return "Biologisk lokale";
