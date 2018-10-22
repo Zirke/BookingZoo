@@ -1,15 +1,27 @@
 package UserInterface;
 
+import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
+import Bookings.Lecturer;
 import Customers.LectureBookingCustomer;
+import enums.BookingStatus;
+import enums.ChoiceOfTopic;
+import enums.FacilityState;
+import enums.LectureRoomType;
+import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.util.Optional;
+
+import static enums.ChoiceOfTopic.topicChosen;
+
 public class EditLectureBookingController {
     private LectureBooking selectedLectureBooking;
 
-    public void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
+    void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         this.selectedLectureBooking = selectedLectureBooking;
     }
 
@@ -24,9 +36,17 @@ public class EditLectureBookingController {
     @FXML
     private ChoiceBox topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
+    private ToggleGroup communeGroup;
+    @FXML
     private Button saveAndCloseButton, cancelButton;
 
-    public void initialize() {
+    public void initialize() throws SQLException, ClassNotFoundException {
+        BookingDataAccessor bda = new BookingDataAccessor(
+                "org.postgresql.Driver",
+                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+                "jyjczxth",
+                "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
+
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
@@ -35,9 +55,25 @@ public class EditLectureBookingController {
 
         categoryChoiceBox.getItems().addAll("Afventende","Aktiv","Færdig","Arkiveret");
 
+        saveAndCloseButton.setOnMouseClicked(e -> {
+            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert2.setContentText("Er den indtastede information korrekt?");
+
+            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+            if (alertChoice2.get() == ButtonType.OK) {
+                try {
+                    bda.editLecBook(overwriteSelectedLectureBooking());
+                    closeWindow();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
     }
 
-    public void initData() {
+    void initData() {
         LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
 
         //Lecture information
@@ -64,6 +100,36 @@ public class EditLectureBookingController {
 
         customerCommentTextArea.setText(selectedLectureBooking.getCustomerComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
+    }
+
+    private LectureBooking overwriteSelectedLectureBooking() {
+        selectedLectureBooking.setDate(datePicker.getValue());
+        selectedLectureBooking.setTime(timeTextField.getText());
+        selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
+        selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
+        selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
+        ChoiceOfTopic topicChoice;
+        topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
+        selectedLectureBooking.setChoiceOfTopic(topicChoice);
+        selectedLectureBooking.setGrade(Integer.parseInt(gradeTextField.getText()));
+        LectureRoomType roomTypeChoice;
+        roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
+        LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
+        selectedLectureBooking.setLectureRoom(foo);
+        Lecturer bar = new Lecturer(lecturerTextField.getText());
+        selectedLectureBooking.setLecturer(bar);
+        BookingStatus statusChoice;
+        statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+        selectedLectureBooking.setBookingStatus(statusChoice);
+
+        RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
+        LectureBookingCustomer temp = new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
+                emailTextField.getText(), schoolNameTextField.getText(), Integer.parseInt(zipCodeTextField.getText()),
+                cityTextField.getText(), selectedCommuneAnswer.getText(), schoolPhoneNumberTextField.getText(),
+                Long.parseLong(eanNumberTextField.getText()));
+        selectedLectureBooking.setCustomer(temp);
+
+        return selectedLectureBooking;
     }
 
     @FXML

@@ -103,7 +103,7 @@ public class BookingDataAccessor {
             rsCustomerSpecific.next();
 
             lbook = new LectureBooking(
-                    rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
+                    rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
                     rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
                     rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
@@ -307,7 +307,9 @@ public class BookingDataAccessor {
 
         String changeStatus = "UPDATE booking SET status = (?) WHERE bookingid=(?)";
         PreparedStatement pstmt = connection.prepareStatement(changeStatus);
-        pstmt.setString(1,status.name()); pstmt.setInt(1,book.getId());
+        pstmt.setString(1, status.name());
+        pstmt.setInt(2, book.getId());
+
         pstmt.executeUpdate();
     }
 

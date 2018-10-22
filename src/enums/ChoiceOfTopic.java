@@ -61,5 +61,34 @@ public enum ChoiceOfTopic {
         public String toString() {
             return "Aalborg Zoo som virksomhed (Handelsskole)";
         }
+    };
+
+    public static ChoiceOfTopic topicChosen(String input) {
+
+        switch (input) {
+            case "Dyr derhjemme":
+                return DYR_DERHJEMME;
+            case "Hverdagen i Zoo":
+                return HVERDAG_ZOO;
+            case "Krybdyr":
+                return KRYBDYR;
+            case "Grønlands dyr":
+                return GROENDLANDS_DYR;
+            case "Afrikas savanner":
+                return AFRIKAS_SAVANNER;
+            case "Aktiveringsværksted":
+                return AKTIVERINGSVAERKSTED;
+            case "Sanseoplevelser":
+                return SANSEOPLEVELSER;
+            case "Dyrs tilpasning og forskelligheder (Udskoling)":
+                return DYRS_TILPASNING;
+            case "Evolution/Klassifikation (Gymnasium)":
+                return EVOLUTION;
+            case "Aalborg Zoo som virksomhed (Handelsskole)":
+                return ZOO_SOM_VIRKSOMHED;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
+
 }

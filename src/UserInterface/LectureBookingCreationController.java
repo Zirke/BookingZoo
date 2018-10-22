@@ -119,34 +119,15 @@ public class LectureBookingCreationController {
     /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
 
     @FXML
-    public void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
+    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate date = datePicker.getValue();
         String time = timeTextField.getText();
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
         int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
         ChoiceOfTopic topicChoice = null;
-        if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Dyr derhjemme")){
-            topicChoice = ChoiceOfTopic.DYR_DERHJEMME;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Hverdagen i Zoo")){
-            topicChoice = ChoiceOfTopic.HVERDAG_ZOO;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Krybdyr")){
-            topicChoice = ChoiceOfTopic.KRYBDYR;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Grønlands dyr")){
-            topicChoice = ChoiceOfTopic.GROENDLANDS_DYR;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Afrikas savanner")){
-            topicChoice = ChoiceOfTopic.AFRIKAS_SAVANNER;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Aktiveringsværksted")){
-            topicChoice = ChoiceOfTopic.AKTIVERINGSVAERKSTED;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Sanseoplevelser")){
-            topicChoice = ChoiceOfTopic.SANSEOPLEVELSER;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Dyrs tilpasning og forskelligheder (Udskoling)")){
-            topicChoice = ChoiceOfTopic.DYRS_TILPASNING;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Evolution/Klassifikation (Gymnasium)")){
-            topicChoice = ChoiceOfTopic.EVOLUTION;
-        } else if (topicChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Aalborg Zoo som virksomhed (Handelsskole)")){
-            topicChoice = ChoiceOfTopic.ZOO_SOM_VIRKSOMHED;
-        }
+
+        topicChoice = topicChoice.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
 
         int grade = Integer.parseInt(gradeTextField.getText());
         LectureRoom lectureRoomChosen = null;

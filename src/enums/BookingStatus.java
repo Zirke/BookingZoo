@@ -24,5 +24,20 @@ public enum BookingStatus {
         public String toString() {
             return "Arkiveret";
         }
+    };
+
+    public static BookingStatus statusChosen(String input) {
+        switch (input) {
+            case "Afventende":
+                return STATUS_PENDING;
+            case "Aktiv":
+                return STATUS_ACTIVE;
+            case "Færdig":
+                return STATUS_DONE;
+            case "Aktiveret":
+                return STATUS_ARCHIVED;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }
