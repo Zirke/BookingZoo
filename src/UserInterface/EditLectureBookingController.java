@@ -38,6 +38,8 @@ public class EditLectureBookingController {
     @FXML
     private ToggleGroup communeGroup;
     @FXML
+    private RadioButton communeRadioBtnYes, communeRadioBtnNo;
+    @FXML
     private Button saveAndCloseButton, cancelButton;
 
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -92,6 +94,10 @@ public class EditLectureBookingController {
         schoolNameTextField.setText(temp.getSchoolName());
         zipCodeTextField.setText(String.valueOf(temp.getZipCode()));
         cityTextField.setText(temp.getCity());
+        if(temp.getCommune().equals("Ja")){
+            communeRadioBtnYes.setSelected(true); }
+            else if (temp.getCommune().equals("Nej")){
+            communeRadioBtnNo.setSelected(true); }
         schoolPhoneNumberTextField.setText(temp.getSchoolPhoneNumber());
         eanNumberTextField.setText(String.valueOf(temp.getEanNumber()));
         contactPersonTextField.setText(temp.getContactPerson());
