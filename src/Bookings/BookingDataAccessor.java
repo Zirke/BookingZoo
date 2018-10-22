@@ -4,6 +4,7 @@ import Customers.LectureBookingCustomer;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
+import javafx.scene.control.RadioButton;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -396,8 +397,6 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
-
-
 
     }
 }

@@ -139,25 +139,8 @@ public class EditArrangementBookingController {
         selectedArrangementBooking.setParticipants(Integer.parseInt(noOfChildrenTextField.getText()));
         selectedArrangementBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedArrangementBooking.setComment(commentTextArea.getText());
-        ChoiceOfMenu menuChoice = null;
         RadioButton menuChoiceButton = (RadioButton) menuGroup.getSelectedToggle();
-        switch (menuChoiceButton.getText()) {
-            case "Kakao, boller og kage":
-                menuChoice = ChoiceOfMenu.MENU_ONE;
-                break;
-            case "Frikadeller og dessert":
-                menuChoice = ChoiceOfMenu.MENU_TWO;
-                break;
-            case "Pasta m. kødsovs og dessert":
-                menuChoice = ChoiceOfMenu.MENU_THREE;
-                break;
-            case "Nuggets og pommes frites":
-                menuChoice = ChoiceOfMenu.MENU_FOUR;
-                break;
-            case "Ingen mad":
-                menuChoice = ChoiceOfMenu.NO_FOOD;
-                break;
-        }
+        ChoiceOfMenu menuChoice = ChoiceOfMenu.getChoiceOfMenu(menuChoiceButton);
         selectedArrangementBooking.setMenuChosen(new FoodOrder(menuChoice));
         selectedArrangementBooking.setRestaurant(new Restaurant(FacilityState.OCCUPIED));
         selectedArrangementBooking.setBirthdayChildName(childNameTextField.getText());
@@ -172,6 +155,7 @@ public class EditArrangementBookingController {
 
         return selectedArrangementBooking;
     }
+
 
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();

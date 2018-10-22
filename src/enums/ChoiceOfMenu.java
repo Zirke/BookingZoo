@@ -1,5 +1,7 @@
 package enums;
 
+import javafx.scene.control.RadioButton;
+
 public enum ChoiceOfMenu {
     MENU_ONE {
         @Override
@@ -30,6 +32,23 @@ public enum ChoiceOfMenu {
         public String toString() {
             return "Ingen mad";
         }
-    },
+    };
+
+    public static ChoiceOfMenu getChoiceOfMenu(RadioButton menuChoiceButton) {
+
+        switch (menuChoiceButton.getText()) {
+            case "Kakao, boller og kage":
+                return MENU_ONE;
+            case "Frikadeller og dessert":
+                return MENU_TWO;
+            case "Pasta m. kødsovs og dessert":
+                return MENU_THREE;
+            case "Nuggets og pommes frites":
+                return MENU_FOUR;
+            case "Ingen mad":
+                return NO_FOOD;
+            default: throw new IllegalArgumentException();
+        }
+    }
 }
 

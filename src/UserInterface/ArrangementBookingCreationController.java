@@ -94,24 +94,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         RadioButton selectedParticipantBtn = (RadioButton) participantGroup.getSelectedToggle();
         String participant = selectedParticipantBtn.getText();
         RadioButton selectedMenuBtn = (RadioButton) menuGroup.getSelectedToggle();
-        ChoiceOfMenu menuChoice = null;
-        switch (selectedMenuBtn.getText()) {
-            case "Kakao, boller og kage":
-                menuChoice = ChoiceOfMenu.MENU_ONE;
-                break;
-            case "Frikadeller og dessert":
-                menuChoice = ChoiceOfMenu.MENU_TWO;
-                break;
-            case "Pasta m. kødsovs og dessert":
-                menuChoice = ChoiceOfMenu.MENU_THREE;
-                break;
-            case "Nuggets og pommes frites":
-                menuChoice = ChoiceOfMenu.MENU_FOUR;
-                break;
-            case "Ingen mad":
-                menuChoice = ChoiceOfMenu.NO_FOOD;
-                break;
-        }
+        ChoiceOfMenu menuChoice = ChoiceOfMenu.getChoiceOfMenu(selectedMenuBtn);
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
