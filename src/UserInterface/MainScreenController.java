@@ -138,6 +138,7 @@ public class MainScreenController extends GeneralController {
             refreshedListOfBookings.addAll(bda.fetchLecBooks());
 
             loadBookingsToListView(refreshedListOfBookings);
+            bda.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -169,28 +170,31 @@ public class MainScreenController extends GeneralController {
     }
 
     @FXML
-    private void showChosenCategoryBookings(ActionEvent event) {
+    private void showChosenCategoryBookings(ActionEvent event) throws SQLException {
         Button chosenCategoryBtn = (Button) event.getSource();
         String foo = chosenCategoryBtn.getText();
 
         ArrayList<Booking> listOfBookings = new ArrayList<>();
-        try {
-            listOfBookings.addAll(bda.fetchArrBooks());
-            listOfBookings.addAll(bda.fetchLecBooks());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        BookingStatus bar = BookingStatus.statusChosen(foo);
+        listOfBookings.addAll(bda.fetchArrBooks());
+        listOfBookings.addAll(bda.fetchLecBooks());
+
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
         bookingListView.getItems().clear();
         for (Booking temp : listOfBookings) {
-            if (temp.getBookingStatus().equals(bar)) {
-                categorisedBookings.add(temp);
+            if (!foo.equals("Oversigt")) {
+                BookingStatus bar = BookingStatus.statusChosen(foo);
+                if (temp.getBookingStatus().equals(bar)) {
+                    categorisedBookings.add(temp);
+                }
             }
+
+        }
+        if (foo.equals("Oversigt")) {
+            categorisedBookings.addAll(bda.fetchArrBooks());
+            categorisedBookings.addAll(bda.fetchLecBooks());
         }
         bookingListView.setItems(categorisedBookings);
-
     }
 
     private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {

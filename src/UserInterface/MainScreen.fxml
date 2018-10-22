@@ -28,7 +28,8 @@
                     </graphic>
                 </Button>
                 <Separator prefWidth="200.0" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Oversigt">
+                <Button mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
+                        prefWidth="250.0" text="Oversigt">
                     <font>
                         <Font size="16.0"/>
                     </font>
