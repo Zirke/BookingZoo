@@ -136,7 +136,7 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(5, abook.getParticipants());
         pstmtGeneral.setString(6, abook.getCustomerComment());
         pstmtGeneral.setString(7, abook.getComment());
-
+        pstmtGeneral.executeUpdate();
 
         //Get Auto-Generated ID of this booking and customer
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
@@ -172,7 +172,6 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(4, abook.getCustomer().getEmail());
 
         //Execute Updates
-        pstmtGeneral.executeUpdate();
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
     }
@@ -245,7 +244,7 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(5, Integer.valueOf(lbook.getParticipants()));
         pstmtGeneral.setString(6, lbook.getCustomerComment());
         pstmtGeneral.setString(7, lbook.getComment());
-
+        pstmtGeneral.executeUpdate();
 
         //Get Auto-Generated ID of this booking and customer
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
@@ -297,7 +296,6 @@ public class BookingDataAccessor {
 
 
         //Execute updates
-        pstmtGeneral.executeUpdate();
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
