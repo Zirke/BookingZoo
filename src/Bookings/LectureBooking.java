@@ -1,5 +1,6 @@
 package Bookings;
 
+import Customers.Customer;
 import Customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
@@ -44,6 +45,19 @@ public class LectureBooking extends Booking {
                           String commune, String schoolPhoneNumber, long eanNumber) {
         super(bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
                         customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
+                time, participants, customerComment, comment);
+        this.lectureRoom = lectureRoom;
+        this.lecturer = lecturer;
+        this.choiceOfTopic = choiceOfTopic;
+        this.noOfTeams = noOfTeams;
+        this.noOfTeachers = noOfTeachers;
+        this.grade = grade;
+    }
+
+    public LectureBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDate date, String time, int participants,
+                          String customerComment, String comment, LectureRoom lectureRoom, Lecturer lecturer,
+                          ChoiceOfTopic choiceOfTopic, int noOfTeams, int noOfTeachers, int grade, LectureBookingCustomer customer) {
+        super(bookingType, bookingStatus, customer, creationDate, date,
                 time, participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;

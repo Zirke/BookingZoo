@@ -46,6 +46,20 @@ public class ArrangementBooking extends Booking {
         this.guide = guide;
     }
 
+    public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDate date,
+                              String time, int participants, String customerComment, String comment, FoodOrder menuChosen,
+                              Restaurant restaurant, String birthdayChildName, int birthdayChildAge, String formerParticipant,
+                              String guide, Customer customer) {
+        super(bookingType, bookingStatus, customer,
+                creationDate, date, time, participants, customerComment, comment);
+        this.menuChosen = menuChosen;
+        this.restaurant = restaurant;
+        this.birthdayChildName = birthdayChildName;
+        this.birthdayChildAge = birthdayChildAge;
+        this.formerParticipant = formerParticipant;
+        this.guide = guide;
+    }
+
     public FoodOrder getMenuChosen() {
         return menuChosen;
     }
