@@ -78,8 +78,6 @@ public class EditArrangementBookingController {
         });
         cancelButton.setOnMouseClicked(e -> closeWindow());
 
-
-
     }
 
     void initData() {
@@ -88,7 +86,7 @@ public class EditArrangementBookingController {
         if (selectedArrangementBooking.getTime().equals("10:00 - 12:00")) {
             timeOneRadioButton.setSelected(true);
         } else {
-            timeTwoRadioButton.setSelected(false);
+            timeTwoRadioButton.setSelected(true);
         }
 
         noOfChildrenTextField.setText(String.valueOf(selectedArrangementBooking.getParticipants()));

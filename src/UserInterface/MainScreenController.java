@@ -5,8 +5,10 @@ import Bookings.Booking;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
+import enums.BookingStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +28,7 @@ public class MainScreenController extends GeneralController {
     private BookingDataAccessor bda;
 
     @FXML
-    private Button refreshBookingsButton, activeBookingsButton;
+    private Button refreshBookingsButton, pendingBookingsButton, activeBookingsButton, finishedBookingsButton, archivedBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -164,6 +166,31 @@ public class MainScreenController extends GeneralController {
                 bookingListView.setItems(bookings);
             }
         }
+    }
+
+    @FXML
+    private void showChosenCategoryBookings(ActionEvent event) {
+        Button chosenCategoryBtn = (Button) event.getSource();
+        String foo = chosenCategoryBtn.getText();
+
+        ArrayList<Booking> listOfBookings = new ArrayList<>();
+        try {
+            listOfBookings.addAll(bda.fetchArrBooks());
+            listOfBookings.addAll(bda.fetchLecBooks());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        BookingStatus bar = BookingStatus.statusChosen(foo);
+
+        ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
+        bookingListView.getItems().clear();
+        for (Booking temp : listOfBookings) {
+            if (temp.getBookingStatus().equals(bar)) {
+                categorisedBookings.add(temp);
+            }
+        }
+        bookingListView.setItems(categorisedBookings);
+
     }
 
     private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {

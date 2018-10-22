@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.MainScreenController">
     <children>
         <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
@@ -33,23 +33,27 @@
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Afventende">
+                <Button fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                        prefHeight="35.0" prefWidth="250.0" text="Afventende">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button fx:id="activeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Aktive">
+                <Button fx:id="activeButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                        prefHeight="35.0" prefWidth="250.0" text="Aktive">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Færdige">
+                <Button fx:id="finishedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                        prefHeight="35.0" prefWidth="250.0" text="Færdige">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
                 <Separator prefWidth="200.0" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="250.0" text="Arkiverede">
+                <Button fx:id="archivedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                        prefHeight="35.0" prefWidth="250.0" text="Arkiverede">
                     <font>
                         <Font size="16.0"/>
                     </font>

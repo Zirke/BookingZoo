@@ -30,11 +30,11 @@ public enum BookingStatus {
         switch (input) {
             case "Afventende":
                 return STATUS_PENDING;
-            case "Aktiv":
+            case "Aktive":
                 return STATUS_ACTIVE;
-            case "Færdig":
+            case "Færdige":
                 return STATUS_DONE;
-            case "Aktiveret":
+            case "Aktiverede":
                 return STATUS_ARCHIVED;
             default:
                 throw new IllegalArgumentException();
