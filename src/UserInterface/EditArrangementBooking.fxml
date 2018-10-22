@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox prefWidth="900.0" spacing="10.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.ArrangementBookingCreationController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.EditArrangementBookingController">
     <children>
         <Label alignment="TOP_LEFT" text="Rediger børnefødselsdag">
             <font>

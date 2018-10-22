@@ -1,9 +1,7 @@
 package UserInterface;
 
 import Bookings.ArrangementBooking;
-import Bookings.FoodOrder;
 import Customers.Customer;
-import enums.ChoiceOfMenu;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -58,21 +56,22 @@ public class EditArrangementBookingController {
         } else {
             participantNoRadioButton.setSelected(true);
         }
-        FoodOrder one = new FoodOrder(ChoiceOfMenu.NO_FOOD);
-        FoodOrder two = new FoodOrder(ChoiceOfMenu.MENU_ONE);
-        FoodOrder three = new FoodOrder(ChoiceOfMenu.MENU_TWO);
-        FoodOrder four = new FoodOrder(ChoiceOfMenu.MENU_THREE);
-        FoodOrder five = new FoodOrder(ChoiceOfMenu.MENU_FOUR);
-        if (selectedArrangementBooking.getMenuChosen().equals(one)) {
-            noFoodRadioButton.setSelected(true);
-        } else if (selectedArrangementBooking.getMenuChosen().equals(two)) {
-            menuOneRadioButton.setSelected(true);
-        } else if (selectedArrangementBooking.getMenuChosen().equals(three)) {
-            menuTwoRadioButton.setSelected(true);
-        } else if (selectedArrangementBooking.getMenuChosen().equals(four)) {
-            menuThreeRadioButton.setSelected(true);
-        } else if (selectedArrangementBooking.getMenuChosen().equals(five)) {
-            menuFourRadioButton.setSelected(true);
+        switch (selectedArrangementBooking.getMenuChosen().toString()) {
+            case "Ingen mad":
+                noFoodRadioButton.setSelected(true);
+                break;
+            case "Kakao, boller og kage":
+                menuOneRadioButton.setSelected(true);
+                break;
+            case "Frikadeller og dessert":
+                menuTwoRadioButton.setSelected(true);
+                break;
+            case "Pasta m. kødsovs og dessert":
+                menuThreeRadioButton.setSelected(true);
+                break;
+            case "Nuggets og pommes frites":
+                menuFourRadioButton.setSelected(true);
+                break;
         }
     }
 }
