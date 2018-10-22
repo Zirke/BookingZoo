@@ -107,7 +107,7 @@ public class BookingDataAccessor {
                     rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
                     rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
-                    new Lecturer(), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
+                    new Lecturer(rsTypeSpecific.getString("lecturer")), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
                     rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getInt("grade"),
                     rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
                     rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),

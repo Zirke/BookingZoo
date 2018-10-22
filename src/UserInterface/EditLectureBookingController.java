@@ -33,6 +33,8 @@ public class EditLectureBookingController {
 
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
 
+        categoryChoiceBox.getItems().addAll("Afventende","Aktiv","Færdig","Arkiveret");
+
     }
 
     public void initData() {
@@ -48,7 +50,7 @@ public class EditLectureBookingController {
         gradeTextField.setText(String.valueOf(selectedLectureBooking.getGrade()));
         lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
         lecturerTextField.setText(selectedLectureBooking.getLecturer().toString());
-        categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus());
+        categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus().toString());
 
         //Customer information
         schoolNameTextField.setText(temp.getSchoolName());

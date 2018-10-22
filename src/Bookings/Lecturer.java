@@ -11,6 +11,10 @@ public class Lecturer {
         this.lecturerStatus = lecturerStatus;
     }
 
+    public Lecturer(String lecturerName) {
+        this.lecturerName = lecturerName;
+    }
+
     public Lecturer() {
     }
 
