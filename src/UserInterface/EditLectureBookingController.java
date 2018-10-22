@@ -55,7 +55,7 @@ public class EditLectureBookingController {
 
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
 
-        categoryChoiceBox.getItems().addAll("Afventende","Aktiv","Færdig","Arkiveret");
+        categoryChoiceBox.getItems().addAll("Afventende","Aktive","Færdige","Arkiverede");
 
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
