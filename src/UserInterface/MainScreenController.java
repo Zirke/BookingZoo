@@ -87,13 +87,19 @@ public class MainScreenController extends GeneralController {
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
-        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreationController.fxml"));
+        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
 
         //Reloads the bookings from database into ListView
         refreshBookingsButton.setOnMouseClicked(e -> refreshBookingListView());
 
         //Opens edit pop-up window corresponding to chosen Booking in ListView
-        editBookingButton.setOnMouseClicked(e -> editSelectedBooking((LectureBooking) (bookingListView.getSelectionModel().getSelectedItem())));
+        editBookingButton.setOnMouseClicked(e -> {
+            if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
+                editSelectedLectureBooking((LectureBooking) (bookingListView.getSelectionModel().getSelectedItem()));
+            } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
+                editSelectedArrangementBooking((Bookings.ArrangementBooking) (bookingListView.getSelectionModel().getSelectedItem()));
+            }
+        });
 
         //Accepting the selected booking when pressing acceptBookingButton
         acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
@@ -144,7 +150,7 @@ public class MainScreenController extends GeneralController {
         if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
         } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
-            showArrangementBookingInformation((ArrangementBooking) bookingListView.getSelectionModel().getSelectedItem());
+            showArrangementBookingInformation((ArrangementBooking) (bookingListView.getSelectionModel().getSelectedItem()));
         }
     }
 
@@ -160,7 +166,7 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void editSelectedBooking(LectureBooking selectedLectureBooking) {
+    private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("EditLectureBooking.fxml"));
             Parent root = loader.load();
@@ -178,8 +184,26 @@ public class MainScreenController extends GeneralController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void editSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditArrangementBooking.fxml"));
+            Parent root = loader.load();
 
+            EditArrangementBookingController controller = loader.getController();
+            controller.setSelectedArrangementBooking(selectedArrangementBooking);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            //stage.setTitle(windowTitle);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
