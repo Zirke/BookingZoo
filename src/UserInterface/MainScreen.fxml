@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.MainScreenController">
     <children>
-        <VBox layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
+        <VBox alignment="TOP_CENTER" layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
                 <Separator prefWidth="200.0" />
@@ -28,33 +28,32 @@
                     </graphic>
                 </Button>
                 <Separator prefWidth="200.0" />
-                <Button mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                        prefWidth="250.0" text="Oversigt">
+                <Label text="Filtrer efter kategori:">
                     <font>
                         <Font size="16.0"/>
                     </font>
-                </Button>
+                </Label>
+                <Separator prefWidth="200.0"/>
                 <Button fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
-                        prefHeight="35.0" prefWidth="250.0" text="Afventende">
+                        prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Afventende">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
                 <Button fx:id="activeButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
-                        prefHeight="35.0" prefWidth="250.0" text="Aktive">
+                        prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Aktive">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
                 <Button fx:id="finishedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
-                        prefHeight="35.0" prefWidth="250.0" text="Færdige">
+                        prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Færdige">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Separator prefWidth="200.0" />
                 <Button fx:id="archivedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
-                        prefHeight="35.0" prefWidth="250.0" text="Arkiverede">
+                        prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Arkiverede">
                     <font>
                         <Font size="16.0"/>
                     </font>

@@ -28,6 +28,7 @@ public class Main extends Application {
             primaryStage.setTitle("Aalborg Zoo Booking System");
             primaryStage.setMaximized(true);
             primaryStage.show();
+            root.requestFocus();
 
         } catch (IOException e) {
             e.printStackTrace();
