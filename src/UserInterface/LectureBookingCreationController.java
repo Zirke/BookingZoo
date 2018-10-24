@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 public class LectureBookingCreationController {
@@ -120,8 +122,10 @@ public class LectureBookingCreationController {
 
     @FXML
     private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
-        LocalDate date = datePicker.getValue();
-        String time = timeTextField.getText();
+        LocalDate tempDate = datePicker.getValue();
+
+        LocalTime tempTime = LocalTime.parse(timeTextField.getText());
+        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
         int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
@@ -153,7 +157,7 @@ public class LectureBookingCreationController {
         String comment = commentTextArea.getText();
 
         LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
-                LocalDate.now(), date, time, numberOfPupils, customerComment, comment, lectureRoomChosen,
+                LocalDate.now(), date, numberOfPupils, customerComment, comment, lectureRoomChosen,
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 

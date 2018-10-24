@@ -4,7 +4,6 @@ import Customers.LectureBookingCustomer;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
-import javafx.scene.control.RadioButton;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class BookingDataAccessor {
         String typeSpecific = "SELECT bookingid,food,restaurant," +
                 "birthdaychildname,birthdaychildage,formerparticipant,guide FROM arrangement_booking ";
 
-        String general = "SELECT bookingid,status,customerid,creationdate,date,time," +
+        String general = "SELECT bookingid,status,customerid,creationdate,datetime," +
                 "participants,customercomment,usercomment FROM booking WHERE bookingid = (?)";
 
         Statement stmtSpecific = connection.createStatement();
@@ -54,7 +53,7 @@ public class BookingDataAccessor {
 
             abook = new ArrangementBooking(
                     rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
-                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
+                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
                     rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new FoodOrder(ChoiceOfMenu.valueOf(rsTypeSpecific.getString("food"))), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
                     rsTypeSpecific.getInt("birthdaychildage"), rsTypeSpecific.getString("formerparticipant"),
@@ -66,6 +65,7 @@ public class BookingDataAccessor {
                 arr.add(abook);
             }
         }
+        //connection.close();
         return arr;
     }
 
@@ -77,7 +77,7 @@ public class BookingDataAccessor {
                 "FROM lecture_booking";
 
         String general = "SELECT bookingid,status," +
-                "customerid,creationdate,date,time,participants,customercomment,usercomment FROM booking WHERE bookingid = (?)";
+                "customerid,creationdate,datetime,participants,customercomment,usercomment FROM booking WHERE bookingid = (?)";
 
         Statement stmtSpecific = connection.createStatement();
         ResultSet rsTypeSpecific = stmtSpecific.executeQuery(typeSpecific);
@@ -105,7 +105,7 @@ public class BookingDataAccessor {
 
             lbook = new LectureBooking(
                     rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
-                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getDate("date").toLocalDate(), rsGeneral.getString("time"),
+                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
                     rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
                     new Lecturer(rsTypeSpecific.getString("lecturer")), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
@@ -121,22 +121,22 @@ public class BookingDataAccessor {
                 arr.add(lbook);
             }
         }
+        //connection.close();
         return arr;
     }
 
     public void createArrBookManually(ArrangementBooking abook) throws SQLException {
         //Insert data into booking table
-        String general = "INSERT INTO booking (bookingtypeid, status, creationdate, date, time, participants, customercomment, usercomment)" +
-                "VALUES ((2),(?),(?),(?),(?),(?),(?),(?))";
+        String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
+                "VALUES ((2),(?),(?),(?),(?),(?),(?))";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
         pstmtGeneral.setString(1, abook.getBookingStatus().name());
         pstmtGeneral.setDate(2, java.sql.Date.valueOf(abook.getCreationDate()));
-        pstmtGeneral.setDate(3, java.sql.Date.valueOf(abook.getDate()));
-        pstmtGeneral.setString(4, abook.getTime());
-        pstmtGeneral.setInt(5, abook.getParticipants());
-        pstmtGeneral.setString(6, abook.getCustomerComment());
-        pstmtGeneral.setString(7, abook.getComment());
+        pstmtGeneral.setTimestamp(3, java.sql.Timestamp.valueOf(abook.getDateTime()));
+        pstmtGeneral.setInt(4, abook.getParticipants());
+        pstmtGeneral.setString(5, abook.getCustomerComment());
+        pstmtGeneral.setString(6, abook.getComment());
         pstmtGeneral.executeUpdate();
 
         //Get Auto-Generated ID of this booking and customer
@@ -175,6 +175,8 @@ public class BookingDataAccessor {
         //Execute Updates
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
+
+        //connection.close();
     }
 
     public void deleteBooking(Booking book) throws SQLException {
@@ -229,22 +231,23 @@ public class BookingDataAccessor {
             pstmtTypeCustomer.executeUpdate();
             pstmtCustomer.executeUpdate();
             pstmtBooking.executeUpdate();
+
+            //connection.close();
         }
     }
 
     public void createLecBookManually(LectureBooking lbook) throws SQLException {
         //Insert data into booking table
-        String general = "INSERT INTO booking (bookingtypeid, status, creationdate, date, time, participants, customercomment, usercomment)" +
-                "VALUES ((1),(?),(?),(?),(?),(?),(?),(?))";
+        String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
+                "VALUES ((1),(?),(?),(?),(?),(?),(?))";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(general);
         pstmtGeneral.setString(1, lbook.getBookingStatus().name());
         pstmtGeneral.setDate(2, java.sql.Date.valueOf(lbook.getCreationDate()));
-        pstmtGeneral.setDate(3, java.sql.Date.valueOf(lbook.getDate()));
-        pstmtGeneral.setString(4, lbook.getTime());
-        pstmtGeneral.setInt(5, Integer.valueOf(lbook.getParticipants()));
-        pstmtGeneral.setString(6, lbook.getCustomerComment());
-        pstmtGeneral.setString(7, lbook.getComment());
+        pstmtGeneral.setTimestamp(3, java.sql.Timestamp.valueOf(lbook.getDateTime()));
+        pstmtGeneral.setInt(4, lbook.getParticipants());
+        pstmtGeneral.setString(5, lbook.getCustomerComment());
+        pstmtGeneral.setString(6, lbook.getComment());
         pstmtGeneral.executeUpdate();
 
         //Get Auto-Generated ID of this booking and customer
@@ -300,6 +303,8 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
+
+        //connection.close();
     }
 
     public void changeBookingStatus(Booking book, BookingStatus status) throws SQLException {
@@ -320,7 +325,7 @@ public class BookingDataAccessor {
         rsCustomerID.next();
         int currentCustomerID = rsCustomerID.getInt(1);
 
-        String editBooking = "UPDATE booking SET date=(?), time=(?), participants=(?), customercomment=(?), usercomment=(?)" +
+        String editBooking = "UPDATE booking SET datetime=(?), participants=(?), customercomment=(?), usercomment=(?)" +
                 "WHERE bookingid=(?)";
         String editLectureBooking = "UPDATE arrangement_booking SET food=(?), restaurant=(?), birthdaychildname=(?), birthdaychildage=(?), formerparticipant=(?), guide=(?)" +
                 "WHERE bookingid=(?)";
@@ -328,9 +333,9 @@ public class BookingDataAccessor {
                 "WHERE customerid=(?)";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(editBooking);
-        pstmtGeneral.setDate(1, Date.valueOf(abook.getDate())); pstmtGeneral.setString(2,abook.getTime());
-        pstmtGeneral.setInt(3,abook.getParticipants()); pstmtGeneral.setString(4,abook.getCustomerComment());
-        pstmtGeneral.setString(5,abook.getComment()); pstmtGeneral.setInt(6,abook.getId());
+        pstmtGeneral.setTimestamp(1, Timestamp.valueOf(abook.getDateTime()));
+        pstmtGeneral.setInt(2,abook.getParticipants()); pstmtGeneral.setString(3,abook.getCustomerComment());
+        pstmtGeneral.setString(4,abook.getComment()); pstmtGeneral.setInt(5,abook.getId());
 
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(editLectureBooking);
@@ -348,6 +353,8 @@ public class BookingDataAccessor {
         changeBookingStatus(abook, abook.getBookingStatus());
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
+
+        //connection.close();
     }
 
     public void editLecBook(LectureBooking lbook) throws SQLException{
@@ -359,7 +366,7 @@ public class BookingDataAccessor {
         rsCustomerID.next();
         int currentCustomerID = rsCustomerID.getInt(1);
 
-        String editBooking = "UPDATE booking SET date=(?), time=(?), participants=(?), customercomment=(?), usercomment=(?)" +
+        String editBooking = "UPDATE booking SET datetime=(?), participants=(?), customercomment=(?), usercomment=(?)" +
                 "WHERE bookingid=(?)";
         String editLectureBooking = "UPDATE lecture_booking SET lectureroom=(?), lecturer=(?), choiceoftopic=(?), noofteams=(?), noofteachers=(?), grade=(?)" +
                 "WHERE bookingid=(?)";
@@ -369,9 +376,9 @@ public class BookingDataAccessor {
                 "WHERE customerid=(?)";
 
         PreparedStatement pstmtGeneral = connection.prepareStatement(editBooking);
-        pstmtGeneral.setDate(1,java.sql.Date.valueOf(lbook.getDate())); pstmtGeneral.setString(2,lbook.getTime());
-        pstmtGeneral.setInt(3,lbook.getParticipants()); pstmtGeneral.setString(4,lbook.getCustomerComment());
-        pstmtGeneral.setString(5,lbook.getComment()); pstmtGeneral.setInt(6,lbook.getId());
+        pstmtGeneral.setTimestamp(1, Timestamp.valueOf(lbook.getDateTime()));
+        pstmtGeneral.setInt(2,lbook.getParticipants()); pstmtGeneral.setString(3,lbook.getCustomerComment());
+        pstmtGeneral.setString(4,lbook.getComment()); pstmtGeneral.setInt(5,lbook.getId());
 
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(editLectureBooking);
@@ -397,6 +404,8 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
+
+        //connection.close();
 
     }
 }

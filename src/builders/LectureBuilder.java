@@ -9,13 +9,14 @@ import enums.ChoiceOfTopic;
 import facilities.LectureRoom;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class LectureBuilder {
     private enums.BookingType bookingType;
     private enums.BookingStatus bookingStatus;
     private LectureBookingCustomer customer;
     private LocalDate creationDate;
-    private LocalDate date;
+    private LocalDateTime date;
     private String time;
     private int participants;
     private String customerComment;
@@ -50,7 +51,7 @@ public class LectureBuilder {
         return this;
     }
 
-    public LectureBuilder setDate(LocalDate date){
+    public LectureBuilder setDate(LocalDateTime date){
         this.date = date;
         return this;
     }
@@ -106,7 +107,7 @@ public class LectureBuilder {
     }
 
     public LectureBooking build(){
-        return new LectureBooking(bookingType, bookingStatus, creationDate, date, time, participants,
+        return new LectureBooking(bookingType, bookingStatus, creationDate, date, participants,
                 customerComment, comment, lectureRoom, lecturer, choiceOfTopic, noOfTeams, noOfTeachers, grade, customer);
     }
 }

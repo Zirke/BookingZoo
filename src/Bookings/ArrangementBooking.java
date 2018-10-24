@@ -6,6 +6,7 @@ import enums.BookingType;
 import facilities.Restaurant;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ArrangementBooking extends Booking {
@@ -17,12 +18,12 @@ public class ArrangementBooking extends Booking {
     private String guide;
 
     public ArrangementBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
-                              LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                              LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant, String birthdayChildName,
                               int birthdayChildAge, String formerParticipant, String guide, String customerContactPerson,
                               String customerPhoneNumber, String customerEmail) {
         super(id, bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
-                creationDate, date, time, participants, customerComment, comment);
+                creationDate, date, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
         this.birthdayChildName = birthdayChildName;
@@ -32,12 +33,12 @@ public class ArrangementBooking extends Booking {
     }
 
     public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus,
-                              LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                              LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                               String comment, FoodOrder menuChosen, Restaurant restaurant,
                               String birthdayChildName, int birthdayChildAge, String formerParticipant, String guide,
                               String customerContactPerson, String customerPhoneNumber, String customerEmail) {
         super(bookingType, bookingStatus, new Customer(customerContactPerson, customerPhoneNumber, customerEmail),
-                creationDate, date, time, participants, customerComment, comment);
+                creationDate, date, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
         this.birthdayChildName = birthdayChildName;
@@ -46,12 +47,11 @@ public class ArrangementBooking extends Booking {
         this.guide = guide;
     }
 
-    public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDate date,
-                              String time, int participants, String customerComment, String comment, FoodOrder menuChosen,
+    public ArrangementBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDateTime date, int participants, String customerComment, String comment, FoodOrder menuChosen,
                               Restaurant restaurant, String birthdayChildName, int birthdayChildAge, String formerParticipant,
                               String guide, Customer customer) {
         super(bookingType, bookingStatus, customer,
-                creationDate, date, time, participants, customerComment, comment);
+                creationDate, date, participants, customerComment, comment);
         this.menuChosen = menuChosen;
         this.restaurant = restaurant;
         this.birthdayChildName = birthdayChildName;
@@ -115,7 +115,7 @@ public class ArrangementBooking extends Booking {
 
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setInt(13, arb.getId());
-        pstmt.setString(1, arb.getDate());
+        pstmt.setString(1, arb.getDateTime());
         pstmt.setString(2, arb.getTime());
         pstmt.setInt(3, Integer.parseInt(arb.getNoOfChildren()));
         pstmt.setString(4, arb.getBirthdayChildName());
@@ -153,6 +153,6 @@ public class ArrangementBooking extends Booking {
 
     @Override
     public String toString() {
-        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDate();
+        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDateTime();
     }
 }

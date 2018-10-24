@@ -13,6 +13,9 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 public class EditArrangementBookingController {
@@ -81,9 +84,9 @@ public class EditArrangementBookingController {
     }
 
     void initData() {
-        datePicker.setValue(selectedArrangementBooking.getDate());
+        datePicker.setValue(selectedArrangementBooking.getDateTime().toLocalDate());
 
-        if (selectedArrangementBooking.getTime().equals("10:00 - 12:00")) {
+        if (selectedArrangementBooking.getDateTime().getHour() == 10) {
             timeOneRadioButton.setSelected(true);
         } else {
             timeTwoRadioButton.setSelected(true);
@@ -131,9 +134,16 @@ public class EditArrangementBookingController {
         BookingStatus statusChoice;
         statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedArrangementBooking.setBookingStatus(statusChoice);
-        selectedArrangementBooking.setDate(datePicker.getValue());
-        RadioButton selectedTimeSlot = (RadioButton) timeGroup.getSelectedToggle();
-        selectedArrangementBooking.setTime(selectedTimeSlot.getText());
+        RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
+        LocalTime tempTime;
+        if(selectedTimeBtn.getText().equals("10:00 - 12:00")){
+            tempTime = LocalTime.of(10,00,00);
+        } else{
+            tempTime = LocalTime.of(12,30,00);
+        }
+        LocalDate tempDate = datePicker.getValue();
+        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
+        selectedArrangementBooking.setDateTime(date);
         selectedArrangementBooking.setParticipants(Integer.parseInt(noOfChildrenTextField.getText()));
         selectedArrangementBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedArrangementBooking.setComment(commentTextArea.getText());

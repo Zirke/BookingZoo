@@ -5,6 +5,7 @@ import enums.BookingStatus;
 import enums.BookingType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public abstract class Booking {
 
@@ -13,32 +14,29 @@ public abstract class Booking {
     private enums.BookingStatus bookingStatus;
     private Customer customer;
     private LocalDate creationDate;
-    private LocalDate date;
-    private String time;
+    private LocalDateTime dateTime;
     private int participants;
     private String customerComment;
     private String comment;
 
-    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, int participants, String customerComment, String comment) {
+    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
         this.id = id;
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.customer = customer;
         this.creationDate = creationDate;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.participants = participants;
         this.customerComment = customerComment;
         this.comment = comment;
     }
 
-    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDate date, String time, int participants, String customerComment, String comment) {
+    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.customer = customer;
         this.creationDate = creationDate;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.participants = participants;
         this.customerComment = customerComment;
         this.comment = comment;
@@ -84,20 +82,12 @@ public abstract class Booking {
         this.creationDate = creationDate;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public int getParticipants() {

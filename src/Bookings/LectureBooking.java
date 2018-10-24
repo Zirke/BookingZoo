@@ -1,6 +1,5 @@
 package Bookings;
 
-import Customers.Customer;
 import Customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
@@ -8,6 +7,7 @@ import enums.ChoiceOfTopic;
 import facilities.LectureRoom;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class LectureBooking extends Booking {
@@ -20,14 +20,14 @@ public class LectureBooking extends Booking {
 
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
-                          LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                          LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
                           int noOfTeams, int noOfTeachers, int grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
                           String commune, String schoolPhoneNumber, long eanNumber) {
         super(id, bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
                         customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
-                time, participants, customerComment, comment);
+                participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;
         this.choiceOfTopic = choiceOfTopic;
@@ -38,14 +38,14 @@ public class LectureBooking extends Booking {
     }
 
     public LectureBooking(BookingType bookingType, BookingStatus bookingStatus,
-                          LocalDate creationDate, LocalDate date, String time, int participants, String customerComment,
+                          LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
                           int noOfTeams, int noOfTeachers, int grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
                           String commune, String schoolPhoneNumber, long eanNumber) {
         super(bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
                         customerEmail, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber), creationDate, date,
-                time, participants, customerComment, comment);
+                participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;
         this.choiceOfTopic = choiceOfTopic;
@@ -54,11 +54,11 @@ public class LectureBooking extends Booking {
         this.grade = grade;
     }
 
-    public LectureBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDate date, String time, int participants,
+    public LectureBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDateTime date, int participants,
                           String customerComment, String comment, LectureRoom lectureRoom, Lecturer lecturer,
                           ChoiceOfTopic choiceOfTopic, int noOfTeams, int noOfTeachers, int grade, LectureBookingCustomer customer) {
         super(bookingType, bookingStatus, customer, creationDate, date,
-                time, participants, customerComment, comment);
+                participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;
         this.choiceOfTopic = choiceOfTopic;
@@ -136,6 +136,6 @@ public class LectureBooking extends Booking {
 
     @Override
     public String toString() {
-        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDate();
+        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDateTime();
     }
 }

@@ -81,9 +81,16 @@ public class ArrangementBookingCreationController extends GeneralController {
     }
 
     private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
-        LocalDate date = datePicker.getValue();
+        LocalDate tempDate = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
-        String time = selectedTimeBtn.getText();
+        LocalTime tempTime;
+        if(selectedTimeBtn.getText().equals("10:00 - 12:00")){
+            tempTime = LocalTime.of(10,00,00);
+        } else{
+            tempTime = LocalTime.of(12,30,00);
+        }
+        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
+
         int noOfChildren = Integer.parseInt(noOfChildrenTextField.getText());
         String childName = childNameTextField.getText();
         int childAge = Integer.parseInt(childAgeTextField.getText());
@@ -106,7 +113,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         );
 
         ArrangementBooking abook = new ArrangementBooking(
-                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date, time,
+                BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date,
                 noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.UNOCCUPIED),
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 

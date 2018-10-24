@@ -278,8 +278,8 @@ public class MainScreenController extends GeneralController {
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getBookingStatus().toString());
         creationDateLabel.setText("Oprettet: " + selectedLectureBooking.getCreationDate().toString());
-        dateLabel.setText("Dato: " + selectedLectureBooking.getDate());
-        timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getTime());
+        dateLabel.setText("Dato: " + selectedLectureBooking.getDateTime().toLocalDate().toString());
+        timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getDateTime().toLocalTime().toString());
         pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getParticipants());
         teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
         teacherNoLabel.setText("Antal lærere: " + selectedLectureBooking.getNoOfTeachers());
@@ -315,9 +315,9 @@ public class MainScreenController extends GeneralController {
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
-        dateLabel.setText("Dato: " + selectedArrangementBooking.getDate());
+        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
         creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
-        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getTime());
+        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
         pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
         teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
         teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());

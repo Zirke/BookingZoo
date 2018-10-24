@@ -8,13 +8,14 @@ import enums.BookingType;
 import facilities.Restaurant;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ArrangementBuilder {
     private enums.BookingType bookingType;
     private enums.BookingStatus bookingStatus;
     private Customer customer;
     private LocalDate creationDate;
-    private LocalDate date;
+    private LocalDateTime date;
     private String time;
     private int participants;
     private String customerComment;
@@ -48,7 +49,7 @@ public class ArrangementBuilder {
         return this;
     }
 
-    public ArrangementBuilder setDate(LocalDate date){
+    public ArrangementBuilder setDate(LocalDateTime date){
         this.date = date;
         return this;
     }
@@ -104,7 +105,7 @@ public class ArrangementBuilder {
     }
 
     public ArrangementBooking build(){
-        return new ArrangementBooking(bookingType, bookingStatus, creationDate, date, time, participants,
+        return new ArrangementBooking(bookingType, bookingStatus, creationDate, date, participants,
                 customerComment, comment, menuChosen, restaurant, birthdayChildName, birthdayChildAge, formerParticipant,
                 guide, customer);
     }

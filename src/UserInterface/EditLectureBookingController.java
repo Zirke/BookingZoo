@@ -14,6 +14,9 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 import static enums.ChoiceOfTopic.topicChosen;
@@ -115,8 +118,8 @@ public class EditLectureBookingController {
         LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
 
         //Lecture information
-        datePicker.setValue(selectedLectureBooking.getDate());
-        timeTextField.setText(selectedLectureBooking.getTime());
+        datePicker.setValue(selectedLectureBooking.getDateTime().toLocalDate());
+        timeTextField.setText(selectedLectureBooking.getDateTime().toLocalTime().toString());
         noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
         noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
         noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
@@ -145,8 +148,10 @@ public class EditLectureBookingController {
     }
 
     private LectureBooking overwriteSelectedLectureBooking() {
-        selectedLectureBooking.setDate(datePicker.getValue());
-        selectedLectureBooking.setTime(timeTextField.getText());
+        LocalTime tempTime = LocalTime.parse(timeTextField.getText());
+        LocalDate tempDate = datePicker.getValue();
+        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
+        selectedLectureBooking.setDateTime(date);
         selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
         selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
