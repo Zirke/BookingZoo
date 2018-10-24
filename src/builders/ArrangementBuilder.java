@@ -16,7 +16,6 @@ public class ArrangementBuilder {
     private Customer customer;
     private LocalDate creationDate;
     private LocalDateTime date;
-    private String time;
     private int participants;
     private String customerComment;
     private String comment;
@@ -51,11 +50,6 @@ public class ArrangementBuilder {
 
     public ArrangementBuilder setDate(LocalDateTime date){
         this.date = date;
-        return this;
-    }
-
-    public ArrangementBuilder setTime(String time){
-        this.time = time;
         return this;
     }
 

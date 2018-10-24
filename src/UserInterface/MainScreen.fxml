@@ -58,30 +58,22 @@
                     </font>
                 </Button>
                 <Separator prefWidth="200.0" />
-                <VBox alignment="BOTTOM_CENTER">
-                    <children>
-                        <MenuButton mnemonicParsing="false" text="Opret ny booking">
-                            <items>
-                                <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste"/>
-                                <MenuItem fx:id="arrangementBookingItem" mnemonicParsing="false"
-                                          text="Børnefødselsdag"/>
-                            </items>
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../ImageView/appointment.png"/>
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </MenuButton>
-                    </children>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </VBox>
+                <MenuButton mnemonicParsing="false" text="Opret ny booking">
+                    <items>
+                        <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste"/>
+                        <MenuItem fx:id="arrangementBookingItem" mnemonicParsing="false" text="Børnefødselsdag"/>
+                    </items>
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../ImageView/appointment.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </MenuButton>
                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
             </children>
             <padding>
@@ -100,38 +92,17 @@
                     </font>
                 </TextField>
                 <Separator prefWidth="200.0"/>
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <Label text="Type           ">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Kontaktperson       "
-                               GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                            <padding>
-                                <Insets left="25.0"/>
-                            </padding>
-                        </Label>
-                        <Label text="Dato" GridPane.columnIndex="2">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                    </children>
-                </GridPane>
-                <ListView fx:id="bookingListView" prefWidth="478.0" VBox.vgrow="ALWAYS"/>
+                <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0">
+                    <columns>
+                        <TableColumn fx:id="bookingTableStatusColumn" prefWidth="75.0" text="Status"/>
+                        <TableColumn prefWidth="75.0" text="Type"/>
+                        <TableColumn prefWidth="75.0" text="Kontaktperson"/>
+                        <TableColumn prefWidth="75.0" text="Dato"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
             </children>
             <opaqueInsets>
                 <Insets/>
