@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/BookingZoo.iml" filepath="$PROJECT_DIR$/.idea/BookingZoo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BookingZoo_main.iml" filepath="$PROJECT_DIR$/.idea/modules/BookingZoo_main.iml" group="BookingZoo" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BookingZoo_test.iml" filepath="$PROJECT_DIR$/.idea/modules/BookingZoo_test.iml" group="BookingZoo" />
     </modules>
   </component>
 </project>
