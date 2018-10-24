@@ -25,10 +25,17 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class MainScreenController extends GeneralController {
-    private BookingDataAccessor bda;
+    private final BookingDataAccessor bda = new BookingDataAccessor(
+            "org.postgresql.Driver",
+            "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+            "jyjczxth",
+            "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
+    );
+    //private ArrayList<Booking> listOfBookings = new ArrayList<>();
 
     @FXML
-    private Button refreshBookingsButton, pendingBookingsButton, activeBookingsButton, finishedBookingsButton, archivedBookingsButton;
+    private Button refreshBookingsButton, overviewButton, pendingBookingsButton, activeBookingsButton,
+            finishedBookingsButton, archivedBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -38,54 +45,52 @@ public class MainScreenController extends GeneralController {
 
     //Nodes for booking information display area
     @FXML
-    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel, timeLabel,
-            pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel, schoolPhoneNumberLabel,
-            zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel, emailLabel, eanLabel;
+    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
+            timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
+            schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
+            emailLabel, eanLabel;
     @FXML
     private TextArea customerCommentArea;
     @FXML
     private Button acceptBookingButton, cancelBookingButton, editBookingButton;
 
-    public void initialize() throws SQLException, ClassNotFoundException {
+    public MainScreenController() throws SQLException, ClassNotFoundException {
+    }
+
+    public void initialize() throws SQLException {
         customerCommentLabel.setVisible(false);
         customerCommentArea.setVisible(false);
         acceptBookingButton.setVisible(false);
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
 
-        bda = new BookingDataAccessor(
-                "org.postgresql.Driver",
-                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-                "jyjczxth",
-                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
-        );
-
-        ArrayList<Booking> listOfBookings = new ArrayList<>();
-
-        listOfBookings.addAll(bda.fetchArrBooks());
-        listOfBookings.addAll(bda.fetchLecBooks());
-
-        loadBookingsToListView(listOfBookings);
+        //Takes all Booking objects from listOfBookings and load them into bookingListView
+        loadBookingsToListView();
 
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
-        for (Booking temp : listOfBookings) {
+        for (Booking temp : fetchBookingsFromDatabase()) {
             listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
         }
         String[] options = listOfContactPersonNames.toArray(new String[0]);
         TextFields.bindAutoCompletion(searchField, options);
 
-        /* Event handlers */
-
-        //Displays information of the clicked booking in ListView
-        bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
+        /*
+         *   Event handlers
+         */
 
         //Shows searched for booking in ListView
         searchField.setOnKeyTyped(e -> {
-            if (searchField.getText().isEmpty()) {
-                loadBookingsToListView(listOfBookings);
-            } else showSearchedForBookingsInListView(listOfBookings);
+            try {
+                if (searchField.getText().isEmpty()) {
+                    loadBookingsToListView();
+                } else showSearchedForBookingsInListView(fetchBookingsFromDatabase());
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         });
+
+        bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
@@ -103,8 +108,13 @@ public class MainScreenController extends GeneralController {
             }
         });
 
-        //Accepting the selected booking when pressing acceptBookingButton
-        acceptBookingButton.setOnMouseClicked(e -> acceptSelectedBooking(listOfBookings));
+        acceptBookingButton.setOnMouseClicked(e -> {
+            try {
+                acceptSelectedBooking(fetchBookingsFromDatabase());
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         //Cancelling the selected booking when pressing cancelBookingButton
         cancelBookingButton.setOnMouseClicked(e -> {
@@ -121,10 +131,18 @@ public class MainScreenController extends GeneralController {
         });
     }
 
+    private ArrayList<Booking> fetchBookingsFromDatabase() throws SQLException {
+        ArrayList<Booking> listOfBookings = new ArrayList<>();
+        listOfBookings.addAll(bda.fetchLecBooks());
+        listOfBookings.addAll(bda.fetchArrBooks());
+
+        return listOfBookings;
+    }
+
     //Takes an ArrayList of bookings to load into ListView of bookings
-    private void loadBookingsToListView(ArrayList<Booking> listOfBookings) {
+    private void loadBookingsToListView() throws SQLException {
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
-        for (Booking booking : listOfBookings) {
+        for (Booking booking : fetchBookingsFromDatabase()) {
             bookings.addAll(booking);
         }
         bookingListView.setItems(bookings);
@@ -132,12 +150,8 @@ public class MainScreenController extends GeneralController {
 
     private void refreshBookingListView() {
         try {
-            ArrayList<Booking> refreshedListOfBookings = new ArrayList<>();
-
-            refreshedListOfBookings.addAll(bda.fetchArrBooks());
-            refreshedListOfBookings.addAll(bda.fetchLecBooks());
-
-            loadBookingsToListView(refreshedListOfBookings);
+            loadBookingsToListView();
+            bda.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,6 +162,15 @@ public class MainScreenController extends GeneralController {
         bookingListView.getItems().remove(bookingToRemove);
     }
 
+    private void deleteSelectedBooking() {
+        try {
+            bda.deleteBooking((Booking) bookingListView.getSelectionModel().getSelectedItem());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Displays information of the clicked booking in ListView
     private void showSelectedBookingInformation() {
         if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
@@ -169,28 +192,31 @@ public class MainScreenController extends GeneralController {
     }
 
     @FXML
-    private void showChosenCategoryBookings(ActionEvent event) {
-        Button chosenCategoryBtn = (Button) event.getSource();
-        String foo = chosenCategoryBtn.getText();
+    private void showChosenCategoryBookings(ActionEvent event) throws SQLException {
+        //bookingListView.getSelectionModel().clearSelection();
 
-        ArrayList<Booking> listOfBookings = new ArrayList<>();
-        try {
-            listOfBookings.addAll(bda.fetchArrBooks());
-            listOfBookings.addAll(bda.fetchLecBooks());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        BookingStatus bar = BookingStatus.statusChosen(foo);
+        Button chosenCategoryBtn = (Button) event.getSource();
+        String nameOfChosenBtn = chosenCategoryBtn.getText();
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
-        bookingListView.getItems().clear();
-        for (Booking temp : listOfBookings) {
-            if (temp.getBookingStatus().equals(bar)) {
-                categorisedBookings.add(temp);
+
+        for (Booking temp : fetchBookingsFromDatabase()) {
+            if (!nameOfChosenBtn.equals("Oversigt")) {
+                BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
+                if (temp.getBookingStatus().equals(chosenBookingStatus)) {
+                    categorisedBookings.add(temp);
+                }
             }
         }
         bookingListView.setItems(categorisedBookings);
+    }
 
+    //TODO
+    //Accepting the selected booking when pressing acceptBookingButton
+    private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
+        if (bookingListView.getSelectionModel().getSelectedItem() != null) {
+            //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
+        }
     }
 
     private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {
@@ -206,7 +232,6 @@ public class MainScreenController extends GeneralController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
-            //stage.setTitle(windowTitle);
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
@@ -226,31 +251,13 @@ public class MainScreenController extends GeneralController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
-            //stage.setTitle(windowTitle);
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
-        if (bookingListView.getSelectionModel().getSelectedItem() != null) {
-            //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
 
-        }
-    }
-
-    private void deleteSelectedBooking() {
-        try {
-            bda.deleteBooking((Booking) bookingListView.getSelectionModel().getSelectedItem());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void changeBookingStatus() {
-
-    }
 
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
@@ -260,8 +267,14 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setVisible(true);
         editBookingButton.setVisible(true);
 
-        LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
+        communeLabel.setVisible(true);
+        cityLabel.setVisible(true);
+        contactPersonLabel.setVisible(true);
+        phoneNumberLabel.setVisible(true);
+        emailLabel.setVisible(true);
+        eanLabel.setVisible(true);
 
+        LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getBookingStatus().toString());
         creationDateLabel.setText("Oprettet: " + selectedLectureBooking.getCreationDate().toString());
@@ -283,13 +296,6 @@ public class MainScreenController extends GeneralController {
         eanLabel.setText("EAN nummer: " + temp.getEanNumber());
         customerCommentArea.setText(selectedLectureBooking.getComment());
         customerCommentArea.setEditable(false);
-
-        communeLabel.setVisible(true);
-        cityLabel.setVisible(true);
-        contactPersonLabel.setVisible(true);
-        phoneNumberLabel.setVisible(true);
-        emailLabel.setVisible(true);
-        eanLabel.setVisible(true);
     }
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
@@ -298,6 +304,14 @@ public class MainScreenController extends GeneralController {
         acceptBookingButton.setVisible(true);
         cancelBookingButton.setVisible(true);
         editBookingButton.setVisible(true);
+
+        communeLabel.setVisible(false);
+        cityLabel.setVisible(false);
+        contactPersonLabel.setVisible(false);
+        phoneNumberLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        eanLabel.setVisible(false);
+        customerCommentArea.setEditable(false);
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
@@ -312,15 +326,8 @@ public class MainScreenController extends GeneralController {
         schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
         schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
         zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
-
-        communeLabel.setVisible(false);
-        cityLabel.setVisible(false);
-        contactPersonLabel.setVisible(false);
-        phoneNumberLabel.setVisible(false);
-        emailLabel.setVisible(false);
-        eanLabel.setVisible(false);
         customerCommentArea.setText(selectedArrangementBooking.getCustomerComment());
-        customerCommentArea.setEditable(false);
+
+
     }
 }
-

@@ -1,0 +1,7 @@
+.toggle-button:selected {
+    -fx-background-color: lightblue;
+}
+
+.toggle-button:selected:focused {
+    -fx-background-color: lightblue;
+}

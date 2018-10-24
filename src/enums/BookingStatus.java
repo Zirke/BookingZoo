@@ -34,7 +34,7 @@ public enum BookingStatus {
                 return STATUS_ACTIVE;
             case "Færdige":
                 return STATUS_DONE;
-            case "Aktiverede":
+            case "Arkiverede":
                 return STATUS_ARCHIVED;
             default:
                 throw new IllegalArgumentException();

@@ -1,0 +1,33 @@
+Ideer:
+
+Lave en ny kategori til bookings, som hedder slettet med tilhørende fetch metode i BDA.
+På denne måde kan det undgåes at slettede bookings bliver vist i "Oversigt".
+
+Gøre pop-up vinduer flytbare
+
+Lave endnu en filtreringsmulighed på "Kategori", "Navn", "Dato"
+
+Gøre Search bar knyttet til den valgte kategori (hvis en kategori er valgt skal den kun kunne søge mellem den valgte kategoris bookings)
+
+
+Opgaver main controller:
+
+Evt. JavaScript til at highlighte den valgt kategori-knap eller anden måde at vise den valgte kategori på.
+
+Formatering på ListView items (tab)
+
+Sortering af booking-items i listview (efter status, navn eller dato)
+
+Tilføj "kategori" til booking .toString
+
+Skifte "Afventende" bookings til "Aktiv" kategori efter accepteret
+
+
+Opgaver edit booking controller(s):
+
+Tilføj kald til "refresh" metode når man trykker "gem & luk"
+
+Tilføj timespinner til EditLectureBooking, som giver en value String i den rigtige tidsformat "HH:MM"
+
+
+
