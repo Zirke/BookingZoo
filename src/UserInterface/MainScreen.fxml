@@ -2,11 +2,12 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="UserInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="212.0" layoutY="324.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0"
@@ -74,7 +75,6 @@
                         </ImageView>
                     </graphic>
                 </MenuButton>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />
@@ -86,18 +86,23 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
             <children>
-                <TextField fx:id="searchField" promptText="Søg efter booking">
+                <TextField fx:id="searchField" promptText="Søg efter booking (Kontaktperson)">
                     <font>
                         <Font size="14.0"/>
                     </font>
                 </TextField>
                 <Separator prefWidth="200.0"/>
-                <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0">
+                <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0" tableMenuButtonVisible="true">
+                    <placeholder>
+                        <Label text="Ingen bookings at vise i denne kategori"/>
+                    </placeholder>
                     <columns>
-                        <TableColumn fx:id="bookingTableStatusColumn" prefWidth="75.0" text="Status"/>
-                        <TableColumn prefWidth="75.0" text="Type"/>
-                        <TableColumn prefWidth="75.0" text="Kontaktperson"/>
-                        <TableColumn prefWidth="75.0" text="Dato"/>
+                        <TableColumn fx:id="bookingStatusColumn" editable="false" prefWidth="75.0" sortType="DESCENDING"
+                                     text="Status"/>
+                        <TableColumn fx:id="bookingTypeColumn" editable="false" prefWidth="75.0" text="Type"/>
+                        <TableColumn fx:id="bookingContactPersonColumn" editable="false" prefWidth="165.0"
+                                     text="Kontaktperson"/>
+                        <TableColumn fx:id="bookingDateColumn" editable="false" prefWidth="60.0" text="Dato"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

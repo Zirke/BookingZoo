@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -41,9 +42,9 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TextField searchField;
     @FXML
-    private TableView bookingTableView;
+    private TableView<Booking> bookingTableView;
     @FXML
-    private TableColumn bookingTableStatusColumn;
+    private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn, bookingDateColumn;
 
     //Nodes for booking information display area
     @FXML
@@ -66,7 +67,7 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
 
-        //Takes all Booking objects from listOfBookings and load them into bookingsTableView
+        //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
         loadBookingsToTableView();
 
         /* Search field controlsfx */
@@ -82,7 +83,7 @@ public class MainScreenController extends GeneralController {
          */
 
         //Shows searched for booking in TableView
-        searchField.setOnKeyTyped(e -> {
+        searchField.setOnAction(e -> {
             try {
                 if (searchField.getText().isEmpty()) {
                     loadBookingsToTableView();
@@ -110,11 +111,17 @@ public class MainScreenController extends GeneralController {
             }
         });
 
+        //Changes the "BookingStatus" of the selected booking in TableView
         acceptBookingButton.setOnMouseClicked(e -> {
-            try {
-                acceptSelectedBooking(fetchBookingsFromDatabase());
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Vil du acceptere bookingen?");
+            alert.setContentText("Bookingen flyttes til 'Aktive'");
+
+            Optional<ButtonType> alertChoice = alert.showAndWait();
+
+            if (alertChoice.get() == ButtonType.OK) {
+                acceptSelectedBooking();
+                removeBookingFromTableView();
             }
         });
 
@@ -128,7 +135,7 @@ public class MainScreenController extends GeneralController {
 
             if (alertChoice.get() == ButtonType.OK) {
                 deleteSelectedBooking();
-                removeBookingFromTable();
+                removeBookingFromTableView();
             }
         });
     }
@@ -144,12 +151,23 @@ public class MainScreenController extends GeneralController {
 
     //Takes an ArrayList of bookings to load into TableView of bookings
     private void loadBookingsToTableView() throws SQLException {
+        bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
+        bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
+        bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
+        bookingDateColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking booking : fetchBookingsFromDatabase()) {
             bookings.addAll(booking);
         }
         bookingTableView.setItems(bookings);
 
+        /*
+        bookingStatusColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getBookingStatus().toString()));
+        bookingTypeColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getBookingType().toString()));
+        bookingContactPersonColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getCustomer().toString()));
+        bookingDateColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getDateTime().toLocalDate().toString()));
+        */
     }
 
     private void refreshBookingTableView() {
@@ -161,18 +179,19 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void removeBookingFromTable() {
-        Booking bookingToRemove = (Booking) bookingTableView.getSelectionModel().getSelectedItem();
+    private void removeBookingFromTableView() {
+        Booking bookingToRemove = bookingTableView.getSelectionModel().getSelectedItem();
         bookingTableView.getItems().remove(bookingToRemove);
     }
 
     private void deleteSelectedBooking() {
         try {
-            bda.deleteBooking((Booking) bookingTableView.getSelectionModel().getSelectedItem());
+            bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     //Displays information of the clicked booking in TableView
     private void showSelectedBookingInformation() {
@@ -197,8 +216,6 @@ public class MainScreenController extends GeneralController {
 
     @FXML
     private void showChosenCategoryBookings(ActionEvent event) throws SQLException {
-        //bookingListView.getSelectionModel().clearSelection();
-
         Button chosenCategoryBtn = (Button) event.getSource();
         String nameOfChosenBtn = chosenCategoryBtn.getText();
 
@@ -215,11 +232,11 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(categorisedBookings);
     }
 
-    //TODO
-    //Accepting the selected booking when pressing acceptBookingButton
-    private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
-        if (bookingTableView.getSelectionModel().getSelectedItem() != null) {
-            //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
+    private void acceptSelectedBooking() {
+        try {
+            bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -260,8 +277,6 @@ public class MainScreenController extends GeneralController {
             e.printStackTrace();
         }
     }
-
-
 
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
@@ -331,7 +346,5 @@ public class MainScreenController extends GeneralController {
         schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
         zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
         customerCommentArea.setText(selectedArrangementBooking.getCustomerComment());
-
-
     }
 }

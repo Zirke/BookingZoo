@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +28,6 @@ public class BuilderTest {
                 .setCustomer("contactperson", "1231341", "simon@hotmail.dk")
                 .setCreationDate(LocalDate.now())
                 .setDate(LocalDateTime.now())
-                .setTime("22:22")
                 .setParticipants(58)
                 .setCustomerComment("hallo")
                 .setComment("haallo2")
@@ -55,7 +53,6 @@ public class BuilderTest {
                         9000, "Aalborg", "Aalborg Kommune", "918924", 3237893)
                 .setCreationDate(LocalDate.now())
                 .setDate(LocalDateTime.now())
-                .setTime("22:22")
                 .setParticipants(58)
                 .setCustomerComment("hallo")
                 .setComment("haallo2")
