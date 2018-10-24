@@ -24,6 +24,12 @@ public enum BookingStatus {
         public String toString() {
             return "Arkiveret";
         }
+    },
+    STATUS_DELETED {
+        @Override
+        public String toString() {
+            return "Slettet";
+        }
     };
 
     public static BookingStatus statusChosen(String input) {
@@ -36,6 +42,8 @@ public enum BookingStatus {
                 return STATUS_DONE;
             case "Arkiverede":
                 return STATUS_ARCHIVED;
+            case "Slettede":
+                return STATUS_DELETED;
             default:
                 throw new IllegalArgumentException();
         }

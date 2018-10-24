@@ -2,8 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
@@ -39,6 +38,13 @@
                     <font>
                         <Font size="16.0"/>
                     </font>
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../ImageView/hourglass.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
                 </Button>
                 <Button fx:id="activeButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
                         prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Aktive">
@@ -59,6 +65,21 @@
                     </font>
                 </Button>
                 <Separator prefWidth="200.0" />
+                <Button fx:id="deletedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                        prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Slettede"
+                        textAlignment="CENTER">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../ImageView/dustbin.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Separator prefWidth="200.0"/>
                 <MenuButton mnemonicParsing="false" text="Opret ny booking">
                     <items>
                         <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste"/>
@@ -68,7 +89,7 @@
                         <Font size="16.0"/>
                     </font>
                     <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="53.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../ImageView/appointment.png"/>
                             </image>
@@ -86,11 +107,22 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
             <children>
-                <TextField fx:id="searchField" promptText="Søg efter booking (Kontaktperson)">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </TextField>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="26.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true"
+                                   style="-fx-opacity: 50;">
+                            <image>
+                                <Image url="@../ImageView/active-search-symbol.png"/>
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="searchField" prefHeight="30.0" prefWidth="447.0"
+                                   promptText="Søg efter booking (Kontaktperson)">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </TextField>
+                    </children>
+                </HBox>
                 <Separator prefWidth="200.0"/>
                 <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0" tableMenuButtonVisible="true">
                     <placeholder>
@@ -309,7 +341,17 @@
                         <Font size="16.0" />
                     </font>
                 </Label>
-                <TextArea fx:id="customerCommentArea" prefHeight="200.0" prefWidth="200.0">
+                <TextArea fx:id="customerCommentTextArea" prefHeight="200.0" prefWidth="200.0">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </TextArea>
+                <Label fx:id="commentLabel" text="Kommentar:">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0">
                     <font>
                         <Font size="14.0"/>
                     </font>

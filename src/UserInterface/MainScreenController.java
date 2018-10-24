@@ -36,7 +36,7 @@ public class MainScreenController extends GeneralController {
 
     @FXML
     private Button refreshBookingsButton, overviewButton, pendingBookingsButton, activeBookingsButton,
-            finishedBookingsButton, archivedBookingsButton;
+            finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -48,12 +48,12 @@ public class MainScreenController extends GeneralController {
 
     //Nodes for booking information display area
     @FXML
-    private Label customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
+    private Label commentLabel, customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
             timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
             schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
             emailLabel, eanLabel;
     @FXML
-    private TextArea customerCommentArea;
+    private TextArea customerCommentTextArea, commentTextArea;
     @FXML
     private Button acceptBookingButton, cancelBookingButton, editBookingButton;
 
@@ -62,7 +62,9 @@ public class MainScreenController extends GeneralController {
 
     public void initialize() throws SQLException {
         customerCommentLabel.setVisible(false);
-        customerCommentArea.setVisible(false);
+        customerCommentTextArea.setVisible(false);
+        commentLabel.setVisible(false);
+        commentTextArea.setVisible(false);
         acceptBookingButton.setVisible(false);
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
@@ -134,7 +136,11 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                deleteSelectedBooking();
+                try {
+                    bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 removeBookingFromTableView();
             }
         });
@@ -281,7 +287,9 @@ public class MainScreenController extends GeneralController {
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
         customerCommentLabel.setVisible(true);
-        customerCommentArea.setVisible(true);
+        customerCommentTextArea.setVisible(true);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
         acceptBookingButton.setVisible(true);
         cancelBookingButton.setVisible(true);
         editBookingButton.setVisible(true);
@@ -292,6 +300,7 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setVisible(true);
         emailLabel.setVisible(true);
         eanLabel.setVisible(true);
+        customerCommentTextArea.setEditable(false);
 
         LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
@@ -313,13 +322,15 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setText("Telefonnummer: " + selectedLectureBooking.getCustomer().getPhoneNumber());
         emailLabel.setText("E-mail: " + selectedLectureBooking.getCustomer().getEmail());
         eanLabel.setText("EAN nummer: " + temp.getEanNumber());
-        customerCommentArea.setText(selectedLectureBooking.getComment());
-        customerCommentArea.setEditable(false);
+        customerCommentTextArea.setText(selectedLectureBooking.getComment());
+        commentTextArea.setText(selectedLectureBooking.getComment());
     }
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
         customerCommentLabel.setVisible(true);
-        customerCommentArea.setVisible(true);
+        customerCommentTextArea.setVisible(true);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
         acceptBookingButton.setVisible(true);
         cancelBookingButton.setVisible(true);
         editBookingButton.setVisible(true);
@@ -330,7 +341,7 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setVisible(false);
         emailLabel.setVisible(false);
         eanLabel.setVisible(false);
-        customerCommentArea.setEditable(false);
+        customerCommentTextArea.setEditable(false);
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
@@ -345,6 +356,7 @@ public class MainScreenController extends GeneralController {
         schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
         schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
         zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
-        customerCommentArea.setText(selectedArrangementBooking.getCustomerComment());
+        customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
+        commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 }
