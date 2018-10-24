@@ -30,6 +30,7 @@ public class Main extends Application {
             primaryStage.show();
             root.requestFocus();
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }

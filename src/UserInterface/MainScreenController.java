@@ -41,7 +41,9 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TextField searchField;
     @FXML
-    private ListView bookingListView;
+    private TableView bookingTableView;
+    @FXML
+    private TableColumn bookingTableStatusColumn;
 
     //Nodes for booking information display area
     @FXML
@@ -64,8 +66,8 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
 
-        //Takes all Booking objects from listOfBookings and load them into bookingListView
-        loadBookingsToListView();
+        //Takes all Booking objects from listOfBookings and load them into bookingsTableView
+        loadBookingsToTableView();
 
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
@@ -79,32 +81,32 @@ public class MainScreenController extends GeneralController {
          *   Event handlers
          */
 
-        //Shows searched for booking in ListView
+        //Shows searched for booking in TableView
         searchField.setOnKeyTyped(e -> {
             try {
                 if (searchField.getText().isEmpty()) {
-                    loadBookingsToListView();
-                } else showSearchedForBookingsInListView(fetchBookingsFromDatabase());
+                    loadBookingsToTableView();
+                } else showSearchedForBookingsInTableView(fetchBookingsFromDatabase());
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
         });
 
-        bookingListView.setOnMouseClicked(e -> showSelectedBookingInformation());
+        bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
         arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
 
-        //Reloads the bookings from database into ListView
-        refreshBookingsButton.setOnMouseClicked(e -> refreshBookingListView());
+        //Reloads the bookings from database into TableView
+        refreshBookingsButton.setOnMouseClicked(e -> refreshBookingTableView());
 
-        //Opens edit pop-up window corresponding to chosen Booking in ListView
+        //Opens edit pop-up window corresponding to chosen Booking in TableView
         editBookingButton.setOnMouseClicked(e -> {
-            if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
-                editSelectedLectureBooking((LectureBooking) (bookingListView.getSelectionModel().getSelectedItem()));
-            } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
-                editSelectedArrangementBooking((Bookings.ArrangementBooking) (bookingListView.getSelectionModel().getSelectedItem()));
+            if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
+                editSelectedLectureBooking((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+            } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
+                editSelectedArrangementBooking((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
             }
         });
 
@@ -126,7 +128,7 @@ public class MainScreenController extends GeneralController {
 
             if (alertChoice.get() == ButtonType.OK) {
                 deleteSelectedBooking();
-                removeBookingFromListView();
+                removeBookingFromTable();
             }
         });
     }
@@ -139,54 +141,56 @@ public class MainScreenController extends GeneralController {
         return listOfBookings;
     }
 
-    //Takes an ArrayList of bookings to load into ListView of bookings
-    private void loadBookingsToListView() throws SQLException {
+
+    //Takes an ArrayList of bookings to load into TableView of bookings
+    private void loadBookingsToTableView() throws SQLException {
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking booking : fetchBookingsFromDatabase()) {
             bookings.addAll(booking);
         }
-        bookingListView.setItems(bookings);
+        bookingTableView.setItems(bookings);
+
     }
 
-    private void refreshBookingListView() {
+    private void refreshBookingTableView() {
         try {
-            loadBookingsToListView();
+            loadBookingsToTableView();
             bda.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void removeBookingFromListView() {
-        Booking bookingToRemove = (Booking) bookingListView.getSelectionModel().getSelectedItem();
-        bookingListView.getItems().remove(bookingToRemove);
+    private void removeBookingFromTable() {
+        Booking bookingToRemove = (Booking) bookingTableView.getSelectionModel().getSelectedItem();
+        bookingTableView.getItems().remove(bookingToRemove);
     }
 
     private void deleteSelectedBooking() {
         try {
-            bda.deleteBooking((Booking) bookingListView.getSelectionModel().getSelectedItem());
+            bda.deleteBooking((Booking) bookingTableView.getSelectionModel().getSelectedItem());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    //Displays information of the clicked booking in ListView
+    //Displays information of the clicked booking in TableView
     private void showSelectedBookingInformation() {
-        if (bookingListView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
-            showLectureBookingInformation((LectureBooking) bookingListView.getSelectionModel().getSelectedItem());
-        } else if (bookingListView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
-            showArrangementBookingInformation((ArrangementBooking) (bookingListView.getSelectionModel().getSelectedItem()));
+        if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
+            showLectureBookingInformation((LectureBooking) bookingTableView.getSelectionModel().getSelectedItem());
+        } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
+            showArrangementBookingInformation((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
         }
     }
 
-    private void showSearchedForBookingsInListView(ArrayList<Booking> listOfBookings) {
+    private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
         for (Booking temp : listOfBookings) {
             String enteredBooking = searchField.getText();
             if (temp.getCustomer().getContactPerson().equals(enteredBooking)) {
-                bookingListView.getSelectionModel().clearSelection();
+                bookingTableView.getSelectionModel().clearSelection();
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
-                bookingListView.setItems(bookings);
+                bookingTableView.setItems(bookings);
             }
         }
     }
@@ -208,13 +212,13 @@ public class MainScreenController extends GeneralController {
                 }
             }
         }
-        bookingListView.setItems(categorisedBookings);
+        bookingTableView.setItems(categorisedBookings);
     }
 
     //TODO
     //Accepting the selected booking when pressing acceptBookingButton
     private void acceptSelectedBooking(ArrayList<Booking> listOfBookings) {
-        if (bookingListView.getSelectionModel().getSelectedItem() != null) {
+        if (bookingTableView.getSelectionModel().getSelectedItem() != null) {
             //System.out.println(bookingListView.getSelectionModel().getSelectedItem().toString());
         }
     }
