@@ -60,6 +60,16 @@ public class ArrangementBooking extends Booking {
         this.guide = guide;
     }
 
+    public ArrangementBooking(BookingStatus bookingStatus, int participants, FoodOrder menuChosen, String birthdayChildName,
+                              int birthdayChildAge, String guide, String customerContactPerson, String customerPhoneNumber,
+                              String customerEmail) {
+        super(bookingStatus, participants, new Customer(customerContactPerson, customerPhoneNumber, customerEmail));
+        this.menuChosen = menuChosen;
+        this.birthdayChildName = birthdayChildName;
+        this.birthdayChildAge = birthdayChildAge;
+        this.guide = guide;
+    }
+
     public FoodOrder getMenuChosen() {
         return menuChosen;
     }

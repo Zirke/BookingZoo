@@ -56,5 +56,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="google-api-services-calendar-v3-rev355-1.25.0-javadoc" level="project" />
+    <orderEntry type="library" name="gson-2.1" level="project" />
   </component>
 </module>
