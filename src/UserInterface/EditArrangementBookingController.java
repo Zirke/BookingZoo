@@ -50,7 +50,7 @@ public class EditArrangementBookingController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
 
-        categoryChoiceBox.getItems().addAll("Afventende","Aktive","Færdige","Arkiverede");
+        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret");
 
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
