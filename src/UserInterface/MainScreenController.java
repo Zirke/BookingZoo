@@ -22,6 +22,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -33,7 +34,6 @@ public class MainScreenController extends GeneralController {
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
     //private ArrayList<Booking> listOfBookings = new ArrayList<>();
-
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
@@ -46,7 +46,9 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TableView<Booking> bookingTableView;
     @FXML
-    private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn, bookingDateColumn;
+    private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
+    @FXML
+    private TableColumn<Booking, LocalDate> bookingDateColumn;
 
     //Nodes for booking information display area
     @FXML
@@ -71,9 +73,6 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
 
-        //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
-        loadBookingsToTableView();
-
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
         for (Booking temp : fetchBookingsFromDatabase()) {
@@ -96,6 +95,9 @@ public class MainScreenController extends GeneralController {
                 e1.printStackTrace();
             }
         });
+
+        //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
+        loadBookingsToTableView();
 
         bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation());
 
@@ -169,13 +171,6 @@ public class MainScreenController extends GeneralController {
             bookings.addAll(booking);
         }
         bookingTableView.setItems(bookings);
-
-        /*
-        bookingStatusColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getBookingStatus().toString()));
-        bookingTypeColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getBookingType().toString()));
-        bookingContactPersonColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getCustomer().toString()));
-        bookingDateColumn.setCellValueFactory(c -> new SimpleStringProperty(booking.getDateTime().toLocalDate().toString()));
-        */
     }
 
     private void refreshBookingTableView() {
@@ -199,7 +194,6 @@ public class MainScreenController extends GeneralController {
             e.printStackTrace();
         }
     }
-
 
     //Displays information of the clicked booking in TableView
     private void showSelectedBookingInformation() {
@@ -308,7 +302,7 @@ public class MainScreenController extends GeneralController {
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedLectureBooking.getBookingStatus().toString());
         creationDateLabel.setText("Oprettet: " + selectedLectureBooking.getCreationDate().toString());
-        dateLabel.setText("Dato: " + selectedLectureBooking.getDateTime());
+        dateLabel.setText("Dato: " + selectedLectureBooking.getDateTime().toLocalDate().toString());
         timeLabel.setText("Tidspunkt: " + selectedLectureBooking.getDateTime().toLocalTime().toString());
         pupilNoLabel.setText("Antal elever: " + selectedLectureBooking.getParticipants());
         teamNoLabel.setText("Antal hold: " + selectedLectureBooking.getNoOfTeams());
@@ -347,7 +341,7 @@ public class MainScreenController extends GeneralController {
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
-        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime());
+        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
         creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
         timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
         pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());

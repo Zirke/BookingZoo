@@ -42,6 +42,9 @@ public abstract class Booking {
         this.comment = comment;
     }
 
+    public Booking() {
+    }
+
     public int getId() {
         return id;
     }
