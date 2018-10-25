@@ -35,8 +35,10 @@ public class MainScreenController extends GeneralController {
     //private ArrayList<Booking> listOfBookings = new ArrayList<>();
 
     @FXML
-    private Button refreshBookingsButton, overviewButton, pendingBookingsButton, activeBookingsButton,
+    private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
+    @FXML
+    private Button refreshBookingsButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
     @FXML
@@ -222,7 +224,7 @@ public class MainScreenController extends GeneralController {
 
     @FXML
     private void showChosenCategoryBookings(ActionEvent event) throws SQLException {
-        Button chosenCategoryBtn = (Button) event.getSource();
+        ToggleButton chosenCategoryBtn = (ToggleButton) event.getSource();
         String nameOfChosenBtn = chosenCategoryBtn.getText();
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
