@@ -173,7 +173,7 @@ public class LectureBookingCreationController {
         );
         bda.createLecBookManually(lbook);
         PostToGoogle postArrangement = new PostToGoogle(lbook);
-        postArrangement.postNewBIRTHDAYToCalendar();
+        postArrangement.postNewLectureToCalendar();
     }
 
     @FXML

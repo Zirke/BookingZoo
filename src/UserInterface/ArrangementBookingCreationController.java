@@ -122,7 +122,7 @@ public class ArrangementBookingCreationController extends GeneralController {
 
         bda.createArrBookManually(abook);
         PostToGoogle postArrangement = new PostToGoogle(abook);
-        postArrangement.postNewBIRTHDAYToCalendar();
+        postArrangement.postNewArrangementToCalendar();
     }
 
     private void closeWindow() {

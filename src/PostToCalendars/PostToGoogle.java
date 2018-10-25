@@ -2,6 +2,7 @@ package PostToCalendars;
 
 import Bookings.ArrangementBooking;
 import Bookings.LectureBooking;
+import Customers.LectureBookingCustomer;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -17,6 +18,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import javafx.application.Application;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,14 +70,14 @@ public class PostToGoogle {
         return new AuthorizationCodeInstalledApp(flow, lReceiver).authorize(USER_ID);
     }
 
-    public void postNewBIRTHDAYToCalendar() throws IOException, GeneralSecurityException {
+    public void postNewArrangementToCalendar() throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        Event birthday_event = new Event()
+        Event arrangement_event = new Event()
                 .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
                 .setDescription(" Status: " + inputArrangementBooking.getBookingStatus().toString() +
                         "\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
@@ -86,8 +88,8 @@ public class PostToGoogle {
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
-                .setTransparency("transparent")
-                .setId(String.valueOf(inputArrangementBooking.getId()));
+                .setTransparency("transparent");
+                //.setId(String.valueOf(inputArrangementBooking.getId()));
         DateTime startOfEvent = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
                                                     String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
                                                     String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
@@ -96,7 +98,7 @@ public class PostToGoogle {
         EventDateTime begin = new EventDateTime()
                 .setDateTime(startOfEvent)
                 .setTimeZone("Europe/Copenhagen");
-        birthday_event.setStart(begin);
+        arrangement_event.setStart(begin);
 
         DateTime endDateTime = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
                                                   String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
@@ -106,20 +108,22 @@ public class PostToGoogle {
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Copenhagen");
-        birthday_event.setEnd(end);
+        arrangement_event.setEnd(end);
 
-        service.events().insert(CALENDAR_ID, birthday_event).execute();
+        service.events().insert(CALENDAR_ID, arrangement_event).execute();
     }
 
-    public void postNewLECTUREToCalendar() throws IOException, GeneralSecurityException {
+    public void postNewLectureToCalendar() throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
+        LectureBookingCustomer temp = (LectureBookingCustomer) inputArrangementBooking.getCustomer();
+
         Event lecture_event = new Event()
-                .setSummary("Skoletjeneste: " +inputLectureBooking.getCustomer().getContactPerson())
+                .setSummary("Skoletjeneste: " + temp.getSchoolName())
                 .setDescription(" Status: " + inputLectureBooking.getBookingStatus().toString() +
                         "\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
                         "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
@@ -128,8 +132,8 @@ public class PostToGoogle {
                         "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
-                .setTransparency("transparent")
-                .setId(String.valueOf(inputLectureBooking.getId()));
+                .setTransparency("transparent");
+                //.setId(String.valueOf(inputLectureBooking.getId()));
         DateTime startOfEvent = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
                                             String.valueOf(inputLectureBooking.getDateTime().getMonthValue()) + "-" +
                                                String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth()) + "T" +
@@ -152,7 +156,7 @@ public class PostToGoogle {
 
         service.events().insert(CALENDAR_ID, lecture_event).execute();
     }
-    public void deleteEventInCalendar() throws IOException, GeneralSecurityException{
+    public void deleteArrangementInCalendar() throws IOException, GeneralSecurityException{
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -161,6 +165,14 @@ public class PostToGoogle {
 
         // Delete an event
         service.events().delete(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
-        //service.events().delete(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
+    }
+    public void deleteLectureInCalendar() throws IOException, GeneralSecurityException{
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        service.events().delete(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
     }
 }
