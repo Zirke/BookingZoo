@@ -15,7 +15,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
+import static UserInterface.EditLectureBookingController.timeFieldCreation;
+import static UserInterface.EditLectureBookingController.topicChoiceBoxCreation;
+
 public class LectureBookingCreationController {
+
     private BookingDataAccessor bda;
 
     public void setBda(BookingDataAccessor bda) {
@@ -29,7 +33,7 @@ public class LectureBookingCreationController {
     private DatePicker datePicker;
 
     @FXML
-    private TextField timeTextField, noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
 
@@ -41,80 +45,29 @@ public class LectureBookingCreationController {
 
     @FXML
     private ChoiceBox topicChoiceBox, lectureRoomChoiceBox;
+    @FXML
+    public Spinner hourSpinner;
+    @FXML
+    public Spinner minuteSpinner;
+
 
     @FXML
     public void initialize() {
-        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
-                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
-                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
-
+        topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
+        createBookingButton();
 
-        createAndCloseButton.setOnMouseClicked(e -> {
-            if (datePicker.getValue() == null || timeTextField.getText().isEmpty() || noOfPupilsTextField.getText().isEmpty() ||
-                    noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
-                    gradeTextField.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
-                    lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
-                    zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
-                    schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
-                    contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()) {
-                Alert alert1 = new Alert(Alert.AlertType.WARNING);
-                alert1.setHeaderText("Tjek alle felter");
-                alert1.setContentText("Et eller flere felter mangler information");
-                alert1.showAndWait();
-            } else {
-                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert2.setContentText("Er den indtastede information korrekt?");
+        textfieldWithOnlyNumbers(noOfPupilsTextField);
+        textfieldWithOnlyNumbers(noOfTeamsTextField);
+        textfieldWithOnlyNumbers(noOfTeachersTextField);
+        textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
+        textfieldWithOnlyNumbers(phoneNumberTextField);
+        textfieldWithOnlyNumbers(gradeTextField);
+        textfieldWithOnlyNumbers(zipCodeTextField);
+        textfieldWithOnlyNumbers(eanNumberTextField);
 
-                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
-
-                if (alertChoice2.get() == ButtonType.OK) {
-                    try {
-                        createNewLectureBookingFromInput();
-                        closeWindow();
-                    } catch (SQLException | ClassNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        noOfPupilsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfPupilsTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        noOfTeamsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfTeamsTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        noOfTeachersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfTeachersTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        gradeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                gradeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        zipCodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                zipCodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        eanNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                eanNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
+        timeFieldCreation(hourSpinner,minuteSpinner);
+        hourSpinner.getValueFactory().setValue(10);
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
@@ -123,8 +76,7 @@ public class LectureBookingCreationController {
     @FXML
     private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
-
-        LocalTime tempTime = LocalTime.parse(timeTextField.getText());
+        LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
         LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
@@ -174,5 +126,44 @@ public class LectureBookingCreationController {
     public void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    private void createBookingButton(){
+        createAndCloseButton.setOnMouseClicked(e -> {
+            if (datePicker.getValue() == null  || noOfPupilsTextField.getText().isEmpty() ||
+                    noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    gradeTextField.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
+                    zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
+                    schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
+                    contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()) {
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setHeaderText("Tjek alle felter");
+                alert1.setContentText("Et eller flere felter mangler information");
+                alert1.showAndWait();
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setContentText("Er den indtastede information korrekt?");
+
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        createNewLectureBookingFromInput();
+                        closeWindow();
+                    } catch (SQLException | ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void textfieldWithOnlyNumbers(TextField var) {
+        var.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                var.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 }
