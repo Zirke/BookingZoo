@@ -83,18 +83,21 @@ public class PostToGoogle {
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
                 .setTransparency("transparent");
-        /*DateTime startOfEvent = new DateTime(inputArrangementBooking.getDateTime().getYear() + "-" +
-                                                    inputArrangementBooking.getDateTime().getMonth() + "-" +
-                                                    inputArrangementBooking.getDateTime().getDayOfMonth() + "T" +
-                                                    inputArrangementBooking.getDateTime().getHour() + ":" +
-                                                    inputArrangementBooking.getDateTime().getMinute() + ":00"); */
-        DateTime startOfEvent = new DateTime("2018-11-01T15:30:00");
+        DateTime startOfEvent = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
+                                                    String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
+                                                    String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
+                                                    String.valueOf(inputArrangementBooking.getDateTime().getHour()) + ":" +
+                                                    String.valueOf(inputArrangementBooking.getDateTime().getMinute()) + ":00");
         EventDateTime begin = new EventDateTime()
                 .setDateTime(startOfEvent)
                 .setTimeZone("Europe/Copenhagen");
         birthday_event.setStart(begin);
 
-        DateTime endDateTime = new DateTime("2018-11-01T16:30:00");
+        DateTime endDateTime = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
+                                                  String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
+                                                  String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
+                                                  String.valueOf(inputArrangementBooking.getDateTime().getHour()+2) + ":" +
+                                                  String.valueOf(inputArrangementBooking.getDateTime().getMinute()) + ":00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Copenhagen");
