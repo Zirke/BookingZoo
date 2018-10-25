@@ -63,12 +63,12 @@ public class EditLectureBookingController {
 
         safeButtonPress(bda);
 
-        textfieldInitialise(noOfPupilsTextField);
-        textfieldInitialise(noOfTeamsTextField);
-        textfieldInitialise(noOfTeachersTextField);
-        textfieldInitialise(gradeTextField);
-        textfieldInitialise(zipCodeTextField);
-        textfieldInitialise(eanNumberTextField);
+        textfieldWithNoNumbers(noOfPupilsTextField);
+        textfieldWithNoNumbers(noOfTeamsTextField);
+        textfieldWithNoNumbers(noOfTeachersTextField);
+        textfieldWithNoNumbers(gradeTextField);
+        textfieldWithNoNumbers(zipCodeTextField);
+        textfieldWithNoNumbers(eanNumberTextField);
 
         timeFieldCreation();
     }
@@ -177,13 +177,12 @@ public class EditLectureBookingController {
     }
 
     private void timeFieldInitialisation() {
-        String[] parts = selectedLectureBooking.getDateTime().toLocalTime().toString().split(":", 2);
-        hourSpinner.getValueFactory().setValue(Integer.valueOf(parts[0].toString()));
-        minutSpinner.getValueFactory().setValue(Integer.valueOf(parts[1].toString()));
+        hourSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getHour());
+        minutSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getMinute());
     }
 
     //aendre navn po metode senere.
-    private void textfieldInitialise(TextField var) {
+    private void textfieldWithNoNumbers(TextField var) {
         var.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 var.setText(newValue.replaceAll("[^\\d]", ""));
