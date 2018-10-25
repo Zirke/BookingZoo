@@ -13,15 +13,13 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
-
-    public void setBda(BookingDataAccessor bda) {
-        this.bda = bda;
-    }
 
     @FXML
     private DatePicker datePicker;

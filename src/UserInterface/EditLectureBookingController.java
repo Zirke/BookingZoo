@@ -110,7 +110,6 @@ public class EditLectureBookingController {
 
     private LectureBooking overwriteSelectedLectureBooking() {
         selectedLectureBooking.setDateTime(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString())));
-        //selectedLectureBooking.setTime(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString());
         selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
         selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
