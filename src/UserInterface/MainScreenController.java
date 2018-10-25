@@ -176,7 +176,6 @@ public class MainScreenController extends GeneralController {
     private void refreshBookingTableView() {
         try {
             loadBookingsToTableView();
-            bda.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
