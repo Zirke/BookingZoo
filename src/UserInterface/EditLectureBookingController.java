@@ -57,20 +57,22 @@ public class EditLectureBookingController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
 
-        topicChoiceBoxCreation();
+        topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         categoryChoiceBox.getItems().addAll("Afventende","Aktive","Færdige","Arkiverede");
 
         safeButtonPress(bda);
 
-        textfieldWithNoNumbers(noOfPupilsTextField);
-        textfieldWithNoNumbers(noOfTeamsTextField);
-        textfieldWithNoNumbers(noOfTeachersTextField);
-        textfieldWithNoNumbers(gradeTextField);
-        textfieldWithNoNumbers(zipCodeTextField);
-        textfieldWithNoNumbers(eanNumberTextField);
+        textfieldWithOnlyNumbers(noOfPupilsTextField);
+        textfieldWithOnlyNumbers(noOfTeamsTextField);
+        textfieldWithOnlyNumbers(noOfTeachersTextField);
+        textfieldWithOnlyNumbers(gradeTextField);
+        textfieldWithOnlyNumbers(zipCodeTextField);
+        textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
+        textfieldWithOnlyNumbers(phoneNumberTextField);
+        textfieldWithOnlyNumbers(eanNumberTextField);
 
-        timeFieldCreation();
+        timeFieldCreation(hourSpinner,minutSpinner);
     }
 
     void initData() {
@@ -108,7 +110,6 @@ public class EditLectureBookingController {
 
     private LectureBooking overwriteSelectedLectureBooking() {
         selectedLectureBooking.setDateTime(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString())));
-        //selectedLectureBooking.setTime(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString());
         selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
         selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
@@ -139,7 +140,7 @@ public class EditLectureBookingController {
         stage.close();
     }
 
-    private void topicChoiceBoxCreation() {
+    public static void topicChoiceBoxCreation(ChoiceBox topicChoiceBox) {
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
@@ -164,7 +165,7 @@ public class EditLectureBookingController {
     }
 
 
-    private void timeFieldCreation() {
+    public static void timeFieldCreation(Spinner hourSpinner, Spinner minutSpinner) {
         SpinnerValueFactory<Integer> valueFactoryHour =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
         hourSpinner.setValueFactory(valueFactoryHour);
@@ -182,7 +183,7 @@ public class EditLectureBookingController {
     }
 
     //aendre navn po metode senere.
-    private void textfieldWithNoNumbers(TextField var) {
+    private void textfieldWithOnlyNumbers(TextField var) {
         var.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 var.setText(newValue.replaceAll("[^\\d]", ""));
