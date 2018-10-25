@@ -59,7 +59,7 @@ public class EditLectureBookingController {
 
         topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
-        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret");
+        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
 
         safeButtonPress(bda);
 

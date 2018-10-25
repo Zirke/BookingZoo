@@ -59,7 +59,7 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private Button acceptBookingButton, cancelBookingButton, editBookingButton;
+    private Button acceptBookingButton, cancelBookingButton, editBookingButton, deleteButton;
 
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
@@ -72,6 +72,11 @@ public class MainScreenController extends GeneralController {
         acceptBookingButton.setVisible(false);
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
+
+        deleteButton.setOnMouseClicked(e -> {
+            deleteSelectedBooking();
+            removeBookingFromTableView();
+        });
 
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
@@ -161,6 +166,8 @@ public class MainScreenController extends GeneralController {
 
     //Takes an ArrayList of bookings to load into TableView of bookings
     private void loadBookingsToTableView() throws SQLException {
+        bookingStatusColumn.setSortType(TableColumn.SortType.DESCENDING);
+
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
@@ -279,10 +286,8 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    //Changes text on all labels corresponding to the chosen booking in ListView
-    private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
-
-        if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+    private void showPendingButtons(BookingStatus bookingStatus) {
+        if (bookingStatus.equals(BookingStatus.STATUS_PENDING)) {
             acceptBookingButton.setVisible(true);
             cancelBookingButton.setVisible(true);
             editBookingButton.setVisible(true);
@@ -291,6 +296,12 @@ public class MainScreenController extends GeneralController {
             cancelBookingButton.setVisible(false);
             editBookingButton.setVisible(true);
         }
+    }
+
+    //Changes text on all labels corresponding to the chosen booking in ListView
+    private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
+
+        showPendingButtons(selectedLectureBooking.getBookingStatus());
 
         communeLabel.setVisible(true);
         cityLabel.setVisible(true);
@@ -329,15 +340,8 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
-        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
-            acceptBookingButton.setVisible(true);
-            cancelBookingButton.setVisible(true);
-            editBookingButton.setVisible(true);
-        } else {
-            acceptBookingButton.setVisible(false);
-            cancelBookingButton.setVisible(false);
-            editBookingButton.setVisible(true);
-        }
+
+        showPendingButtons(selectedArrangementBooking.getBookingStatus());
 
         communeLabel.setVisible(false);
         cityLabel.setVisible(false);
