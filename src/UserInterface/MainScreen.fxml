@@ -54,6 +54,7 @@
                   <ToggleGroup fx:id="Categories" />
                </toggleGroup>
             </ToggleButton>
+            <Separator prefWidth="200.0" />
             <ToggleButton fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Afventende" toggleGroup="$Categories">
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
