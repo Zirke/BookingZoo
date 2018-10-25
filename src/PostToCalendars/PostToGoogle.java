@@ -42,7 +42,8 @@ public class PostToGoogle {
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "/PostToCalendars/client_secret_541371792575-89r2prpe9k5k35mue48s47eaqa7i8jrt.apps.googleusercontent.com.json";
 
-    /* Calendar id for the google calendar and the user id for posting on the calendar */
+    /* Calendar id for the google calendar and the user id for posting on the calendar
+    *  Only approved users can post to the calendar - must be added manually*/
     private static final String CALENDAR_ID = "s8phc5eq9eohle7ps9c4ctsa04@group.calendar.google.com";
     private static final String USER_ID = "541371792575-b6ten96k8mvqddhruugj7gfdhv7e0l9s.apps.googleusercontent.com";
 
@@ -76,16 +77,24 @@ public class PostToGoogle {
                         "\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
                         "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
                         "\n Guide: " + inputArrangementBooking.getGuide() +
+                        "\n Bestilling af mad: " + inputArrangementBooking.getMenuChosen().toString() +
+                        "\n\n Kommentar: " + inputArrangementBooking.getComment() +
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
-                        "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail());
-        DateTime startOfEvent = new DateTime("2018-10-31T11:30:00");
+                        "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
+                .setTransparency("transparent");
+        /*DateTime startOfEvent = new DateTime(inputArrangementBooking.getDateTime().getYear() + "-" +
+                                                    inputArrangementBooking.getDateTime().getMonth() + "-" +
+                                                    inputArrangementBooking.getDateTime().getDayOfMonth() + "T" +
+                                                    inputArrangementBooking.getDateTime().getHour() + ":" +
+                                                    inputArrangementBooking.getDateTime().getMinute() + ":00"); */
+        DateTime startOfEvent = new DateTime("2018-11-01T15:30:00");
         EventDateTime begin = new EventDateTime()
                 .setDateTime(startOfEvent)
                 .setTimeZone("Europe/Copenhagen");
         birthday_event.setStart(begin);
 
-        DateTime endDateTime = new DateTime("2018-10-31T13:30:00");
+        DateTime endDateTime = new DateTime("2018-11-01T16:30:00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Copenhagen");

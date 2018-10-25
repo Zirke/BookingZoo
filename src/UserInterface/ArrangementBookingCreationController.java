@@ -3,6 +3,7 @@ package UserInterface;
 import Bookings.ArrangementBooking;
 import Bookings.BookingDataAccessor;
 import Bookings.FoodOrder;
+import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfMenu;
@@ -12,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.*;
 import java.util.Optional;
@@ -38,7 +41,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     @FXML
     private Button createAndCloseButton, cancelButton;
 
-    public void initialize() {
+    public void initialize() throws IOException, GeneralSecurityException {
 
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
@@ -59,7 +62,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                     try {
                         createArrangementBookingFromInput();
                         closeWindow();
-                    } catch (SQLException | ClassNotFoundException e1) {
+                    } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
                         e1.printStackTrace();
                     }
                 }
@@ -80,7 +83,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
-    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
+    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
         LocalDate tempDate = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;
@@ -118,6 +121,8 @@ public class ArrangementBookingCreationController extends GeneralController {
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
         bda.createArrBookManually(abook);
+        PostToGoogle postArrangement = new PostToGoogle(abook);
+        postArrangement.postNewBIRTHDAYToCalendar();
     }
 
     private void closeWindow() {

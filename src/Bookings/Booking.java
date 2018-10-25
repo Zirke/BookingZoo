@@ -42,10 +42,12 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(BookingStatus bookingStatus, int participants, Customer customer) {
+    public Booking(BookingStatus bookingStatus, int participants, Customer customer, LocalDateTime dateTime, String comment) {
         this.bookingStatus = bookingStatus;
         this.participants = participants;
         this.customer = customer;
+        this.dateTime = dateTime;
+        this.comment = comment;
     }
 
     public Booking() {

@@ -62,8 +62,8 @@ public class ArrangementBooking extends Booking {
 
     public ArrangementBooking(BookingStatus bookingStatus, int participants, FoodOrder menuChosen, String birthdayChildName,
                               int birthdayChildAge, String guide, String customerContactPerson, String customerPhoneNumber,
-                              String customerEmail) {
-        super(bookingStatus, participants, new Customer(customerContactPerson, customerPhoneNumber, customerEmail));
+                              String customerEmail, LocalDateTime dateTime, String comment) {
+        super(bookingStatus, participants, new Customer(customerContactPerson, customerPhoneNumber, customerEmail), dateTime, comment);
         this.menuChosen = menuChosen;
         this.birthdayChildName = birthdayChildName;
         this.birthdayChildAge = birthdayChildAge;
