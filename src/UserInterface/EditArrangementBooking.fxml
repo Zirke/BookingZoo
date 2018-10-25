@@ -92,7 +92,8 @@
                                 <ToggleGroup fx:id="timeGroup" />
                             </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="timeTwoRadioButton" mnemonicParsing="false" text="12:30 - 14:00" toggleGroup="$timeGroup">
+                        <RadioButton fx:id="timeTwoRadioButton" mnemonicParsing="false" text="12:30 - 14:30"
+                                     toggleGroup="$timeGroup">
                             <padding>
                                 <Insets left="5.0" top="7.0" />
                             </padding>
