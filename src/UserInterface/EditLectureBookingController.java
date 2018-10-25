@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -22,16 +21,17 @@ import java.util.Optional;
 import static enums.ChoiceOfTopic.topicChosen;
 
 public class EditLectureBookingController {
+
+
     private LectureBooking selectedLectureBooking;
 
     void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         this.selectedLectureBooking = selectedLectureBooking;
     }
-
     @FXML
     private DatePicker datePicker;
     @FXML
-    private TextField timeTextField, noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
             lecturerTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
     @FXML
@@ -44,6 +44,11 @@ public class EditLectureBookingController {
     private RadioButton communeRadioBtnYes, communeRadioBtnNo;
     @FXML
     private Button saveAndCloseButton, cancelButton;
+    @FXML
+    public Spinner hourSpinner;
+    @FXML
+    public Spinner minutSpinner;
+
 
     public void initialize() throws SQLException, ClassNotFoundException {
         BookingDataAccessor bda = new BookingDataAccessor(
@@ -52,66 +57,20 @@ public class EditLectureBookingController {
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
 
-        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
-                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
-                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
-
+        topicChoiceBoxCreation();
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
-
         categoryChoiceBox.getItems().addAll("Afventende","Aktive","Færdige","Arkiverede");
 
-        saveAndCloseButton.setOnMouseClicked(e -> {
-            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-            alert2.setContentText("Er den indtastede information korrekt?");
+        safeButtonPress(bda);
 
-            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+        textfieldInitialise(noOfPupilsTextField);
+        textfieldInitialise(noOfTeamsTextField);
+        textfieldInitialise(noOfTeachersTextField);
+        textfieldInitialise(gradeTextField);
+        textfieldInitialise(zipCodeTextField);
+        textfieldInitialise(eanNumberTextField);
 
-            if (alertChoice2.get() == ButtonType.OK) {
-                try {
-                    bda.editLecBook(overwriteSelectedLectureBooking());
-                    closeWindow();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-
-        noOfPupilsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfPupilsTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        noOfTeamsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfTeamsTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        noOfTeachersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfTeachersTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        gradeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                gradeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        zipCodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                zipCodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        eanNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                eanNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
+        timeFieldCreation();
     }
 
     void initData() {
@@ -119,7 +78,7 @@ public class EditLectureBookingController {
 
         //Lecture information
         datePicker.setValue(selectedLectureBooking.getDateTime().toLocalDate());
-        timeTextField.setText(selectedLectureBooking.getDateTime().toLocalTime().toString());
+        timeFieldInitialisation();
         noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
         noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
         noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
@@ -148,25 +107,20 @@ public class EditLectureBookingController {
     }
 
     private LectureBooking overwriteSelectedLectureBooking() {
-        LocalTime tempTime = LocalTime.parse(timeTextField.getText());
-        LocalDate tempDate = datePicker.getValue();
-        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
-        selectedLectureBooking.setDateTime(date);
+        selectedLectureBooking.setDateTime(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString())));
+        //selectedLectureBooking.setTime(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString());
         selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
         selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
-        ChoiceOfTopic topicChoice;
-        topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
+        ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
         selectedLectureBooking.setGrade(Integer.parseInt(gradeTextField.getText()));
-        LectureRoomType roomTypeChoice;
-        roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
+        LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);
         Lecturer bar = new Lecturer(lecturerTextField.getText());
         selectedLectureBooking.setLecturer(bar);
-        BookingStatus statusChoice;
-        statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+        BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setBookingStatus(statusChoice);
 
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
@@ -185,5 +139,55 @@ public class EditLectureBookingController {
         stage.close();
     }
 
+    private void topicChoiceBoxCreation() {
+        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
+                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
+                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
+    }
 
+    private void safeButtonPress(BookingDataAccessor bda) {
+        saveAndCloseButton.setOnMouseClicked(e -> {
+            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert2.setContentText("Er den indtastede information korrekt?");
+
+            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+            if (alertChoice2.get() == ButtonType.OK) {
+                try {
+                    bda.editLecBook(overwriteSelectedLectureBooking());
+                    closeWindow();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    private void timeFieldCreation() {
+        SpinnerValueFactory<Integer> valueFactoryHour =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
+        hourSpinner.setValueFactory(valueFactoryHour);
+        hourSpinner.setEditable(true);
+
+        SpinnerValueFactory<Integer> valueFactoryMinuts =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
+        minutSpinner.setValueFactory(valueFactoryMinuts);
+        minutSpinner.setEditable(true);
+    }
+
+    private void timeFieldInitialisation() {
+        String[] parts = selectedLectureBooking.getDateTime().toLocalTime().toString().split(":", 2);
+        hourSpinner.getValueFactory().setValue(Integer.valueOf(parts[0].toString()));
+        minutSpinner.getValueFactory().setValue(Integer.valueOf(parts[1].toString()));
+    }
+
+    //aendre navn po metode senere.
+    private void textfieldInitialise(TextField var) {
+        var.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                var.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
 }
