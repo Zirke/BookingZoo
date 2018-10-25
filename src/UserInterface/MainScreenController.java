@@ -281,13 +281,16 @@ public class MainScreenController extends GeneralController {
 
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
-        customerCommentLabel.setVisible(true);
-        customerCommentTextArea.setVisible(true);
-        commentLabel.setVisible(true);
-        commentTextArea.setVisible(true);
-        acceptBookingButton.setVisible(true);
-        cancelBookingButton.setVisible(true);
-        editBookingButton.setVisible(true);
+
+        if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            acceptBookingButton.setVisible(true);
+            cancelBookingButton.setVisible(true);
+            editBookingButton.setVisible(true);
+        } else {
+            acceptBookingButton.setVisible(false);
+            cancelBookingButton.setVisible(false);
+            editBookingButton.setVisible(true);
+        }
 
         communeLabel.setVisible(true);
         cityLabel.setVisible(true);
@@ -295,7 +298,11 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setVisible(true);
         emailLabel.setVisible(true);
         eanLabel.setVisible(true);
+        customerCommentLabel.setVisible(true);
+        customerCommentTextArea.setVisible(true);
         customerCommentTextArea.setEditable(false);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
 
         LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
@@ -322,13 +329,15 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
-        customerCommentLabel.setVisible(true);
-        customerCommentTextArea.setVisible(true);
-        commentLabel.setVisible(true);
-        commentTextArea.setVisible(true);
-        acceptBookingButton.setVisible(true);
-        cancelBookingButton.setVisible(true);
-        editBookingButton.setVisible(true);
+        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            acceptBookingButton.setVisible(true);
+            cancelBookingButton.setVisible(true);
+            editBookingButton.setVisible(true);
+        } else {
+            acceptBookingButton.setVisible(false);
+            cancelBookingButton.setVisible(false);
+            editBookingButton.setVisible(true);
+        }
 
         communeLabel.setVisible(false);
         cityLabel.setVisible(false);
@@ -336,7 +345,11 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setVisible(false);
         emailLabel.setVisible(false);
         eanLabel.setVisible(false);
+        customerCommentLabel.setVisible(true);
+        customerCommentTextArea.setVisible(true);
         customerCommentTextArea.setEditable(false);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
