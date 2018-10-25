@@ -34,6 +34,10 @@ public class PostToGoogle {
         this.inputArrangementBooking = calendarArrangementBooking;
     }
 
+    public PostToGoogle(LectureBooking inputLectureBooking) {
+        this.inputLectureBooking = inputLectureBooking;
+    }
+
     private static final String APPLICATION_NAME = "Aalborg Zoo Semester Project";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "storedTokens";
@@ -82,7 +86,8 @@ public class PostToGoogle {
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
-                .setTransparency("transparent");
+                .setTransparency("transparent")
+                .setId(String.valueOf(inputArrangementBooking.getId()));
         DateTime startOfEvent = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
                                                     String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
                                                     String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
@@ -114,20 +119,48 @@ public class PostToGoogle {
                 .build();
 
         Event lecture_event = new Event()
-                .setSummary("Undervisning i: ")
-                .setDescription("Lokale: ");
-        DateTime startOfEvent = new DateTime("2018-10-29T10:00:00");
+                .setSummary("Skoletjeneste: " +inputLectureBooking.getCustomer().getContactPerson())
+                .setDescription(" Status: " + inputLectureBooking.getBookingStatus().toString() +
+                        "\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
+                        "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
+                        "\n Underviser: " + inputLectureBooking.getLecturer() +
+                        "\n\n Kommentar: " + inputLectureBooking.getComment() +
+                        "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
+                        "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
+                        "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
+                .setTransparency("transparent")
+                .setId(String.valueOf(inputLectureBooking.getId()));
+        DateTime startOfEvent = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
+                                            String.valueOf(inputLectureBooking.getDateTime().getMonthValue()) + "-" +
+                                               String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth()) + "T" +
+                                              String.valueOf(inputLectureBooking.getDateTime().getHour()) + ":" +
+                                               String.valueOf(inputLectureBooking.getDateTime().getMinute()) + ":00");
         EventDateTime begin = new EventDateTime()
                 .setDateTime(startOfEvent)
                 .setTimeZone("Europe/Copenhagen");
         lecture_event.setStart(begin);
 
-        DateTime endOfEvent = new DateTime("2018-10-29T19:00:00");
+        DateTime endDateTime = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
+                                            String.valueOf(inputLectureBooking.getDateTime().getMonthValue()) + "-" +
+                                               String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth()) + "T" +
+                                              String.valueOf(inputLectureBooking.getDateTime().getHour()+1) + ":" +
+                                             String.valueOf(inputLectureBooking.getDateTime().getMinute()) + ":00");
         EventDateTime end = new EventDateTime()
-                .setDateTime(endOfEvent)
+                .setDateTime(endDateTime)
                 .setTimeZone("Europe/Copenhagen");
         lecture_event.setEnd(end);
 
         service.events().insert(CALENDAR_ID, lecture_event).execute();
+    }
+    public void deleteEventInCalendar() throws IOException, GeneralSecurityException{
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        // Delete an event
+        service.events().delete(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
+        //service.events().delete(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
     }
 }

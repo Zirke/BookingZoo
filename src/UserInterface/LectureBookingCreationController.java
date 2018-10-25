@@ -3,12 +3,16 @@ package UserInterface;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Bookings.Lecturer;
+import PostToCalendars.PostToGoogle;
 import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.mortbay.util.IO;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,7 +47,7 @@ public class LectureBookingCreationController {
     private ChoiceBox topicChoiceBox, lectureRoomChoiceBox;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException, GeneralSecurityException{
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
@@ -72,7 +76,7 @@ public class LectureBookingCreationController {
                     try {
                         createNewLectureBookingFromInput();
                         closeWindow();
-                    } catch (SQLException | ClassNotFoundException e1) {
+                    } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
                         e1.printStackTrace();
                     }
                 }
@@ -121,7 +125,7 @@ public class LectureBookingCreationController {
     /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
 
     @FXML
-    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
+    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
         LocalDate tempDate = datePicker.getValue();
 
         LocalTime tempTime = LocalTime.parse(timeTextField.getText());
@@ -168,6 +172,8 @@ public class LectureBookingCreationController {
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
         bda.createLecBookManually(lbook);
+        PostToGoogle postArrangement = new PostToGoogle(lbook);
+        postArrangement.postNewBIRTHDAYToCalendar();
     }
 
     @FXML

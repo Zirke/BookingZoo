@@ -5,6 +5,7 @@ import Bookings.Booking;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
+import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -128,6 +130,12 @@ public class MainScreenController extends GeneralController {
             if (alertChoice.get() == ButtonType.OK) {
                 acceptSelectedBooking();
                 removeBookingFromTableView();
+                PostToGoogle newConfirmedBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                try {
+                    newConfirmedBooking.postNewBIRTHDAYToCalendar() ;
+                }catch(IOException | GeneralSecurityException execp){
+                    execp.printStackTrace();
+                }
             }
         });
 
@@ -138,11 +146,13 @@ public class MainScreenController extends GeneralController {
             alert.setContentText("Handlingen vil slette bookingen");
 
             Optional<ButtonType> alertChoice = alert.showAndWait();
+            PostToGoogle newConfirmedBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
 
             if (alertChoice.get() == ButtonType.OK) {
                 try {
                     bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
-                } catch (SQLException e1) {
+                    newConfirmedBooking.deleteEventInCalendar();
+                } catch (SQLException | IOException | GeneralSecurityException e1) {
                     e1.printStackTrace();
                 }
                 removeBookingFromTableView();
