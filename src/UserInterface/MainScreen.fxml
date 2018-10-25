@@ -46,14 +46,7 @@
                     </font>
                 </Label>
                 <Separator prefWidth="200.0" />
-            <ToggleButton fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Afventende">
-               <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../ImageView/hourglass.png" />
-                            </image>
-                        </ImageView>
-               </graphic>
+            <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Oversigt">
                <font>
                   <Font size="16.0" />
                </font>
@@ -61,7 +54,14 @@
                   <ToggleGroup fx:id="Categories" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Oversigt" toggleGroup="$Categories">
+            <ToggleButton fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Afventende" toggleGroup="$Categories">
+               <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../ImageView/hourglass.png" />
+                            </image>
+                        </ImageView>
+               </graphic>
                <font>
                   <Font size="16.0" />
                </font>
