@@ -314,6 +314,7 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setVisible(true);
         emailLabel.setVisible(true);
         eanLabel.setVisible(true);
+        guide_lecturerLabel.setVisible(true);
         customerCommentLabel.setVisible(true);
         customerCommentTextArea.setVisible(true);
         customerCommentTextArea.setEditable(false);
@@ -340,7 +341,9 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setText("Telefonnummer: " + selectedLectureBooking.getCustomer().getPhoneNumber());
         emailLabel.setText("E-mail: " + selectedLectureBooking.getCustomer().getEmail());
         eanLabel.setText("EAN nummer: " + temp.getEanNumber());
-        guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
+        if (selectedLectureBooking.getLecturer() == null) {
+            guide_lecturerLabel.setText("Underviser: Ingen underviser tilføjet");
+        } else guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
         customerCommentTextArea.setText(selectedLectureBooking.getComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
@@ -349,12 +352,12 @@ public class MainScreenController extends GeneralController {
 
         showPendingButtons(selectedArrangementBooking.getBookingStatus());
 
-        communeLabel.setVisible(false);
         cityLabel.setVisible(false);
         contactPersonLabel.setVisible(false);
         phoneNumberLabel.setVisible(false);
         emailLabel.setVisible(false);
         eanLabel.setVisible(false);
+        guide_lecturerLabel.setVisible(false);
         customerCommentLabel.setVisible(true);
         customerCommentTextArea.setVisible(true);
         customerCommentTextArea.setEditable(false);
@@ -374,7 +377,9 @@ public class MainScreenController extends GeneralController {
         schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
         schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
         zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
-        guide_lecturerLabel.setText("Rundviser: " + selectedArrangementBooking.getGuide());
+        if (selectedArrangementBooking.getGuide() == null) {
+            communeLabel.setText("Guide: Ingen guide tilføjet");
+        } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
