@@ -129,8 +129,6 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                acceptSelectedBooking();
-                removeBookingFromTableView();
                 if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                     PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                     try {
@@ -146,6 +144,8 @@ public class MainScreenController extends GeneralController {
                         execp.printStackTrace();
                     }
                 }
+                acceptSelectedBooking();
+                removeBookingFromTableView();
             }
         });
 
@@ -156,17 +156,19 @@ public class MainScreenController extends GeneralController {
             alert.setContentText("Handlingen vil slette bookingen");
 
             Optional<ButtonType> alertChoice = alert.showAndWait();
-            PostToGoogle newConfirmedBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+
 
             if (alertChoice.get() == ButtonType.OK) {
-                try {
-                    bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
-                    newConfirmedBooking.deleteArrangementInCalendar();
-                } catch (SQLException | IOException | GeneralSecurityException e1) {
-                    e1.printStackTrace();
+                if(bookingTableView.getSelectionModel().getSelectedItem().getBookingType() == (BookingType.ARRANGEMENTBOOKING)){
+                    PostToGoogle cancelArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    try {
+                      cancelArrangementBooking.deleteArrangementInCalendar();
+                        bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
+                    } catch (SQLException | IOException | GeneralSecurityException e1) {
+                        e1.printStackTrace();
                 }
                 removeBookingFromTableView();
-            }
+            }}
         });
     }
 

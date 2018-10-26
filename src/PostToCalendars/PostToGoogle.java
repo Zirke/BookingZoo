@@ -32,6 +32,7 @@ public class PostToGoogle {
     private String tempDay = "0";
     private String tempHour = "0";
     private String tempMinute = "0";
+    private String idModifier = "aaaaaa";
 
     private ArrangementBooking inputArrangementBooking;
     private LectureBooking inputLectureBooking;
@@ -94,8 +95,8 @@ public class PostToGoogle {
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
                 .setTransparency("transparent")
-                .setColorId("6"); // Orange
-                //.setId(String.valueOf(inputArrangementBooking.getId()));
+                .setColorId("6") // Orange
+                .setId(idModifier += String.valueOf(inputArrangementBooking.getId()));
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         if(inputArrangementBooking.getDateTime().getMonthValue() < 10) {
@@ -110,7 +111,7 @@ public class PostToGoogle {
         else{
             tempDay = String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
         }
-        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+        if(inputArrangementBooking.getDateTime().getHour() < 10) {
             tempHour += String.valueOf(inputArrangementBooking.getDateTime().getHour());
         }
         else{
@@ -167,8 +168,8 @@ public class PostToGoogle {
                         "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
                 .setTransparency("transparent")
                 .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
-                .setColorId("7"); // Turquoise
-                //.setId(String.valueOf(inputLectureBooking.getId()));
+                .setColorId("7") // Turquoise
+                .setId("xxxxxx" + String.valueOf(inputLectureBooking.getId()));
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         if(inputLectureBooking.getDateTime().getMonthValue() < 10) {
@@ -226,7 +227,7 @@ public class PostToGoogle {
                 .build();
 
         // Delete an event
-        service.events().delete(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
+        service.events().delete(CALENDAR_ID, (idModifier += String.valueOf(inputArrangementBooking.getId()))).execute();
     }
     public void deleteLectureInCalendar() throws IOException, GeneralSecurityException{
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -235,7 +236,7 @@ public class PostToGoogle {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        service.events().delete(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
+        service.events().delete(CALENDAR_ID, (idModifier += String.valueOf(inputLectureBooking.getId()))).execute();
     }
     public void updateArrangementInCalendar() throws IOException, GeneralSecurityException{
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -244,7 +245,7 @@ public class PostToGoogle {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        Event updatedArrangementEvent = service.events().get(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
+        Event updatedArrangementEvent = service.events().get(CALENDAR_ID, ("xxxxxx" + String.valueOf(inputArrangementBooking.getId()))).execute();
 
         updatedArrangementEvent
                 .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
