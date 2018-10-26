@@ -18,7 +18,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
-import javafx.application.Application;
+import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +28,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class PostToGoogle {
+    private String tempMonth = "0";
+    private String tempDay = "0";
+    private String tempHour = "0";
+    private String tempMinute = "0";
 
     private ArrangementBooking inputArrangementBooking;
     private LectureBooking inputLectureBooking;
@@ -84,30 +88,57 @@ public class PostToGoogle {
                         "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
                         "\n Guide: " + inputArrangementBooking.getGuide() +
                         "\n Bestilling af mad: " + inputArrangementBooking.getMenuChosen().toString() +
-                        "\n\n Kommentar: " + inputArrangementBooking.getComment() +
+                        "\n\n Kunde Kommentar: " + inputArrangementBooking.getCustomerComment() +
+                        "\n\n Egen Kommentar: " + inputArrangementBooking.getComment() +
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
-                .setTransparency("transparent");
+                .setTransparency("transparent")
+                .setColorId("6"); // Orange
                 //.setId(String.valueOf(inputArrangementBooking.getId()));
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        if(inputArrangementBooking.getDateTime().getMonthValue() < 10) {
+            tempMonth += String.valueOf(inputArrangementBooking.getDateTime().getMonthValue());
+        }
+        else{
+            tempMonth = String.valueOf(inputArrangementBooking.getDateTime().getMonthValue());
+        }
+        if(inputArrangementBooking.getDateTime().getDayOfMonth() < 10) {
+            tempDay += String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
+        }
+        else{
+            tempDay = String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
+        }
+        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+            tempHour += String.valueOf(inputArrangementBooking.getDateTime().getHour());
+        }
+        else{
+            tempHour = String.valueOf(inputArrangementBooking.getDateTime().getHour());
+        }
+        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+            tempMinute += String.valueOf(inputArrangementBooking.getDateTime().getMinute());
+        }
+        else{
+            tempMinute = String.valueOf(inputArrangementBooking.getDateTime().getMinute());
+        }
+
         DateTime startOfEvent = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
-                                                    String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
-                                                    String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
-                                                    String.valueOf(inputArrangementBooking.getDateTime().getHour()) + ":" +
-                                                    String.valueOf(inputArrangementBooking.getDateTime().getMinute()) + ":00");
+                                                    tempMonth + "-" +
+                                                    tempDay + "T" +
+                                                    tempHour + ":" +
+                                                    tempMinute + ":00");
         EventDateTime begin = new EventDateTime()
-                .setDateTime(startOfEvent)
-                .setTimeZone("Europe/Copenhagen");
+                .setDateTime(startOfEvent);
         arrangement_event.setStart(begin);
 
         DateTime endDateTime = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
-                                                  String.valueOf(inputArrangementBooking.getDateTime().getMonthValue()) + "-" +
-                                                  String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth()) + "T" +
-                                                  String.valueOf(inputArrangementBooking.getDateTime().getHour()+2) + ":" +
-                                                  String.valueOf(inputArrangementBooking.getDateTime().getMinute()) + ":00");
+                                                  tempMonth + "-" +
+                                                  tempDay + "T" +
+                                                  (String.valueOf(Integer.valueOf(tempHour) +2)) + ":" +
+                                                  tempMinute + ":00");
         EventDateTime end = new EventDateTime()
-                .setDateTime(endDateTime)
-                .setTimeZone("Europe/Copenhagen");
+                .setDateTime(endDateTime);
         arrangement_event.setEnd(end);
 
         service.events().insert(CALENDAR_ID, arrangement_event).execute();
@@ -120,35 +151,66 @@ public class PostToGoogle {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        LectureBookingCustomer temp = (LectureBookingCustomer) inputArrangementBooking.getCustomer();
+        LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
 
         Event lecture_event = new Event()
                 .setSummary("Skoletjeneste: " + temp.getSchoolName())
                 .setDescription(" Status: " + inputLectureBooking.getBookingStatus().toString() +
                         "\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
                         "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
+                        "\n Antal hold: " + String.valueOf(inputLectureBooking.getNoOfTeams()) +
+                        "\n Antal lærer: " + String.valueOf(inputLectureBooking.getNoOfTeachers()) +
                         "\n Underviser: " + inputLectureBooking.getLecturer() +
                         "\n\n Kommentar: " + inputLectureBooking.getComment() +
                         "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
-                .setTransparency("transparent");
+                .setTransparency("transparent")
+                .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
+                .setColorId("7"); // Turquoise
                 //.setId(String.valueOf(inputLectureBooking.getId()));
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        if(inputLectureBooking.getDateTime().getMonthValue() < 10) {
+            tempMonth += String.valueOf(inputLectureBooking.getDateTime().getMonthValue());
+        }
+        else{
+            tempMonth = String.valueOf(inputLectureBooking.getDateTime().getMonthValue());
+        }
+        if(inputLectureBooking.getDateTime().getDayOfMonth() < 10) {
+            tempDay += String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth());
+        }
+        else{
+            tempDay = String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth());
+        }
+        if(inputLectureBooking.getDateTime().getHour() < 10) {
+            tempHour += String.valueOf(inputLectureBooking.getDateTime().getHour());
+        }
+        else {
+            tempHour = String.valueOf(inputLectureBooking.getDateTime().getHour());
+        }
+        if(inputLectureBooking.getDateTime().getMinute() < 10) {
+            tempMinute += String.valueOf(inputLectureBooking.getDateTime().getMinute());
+        }
+        else{
+            tempMinute = String.valueOf(inputLectureBooking.getDateTime().getMinute());
+        }
+
         DateTime startOfEvent = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
-                                            String.valueOf(inputLectureBooking.getDateTime().getMonthValue()) + "-" +
-                                               String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth()) + "T" +
-                                              String.valueOf(inputLectureBooking.getDateTime().getHour()) + ":" +
-                                               String.valueOf(inputLectureBooking.getDateTime().getMinute()) + ":00");
+                                               tempMonth + "-" +
+                                               tempDay + "T" +
+                                               tempHour + ":" +
+                                               tempMinute + ":00");
         EventDateTime begin = new EventDateTime()
                 .setDateTime(startOfEvent)
                 .setTimeZone("Europe/Copenhagen");
         lecture_event.setStart(begin);
 
         DateTime endDateTime = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
-                                            String.valueOf(inputLectureBooking.getDateTime().getMonthValue()) + "-" +
-                                               String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth()) + "T" +
-                                              String.valueOf(inputLectureBooking.getDateTime().getHour()+1) + ":" +
-                                             String.valueOf(inputLectureBooking.getDateTime().getMinute()) + ":00");
+                                              tempMonth + "-" +
+                                              tempDay + "T" +
+                                              (String.valueOf(Integer.valueOf(tempHour) + 1)) + ":" +
+                                              tempMinute + ":00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Copenhagen");
@@ -173,6 +235,149 @@ public class PostToGoogle {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        service.events().delete(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
+        service.events().delete(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
+    }
+    public void updateArrangementInCalendar() throws IOException, GeneralSecurityException{
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        Event updatedArrangementEvent = service.events().get(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId())).execute();
+
+        updatedArrangementEvent
+                .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
+                .setDescription(" Status: " + inputArrangementBooking.getBookingStatus().toString() +
+                        "\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
+                        "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
+                        "\n Guide: " + inputArrangementBooking.getGuide() +
+                        "\n Bestilling af mad: " + inputArrangementBooking.getMenuChosen().toString() +
+                        "\n\n Kunde Kommentar: " + inputArrangementBooking.getCustomerComment() +
+                        "\n\n Egen Kommentar: " + inputArrangementBooking.getComment() +
+                        "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
+                        "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
+                        "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail());
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        if(inputArrangementBooking.getDateTime().getMonthValue() < 10) {
+            tempMonth += String.valueOf(inputArrangementBooking.getDateTime().getMonthValue());
+        }
+        else{
+            tempMonth = String.valueOf(inputArrangementBooking.getDateTime().getMonthValue());
+        }
+        if(inputArrangementBooking.getDateTime().getDayOfMonth() < 10) {
+            tempDay += String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
+        }
+        else{
+            tempDay = String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
+        }
+        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+            tempHour += String.valueOf(inputArrangementBooking.getDateTime().getHour());
+        }
+        else{
+            tempHour = String.valueOf(inputArrangementBooking.getDateTime().getHour());
+        }
+        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+            tempMinute += String.valueOf(inputArrangementBooking.getDateTime().getMinute());
+        }
+        else{
+            tempMinute = String.valueOf(inputArrangementBooking.getDateTime().getMinute());
+        }
+
+        DateTime startOfEvent = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
+                tempMonth + "-" +
+                tempDay + "T" +
+                tempHour + ":" +
+                tempMinute + ":00");
+        EventDateTime begin = new EventDateTime()
+                .setDateTime(startOfEvent);
+        updatedArrangementEvent.setStart(begin);
+
+        DateTime endDateTime = new DateTime(String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" +
+                tempMonth + "-" +
+                tempDay + "T" +
+                (String.valueOf(Integer.valueOf(tempHour) +2)) + ":" +
+                tempMinute + ":00");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime);
+        updatedArrangementEvent.setEnd(end);
+
+        service.events().update(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId()), updatedArrangementEvent).execute();
+
+    }
+    public void updateLectureInCalendar() throws IOException, GeneralSecurityException{
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
+
+        Event updatedLectureEvent = service.events().get(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
+
+        updatedLectureEvent
+                .setSummary("Skoletjeneste: " + temp.getSchoolName())
+                .setDescription(" Status: " + inputLectureBooking.getBookingStatus().toString() +
+                        "\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
+                        "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
+                        "\n Antal hold: " + String.valueOf(inputLectureBooking.getNoOfTeams()) +
+                        "\n Antal lærer: " + String.valueOf(inputLectureBooking.getNoOfTeachers()) +
+                        "\n Underviser: " + inputLectureBooking.getLecturer() +
+                        "\n\n Kommentar: " + inputLectureBooking.getComment() +
+                        "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
+                        "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
+                        "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
+                .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()));
+        //.setId(String.valueOf(inputLectureBooking.getId()));
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        if(inputLectureBooking.getDateTime().getMonthValue() < 10) {
+            tempMonth += String.valueOf(inputLectureBooking.getDateTime().getMonthValue());
+        }
+        else{
+            tempMonth = String.valueOf(inputLectureBooking.getDateTime().getMonthValue());
+        }
+        if(inputLectureBooking.getDateTime().getDayOfMonth() < 10) {
+            tempDay += String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth());
+        }
+        else{
+            tempDay = String.valueOf(inputLectureBooking.getDateTime().getDayOfMonth());
+        }
+        if(inputLectureBooking.getDateTime().getHour() < 10) {
+            tempHour += String.valueOf(inputLectureBooking.getDateTime().getHour());
+        }
+        else {
+            tempHour = String.valueOf(inputLectureBooking.getDateTime().getHour());
+        }
+        if(inputLectureBooking.getDateTime().getMinute() < 10) {
+            tempMinute += String.valueOf(inputLectureBooking.getDateTime().getMinute());
+        }
+        else{
+            tempMinute = String.valueOf(inputLectureBooking.getDateTime().getMinute());
+        }
+
+        DateTime startOfEvent = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
+                tempMonth + "-" +
+                tempDay + "T" +
+                tempHour + ":" +
+                tempMinute + ":00");
+        EventDateTime begin = new EventDateTime()
+                .setDateTime(startOfEvent)
+                .setTimeZone("Europe/Copenhagen");
+        updatedLectureEvent.setStart(begin);
+
+        DateTime endDateTime = new DateTime(String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" +
+                tempMonth + "-" +
+                tempDay + "T" +
+                (String.valueOf(Integer.valueOf(tempHour) + 1)) + ":" +
+                tempMinute + ":00");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("Europe/Copenhagen");
+        updatedLectureEvent.setEnd(end);
+
+        service.events().update(CALENDAR_ID, String.valueOf(inputLectureBooking.getId()), updatedLectureEvent).execute();
     }
 }

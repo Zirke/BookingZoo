@@ -3,12 +3,17 @@ package UserInterface;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Bookings.Lecturer;
+import PostToCalendars.PostToGoogle;
 import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.mortbay.util.IO;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,7 +57,7 @@ public class LectureBookingCreationController {
 
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException, GeneralSecurityException {
         topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         createBookingButton();
@@ -74,7 +79,7 @@ public class LectureBookingCreationController {
     /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
 
     @FXML
-    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
+    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
         LocalDate tempDate = datePicker.getValue();
         LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
         LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
@@ -120,6 +125,9 @@ public class LectureBookingCreationController {
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
         bda.createLecBookManually(lbook);
+
+        PostToGoogle newLectureBookingToCalendar = new PostToGoogle(lbook);
+        newLectureBookingToCalendar.postNewLectureToCalendar();
     }
 
     @FXML
@@ -128,7 +136,7 @@ public class LectureBookingCreationController {
         stage.close();
     }
 
-    private void createBookingButton(){
+    private void createBookingButton() throws IOException, GeneralSecurityException{
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null  || noOfPupilsTextField.getText().isEmpty() ||
                     noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
@@ -151,7 +159,7 @@ public class LectureBookingCreationController {
                     try {
                         createNewLectureBookingFromInput();
                         closeWindow();
-                    } catch (SQLException | ClassNotFoundException e1) {
+                    } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
                         e1.printStackTrace();
                     }
                 }
