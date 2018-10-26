@@ -66,7 +66,6 @@ public class LectureBookingCreationController {
         textfieldWithOnlyNumbers(noOfTeamsTextField);
         textfieldWithOnlyNumbers(noOfTeachersTextField);
         textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
-        textfieldWithOnlyNumbers(phoneNumberTextField);
         textfieldWithOnlyNumbers(gradeTextField);
         textfieldWithOnlyNumbers(zipCodeTextField);
         textfieldWithOnlyNumbers(eanNumberTextField);

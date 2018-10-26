@@ -19,7 +19,7 @@ public abstract class Booking {
     private String customerComment;
     private String comment;
 
-    public Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
+    Booking(int id, BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
         this.id = id;
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
@@ -31,7 +31,7 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
+    Booking(BookingType bookingType, BookingStatus bookingStatus, Customer customer, LocalDate creationDate, LocalDateTime dateTime, int participants, String customerComment, String comment) {
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.customer = customer;
@@ -42,7 +42,7 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    public Booking(BookingStatus bookingStatus, int participants, Customer customer, LocalDateTime dateTime, String comment) {
+    Booking(BookingStatus bookingStatus, int participants, Customer customer) {
         this.bookingStatus = bookingStatus;
         this.participants = participants;
         this.customer = customer;
