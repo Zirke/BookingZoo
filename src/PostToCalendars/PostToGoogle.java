@@ -32,7 +32,7 @@ public class PostToGoogle {
     private String tempDay = "0";
     private String tempHour = "0";
     private String tempMinute = "0";
-    private String idModifier = "aaaaaa";
+
 
     private ArrangementBooking inputArrangementBooking;
     private LectureBooking inputLectureBooking;
@@ -76,6 +76,7 @@ public class PostToGoogle {
     }
 
     public void postNewArrangementToCalendar() throws IOException, GeneralSecurityException {
+        String idModifier = "aaaaaa" + inputArrangementBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -95,8 +96,9 @@ public class PostToGoogle {
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
                 .setTransparency("transparent")
-                .setColorId("6") // Orange
-                .setId(idModifier += String.valueOf(inputArrangementBooking.getId()));
+                .setColorId("5") // Yellow
+                .setSequence(1)
+                .setId(idModifier);
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         if(inputArrangementBooking.getDateTime().getMonthValue() < 10) {
@@ -146,6 +148,7 @@ public class PostToGoogle {
     }
 
     public void postNewLectureToCalendar() throws IOException, GeneralSecurityException {
+        String idModifier = "aaaaaa" + inputLectureBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -169,7 +172,7 @@ public class PostToGoogle {
                 .setTransparency("transparent")
                 .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
                 .setColorId("7") // Turquoise
-                .setId("xxxxxx" + String.valueOf(inputLectureBooking.getId()));
+                .setId(idModifier);
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         if(inputLectureBooking.getDateTime().getMonthValue() < 10) {
@@ -220,6 +223,7 @@ public class PostToGoogle {
         service.events().insert(CALENDAR_ID, lecture_event).execute();
     }
     public void deleteArrangementInCalendar() throws IOException, GeneralSecurityException{
+        String idModifier = "aaaaaa" + inputArrangementBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -227,25 +231,27 @@ public class PostToGoogle {
                 .build();
 
         // Delete an event
-        service.events().delete(CALENDAR_ID, (idModifier += String.valueOf(inputArrangementBooking.getId()))).execute();
+        service.events().delete(CALENDAR_ID, (idModifier)).execute();
     }
     public void deleteLectureInCalendar() throws IOException, GeneralSecurityException{
+        String idModifier = "aaaaaa" + inputLectureBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        service.events().delete(CALENDAR_ID, (idModifier += String.valueOf(inputLectureBooking.getId()))).execute();
+        service.events().delete(CALENDAR_ID, (idModifier)).execute();
     }
     public void updateArrangementInCalendar() throws IOException, GeneralSecurityException{
+        String idModifier = "aaaaaa" + inputArrangementBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        Event updatedArrangementEvent = service.events().get(CALENDAR_ID, ("xxxxxx" + String.valueOf(inputArrangementBooking.getId()))).execute();
+        Event updatedArrangementEvent = service.events().get(CALENDAR_ID, idModifier).execute();
 
         updatedArrangementEvent
                 .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
@@ -258,7 +264,8 @@ public class PostToGoogle {
                         "\n\n Egen Kommentar: " + inputArrangementBooking.getComment() +
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
-                        "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail());
+                        "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
+                .setSequence(2);
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         if(inputArrangementBooking.getDateTime().getMonthValue() < 10) {
@@ -273,7 +280,7 @@ public class PostToGoogle {
         else{
             tempDay = String.valueOf(inputArrangementBooking.getDateTime().getDayOfMonth());
         }
-        if(inputArrangementBooking.getDateTime().getMinute() < 10) {
+        if(inputArrangementBooking.getDateTime().getHour() < 10) {
             tempHour += String.valueOf(inputArrangementBooking.getDateTime().getHour());
         }
         else{
@@ -304,10 +311,11 @@ public class PostToGoogle {
                 .setDateTime(endDateTime);
         updatedArrangementEvent.setEnd(end);
 
-        service.events().update(CALENDAR_ID, String.valueOf(inputArrangementBooking.getId()), updatedArrangementEvent).execute();
+        service.events().update(CALENDAR_ID, (idModifier), updatedArrangementEvent).execute();
 
     }
     public void updateLectureInCalendar() throws IOException, GeneralSecurityException{
+        String idModifier = "aaaaaa" + inputLectureBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -316,7 +324,7 @@ public class PostToGoogle {
 
         LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
 
-        Event updatedLectureEvent = service.events().get(CALENDAR_ID, String.valueOf(inputLectureBooking.getId())).execute();
+        Event updatedLectureEvent = service.events().get(CALENDAR_ID, idModifier).execute();
 
         updatedLectureEvent
                 .setSummary("Skoletjeneste: " + temp.getSchoolName())
@@ -330,7 +338,8 @@ public class PostToGoogle {
                         "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
-                .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()));
+                .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
+                .setSequence(2);
         //.setId(String.valueOf(inputLectureBooking.getId()));
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
@@ -379,6 +388,6 @@ public class PostToGoogle {
                 .setTimeZone("Europe/Copenhagen");
         updatedLectureEvent.setEnd(end);
 
-        service.events().update(CALENDAR_ID, String.valueOf(inputLectureBooking.getId()), updatedLectureEvent).execute();
+        service.events().update(CALENDAR_ID, idModifier, updatedLectureEvent).execute();
     }
 }

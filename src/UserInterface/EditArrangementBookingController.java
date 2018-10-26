@@ -4,6 +4,7 @@ import Bookings.ArrangementBooking;
 import Bookings.BookingDataAccessor;
 import Bookings.FoodOrder;
 import Customers.Customer;
+import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.ChoiceOfMenu;
 import enums.FacilityState;
@@ -11,7 +12,10 @@ import facilities.Restaurant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.mortbay.util.IO;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +46,7 @@ public class EditArrangementBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
-    public void initialize() throws SQLException, ClassNotFoundException {
+    public void initialize() throws SQLException, ClassNotFoundException{
 
         BookingDataAccessor bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
@@ -62,7 +66,7 @@ public class EditArrangementBookingController {
                 try {
                     bda.editArrBook(overwriteSelectedArrangementBooking());
                     closeWindow();
-                } catch (SQLException e1) {
+                } catch (SQLException | IOException | GeneralSecurityException e1) {
                     e1.printStackTrace();
                 }
             }

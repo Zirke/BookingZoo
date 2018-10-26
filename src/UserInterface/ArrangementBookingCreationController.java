@@ -119,8 +119,6 @@ public class ArrangementBookingCreationController extends GeneralController {
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
         bda.createArrBookManually(abook);
-        PostToGoogle postArrangement = new PostToGoogle(abook);
-        postArrangement.postNewArrangementToCalendar();
     }
 
     private void closeWindow() {

@@ -1,10 +1,13 @@
 package Bookings;
 
 import Customers.LectureBookingCustomer;
+import PostToCalendars.PostToGoogle;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -125,7 +128,7 @@ public class BookingDataAccessor {
         return arr;
     }
 
-    public void createArrBookManually(ArrangementBooking abook) throws SQLException {
+    public void createArrBookManually(ArrangementBooking abook) throws SQLException, GeneralSecurityException, IOException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((2),(?),(?),(?),(?),(?),(?))";
@@ -175,6 +178,9 @@ public class BookingDataAccessor {
         //Execute Updates
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
+
+        PostToGoogle postArrangement = new PostToGoogle(abook);
+        postArrangement.postNewArrangementToCalendar();
 
         //connection.close();
     }
@@ -236,7 +242,7 @@ public class BookingDataAccessor {
         }
     }
 
-    public void createLecBookManually(LectureBooking lbook) throws SQLException {
+    public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((1),(?),(?),(?),(?),(?),(?))";
@@ -304,6 +310,8 @@ public class BookingDataAccessor {
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
 
+        PostToGoogle postArrangement = new PostToGoogle(lbook);
+        postArrangement.postNewLectureToCalendar();
         //connection.close();
     }
 
@@ -317,7 +325,7 @@ public class BookingDataAccessor {
         pstmt.executeUpdate();
     }
 
-    public void editArrBook(ArrangementBooking abook) throws SQLException {
+    public void editArrBook(ArrangementBooking abook) throws SQLException, IOException, GeneralSecurityException {
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
         pstmtGetCustomerID.setInt(1,abook.getId());
@@ -354,10 +362,12 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
 
+        PostToGoogle updateArrangementBooking = new PostToGoogle(abook);
+        updateArrangementBooking.updateArrangementInCalendar();
         //connection.close();
     }
 
-    public void editLecBook(LectureBooking lbook) throws SQLException{
+    public void editLecBook(LectureBooking lbook) throws SQLException, IOException, GeneralSecurityException{
 
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
@@ -404,6 +414,9 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
+
+        PostToGoogle postArrangement = new PostToGoogle(lbook);
+        postArrangement.updateLectureInCalendar();
 
         //connection.close();
 

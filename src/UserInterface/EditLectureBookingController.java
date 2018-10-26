@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -50,7 +52,7 @@ public class EditLectureBookingController {
     public Spinner minutSpinner;
 
 
-    public void initialize() throws SQLException, ClassNotFoundException {
+    public void initialize() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
         BookingDataAccessor bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
                 "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
@@ -146,7 +148,7 @@ public class EditLectureBookingController {
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
     }
 
-    private void safeButtonPress(BookingDataAccessor bda) {
+    private void safeButtonPress(BookingDataAccessor bda)throws IOException, GeneralSecurityException {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
@@ -157,7 +159,7 @@ public class EditLectureBookingController {
                 try {
                     bda.editLecBook(overwriteSelectedLectureBooking());
                     closeWindow();
-                } catch (SQLException e1) {
+                } catch (SQLException | IOException | GeneralSecurityException e1) {
                     e1.printStackTrace();
                 }
             }
