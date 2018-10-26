@@ -185,7 +185,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void deleteBooking(Booking book) throws SQLException {
+    public void deleteBooking(Booking book) throws SQLException, IOException, GeneralSecurityException {
 
         //Get CustomerID
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
@@ -238,8 +238,24 @@ public class BookingDataAccessor {
             pstmtCustomer.executeUpdate();
             pstmtBooking.executeUpdate();
 
+            if(book.getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                PostToGoogle cancelArrangementBooking = new PostToGoogle((ArrangementBooking) book);
+                try{
+                    cancelArrangementBooking.deleteArrangementInCalendar();
+                }catch(IOException | GeneralSecurityException excep){
+                    excep.printStackTrace();
+                    }
+                }
+            if(book.getBookingType() == (BookingType.LECTUREBOOKING)){
+                PostToGoogle cancelLectureBooking = new PostToGoogle((LectureBooking) book);
+                try{
+                    cancelLectureBooking.deleteLectureInCalendar();
+                }catch (IOException | GeneralSecurityException excep){
+                    excep.printStackTrace();
+                }
+            }
             //connection.close();
-        }
+            }
     }
 
     public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException {

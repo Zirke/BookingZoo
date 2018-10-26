@@ -231,7 +231,7 @@ public class PostToGoogle {
                 .build();
 
         // Delete an event
-        service.events().delete(CALENDAR_ID, (idModifier)).execute();
+        service.events().delete(CALENDAR_ID, idModifier).execute();
     }
     public void deleteLectureInCalendar() throws IOException, GeneralSecurityException{
         String idModifier = "aaaaaa" + inputLectureBooking.getId();
@@ -241,7 +241,7 @@ public class PostToGoogle {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        service.events().delete(CALENDAR_ID, (idModifier)).execute();
+        service.events().delete(CALENDAR_ID, idModifier).execute();
     }
     public void updateArrangementInCalendar() throws IOException, GeneralSecurityException{
         String idModifier = "aaaaaa" + inputArrangementBooking.getId();

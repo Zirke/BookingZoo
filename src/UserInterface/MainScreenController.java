@@ -68,7 +68,7 @@ public class MainScreenController extends GeneralController {
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, IOException, GeneralSecurityException {
         fetchBookingsFromDatabase();
 
         customerCommentLabel.setVisible(false);
@@ -80,7 +80,11 @@ public class MainScreenController extends GeneralController {
         editBookingButton.setVisible(false);
 
         deleteButton.setOnMouseClicked(e -> {
-            deleteSelectedBooking();
+            try{
+                deleteSelectedBooking();
+            }catch(IOException | GeneralSecurityException excep){
+                excep.printStackTrace();
+            }
             removeBookingFromTableView();
         });
 
@@ -168,16 +172,13 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                if(bookingTableView.getSelectionModel().getSelectedItem().getBookingType() == (BookingType.ARRANGEMENTBOOKING)){
-                    PostToGoogle cancelArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                    try {
-                      cancelArrangementBooking.deleteArrangementInCalendar();
-                        bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
-                    } catch (SQLException | IOException | GeneralSecurityException e1) {
+                try{
+                    bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
+                    } catch (SQLException e1) {
                         e1.printStackTrace();
                 }
                 removeBookingFromTableView();
-            }}
+            }
         });
     }
 
@@ -219,10 +220,10 @@ public class MainScreenController extends GeneralController {
         bookingTableView.getItems().remove(bookingToRemove);
     }
 
-    private void deleteSelectedBooking() {
+    private void deleteSelectedBooking() throws IOException, GeneralSecurityException {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException e) {
+        } catch (SQLException | IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
     }
