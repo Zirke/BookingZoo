@@ -134,6 +134,8 @@ public class EditArrangementBookingController {
         BookingStatus statusChoice;
         statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedArrangementBooking.setBookingStatus(statusChoice);
+
+
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;
         if(selectedTimeBtn.getText().equals("10:00 - 12:00")){

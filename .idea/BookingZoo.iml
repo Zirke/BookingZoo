@@ -58,5 +58,6 @@
     </orderEntry>
     <orderEntry type="library" name="google-api-services-calendar-v3-rev355-1.25.0-javadoc" level="project" />
     <orderEntry type="library" name="JarFiler" level="project" />
+    <orderEntry type="library" name="Google" level="project" />
   </component>
 </module>

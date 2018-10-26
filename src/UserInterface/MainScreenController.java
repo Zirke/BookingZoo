@@ -6,6 +6,7 @@ import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
 import enums.BookingStatus;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +23,6 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -33,6 +33,7 @@ public class MainScreenController extends GeneralController {
             "jyjczxth",
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
+    private ArrayList<Booking> listOfBookings = new ArrayList<>();
 
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
@@ -48,14 +49,14 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
-    private TableColumn<Booking, LocalDate> bookingDateColumn;
+    private TableColumn<Booking, String> bookingDateColumn;
 
     //Nodes for booking information display area
     @FXML
     private Label commentLabel, customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
             timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
             schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
-            emailLabel, eanLabel;
+            emailLabel, eanLabel, guide_lecturerLabel;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
@@ -65,6 +66,8 @@ public class MainScreenController extends GeneralController {
     }
 
     public void initialize() throws SQLException {
+        fetchBookingsFromDatabase();
+
         customerCommentLabel.setVisible(false);
         customerCommentTextArea.setVisible(false);
         commentLabel.setVisible(false);
@@ -80,7 +83,7 @@ public class MainScreenController extends GeneralController {
 
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
-        for (Booking temp : fetchBookingsFromDatabase()) {
+        for (Booking temp : listOfBookings) {
             listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
         }
         String[] options = listOfContactPersonNames.toArray(new String[0]);
@@ -92,13 +95,9 @@ public class MainScreenController extends GeneralController {
 
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
-            try {
-                if (searchField.getText().isEmpty()) {
-                    loadBookingsToTableView();
-                } else showSearchedForBookingsInTableView(fetchBookingsFromDatabase());
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            if (searchField.getText().isEmpty()) {
+                loadBookingsToTableView();
+            } else showSearchedForBookingsInTableView(listOfBookings);
         });
 
         //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
@@ -111,7 +110,13 @@ public class MainScreenController extends GeneralController {
         arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
 
         //Reloads the bookings from database into TableView
-        refreshBookingsButton.setOnMouseClicked(e -> refreshBookingTableView());
+        refreshBookingsButton.setOnMouseClicked(e -> {
+            try {
+                refreshBookingTableView();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         //Opens edit pop-up window corresponding to chosen Booking in TableView
         editBookingButton.setOnMouseClicked(e -> {
@@ -155,37 +160,37 @@ public class MainScreenController extends GeneralController {
         });
     }
 
-    private ArrayList<Booking> fetchBookingsFromDatabase() throws SQLException {
-        ArrayList<Booking> listOfBookings = new ArrayList<>();
+    /*
+     *   METHODS
+     */
+
+    private void fetchBookingsFromDatabase() throws SQLException {
         listOfBookings.addAll(bda.fetchLecBooks());
         listOfBookings.addAll(bda.fetchArrBooks());
-
-        return listOfBookings;
     }
 
-
     //Takes an ArrayList of bookings to load into TableView of bookings
-    private void loadBookingsToTableView() throws SQLException {
-        bookingStatusColumn.setSortType(TableColumn.SortType.DESCENDING);
+    private void loadBookingsToTableView() {
+        //bookingStatusColumn.setSortType(TableColumn.SortType.DESCENDING);
 
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-        bookingDateColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
+        bookingDateColumn.setSortType(TableColumn.SortType.ASCENDING);
 
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
-        for (Booking booking : fetchBookingsFromDatabase()) {
+        for (Booking booking : listOfBookings) {
             bookings.addAll(booking);
         }
         bookingTableView.setItems(bookings);
     }
 
-    private void refreshBookingTableView() {
-        try {
-            loadBookingsToTableView();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private void refreshBookingTableView() throws SQLException {
+        listOfBookings.clear();
+        fetchBookingsFromDatabase();
+        loadBookingsToTableView();
     }
 
     private void removeBookingFromTableView() {
@@ -229,7 +234,7 @@ public class MainScreenController extends GeneralController {
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
 
-        for (Booking temp : fetchBookingsFromDatabase()) {
+        for (Booking temp : listOfBookings) {
             if (!nameOfChosenBtn.equals("Oversigt")) {
                 BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
                 if (temp.getBookingStatus().equals(chosenBookingStatus)) {
@@ -335,6 +340,7 @@ public class MainScreenController extends GeneralController {
         phoneNumberLabel.setText("Telefonnummer: " + selectedLectureBooking.getCustomer().getPhoneNumber());
         emailLabel.setText("E-mail: " + selectedLectureBooking.getCustomer().getEmail());
         eanLabel.setText("EAN nummer: " + temp.getEanNumber());
+        guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
         customerCommentTextArea.setText(selectedLectureBooking.getComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
@@ -368,6 +374,7 @@ public class MainScreenController extends GeneralController {
         schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
         schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
         zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
+        guide_lecturerLabel.setText("Rundviser: " + selectedArrangementBooking.getGuide());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
