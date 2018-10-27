@@ -149,7 +149,7 @@ public class MainScreenController extends GeneralController {
                         PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                         try {
                             newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                        } catch (IOException | GeneralSecurityException | SQLException | ClassNotFoundException excep) {
+                        } catch (IOException | GeneralSecurityException | SQLException excep) {
                             excep.printStackTrace();
                         }
                     }catch (SQLException | ClassNotFoundException excep1){

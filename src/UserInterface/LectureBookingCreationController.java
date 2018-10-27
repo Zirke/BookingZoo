@@ -124,9 +124,6 @@ public class LectureBookingCreationController {
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
         bda.createLecBookManually(lbook);
-
-        PostToGoogle newLectureBookingToCalendar = new PostToGoogle(lbook);
-        newLectureBookingToCalendar.postNewLectureToCalendar();
     }
 
     @FXML
