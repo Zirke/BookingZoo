@@ -57,7 +57,7 @@ public class LectureBookingCreationController {
 
 
     @FXML
-    public void initialize() throws IOException, GeneralSecurityException {
+    public void initialize() {
         topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         createBookingButton();
@@ -132,7 +132,7 @@ public class LectureBookingCreationController {
         stage.close();
     }
 
-    private void createBookingButton() throws IOException, GeneralSecurityException{
+    private void createBookingButton() {
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null  || noOfPupilsTextField.getText().isEmpty() ||
                     noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
