@@ -148,7 +148,7 @@ public class EditLectureBookingController {
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
     }
 
-    private void safeButtonPress(BookingDataAccessor bda)throws IOException, GeneralSecurityException {
+    private void safeButtonPress(BookingDataAccessor bda)throws IOException, GeneralSecurityException, ClassNotFoundException {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
@@ -159,7 +159,7 @@ public class EditLectureBookingController {
                 try {
                     bda.editLecBook(overwriteSelectedLectureBooking());
                     closeWindow();
-                } catch (SQLException | IOException | GeneralSecurityException e1) {
+                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
                     e1.printStackTrace();
                 }
             }

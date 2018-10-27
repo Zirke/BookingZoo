@@ -66,7 +66,7 @@ public class EditArrangementBookingController {
                 try {
                     bda.editArrBook(overwriteSelectedArrangementBooking());
                     closeWindow();
-                } catch (SQLException | IOException | GeneralSecurityException e1) {
+                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
                     e1.printStackTrace();
                 }
             }

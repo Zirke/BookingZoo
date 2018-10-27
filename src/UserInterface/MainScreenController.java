@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
+import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -68,7 +69,7 @@ public class MainScreenController extends GeneralController {
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
-    public void initialize() throws SQLException, IOException, GeneralSecurityException {
+    public void initialize() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException, ClassNotFoundException {
         fetchBookingsFromDatabase();
 
         customerCommentLabel.setVisible(false);
@@ -82,7 +83,7 @@ public class MainScreenController extends GeneralController {
         deleteButton.setOnMouseClicked(e -> {
             try{
                 deleteSelectedBooking();
-            }catch(IOException | GeneralSecurityException excep){
+            }catch(IOException | GeneralSecurityException | ClassNotFoundException excep){
                 excep.printStackTrace();
             }
             removeBookingFromTableView();
@@ -144,23 +145,32 @@ public class MainScreenController extends GeneralController {
 
             if (alertChoice.get() == ButtonType.OK) {
                 if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                    PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                     try {
-                        newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                    } catch (IOException | GeneralSecurityException execp) {
-                        execp.printStackTrace();}
+                        PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                        try {
+                            newConfirmedArrangementBooking.postNewArrangementToCalendar();
+                        } catch (IOException | GeneralSecurityException | SQLException | ClassNotFoundException excep) {
+                            excep.printStackTrace();
+                        }
+                    }catch (SQLException | ClassNotFoundException excep1){
+                        excep1.printStackTrace();
                     }
                 if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                     try {
-                        newConfirmedLectureBooking.postNewLectureToCalendar();
-                    } catch (IOException | GeneralSecurityException execp) {
-                        execp.printStackTrace();
+                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                        try {
+                            newConfirmedLectureBooking.postNewLectureToCalendar();
+                        } catch (IOException | GeneralSecurityException excep) {
+                            excep.printStackTrace();
+                        }
+                    }catch(ClassNotFoundException | SQLException excep1){
+                            excep1.printStackTrace();
+                        }
+
                     }
-                }
+                }}
                 acceptSelectedBooking();
                 removeBookingFromTableView();
-            }
         });
 
         //Cancelling the selected booking when pressing cancelBookingButton
@@ -220,7 +230,7 @@ public class MainScreenController extends GeneralController {
         bookingTableView.getItems().remove(bookingToRemove);
     }
 
-    private void deleteSelectedBooking() throws IOException, GeneralSecurityException {
+    private void deleteSelectedBooking() throws IOException, GeneralSecurityException, ClassNotFoundException {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
         } catch (SQLException | IOException | GeneralSecurityException e) {

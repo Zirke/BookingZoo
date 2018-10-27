@@ -1,6 +1,7 @@
 package PostToCalendars;
 
 import Bookings.ArrangementBooking;
+import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
 import com.google.api.client.auth.oauth2.Credential;
@@ -18,30 +19,42 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import enums.BookingStatus;
 import org.mortbay.util.IO;
+import org.postgresql.core.SqlCommand;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.sql.*;
 import java.util.Collections;
 import java.util.List;
 
 public class PostToGoogle {
+    private final BookingDataAccessor bda = new BookingDataAccessor(
+            "org.postgresql.Driver",
+            "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+            "jyjczxth",
+            "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
+    );
+
     private String tempMonth = "0";
     private String tempDay = "0";
     private String tempHour = "0";
     private String tempMinute = "0";
-
+    private String tempComment = "Ingen kommentar";
+    private String tempCustomerComment = "Ingen kommentar";
+    private Connection connection;
 
     private ArrangementBooking inputArrangementBooking;
     private LectureBooking inputLectureBooking;
 
-    public PostToGoogle(ArrangementBooking calendarArrangementBooking) {
+    public PostToGoogle(ArrangementBooking calendarArrangementBooking) throws ClassNotFoundException, SQLException{
         this.inputArrangementBooking = calendarArrangementBooking;
     }
 
-    public PostToGoogle(LectureBooking inputLectureBooking) {
+    public PostToGoogle(LectureBooking inputLectureBooking)throws ClassNotFoundException, SQLException {
         this.inputLectureBooking = inputLectureBooking;
     }
 
@@ -75,23 +88,36 @@ public class PostToGoogle {
         return new AuthorizationCodeInstalledApp(flow, lReceiver).authorize(USER_ID);
     }
 
-    public void postNewArrangementToCalendar() throws IOException, GeneralSecurityException {
-        String idModifier = "aaaaaa" + inputArrangementBooking.getId();
+    public void postNewArrangementToCalendar() throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+        String idModifier = "aaaaaa" + inputArrangementBooking.getId();
+
+       if(inputArrangementBooking.getId() == 0){
+            idModifier = "aaaaaa" + bda.getLastID();
+        }
+        else {
+            idModifier = "aaaaaa" + inputArrangementBooking.getId();
+
+        }
+        if (!(inputArrangementBooking.getCustomerComment().isEmpty())){
+            tempCustomerComment = inputArrangementBooking.getCustomerComment();
+        }
+        if(!(inputArrangementBooking.getComment().isEmpty())){
+            tempComment = inputArrangementBooking.getComment();
+        }
 
         Event arrangement_event = new Event()
                 .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
-                .setDescription(" Status: " + inputArrangementBooking.getBookingStatus().toString() +
-                        "\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
+                .setDescription("\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
                         "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
                         "\n Guide: " + inputArrangementBooking.getGuide() +
                         "\n Bestilling af mad: " + inputArrangementBooking.getMenuChosen().toString() +
-                        "\n\n Kunde Kommentar: " + inputArrangementBooking.getCustomerComment() +
-                        "\n\n Egen Kommentar: " + inputArrangementBooking.getComment() +
+                        "\n\n Kunde Kommentar: " + tempCustomerComment +
+                        "\n\n Egen Kommentar: " + tempComment +
                         "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail())
@@ -147,7 +173,7 @@ public class PostToGoogle {
         service.events().insert(CALENDAR_ID, arrangement_event).execute();
     }
 
-    public void postNewLectureToCalendar() throws IOException, GeneralSecurityException {
+    public void postNewLectureToCalendar() throws IOException, GeneralSecurityException, ClassNotFoundException, SQLException {
         String idModifier = "aaaaaa" + inputLectureBooking.getId();
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
@@ -157,15 +183,29 @@ public class PostToGoogle {
 
         LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
 
+        if(inputLectureBooking.getId() == 0){
+            idModifier = "aaaaaa" + bda.getLastID();
+        }
+        else {
+            idModifier = "aaaaaa" + inputLectureBooking.getId();
+        }
+
+        if (!(inputLectureBooking.getCustomerComment().isEmpty())){
+            tempCustomerComment = inputLectureBooking.getCustomerComment();
+        }
+        if(!(inputLectureBooking.getComment().isEmpty())){
+            tempComment = inputLectureBooking.getComment();
+        }
+
         Event lecture_event = new Event()
                 .setSummary("Skoletjeneste: " + temp.getSchoolName())
-                .setDescription(" Status: " + inputLectureBooking.getBookingStatus().toString() +
-                        "\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
+                .setDescription("\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
+                        "\n Underviser: " + inputLectureBooking.getLecturer() +
                         "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
                         "\n Antal hold: " + String.valueOf(inputLectureBooking.getNoOfTeams()) +
                         "\n Antal lærer: " + String.valueOf(inputLectureBooking.getNoOfTeachers()) +
-                        "\n Underviser: " + inputLectureBooking.getLecturer() +
-                        "\n\n Kommentar: " + inputLectureBooking.getComment() +
+                        "\n\n Kunde Kommentar: " + tempCustomerComment +
+                        "\n\n Kommentar: " + tempComment +
                         "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
                         "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
                         "\n E-mail: " + inputLectureBooking.getCustomer().getEmail())
@@ -313,6 +353,10 @@ public class PostToGoogle {
 
         service.events().update(CALENDAR_ID, (idModifier), updatedArrangementEvent).execute();
 
+        if(inputArrangementBooking.getBookingStatus() == BookingStatus.STATUS_DELETED){
+            deleteArrangementInCalendar();
+        }
+
     }
     public void updateLectureInCalendar() throws IOException, GeneralSecurityException{
         String idModifier = "aaaaaa" + inputLectureBooking.getId();
@@ -389,5 +433,9 @@ public class PostToGoogle {
         updatedLectureEvent.setEnd(end);
 
         service.events().update(CALENDAR_ID, idModifier, updatedLectureEvent).execute();
+
+        if(inputLectureBooking.getBookingStatus() == BookingStatus.STATUS_DELETED){
+            deleteLectureInCalendar();
+        }
     }
 }

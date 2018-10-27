@@ -128,7 +128,7 @@ public class BookingDataAccessor {
         return arr;
     }
 
-    public void createArrBookManually(ArrangementBooking abook) throws SQLException, GeneralSecurityException, IOException {
+    public void createArrBookManually(ArrangementBooking abook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((2),(?),(?),(?),(?),(?),(?))";
@@ -185,7 +185,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void deleteBooking(Booking book) throws SQLException, IOException, GeneralSecurityException {
+    public void deleteBooking(Booking book) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException {
 
         //Get CustomerID
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
@@ -258,7 +258,7 @@ public class BookingDataAccessor {
             }
     }
 
-    public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException {
+    public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((1),(?),(?),(?),(?),(?),(?))";
@@ -341,7 +341,7 @@ public class BookingDataAccessor {
         pstmt.executeUpdate();
     }
 
-    public void editArrBook(ArrangementBooking abook) throws SQLException, IOException, GeneralSecurityException {
+    public void editArrBook(ArrangementBooking abook) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException {
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
         pstmtGetCustomerID.setInt(1,abook.getId());
@@ -383,7 +383,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void editLecBook(LectureBooking lbook) throws SQLException, IOException, GeneralSecurityException{
+    public void editLecBook(LectureBooking lbook) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException{
 
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
@@ -436,5 +436,15 @@ public class BookingDataAccessor {
 
         //connection.close();
 
+    }
+    public int getLastID()throws SQLException{
+        String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
+
+        Statement stmt = connection.prepareStatement(getLastID);
+        ResultSet rs = ((PreparedStatement) stmt).executeQuery();
+        rs.next();
+        int currentBookingID = rs.getInt(1);
+
+        return currentBookingID;
     }
 }

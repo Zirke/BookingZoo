@@ -42,14 +42,6 @@ public abstract class Booking {
         this.comment = comment;
     }
 
-    Booking(BookingStatus bookingStatus, int participants, Customer customer) {
-        this.bookingStatus = bookingStatus;
-        this.participants = participants;
-        this.customer = customer;
-        this.dateTime = dateTime;
-        this.comment = comment;
-    }
-
     public Booking() {
     }
 
