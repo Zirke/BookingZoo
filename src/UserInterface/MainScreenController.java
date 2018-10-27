@@ -69,7 +69,7 @@ public class MainScreenController extends GeneralController {
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
-    public void initialize() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException, ClassNotFoundException {
+    public void initialize() throws SQLException {
         fetchBookingsFromDatabase();
 
         customerCommentLabel.setVisible(false);
@@ -83,7 +83,7 @@ public class MainScreenController extends GeneralController {
         deleteButton.setOnMouseClicked(e -> {
             try{
                 deleteSelectedBooking();
-            }catch(IOException | GeneralSecurityException | ClassNotFoundException excep){
+            }catch(ClassNotFoundException excep){
                 excep.printStackTrace();
             }
             removeBookingFromTableView();
@@ -203,8 +203,6 @@ public class MainScreenController extends GeneralController {
 
     //Takes an ArrayList of bookings to load into TableView of bookings
     private void loadBookingsToTableView() {
-        //bookingStatusColumn.setSortType(TableColumn.SortType.DESCENDING);
-
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
@@ -230,7 +228,7 @@ public class MainScreenController extends GeneralController {
         bookingTableView.getItems().remove(bookingToRemove);
     }
 
-    private void deleteSelectedBooking() throws IOException, GeneralSecurityException, ClassNotFoundException {
+    private void deleteSelectedBooking() throws ClassNotFoundException {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
         } catch (SQLException | IOException | GeneralSecurityException e) {
@@ -260,7 +258,7 @@ public class MainScreenController extends GeneralController {
     }
 
     @FXML
-    private void showChosenCategoryBookings(ActionEvent event) throws SQLException {
+    private void showChosenCategoryBookings(ActionEvent event) {
         ToggleButton chosenCategoryBtn = (ToggleButton) event.getSource();
         String nameOfChosenBtn = chosenCategoryBtn.getText();
 
@@ -376,7 +374,7 @@ public class MainScreenController extends GeneralController {
         if (selectedLectureBooking.getLecturer() == null) {
             guide_lecturerLabel.setText("Underviser: Ingen underviser tilføjet");
         } else guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
-        customerCommentTextArea.setText(selectedLectureBooking.getComment());
+        customerCommentTextArea.setText(selectedLectureBooking.getCustomerComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
 
