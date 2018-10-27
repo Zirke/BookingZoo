@@ -5,10 +5,8 @@ import Bookings.Booking;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Customers.LectureBookingCustomer;
-import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import enums.BookingType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +20,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
-import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -37,7 +34,11 @@ public class MainScreenController extends GeneralController {
             "jyjczxth",
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
-    private ArrayList<Booking> listOfBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfBookings = new ArrayList<>(); //Without archived and deleted
+    private ArrayList<Booking> listOfArchivedBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
+
 
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
@@ -81,17 +82,13 @@ public class MainScreenController extends GeneralController {
         editBookingButton.setVisible(false);
 
         deleteButton.setOnMouseClicked(e -> {
-            try{
-                deleteSelectedBooking();
-            }catch(ClassNotFoundException excep){
-                excep.printStackTrace();
-            }
+            deleteSelectedBooking();
             removeBookingFromTableView();
         });
 
         /* Search field controlsfx */
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
-        for (Booking temp : listOfBookings) {
+        for (Booking temp : listOfAllBookings) {
             listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
         }
         String[] options = listOfContactPersonNames.toArray(new String[0]);
@@ -105,7 +102,7 @@ public class MainScreenController extends GeneralController {
         searchField.setOnAction(e -> {
             if (searchField.getText().isEmpty()) {
                 loadBookingsToTableView();
-            } else showSearchedForBookingsInTableView(listOfBookings);
+            } else showSearchedForBookingsInTableView(listOfAllBookings);
         });
 
         //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
@@ -144,33 +141,9 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        try {
-                            newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                        } catch (IOException | GeneralSecurityException | SQLException | ClassNotFoundException excep) {
-                            excep.printStackTrace();
-                        }
-                    }catch (SQLException | ClassNotFoundException excep1){
-                        excep1.printStackTrace();
-                    }
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        try {
-                            newConfirmedLectureBooking.postNewLectureToCalendar();
-                        } catch (IOException | GeneralSecurityException excep) {
-                            excep.printStackTrace();
-                        }
-                    }catch(ClassNotFoundException | SQLException excep1){
-                            excep1.printStackTrace();
-                        }
-
-                    }
-                }}
                 acceptSelectedBooking();
                 removeBookingFromTableView();
+            }
         });
 
         //Cancelling the selected booking when pressing cancelBookingButton
@@ -182,10 +155,10 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                try{
+                try {
                     bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
                 }
                 removeBookingFromTableView();
             }
@@ -197,8 +170,17 @@ public class MainScreenController extends GeneralController {
      */
 
     private void fetchBookingsFromDatabase() throws SQLException {
-        listOfBookings.addAll(bda.fetchLecBooks());
-        listOfBookings.addAll(bda.fetchArrBooks());
+        listOfAllBookings.addAll(bda.fetchLecBooks());
+        listOfAllBookings.addAll(bda.fetchArrBooks());
+
+        for (Booking tempBooking : listOfAllBookings) {
+            if (tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret"))) {
+                listOfArchivedBookings.add(tempBooking);
+            }
+            if (tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet"))) {
+                listOfDeletedBookings.add(tempBooking);
+            } else listOfBookings.add(tempBooking);
+        }
     }
 
     //Takes an ArrayList of bookings to load into TableView of bookings
@@ -208,16 +190,14 @@ public class MainScreenController extends GeneralController {
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
-        bookingDateColumn.setSortType(TableColumn.SortType.ASCENDING);
 
-        ObservableList<Booking> bookings = FXCollections.observableArrayList();
-        for (Booking booking : listOfBookings) {
-            bookings.addAll(booking);
-        }
-        bookingTableView.setItems(bookings);
+        ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
+        bookingsToShow.addAll(listOfBookings);
+        bookingTableView.setItems(bookingsToShow);
     }
 
     private void refreshBookingTableView() throws SQLException {
+        listOfAllBookings.clear();
         listOfBookings.clear();
         fetchBookingsFromDatabase();
         loadBookingsToTableView();
@@ -228,10 +208,10 @@ public class MainScreenController extends GeneralController {
         bookingTableView.getItems().remove(bookingToRemove);
     }
 
-    private void deleteSelectedBooking() throws ClassNotFoundException {
+    private void deleteSelectedBooking() {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException | IOException | GeneralSecurityException e) {
+        } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -264,13 +244,26 @@ public class MainScreenController extends GeneralController {
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
 
-        for (Booking temp : listOfBookings) {
-            if (!nameOfChosenBtn.equals("Oversigt")) {
+        if (overviewButton.isSelected()) {
+            categorisedBookings.clear();
+            categorisedBookings.addAll(listOfBookings);
+        }
+        if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected()) {
+            categorisedBookings.clear();
+            for (Booking temp : listOfBookings) {
                 BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
                 if (temp.getBookingStatus().equals(chosenBookingStatus)) {
                     categorisedBookings.add(temp);
                 }
             }
+        }
+        if (archivedBookingsButton.isSelected()) {
+            categorisedBookings.clear();
+            categorisedBookings.addAll(listOfArchivedBookings);
+        }
+        if (deletedBookingsButton.isSelected()) {
+            categorisedBookings.clear();
+            categorisedBookings.addAll(listOfDeletedBookings);
         }
         bookingTableView.setItems(categorisedBookings);
     }
@@ -374,7 +367,7 @@ public class MainScreenController extends GeneralController {
         if (selectedLectureBooking.getLecturer() == null) {
             guide_lecturerLabel.setText("Underviser: Ingen underviser tilføjet");
         } else guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
-        customerCommentTextArea.setText(selectedLectureBooking.getCustomerComment());
+        customerCommentTextArea.setText(selectedLectureBooking.getComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
 
