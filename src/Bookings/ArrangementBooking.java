@@ -108,30 +108,6 @@ public class ArrangementBooking extends Booking {
         this.guide = guide;
     }
 
-    /*public void updateArrangementDatabase(ArrangementBooking arb, Connection con) throws SQLException {
-        String sql = "UPDATE arrangement_booking SET date=(?),time_slot=(?),children_amount=(?)," +
-                "child_name=(?),age=(?),contact_person=(?),phone_number=(?),email=(?),previous_customer=(?)," +
-                "food_choice=(?),customer_comment=(?),user_comment=(?) WHERE unique_id=(?)";
-
-        PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setInt(13, arb.getId());
-        pstmt.setString(1, arb.getDateTime());
-        pstmt.setString(2, arb.getTime());
-        pstmt.setInt(3, Integer.parseInt(arb.getNoOfChildren()));
-        pstmt.setString(4, arb.getBirthdayChildName());
-        pstmt.setInt(5, Integer.parseInt(arb.getBirthdayChildAge()));
-        pstmt.setString(6, arb.getContactPerson());
-        pstmt.setString(7, arb.getPhoneNumber());
-        pstmt.setString(8, arb.getEmail());
-        pstmt.setInt(9, Integer.parseInt(arb.getFormerParticipant()));
-        pstmt.setString(10, arb.getChoiceOfMenu());
-        pstmt.setString(11, arb.getComment());
-        pstmt.setString(12, arb.getComment());
-
-        pstmt.executeUpdate();
-    }
-    */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -153,6 +129,6 @@ public class ArrangementBooking extends Booking {
 
     @Override
     public String toString() {
-        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDateTime();
+        return "ArrangementBooking " + getBookingStatus() + getId();
     }
 }

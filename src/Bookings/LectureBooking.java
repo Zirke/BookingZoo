@@ -136,6 +136,6 @@ public class LectureBooking extends Booking {
 
     @Override
     public String toString() {
-        return getBookingType() + "\t \t \t" + getCustomer().getContactPerson() + "\t \t \t" + getDateTime();
+        return "LectureBooking" + getBookingStatus() + getId();
     }
 }

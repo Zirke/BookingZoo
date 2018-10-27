@@ -200,12 +200,16 @@ public class MainScreenController extends GeneralController {
         listOfAllBookings.addAll(bda.fetchArrBooks());
 
         for (Booking tempBooking : listOfAllBookings) {
-            if (tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret"))) {
+            if(tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret"))) {
                 listOfArchivedBookings.add(tempBooking);
             }
-            if (tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet"))) {
+            if(tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet"))) {
                 listOfDeletedBookings.add(tempBooking);
-            } else listOfBookings.add(tempBooking);
+            }
+            if(!tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret")) &&
+              (!tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet")))) {
+                listOfBookings.add(tempBooking);
+            }
         }
     }
 
