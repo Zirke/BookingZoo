@@ -112,7 +112,7 @@ public class BookingDataAccessor {
                     rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
                     rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
                     new Lecturer(rsTypeSpecific.getString("lecturer")), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
-                    rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getInt("grade"),
+                    rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getString("grade"),
                     rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
                     rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),
                     rsCustomerSpecific.getInt("zipcode"), rsCustomerSpecific.getString("city"),
@@ -185,7 +185,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void deleteBooking(Booking book) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException {
+    public void deleteBooking(Booking book) throws SQLException, ClassNotFoundException {
 
         //Get CustomerID
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
@@ -292,7 +292,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setString(4, lbook.getChoiceOfTopic().name());
         pstmtTypeSpecific.setInt(5, lbook.getNoOfTeams());
         pstmtTypeSpecific.setInt(6, lbook.getNoOfTeachers());
-        pstmtTypeSpecific.setInt(7, lbook.getGrade());
+        pstmtTypeSpecific.setString(7, lbook.getGrade());
 
 
         //Insert data into customer table
@@ -410,7 +410,7 @@ public class BookingDataAccessor {
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(editLectureBooking);
         pstmtTypeSpecific.setString(1,lbook.getLectureRoom().getType().name()); pstmtTypeSpecific.setString(2,lbook.getLecturer().toString());
         pstmtTypeSpecific.setString(3,lbook.getChoiceOfTopic().name()); pstmtTypeSpecific.setInt(4,lbook.getNoOfTeams());
-        pstmtTypeSpecific.setInt(5,lbook.getNoOfTeachers()); pstmtTypeSpecific.setInt(6,lbook.getGrade());
+        pstmtTypeSpecific.setInt(5,lbook.getNoOfTeachers()); pstmtTypeSpecific.setString(6,lbook.getGrade());
         pstmtTypeSpecific.setInt(7,lbook.getId());
 
         PreparedStatement pstmtCustomer = connection.prepareStatement(editCustomer);

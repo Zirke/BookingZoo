@@ -3,16 +3,13 @@ package UserInterface;
 import Bookings.BookingDataAccessor;
 import Bookings.LectureBooking;
 import Bookings.Lecturer;
-import PostToCalendars.PostToGoogle;
 import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.mortbay.util.IO;
 
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -87,9 +84,9 @@ public class LectureBookingCreationController {
         int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
         ChoiceOfTopic topicChoice = null;
 
-        topicChoice = topicChoice.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
+        topicChoice = ChoiceOfTopic.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
 
-        int grade = Integer.parseInt(gradeTextField.getText());
+        String grade = gradeTextField.getText();
         LectureRoom lectureRoomChosen = null;
         if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Savannelokale")) {
             lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE);

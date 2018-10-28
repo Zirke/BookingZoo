@@ -52,7 +52,7 @@ public class EditLectureBookingController {
     public Spinner minutSpinner;
 
 
-    public void initialize() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         BookingDataAccessor bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
                 "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
@@ -117,7 +117,7 @@ public class EditLectureBookingController {
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
         ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
-        selectedLectureBooking.setGrade(Integer.parseInt(gradeTextField.getText()));
+        selectedLectureBooking.setGrade(gradeTextField.getText());
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);
@@ -148,7 +148,7 @@ public class EditLectureBookingController {
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
     }
 
-    private void safeButtonPress(BookingDataAccessor bda)throws IOException, GeneralSecurityException, ClassNotFoundException {
+    private void safeButtonPress(BookingDataAccessor bda) {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");

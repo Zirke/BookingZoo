@@ -229,6 +229,8 @@ public class MainScreenController extends GeneralController {
     private void refreshBookingTableView() throws SQLException {
         listOfAllBookings.clear();
         listOfBookings.clear();
+        listOfDeletedBookings.clear();
+        listOfArchivedBookings.clear();
         fetchBookingsFromDatabase();
         loadBookingsToTableView();
     }
@@ -241,7 +243,7 @@ public class MainScreenController extends GeneralController {
     private void deleteSelectedBooking() {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e) {
+        } catch (SQLException | /*IOException | GeneralSecurityException |*/ ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

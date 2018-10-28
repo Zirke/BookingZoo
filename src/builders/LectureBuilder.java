@@ -27,7 +27,7 @@ public class LectureBuilder {
     private ChoiceOfTopic choiceOfTopic;
     private int noOfTeams;
     private int noOfTeachers;
-    private int grade;
+    private String grade;
 
     public LectureBuilder setBookingType(BookingType bookingType){
         this.bookingType = bookingType;
@@ -101,7 +101,7 @@ public class LectureBuilder {
         return this;
     }
 
-    public LectureBuilder setGrade(int grade){
+    public LectureBuilder setGrade(String grade){
         this.grade = grade;
         return this;
     }
