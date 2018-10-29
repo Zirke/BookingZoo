@@ -23,13 +23,17 @@ import java.util.Optional;
 import static enums.ChoiceOfTopic.topicChosen;
 
 public class EditLectureBookingController {
-
-
+    private BookingDataAccessor bda;
     private LectureBooking selectedLectureBooking;
 
     void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         this.selectedLectureBooking = selectedLectureBooking;
     }
+
+    void setBda(BookingDataAccessor bda) {
+        this.bda = bda;
+    }
+
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -39,7 +43,7 @@ public class EditLectureBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private ChoiceBox topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
     private ToggleGroup communeGroup;
     @FXML
@@ -52,16 +56,13 @@ public class EditLectureBookingController {
     public Spinner minutSpinner;
 
 
-    public void initialize() throws SQLException, ClassNotFoundException {
-        BookingDataAccessor bda = new BookingDataAccessor(
-                "org.postgresql.Driver",
-                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-                "jyjczxth",
-                "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
-
-        topicChoiceBoxCreation(topicChoiceBox);
+    public void initialize() {
+        timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
+        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
+                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
+                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
         safeButtonPress(bda);
 
@@ -74,7 +75,7 @@ public class EditLectureBookingController {
         textfieldWithOnlyNumbers(phoneNumberTextField);
         textfieldWithOnlyNumbers(eanNumberTextField);
 
-        timeFieldCreation(hourSpinner,minutSpinner);
+        //timeFieldCreation(hourSpinner,minutSpinner);
     }
 
     void initData() {
@@ -82,7 +83,24 @@ public class EditLectureBookingController {
 
         //Lecture information
         datePicker.setValue(selectedLectureBooking.getDateTime().toLocalDate());
-        timeFieldInitialisation();
+
+        String tempTime;
+        switch (selectedLectureBooking.getDateTime().toString()) {
+            case "10:15 - 11:15":
+                tempTime = "10:15 - 11:15";
+                break;
+            case "11:15 - 12:15":
+                tempTime = "11:15 - 12:15";
+                break;
+            case "12:15 - 13:15":
+                tempTime = "12:15 - 13:15";
+                break;
+            default:
+                tempTime = "13:15 - 14:15";
+                break;
+        }
+        timeChoiceBox.setValue(tempTime);
+
         noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
         noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
         noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
@@ -142,12 +160,6 @@ public class EditLectureBookingController {
         stage.close();
     }
 
-    public static void topicChoiceBoxCreation(ChoiceBox topicChoiceBox) {
-        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
-                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
-                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
-    }
-
     private void safeButtonPress(BookingDataAccessor bda) {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
@@ -166,6 +178,7 @@ public class EditLectureBookingController {
         });
     }
 
+    /*
 
     public static void timeFieldCreation(Spinner hourSpinner, Spinner minutSpinner) {
         SpinnerValueFactory<Integer> valueFactoryHour =
@@ -183,7 +196,7 @@ public class EditLectureBookingController {
         hourSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getHour());
         minutSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getMinute());
     }
-
+    */
     //aendre navn po metode senere.
     private void textfieldWithOnlyNumbers(TextField var) {
         var.textProperty().addListener((observable, oldValue, newValue) -> {

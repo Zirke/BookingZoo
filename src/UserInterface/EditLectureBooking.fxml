@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox minHeight="800.0" prefWidth="900.0" spacing="25.0" style="-fx-border-color: black;"
-      xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="UserInterface.EditLectureBookingController">
     <children>
         <GridPane hgap="10.0" prefHeight="450.0" prefWidth="828.0" vgap="10.0">
@@ -137,12 +137,7 @@
                 </Label>
                 <TextField fx:id="eanNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                 <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-                <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <children>
-                        <Spinner fx:id="hourSpinner" prefHeight="28.0" prefWidth="104.0"/>
-                        <Spinner fx:id="minutSpinner" prefHeight="28.0" prefWidth="97.0"/>
-                    </children>
-                </HBox>
+                <ChoiceBox fx:id="timeChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" />

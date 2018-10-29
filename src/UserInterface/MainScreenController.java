@@ -327,6 +327,7 @@ public class MainScreenController extends GeneralController {
 
             EditLectureBookingController controller = loader.getController();
             controller.setSelectedLectureBooking(selectedLectureBooking);
+            controller.setBda(bda);
             controller.initData();
 
             Stage stage = new Stage();

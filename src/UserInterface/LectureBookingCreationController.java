@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
-import static UserInterface.EditLectureBookingController.topicChoiceBoxCreation;
 
 public class LectureBookingCreationController {
 
@@ -51,9 +50,11 @@ public class LectureBookingCreationController {
     @FXML
     public void initialize() {
         createBookingButton();
-        topicChoiceBoxCreation(topicChoiceBox);
-        lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
+        lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
+        topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
+                "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
+                "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
