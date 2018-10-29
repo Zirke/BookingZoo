@@ -225,7 +225,7 @@ public class MainScreenController extends GeneralController {
         bookingsToShow.addAll(listOfBookings);
         bookingTableView.setItems(bookingsToShow);
     }
-
+    //TODO: Use getLastId to refresh TableView.
     private void refreshBookingTableView() throws SQLException {
         listOfAllBookings.clear();
         listOfBookings.clear();

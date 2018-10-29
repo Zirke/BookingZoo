@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 public class BookingDataAccessor {
     private Connection connection;
@@ -27,103 +28,30 @@ public class BookingDataAccessor {
         this.connection = connection;
     }
 
-    public ArrayList<ArrangementBooking> fetchArrBooks() throws SQLException {
+    public ArrayList<Booking> fetchArrBooks() throws SQLException {
 
-        ArrayList<ArrangementBooking> arr = new ArrayList<>();
+        ArrayList<Booking> arr;
 
-        String typeSpecific = "SELECT bookingid,food,restaurant," +
-                "birthdaychildname,birthdaychildage,formerparticipant,guide FROM arrangement_booking ";
+        String general = "SELECT * FROM booking WHERE bookingtypeid = 2";
 
-        String general = "SELECT bookingid,status,customerid,creationdate,datetime," +
-                "participants,customercomment,usercomment FROM booking WHERE bookingid = (?)";
+        Statement stmtSpecific = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+        ResultSet rsGeneral = stmtSpecific.executeQuery(general);
 
-        Statement stmtSpecific = connection.createStatement();
-        ResultSet rsTypeSpecific = stmtSpecific.executeQuery(typeSpecific);
-
-        while (rsTypeSpecific.next()) {
-            ArrangementBooking abook;
-
-            PreparedStatement pstmtGeneral = connection.prepareStatement(general);
-            pstmtGeneral.setInt(1, rsTypeSpecific.getInt("bookingid"));
-            ResultSet rsGeneral = pstmtGeneral.executeQuery();
-            rsGeneral.next();
-
-            String customer = "SELECT customerid,contactperson,phonenumber,email FROM customer WHERE customerid = (?)";
-            PreparedStatement pstmtCustomer = connection.prepareStatement(customer);
-            pstmtCustomer.setInt(1, rsGeneral.getInt("customerid"));
-            ResultSet rsCustomer = pstmtCustomer.executeQuery();
-            rsCustomer.next();
-
-            abook = new ArrangementBooking(
-                    rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
-                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
-                    rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new FoodOrder(ChoiceOfMenu.valueOf(rsTypeSpecific.getString("food"))), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
-                    rsTypeSpecific.getInt("birthdaychildage"), rsTypeSpecific.getString("formerparticipant"),
-                    rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
-                    rsCustomer.getString("phonenumber"), rsCustomer.getString("email")
-            );
-
-            if (abook != null) {
-                arr.add(abook);
-            }
-        }
+        arr = fetchFromDatabase(rsGeneral);
         //connection.close();
         return arr;
     }
 
-    public ArrayList<LectureBooking> fetchLecBooks() throws SQLException {
+    public ArrayList<Booking> fetchLecBooks() throws SQLException {
 
-        ArrayList<LectureBooking> arr = new ArrayList<>();
+        ArrayList<Booking> arr;
 
-        String typeSpecific = "SELECT bookingid,lectureroom,lecturer,choiceoftopic,noofteams,noofteachers,grade " +
-                "FROM lecture_booking";
+        String general = "SELECT * FROM booking WHERE bookingtypeid = 1";
 
-        String general = "SELECT bookingid,status," +
-                "customerid,creationdate,datetime,participants,customercomment,usercomment FROM booking WHERE bookingid = (?)";
+        Statement stmtGeneral = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+        ResultSet rsGeneral = stmtGeneral.executeQuery(general);
 
-        Statement stmtSpecific = connection.createStatement();
-        ResultSet rsTypeSpecific = stmtSpecific.executeQuery(typeSpecific);
-
-        while (rsTypeSpecific.next()) {
-            LectureBooking lbook = null;
-
-            PreparedStatement pstmtGeneral = connection.prepareStatement(general);
-            pstmtGeneral.setInt(1, rsTypeSpecific.getInt("bookingid"));
-            ResultSet rsGeneral = pstmtGeneral.executeQuery();
-            rsGeneral.next();
-
-            String customer = "SELECT customerid,contactperson,phonenumber,email FROM customer WHERE customerid = (?)";
-            String customerSpecific = "SELECT customerid,schoolname,zipcode,city,commune,schoolphonenumber,eannumber " +
-                    "FROM lecture_booking_customer WHERE customerid = (?)";
-
-            PreparedStatement pstmtCustomer = connection.prepareStatement(customer);
-            PreparedStatement pstmtSpecificCustomer = connection.prepareStatement(customerSpecific);
-            pstmtCustomer.setInt(1, rsGeneral.getInt("customerid"));
-            pstmtSpecificCustomer.setInt(1, rsGeneral.getInt("customerid"));
-            ResultSet rsCustomer = pstmtCustomer.executeQuery();
-            ResultSet rsCustomerSpecific = pstmtSpecificCustomer.executeQuery();
-            rsCustomer.next();
-            rsCustomerSpecific.next();
-
-            lbook = new LectureBooking(
-                    rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
-                    rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
-                    rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
-                    rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
-                    new Lecturer(rsTypeSpecific.getString("lecturer")), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
-                    rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getString("grade"),
-                    rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
-                    rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),
-                    rsCustomerSpecific.getInt("zipcode"), rsCustomerSpecific.getString("city"),
-                    rsCustomerSpecific.getString("commune"), rsCustomerSpecific.getString("schoolphonenumber"),
-                    rsCustomerSpecific.getLong("eannumber")
-            );
-
-            if (lbook != null) {
-                arr.add(lbook);
-            }
-        }
+        arr = fetchFromDatabase(rsGeneral);
         //connection.close();
         return arr;
     }
@@ -447,4 +375,93 @@ public class BookingDataAccessor {
 
         return currentBookingID;
     }
+
+    private ArrayList<Booking> fetchFromDatabase(ResultSet rsGeneral) throws SQLException {
+        ArrayList<Booking> arr = new ArrayList<>();
+        rsGeneral.next();
+        if (rsGeneral.getInt("bookingtypeid") == 2) {
+            rsGeneral.previous();
+
+
+            String typeSpecific = "SELECT bookingid,food,restaurant," +
+                    "birthdaychildname,birthdaychildage,formerparticipant,guide FROM arrangement_booking WHERE bookingid = (?)";
+
+            while (rsGeneral.next()) {
+                ArrangementBooking abook;
+
+                PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
+                pstmtTypeSpecific.setInt(1, rsGeneral.getInt("bookingid"));
+                ResultSet rsTypeSpecific = pstmtTypeSpecific.executeQuery();
+                rsTypeSpecific.next();
+
+                String customer = "SELECT customerid,contactperson,phonenumber,email FROM customer WHERE customerid = (?)";
+                PreparedStatement pstmtCustomer = connection.prepareStatement(customer);
+                pstmtCustomer.setInt(1, rsGeneral.getInt("customerid"));
+                ResultSet rsCustomer = pstmtCustomer.executeQuery();
+                rsCustomer.next();
+
+                abook = new ArrangementBooking(
+                        rsGeneral.getInt("bookingid"), BookingType.ARRANGEMENTBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
+                        rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
+                        rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
+                        rsGeneral.getString("usercomment"), new FoodOrder(ChoiceOfMenu.valueOf(rsTypeSpecific.getString("food"))), new Restaurant(FacilityState.OCCUPIED), rsTypeSpecific.getString("birthdaychildname"),
+                        rsTypeSpecific.getInt("birthdaychildage"), rsTypeSpecific.getString("formerparticipant"),
+                        rsTypeSpecific.getString("guide"), rsCustomer.getString("contactperson"),
+                        rsCustomer.getString("phonenumber"), rsCustomer.getString("email")
+                );
+
+                arr.add(abook);
+            }
+            return arr;
+        } else if (rsGeneral.getInt("bookingtypeid") == 1) {
+            rsGeneral.previous();
+
+            String typeSpecific = "SELECT bookingid,lectureroom,lecturer,choiceoftopic,noofteams,noofteachers,grade " +
+                    "FROM lecture_booking WHERE bookingid = (?)";
+
+            while (rsGeneral.next()) {
+                LectureBooking lbook;
+
+                PreparedStatement pstmtTypeSpecific = connection.prepareStatement(typeSpecific);
+                pstmtTypeSpecific.setInt(1, rsGeneral.getInt("bookingid"));
+                ResultSet rsTypeSpecific = pstmtTypeSpecific.executeQuery();
+                rsTypeSpecific.next();
+
+                String customer = "SELECT customerid,contactperson,phonenumber,email FROM customer WHERE customerid = (?)";
+                String customerSpecific = "SELECT customerid,schoolname,zipcode,city,commune,schoolphonenumber,eannumber " +
+                        "FROM lecture_booking_customer WHERE customerid = (?)";
+
+                PreparedStatement pstmtCustomer = connection.prepareStatement(customer);
+                PreparedStatement pstmtSpecificCustomer = connection.prepareStatement(customerSpecific);
+                pstmtCustomer.setInt(1, rsGeneral.getInt("customerid"));
+                pstmtSpecificCustomer.setInt(1, rsGeneral.getInt("customerid"));
+                ResultSet rsCustomer = pstmtCustomer.executeQuery();
+                ResultSet rsCustomerSpecific = pstmtSpecificCustomer.executeQuery();
+                rsCustomer.next();
+                rsCustomerSpecific.next();
+
+                lbook = new LectureBooking(
+                        rsGeneral.getInt("bookingid"), BookingType.LECTUREBOOKING, BookingStatus.valueOf(rsGeneral.getString("status")),
+                        rsGeneral.getDate("creationdate").toLocalDate(), rsGeneral.getTimestamp("datetime").toLocalDateTime(),
+                        rsGeneral.getInt("participants"), rsGeneral.getString("customercomment"),
+                        rsGeneral.getString("usercomment"), new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.valueOf(rsTypeSpecific.getString("lectureroom"))),
+                        new Lecturer(rsTypeSpecific.getString("lecturer")), ChoiceOfTopic.valueOf(rsTypeSpecific.getString("choiceoftopic")), rsTypeSpecific.getInt("noofteams"),
+                        rsTypeSpecific.getInt("noofteachers"), rsTypeSpecific.getString("grade"),
+                        rsCustomer.getString("contactperson"), rsCustomer.getString("phonenumber"),
+                        rsCustomer.getString("email"), rsCustomerSpecific.getString("schoolname"),
+                        rsCustomerSpecific.getInt("zipcode"), rsCustomerSpecific.getString("city"),
+                        rsCustomerSpecific.getString("commune"), rsCustomerSpecific.getString("schoolphonenumber"),
+                        rsCustomerSpecific.getLong("eannumber")
+                );
+
+                if (lbook != null) {
+                    arr.add(lbook);
+                }
+            }
+            //connection.close();
+            return arr;
+        }
+        throw new InputMismatchException();
+    }
+
 }
