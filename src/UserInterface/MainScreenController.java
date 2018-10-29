@@ -38,6 +38,9 @@ public class MainScreenController extends GeneralController {
     );
     private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
     private ArrayList<Booking> listOfBookings = new ArrayList<>(); //Without archived and deleted
+    private ArrayList<Booking> listOfPendingBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfActiveBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfFinishedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfArchivedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
 
@@ -200,14 +203,23 @@ public class MainScreenController extends GeneralController {
         listOfAllBookings.addAll(bda.fetchArrBooks());
 
         for (Booking tempBooking : listOfAllBookings) {
-            if(tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret"))) {
+            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+                listOfPendingBookings.add(tempBooking);
+            }
+            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ACTIVE)) {
+                listOfActiveBookings.add(tempBooking);
+            }
+            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DONE)) {
+                listOfFinishedBookings.add(tempBooking);
+            }
+            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED)) {
                 listOfArchivedBookings.add(tempBooking);
             }
-            if(tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet"))) {
+            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DELETED)) {
                 listOfDeletedBookings.add(tempBooking);
             }
-            if(!tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Arkiveret")) &&
-              (!tempBooking.getBookingStatus().equals(BookingStatus.statusChosen("Slettet")))) {
+            if (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED) &&
+                    (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DELETED))) {
                 listOfBookings.add(tempBooking);
             }
         }
