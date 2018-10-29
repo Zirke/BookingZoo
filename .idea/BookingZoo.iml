@@ -69,5 +69,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Google" level="project" />
+    <orderEntry type="library" name="controlsfx-9.0" level="project" />
   </component>
 </module>
