@@ -64,7 +64,6 @@ public class EditLectureBookingController {
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
         textfieldWithOnlyNumbers(noOfTeachersTextField);
-        textfieldWithOnlyNumbers(gradeTextField);
         textfieldWithOnlyNumbers(zipCodeTextField);
         textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
         textfieldWithOnlyNumbers(phoneNumberTextField);

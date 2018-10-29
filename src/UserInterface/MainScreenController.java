@@ -475,7 +475,7 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    public ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
+    private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
         while (iter.hasNext()){
