@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
-import static UserInterface.EditLectureBookingController.timeFieldCreation;
 import static UserInterface.EditLectureBookingController.topicChoiceBoxCreation;
 
 public class LectureBookingCreationController {
@@ -46,18 +45,15 @@ public class LectureBookingCreationController {
     private ToggleGroup communeGroup;
 
     @FXML
-    private ChoiceBox topicChoiceBox, lectureRoomChoiceBox;
-    @FXML
-    public Spinner hourSpinner;
-    @FXML
-    public Spinner minuteSpinner;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox;
 
 
     @FXML
     public void initialize() {
+        createBookingButton();
         topicChoiceBoxCreation(topicChoiceBox);
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
-        createBookingButton();
+        timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
 
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
@@ -67,9 +63,11 @@ public class LectureBookingCreationController {
         textfieldWithOnlyNumbers(zipCodeTextField);
         textfieldWithOnlyNumbers(eanNumberTextField);
 
+        /*
         timeFieldCreation(hourSpinner,minuteSpinner);
         hourSpinner.getValueFactory().setValue(10);
         cancelButton.setOnMouseClicked(e -> closeWindow());
+        */
     }
 
     /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
@@ -77,7 +75,23 @@ public class LectureBookingCreationController {
     @FXML
     private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
         LocalDate tempDate = datePicker.getValue();
-        LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
+        //LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
+        LocalTime tempTime;
+        switch (timeChoiceBox.getValue().toString()) {
+            case "10:15 - 11:15":
+                tempTime = LocalTime.of(10, 15, 00);
+                break;
+            case "11:15 - 12:15":
+                tempTime = LocalTime.of(11, 15, 00);
+                break;
+            case "12:15 - 13:15":
+                tempTime = LocalTime.of(12, 15, 00);
+                break;
+            default:
+                tempTime = LocalTime.of(13, 15, 00);
+                break;
+        }
+
         LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());

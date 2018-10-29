@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,11 +62,11 @@ public class PostToGoogle {
 
     /* If you change scope, delete all tokens */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "/PostToCalendars/client_secret_541371792575-89r2prpe9k5k35mue48s47eaqa7i8jrt.apps.googleusercontent.com.json";
+    private static final String CREDENTIALS_FILE_PATH = "/PostToCalendars/client_secret_1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com.json";
 
     /* Calendar id for the google calendar and the user id for posting on the calendar
     *  Only approved users can post to the calendar - must be added manually*/
-    private static final String CALENDAR_ID = "s8phc5eq9eohle7ps9c4ctsa04@group.calendar.google.com";
+    private static final String CALENDAR_ID = "aalborgzoo305@gmail.com";
     private static final String USER_ID = "541371792575-b6ten96k8mvqddhruugj7gfdhv7e0l9s.apps.googleusercontent.com";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
