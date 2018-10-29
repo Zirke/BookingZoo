@@ -3,6 +3,7 @@ package Bookings;
 import Customers.LectureBookingCustomer;
 import PostToCalendars.PostToGoogle;
 import enums.*;
+import exception.NoBookingsInDatabaseException;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 
@@ -28,32 +29,43 @@ public class BookingDataAccessor {
         this.connection = connection;
     }
 
-    public ArrayList<Booking> fetchArrBooks() throws SQLException {
+    public ArrayList<Booking> fetchArrBooks() throws SQLException, NoBookingsInDatabaseException {
 
-        ArrayList<Booking> arr;
+        ArrayList<Booking> arr = null;
 
         String general = "SELECT * FROM booking WHERE bookingtypeid = 2";
 
         Statement stmtSpecific = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
         ResultSet rsGeneral = stmtSpecific.executeQuery(general);
 
-        arr = fetchFromDatabase(rsGeneral);
+        if (rsGeneral.next()) {
+            rsGeneral.previous();
+            arr = fetchFromDatabase(rsGeneral);
+        }
         //connection.close();
-        return arr;
+        if (arr != null) {
+            return arr;
+        }
+        throw new NoBookingsInDatabaseException();
     }
 
-    public ArrayList<Booking> fetchLecBooks() throws SQLException {
+    public ArrayList<Booking> fetchLecBooks() throws SQLException, NoBookingsInDatabaseException {
 
-        ArrayList<Booking> arr;
+        ArrayList<Booking> arr = null;
 
         String general = "SELECT * FROM booking WHERE bookingtypeid = 1";
 
         Statement stmtGeneral = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
         ResultSet rsGeneral = stmtGeneral.executeQuery(general);
-
-        arr = fetchFromDatabase(rsGeneral);
+        if (rsGeneral.next()) {
+            rsGeneral.previous();
+            arr = fetchFromDatabase(rsGeneral);
+        }
         //connection.close();
-        return arr;
+        if (arr != null) {
+            return arr;
+        }
+        throw new NoBookingsInDatabaseException();
     }
 
     public void createArrBookManually(ArrangementBooking abook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {

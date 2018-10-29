@@ -8,6 +8,7 @@ import Customers.LectureBookingCustomer;
 import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.BookingType;
+import exception.NoBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -209,8 +210,17 @@ public class MainScreenController extends GeneralController {
      */
 
     private void fetchBookingsFromDatabase() throws SQLException {
-        listOfAllBookings.addAll(bda.fetchLecBooks());
-        listOfAllBookings.addAll(bda.fetchArrBooks());
+        try {
+            listOfAllBookings.addAll(bda.fetchLecBooks());
+        } catch (NoBookingsInDatabaseException e) {
+            System.out.println("No lecture bookings in database");
+        }
+        try {
+            listOfAllBookings.addAll(bda.fetchArrBooks());
+        } catch (NoBookingsInDatabaseException e) {
+            System.out.println("No arrangement bookings in database");
+        }
+
 
         for (Booking tempBooking : listOfAllBookings) {
             if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
