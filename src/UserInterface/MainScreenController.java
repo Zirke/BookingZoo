@@ -26,7 +26,9 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class MainScreenController extends GeneralController {
@@ -44,7 +46,9 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfArchivedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
 
-
+    @FXML
+    public Button notificationButton;
+    public Label notificationLabel;
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
@@ -113,7 +117,7 @@ public class MainScreenController extends GeneralController {
         //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
         loadBookingsToTableView();
 
-        bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation());
+        bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation(bookingTableView));
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
@@ -192,6 +196,12 @@ public class MainScreenController extends GeneralController {
                 removeBookingFromTableView();
             }
         });
+
+        ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
+        notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
+        notificationButton.setOnMouseClicked(e -> {
+            showUpcomingBookings(noficationBookings);
+        });
     }
 
     /*
@@ -261,7 +271,7 @@ public class MainScreenController extends GeneralController {
     }
 
     //Displays information of the clicked booking in TableView
-    private void showSelectedBookingInformation() {
+    public void showSelectedBookingInformation(TableView bookingTableView) {
         if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingTableView.getSelectionModel().getSelectedItem());
         } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
@@ -450,5 +460,38 @@ public class MainScreenController extends GeneralController {
         } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
+    }
+
+    public ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
+        Iterator iter = allBookings.iterator();
+        ArrayList<Booking> notifiBookings = new ArrayList<>();
+        while (iter.hasNext()){
+            Booking temp = (Booking)iter.next();
+            if((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) || temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
+                    && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE ||temp.getBookingStatus() == BookingStatus.STATUS_DONE)){
+                notifiBookings.add(temp);
+            }
+        }
+        return notifiBookings;
+    }
+
+    private void showUpcomingBookings(ArrayList<Booking> upcomingBookings){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("UpcomingBooking.fxml"));
+            Parent root = loader.load();
+
+            UpcomingBookingController controller = loader.getController();
+            controller.setUpcomingBookings(upcomingBookings);
+            controller.setController(this);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.MainScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="10.0">
             <children>
@@ -130,11 +130,25 @@
                                 <Image url="@../ImageView/active-search-symbol.png" />
                             </image>
                         </ImageView>
-                        <TextField fx:id="searchField" prefHeight="30.0" prefWidth="447.0" promptText="Søg efter booking (Kontaktperson)">
+                        <TextField fx:id="searchField" prefHeight="30.0" prefWidth="394.0" promptText="Søg efter booking (Kontaktperson)">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </TextField>
+                  <Button fx:id="notificationButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="72.0">
+                     <graphic>
+                        <HBox minWidth="-Infinity" prefHeight="34.0" prefWidth="56.0">
+                           <children>
+                              <ImageView fitHeight="36.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../ImageView/notifications.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="notificationLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="26.0" />
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </Button>
                     </children>
                 </HBox>
                 <Separator prefWidth="200.0" />
