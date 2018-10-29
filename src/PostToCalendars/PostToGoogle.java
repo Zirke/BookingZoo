@@ -67,7 +67,7 @@ public class PostToGoogle {
     /* Calendar id for the google calendar and the user id for posting on the calendar
     *  Only approved users can post to the calendar - must be added manually*/
     private static final String CALENDAR_ID = "aalborgzoo305@gmail.com";
-    private static final String USER_ID = "541371792575-b6ten96k8mvqddhruugj7gfdhv7e0l9s.apps.googleusercontent.com";
+    private static final String USER_ID = "1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.

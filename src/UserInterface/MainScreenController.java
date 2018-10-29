@@ -345,6 +345,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            //refreshBookingTableView();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -357,6 +358,7 @@ public class MainScreenController extends GeneralController {
 
             EditArrangementBookingController controller = loader.getController();
             controller.setSelectedArrangementBooking(selectedArrangementBooking);
+            controller.setBda(bda);
             controller.initData();
 
             Stage stage = new Stage();
@@ -364,6 +366,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            //refreshBookingTableView();
         } catch (IOException e) {
             e.printStackTrace();
         }
