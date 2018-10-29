@@ -2,6 +2,7 @@ package UserInterface;
 
 import Bookings.Booking;
 import exception.NoUpcomingBookingException;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 public class UpcomingBookingController {
 
     @FXML
-    public TableColumn statusColumn, typeColumn, contactColumn, dateColumn;
+    public TableColumn statusColumn, typeColumn, contactColumn;
+    public TableColumn<Booking, String> dateColumn;
     public TableView UpcomingBookingTable;
     public Button doneButton;
 
@@ -59,12 +61,14 @@ public class UpcomingBookingController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+        dateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
+
 
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking booking : listOfbooking) {
             bookings.addAll(booking);
         }
         UpcomingBookingTable.setItems(bookings);
+
     }
 }
