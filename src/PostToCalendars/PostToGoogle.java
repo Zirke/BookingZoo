@@ -142,6 +142,7 @@ public class PostToGoogle {
                 .setTransparency("transparent")
                 .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
                 .setColorId("7") // Turquoise
+                .setSequence(1)
                 .setId(idLectureChecker());
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
@@ -175,7 +176,7 @@ public class PostToGoogle {
 
         updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
                                .setDescription(descriptionBuilderArrangement(tempCustomerComment, tempComment))
-                               .setSequence(2);
+                               .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         tempMonth = monthsLessThanTenArr();
@@ -215,7 +216,7 @@ public class PostToGoogle {
 
         updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
                            .setDescription(descriptionBuilderLecture(tempCustomerComment, tempComment))
-                           .setSequence(2);
+                           .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         tempMonth = monthsLessThanTenLec();
