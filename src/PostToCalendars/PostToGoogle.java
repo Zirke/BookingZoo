@@ -239,25 +239,26 @@ public class PostToGoogle {
         }
     }
     private String commentArrangementChecker(){
-        if(!(inputArrangementBooking.getComment().isEmpty())){
+        if((inputArrangementBooking.getComment() != null) && !(inputArrangementBooking.getComment().isEmpty())){
             tempComment = inputArrangementBooking.getComment();
         }
+
         return tempComment;
     }
     private String commentArrangementCustomerChecker(){
-        if (!(inputArrangementBooking.getCustomerComment().isEmpty())){
+        if ((inputArrangementBooking.getCustomerComment() != null) &&!(inputArrangementBooking.getCustomerComment().isEmpty())){
             tempCustomerComment = inputArrangementBooking.getCustomerComment();
         }
         return  tempCustomerComment;
     }
     private String commentLectureChecker(){
-        if(!(inputLectureBooking.getComment().isEmpty())){
+        if((inputLectureBooking.getComment() != null) &&!(inputLectureBooking.getComment().isEmpty())){
             tempComment = inputLectureBooking.getComment();
         }
         return tempComment;
     }
     private String commentLectureCustomerChecker(){
-        if (!(inputLectureBooking.getCustomerComment().isEmpty())){
+        if ((inputLectureBooking.getCustomerComment() != null) && !(inputLectureBooking.getCustomerComment().isEmpty())){
             tempCustomerComment = inputLectureBooking.getCustomerComment();
         }
         return  tempCustomerComment;
