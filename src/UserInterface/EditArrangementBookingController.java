@@ -51,7 +51,7 @@ public class EditArrangementBookingController {
 
     public void initialize() {
 
-        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
+        categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
 
         saveButtonPress();
 
