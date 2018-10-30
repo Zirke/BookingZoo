@@ -377,42 +377,49 @@
                 </TextArea>
                 <HBox prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                     <children>
-                        <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking">
+                        <Button fx:id="acceptBookingButton" mnemonicParsing="false" text="Accepter booking"
+                                textFill="#31a441">
                             <font>
                                 <Font size="16.0" />
                             </font>
                      <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                         <ImageView fitHeight="25.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../ImageView/edit.png" />
+                               <Image url="@../ImageView/if_sign-check_299110.png"/>
                            </image>
                         </ImageView>
                      </graphic>
                         </Button>
-                        <Button fx:id="acceptBookingButton" mnemonicParsing="false" text="Accepter booking" textFill="#31a441">
+                        <Button fx:id="cancelBookingButton" mnemonicParsing="false" text="Annuller booking"
+                                textFill="RED">
                             <font>
                                 <Font size="16.0" />
                             </font>
                      <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
+                         <ImageView fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../ImageView/if_sign-check_299110.png" />
+                               <Image url="@../ImageView/if_sign-error_299045.png"/>
                            </image>
                         </ImageView>
                      </graphic>
                         </Button>
-                        <Button fx:id="cancelBookingButton" mnemonicParsing="false" text="Annuller booking" textFill="RED">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../ImageView/if_sign-error_299045.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                        </Button>
+                        <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="718.0">
+                            <children>
+                                <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking">
+                                    <font>
+                                        <Font size="16.0"/>
+                                    </font>
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../ImageView/edit.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
                     </children>
                 </HBox>
             </children>

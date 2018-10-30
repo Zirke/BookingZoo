@@ -411,6 +411,11 @@ public class MainScreenController extends GeneralController {
         customerCommentTextArea.setEditable(false);
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
+        commentTextArea.setEditable(false);
+
+        if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            editBookingButton.setVisible(false);
+        }
 
         LectureBookingCustomer temp = (LectureBookingCustomer) selectedLectureBooking.getCustomer();
         bookingTypeLabel.setText(selectedLectureBooking.getBookingType().toString());
@@ -454,6 +459,11 @@ public class MainScreenController extends GeneralController {
         customerCommentTextArea.setEditable(false);
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
+        commentTextArea.setEditable(false);
+
+        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            editBookingButton.setVisible(false);
+        }
 
         bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
         bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
