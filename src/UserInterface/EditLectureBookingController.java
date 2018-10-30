@@ -59,7 +59,7 @@ public class EditLectureBookingController {
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
-        safeButtonPress(bda);
+        safeButtonPress();
 
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
@@ -168,7 +168,7 @@ public class EditLectureBookingController {
         stage.close();
     }
 
-    private void safeButtonPress(BookingDataAccessor bda) {
+    private void safeButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
