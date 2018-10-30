@@ -12,6 +12,12 @@ public enum LectureRoomType {
         public String toString() {
             return "Biologisk lokale";
         }
+    },
+    NOT_CHOSEN {
+        @Override
+        public String toString() {
+            return "Intet lokale valgt";
+        }
     };
 
     public static LectureRoomType roomTypeChoice(String input) {
@@ -21,6 +27,8 @@ public enum LectureRoomType {
                 return SAVANNAH_TYPE;
             case "Biologisk lokale":
                 return BIOLOGICAL_TYPE;
+            case "Intet lokale valgt":
+                return NOT_CHOSEN;
             default:
                 throw new IllegalArgumentException();
         }
