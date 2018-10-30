@@ -67,7 +67,7 @@ public class PostToGoogle {
     /* Calendar id for the google calendar and the user id for posting on the calendar
     *  Only approved users can post to the calendar - must be added manually*/
     private static final String CALENDAR_ID = "aalborgzoo305@gmail.com";
-    private static final String USER_ID = "1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com    ";
+    private static final String USER_ID = "1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com";
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
@@ -142,7 +142,6 @@ public class PostToGoogle {
                 .setTransparency("transparent")
                 .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
                 .setColorId("7") // Turquoise
-                .setSequence(1)
                 .setId(idLectureChecker());
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
@@ -176,7 +175,7 @@ public class PostToGoogle {
 
         updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
                                .setDescription(descriptionBuilderArrangement(tempCustomerComment, tempComment))
-                               .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
+                               .setSequence(2);
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         tempMonth = monthsLessThanTenArr();
@@ -216,7 +215,7 @@ public class PostToGoogle {
 
         updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
                            .setDescription(descriptionBuilderLecture(tempCustomerComment, tempComment))
-                           .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
+                           .setSequence(2);
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         tempMonth = monthsLessThanTenLec();

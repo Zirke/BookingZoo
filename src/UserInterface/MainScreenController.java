@@ -8,6 +8,7 @@ import Customers.LectureBookingCustomer;
 import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.BookingType;
+import exception.NoBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -209,8 +210,17 @@ public class MainScreenController extends GeneralController {
      */
 
     private void fetchBookingsFromDatabase() throws SQLException {
-        listOfAllBookings.addAll(bda.fetchLecBooks());
-        listOfAllBookings.addAll(bda.fetchArrBooks());
+        try {
+            listOfAllBookings.addAll(bda.fetchLecBooks());
+        } catch (NoBookingsInDatabaseException e) {
+            System.out.println("No lecture bookings in database");
+        }
+        try {
+            listOfAllBookings.addAll(bda.fetchArrBooks());
+        } catch (NoBookingsInDatabaseException e) {
+            System.out.println("No arrangement bookings in database");
+        }
+
 
         for (Booking tempBooking : listOfAllBookings) {
             if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
@@ -345,6 +355,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            //refreshBookingTableView();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -357,6 +368,7 @@ public class MainScreenController extends GeneralController {
 
             EditArrangementBookingController controller = loader.getController();
             controller.setSelectedArrangementBooking(selectedArrangementBooking);
+            controller.setBda(bda);
             controller.initData();
 
             Stage stage = new Stage();
@@ -364,6 +376,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            //refreshBookingTableView();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -462,7 +475,7 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    public ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
+    private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
         while (iter.hasNext()){

@@ -4,7 +4,6 @@ import Bookings.ArrangementBooking;
 import Bookings.BookingDataAccessor;
 import Bookings.FoodOrder;
 import Customers.Customer;
-import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.ChoiceOfMenu;
 import enums.FacilityState;
@@ -12,7 +11,6 @@ import facilities.Restaurant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -23,10 +21,15 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public class EditArrangementBookingController {
+    private BookingDataAccessor bda;
     private ArrangementBooking selectedArrangementBooking;
 
-    public void setSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
+    void setSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
         this.selectedArrangementBooking = selectedArrangementBooking;
+    }
+
+    void setBda(BookingDataAccessor bda) {
+        this.bda = bda;
     }
 
     @FXML
@@ -46,13 +49,7 @@ public class EditArrangementBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
-    public void initialize() throws SQLException, ClassNotFoundException{
-
-        BookingDataAccessor bda = new BookingDataAccessor(
-                "org.postgresql.Driver",
-                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-                "jyjczxth",
-                "nw51BNKhctporjIFT5Qhhm72jwGVJK95");
+    public void initialize() {
 
         categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
 

@@ -50,11 +50,6 @@ public class EditLectureBookingController {
     private RadioButton communeRadioBtnYes, communeRadioBtnNo;
     @FXML
     private Button saveAndCloseButton, cancelButton;
-    @FXML
-    public Spinner hourSpinner;
-    @FXML
-    public Spinner minutSpinner;
-
 
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
@@ -69,13 +64,10 @@ public class EditLectureBookingController {
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
         textfieldWithOnlyNumbers(noOfTeachersTextField);
-        textfieldWithOnlyNumbers(gradeTextField);
         textfieldWithOnlyNumbers(zipCodeTextField);
         textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
         textfieldWithOnlyNumbers(phoneNumberTextField);
         textfieldWithOnlyNumbers(eanNumberTextField);
-
-        //timeFieldCreation(hourSpinner,minutSpinner);
     }
 
     void initData() {
@@ -129,7 +121,23 @@ public class EditLectureBookingController {
     }
 
     private LectureBooking overwriteSelectedLectureBooking() {
-        selectedLectureBooking.setDateTime(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(hourSpinner.getValue().toString() + ":" + minutSpinner.getValue().toString())));
+        LocalTime tempTime;
+        switch (timeChoiceBox.getValue().toString()) {
+            case "10:15 - 11:15":
+                tempTime = LocalTime.of(10, 15, 00);
+                break;
+            case "11:15 - 12:15":
+                tempTime = LocalTime.of(11, 15, 00);
+                break;
+            case "12:15 - 13:15":
+                tempTime = LocalTime.of(12, 15, 00);
+                break;
+            default:
+                tempTime = LocalTime.of(13, 15, 00);
+                break;
+        }
+
+        selectedLectureBooking.setDateTime(LocalDateTime.of(datePicker.getValue(), tempTime));
         selectedLectureBooking.setParticipants(Integer.parseInt(noOfPupilsTextField.getText()));
         selectedLectureBooking.setNoOfTeams(Integer.parseInt(noOfTeamsTextField.getText()));
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
