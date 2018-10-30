@@ -375,10 +375,10 @@
                         <Font size="14.0" />
                     </font>
                 </TextArea>
-                <HBox prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                <HBox spacing="25.0">
                     <children>
-                        <Button fx:id="acceptBookingButton" mnemonicParsing="false" text="Accepter booking"
-                                textFill="#31a441">
+                        <Button fx:id="acceptBookingButton" minWidth="180.0" mnemonicParsing="false" prefWidth="175.0"
+                                text="Accepter booking" textFill="#31a441">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -390,8 +390,8 @@
                         </ImageView>
                      </graphic>
                         </Button>
-                        <Button fx:id="cancelBookingButton" mnemonicParsing="false" text="Annuller booking"
-                                textFill="RED">
+                        <Button fx:id="cancelBookingButton" minWidth="180.0" mnemonicParsing="false"
+                                text="Annuller booking" textFill="RED">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -403,7 +403,7 @@
                         </ImageView>
                      </graphic>
                         </Button>
-                        <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="718.0">
+                        <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="708.0">
                             <children>
                                 <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking">
                                     <font>
