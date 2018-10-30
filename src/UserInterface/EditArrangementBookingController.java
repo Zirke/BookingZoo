@@ -51,23 +51,9 @@ public class EditArrangementBookingController {
 
     public void initialize() {
 
-        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
+        categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
 
-        saveAndCloseButton.setOnMouseClicked(e -> {
-            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-            alert2.setContentText("Er den indtastede information korrekt?");
-
-            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
-
-            if (alertChoice2.get() == ButtonType.OK) {
-                try {
-                    bda.editArrBook(overwriteSelectedArrangementBooking());
-                    closeWindow();
-                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        saveButtonPress();
 
         noOfChildrenTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -129,6 +115,24 @@ public class EditArrangementBookingController {
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
 
+    }
+
+    private void saveButtonPress(){
+        saveAndCloseButton.setOnMouseClicked(e -> {
+            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert2.setContentText("Er den indtastede information korrekt?");
+
+            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+            if (alertChoice2.get() == ButtonType.OK) {
+                try {
+                    bda.editArrBook(overwriteSelectedArrangementBooking());
+                    closeWindow();
+                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 
     private ArrangementBooking overwriteSelectedArrangementBooking() {

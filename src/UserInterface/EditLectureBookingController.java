@@ -54,12 +54,12 @@ public class EditLectureBookingController {
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
-        categoryChoiceBox.getItems().addAll("Afventende", "Aktiv", "Færdig", "Arkiveret", "Slettet");
+        categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
-        safeButtonPress(bda);
+        safeButtonPress();
 
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
@@ -168,7 +168,7 @@ public class EditLectureBookingController {
         stage.close();
     }
 
-    private void safeButtonPress(BookingDataAccessor bda) {
+    private void safeButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
