@@ -13,13 +13,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class UpcomingBookingController {
+
     private ArrayList<Booking> upcomingBookings;
     private MainScreenController controller;
 
     @FXML
+    public TableColumn<Booking, String> daysUntil;
     public TableColumn statusColumn, typeColumn, contactColumn;
     public TableColumn<Booking, String> dateColumn;
     public TableView UpcomingBookingTable;
@@ -40,8 +44,9 @@ public class UpcomingBookingController {
             stage.close();
         });
 
-        UpcomingBookingTable.setOnMouseClicked(e -> {
+        UpcomingBookingTable.getSelectionModel().selectedIndexProperty().addListener(e ->{
             controller.showSelectedBookingInformation(UpcomingBookingTable);
+
             Stage stage = (Stage) doneButton.getScene().getWindow();
             stage.close();
         });
@@ -58,6 +63,7 @@ public class UpcomingBookingController {
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         dateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
+        daysUntil.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(String.valueOf(Duration.between( LocalDateTime.now(), cellData.getValue().getDateTime()).toDays()+1)));
 
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking booking : listOfbooking) {
