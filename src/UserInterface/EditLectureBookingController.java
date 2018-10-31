@@ -151,6 +151,8 @@ public class EditLectureBookingController {
         selectedLectureBooking.setLecturer(bar);
         BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setBookingStatus(statusChoice);
+        selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
+        selectedLectureBooking.setComment(commentTextArea.getText());
 
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
         LectureBookingCustomer temp = new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
@@ -158,6 +160,7 @@ public class EditLectureBookingController {
                 cityTextField.getText(), selectedCommuneAnswer.getText(), schoolPhoneNumberTextField.getText(),
                 Long.parseLong(eanNumberTextField.getText()));
         selectedLectureBooking.setCustomer(temp);
+
 
         return selectedLectureBooking;
     }

@@ -198,6 +198,7 @@ public class MainScreenController extends GeneralController {
             }
         });
 
+        //Notification button
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
         notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
         notificationButton.setOnMouseClicked(e -> {
