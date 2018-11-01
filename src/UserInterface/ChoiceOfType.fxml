@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" spacing="25.0" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.ChoiceOfTypeController">
    <children>
        <Label prefHeight="46.0" prefWidth="468.0" text="Vælg venligt hvilken type booking, som du gerne vil se:">
            <font>

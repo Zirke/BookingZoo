@@ -18,11 +18,6 @@ import java.util.ArrayList;
 
 public class ChoiceOfTypeController {
 
-    @FXML
-    public Button arrangementButton;
-    public Button lectureButton;
-    public Button allBookingButton;
-
 
 
     @FXML
@@ -54,6 +49,8 @@ public class ChoiceOfTypeController {
             stage.setScene(new Scene(root));
             root.requestFocus();
             stage.show();
+            Stage currentStage = (Stage) chosenBtn.getScene().getWindow();
+            currentStage.close();
         } catch (IOException x) {
             x.printStackTrace();
         }
