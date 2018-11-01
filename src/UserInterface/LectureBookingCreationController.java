@@ -128,12 +128,6 @@ public class LectureBookingCreationController {
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
-        bda = new BookingDataAccessor(
-                "org.postgresql.Driver",
-                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-                "jyjczxth",
-                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
-        );
         bda.createLecBookManually(lbook);
     }
 

@@ -3,7 +3,6 @@ package UserInterface;
 import Bookings.ArrangementBooking;
 import Bookings.BookingDataAccessor;
 import Bookings.FoodOrder;
-import PostToCalendars.PostToGoogle;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfMenu;
@@ -23,6 +22,10 @@ import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
+
+    void setBda(BookingDataAccessor bda) {
+        this.bda = bda;
+    }
 
     @FXML
     private DatePicker datePicker;
@@ -105,13 +108,6 @@ public class ArrangementBookingCreationController extends GeneralController {
         ChoiceOfMenu menuChoice = ChoiceOfMenu.getChoiceOfMenu(selectedMenuBtn);
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
-
-        bda = new BookingDataAccessor(
-                "org.postgresql.Driver",
-                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-                "jyjczxth",
-                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
-        );
 
         ArrangementBooking abook = new ArrangementBooking(
                 BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date,

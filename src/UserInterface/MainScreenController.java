@@ -82,6 +82,7 @@ public class MainScreenController extends GeneralController {
 
     public void initialize() throws SQLException {
         fetchBookingsFromDatabase();
+        loadBookingsToTableView();
 
         customerCommentLabel.setVisible(false);
         customerCommentTextArea.setVisible(false);
@@ -121,8 +122,8 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation(bookingTableView));
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
-        lectureBookingItem.setOnAction(e -> openNewPopUpWindow("LectureBookingCreation.fxml"));
-        arrangementBookingItem.setOnAction(e -> openNewPopUpWindow("ArrangementBookingCreation.fxml"));
+        lectureBookingItem.setOnAction(e -> createNewLectureBooking());
+        arrangementBookingItem.setOnAction(e -> createNewArrangementBooking());
 
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
@@ -151,7 +152,7 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                     try {
                         PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                         try {
@@ -159,25 +160,26 @@ public class MainScreenController extends GeneralController {
                         } catch (IOException | GeneralSecurityException | SQLException excep) {
                             excep.printStackTrace();
                         }
-                    }catch (SQLException | ClassNotFoundException excep1){
+                    } catch (SQLException | ClassNotFoundException excep1) {
                         excep1.printStackTrace();
                     }
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
                         try {
-                            newConfirmedLectureBooking.postNewLectureToCalendar();
-                        } catch (IOException | GeneralSecurityException excep) {
-                            excep.printStackTrace();
-                        }
-                    }catch(ClassNotFoundException | SQLException excep1){
+                            PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                            try {
+                                newConfirmedLectureBooking.postNewLectureToCalendar();
+                            } catch (IOException | GeneralSecurityException excep) {
+                                excep.printStackTrace();
+                            }
+                        } catch (ClassNotFoundException | SQLException excep1) {
                             excep1.printStackTrace();
                         }
 
                     }
-                }}
-                acceptSelectedBooking();
-                removeBookingFromTableView();
+                }
+            }
+            acceptSelectedBooking();
+            removeBookingFromTableView();
         });
 
         //Cancelling the selected booking when pressing cancelBookingButton
@@ -258,10 +260,14 @@ public class MainScreenController extends GeneralController {
         bookingsToShow.addAll(listOfBookings);
         bookingTableView.setItems(bookingsToShow);
     }
+
     //TODO: Use getLastId to refresh TableView.
     private void refreshBookingTableView() throws SQLException {
         listOfAllBookings.clear();
         listOfBookings.clear();
+        listOfPendingBookings.clear();
+        listOfActiveBookings.clear();
+        listOfFinishedBookings.clear();
         listOfDeletedBookings.clear();
         listOfArchivedBookings.clear();
         fetchBookingsFromDatabase();
@@ -276,13 +282,13 @@ public class MainScreenController extends GeneralController {
     private void deleteSelectedBooking() {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException | /*IOException | GeneralSecurityException |*/ ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     //Displays information of the clicked booking in TableView
-    public void showSelectedBookingInformation(TableView bookingTableView) {
+    void showSelectedBookingInformation(TableView bookingTableView) {
         if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingTableView.getSelectionModel().getSelectedItem());
         } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
@@ -337,6 +343,44 @@ public class MainScreenController extends GeneralController {
         try {
             bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createNewArrangementBooking() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArrangementBookingCreation.fxml"));
+            Parent root = loader.load();
+
+            ArrangementBookingCreationController controller = loader.getController();
+            controller.setBda(bda);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            //refreshBookingTableView();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createNewLectureBooking() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LectureBookingCreation.fxml"));
+            Parent root = loader.load();
+
+            LectureBookingCreationController controller = loader.getController();
+            controller.setBda(bda);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            //refreshBookingTableView();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -486,20 +530,20 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings){
+    private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings) {
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
-        while (iter.hasNext()){
-            Booking temp = (Booking)iter.next();
-            if((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) || temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
-                    && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE ||temp.getBookingStatus() == BookingStatus.STATUS_DONE)){
+        while (iter.hasNext()) {
+            Booking temp = (Booking) iter.next();
+            if ((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) || temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
+                    && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) {
                 notifiBookings.add(temp);
             }
         }
         return notifiBookings;
     }
 
-    private void showUpcomingBookings(ArrayList<Booking> upcomingBookings){
+    private void showUpcomingBookings(ArrayList<Booking> upcomingBookings) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("UpcomingBooking.fxml"));
             Parent root = loader.load();
