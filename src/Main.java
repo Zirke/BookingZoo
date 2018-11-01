@@ -20,10 +20,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/MainScreen.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/ChoiceOfType.fxml"));
             primaryStage.setScene(new Scene(root));
-            primaryStage.setTitle("Aalborg Zoo Booking System");
-            primaryStage.setMaximized(true);
+            //primaryStage.setTitle("Aalborg Zoo Booking System");
+            //primaryStage.setMaximized(true);
             primaryStage.show();
             root.requestFocus();
 
