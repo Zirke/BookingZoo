@@ -93,7 +93,6 @@ public class MainScreenController extends GeneralController {
 
     public void initialize() throws SQLException {
         fetchBookingsFromDatabase();
-        loadBookingsToTableView();
 
         customerCommentLabel.setVisible(false);
         customerCommentTextArea.setVisible(false);
@@ -341,11 +340,16 @@ public class MainScreenController extends GeneralController {
         String nameOfChosenBtn = chosenCategoryBtn.getText();
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
-
         if (overviewButton.isSelected()) {
             categorisedBookings.clear();
-            categorisedBookings.addAll(listOfBookings);
+            switch (typeOfBooking){
+                case "Alle": categorisedBookings.addAll(listOfBookings); break;
+                case "Skoletjeneste": categorisedBookings.addAll(listOfLectureBookings); break;
+                case "Børnefødselsdag": categorisedBookings.addAll(listOfArrangementBookings); break;
+                default: throw new IllegalArgumentException();
+            }
         }
+
         if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected()) {
             categorisedBookings.clear();
             for (Booking temp : listOfBookings) {
@@ -355,17 +359,49 @@ public class MainScreenController extends GeneralController {
                 }
             }
         }
+
         if (archivedBookingsButton.isSelected()) {
             categorisedBookings.clear();
-            categorisedBookings.addAll(listOfArchivedBookings);
+            switch (typeOfBooking){
+                case "Alle": {
+                    categorisedBookings.addAll(listOfArchivedBookings);
+                }; break;
+                case "Skoletjeneste": {
+                    for(Booking x : listOfLectureBookings){
+                        if(x.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED))
+                            categorisedBookings.add(x);
+                    }
+                }; break;
+                case "Børnefødselsdag": for(Booking x : listOfLectureBookings){
+                    if(x.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED))
+                        categorisedBookings.add(x);
+                }; break;
+                default: throw new IllegalArgumentException();
+            }
+
         }
         if (deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
-            categorisedBookings.addAll(listOfDeletedBookings);
+            switch (typeOfBooking){
+                case "Alle": {
+                    categorisedBookings.addAll(listOfArchivedBookings);
+                }; break;
+                case "Skoletjeneste": {
+                    for(Booking x : listOfLectureBookings){
+                        if(x.getBookingStatus().equals(BookingStatus.STATUS_DELETED))
+                            categorisedBookings.add(x);
+                    }
+                }; break;
+                case "Børnefødselsdag": for(Booking x : listOfLectureBookings){
+                    if(x.getBookingStatus().equals(BookingStatus.STATUS_DELETED))
+                        categorisedBookings.add(x);
+                }; break;
+                default: throw new IllegalArgumentException();
+            }
         }
+
         bookingTableView.setItems(categorisedBookings);
     }
-
     private void acceptSelectedBooking() {
         try {
             bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
