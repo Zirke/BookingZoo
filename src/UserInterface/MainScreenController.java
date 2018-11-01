@@ -46,6 +46,17 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfFinishedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfArchivedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfLectureBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfArrangementBookings = new ArrayList<>();
+    String typeOfBooking = "Ingen";
+
+    public String getTypeOfBooking() {
+        return typeOfBooking;
+    }
+
+    public void setTypeOfBooking(String typeOfBooking) {
+        this.typeOfBooking = typeOfBooking;
+    }
 
     @FXML
     public Button notificationButton;
@@ -109,14 +120,15 @@ public class MainScreenController extends GeneralController {
          */
 
         //Shows searched for booking in TableView
-        searchField.setOnAction(e -> {
+        /*searchField.setOnAction(e -> {
             if (searchField.getText().isEmpty()) {
-                loadBookingsToTableView();
+                loadBookingTypeIntoTableView();
             } else showSearchedForBookingsInTableView(listOfAllBookings);
-        });
+        });*/
 
         //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
-        loadBookingsToTableView();
+
+        //loadBookingTypeIntoTableView();
 
         bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation(bookingTableView));
 
@@ -210,16 +222,28 @@ public class MainScreenController extends GeneralController {
      *   METHODS
      */
 
+    public void initialiseChoiceOfBooking(){
+        loadBookingTypeIntoTableView();
+        //Shows searched for booking in TableView
+        searchField.setOnAction(e -> {
+            if (searchField.getText().isEmpty()) {
+                loadBookingTypeIntoTableView();
+            } else showSearchedForBookingsInTableView(listOfAllBookings);
+        });
+    }
+
     private void fetchBookingsFromDatabase() throws SQLException {
         try {
-            listOfAllBookings.addAll(bda.fetchLecBooks());
+            listOfLectureBookings.addAll(bda.fetchLecBooks());
+            listOfAllBookings.addAll(listOfLectureBookings);
         } catch (NoBookingsInDatabaseException e) {
-            System.out.println("No lecture bookings in database");
+            System.out.println("No lecture bookings in database"); //Lav om til exception handling
         }
         try {
-            listOfAllBookings.addAll(bda.fetchArrBooks());
+            listOfArrangementBookings.addAll(bda.fetchArrBooks());
+            listOfAllBookings.addAll(listOfArrangementBookings);
         } catch (NoBookingsInDatabaseException e) {
-            System.out.println("No arrangement bookings in database");
+            System.out.println("No arrangement bookings in database"); //Lav om til exception handling
         }
 
 
@@ -247,7 +271,7 @@ public class MainScreenController extends GeneralController {
     }
 
     //Takes an ArrayList of bookings to load into TableView of bookings
-    private void loadBookingsToTableView() {
+    private void loadBookingsToTableView(ArrayList<Booking> listOfBookings) {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
@@ -264,8 +288,11 @@ public class MainScreenController extends GeneralController {
         listOfBookings.clear();
         listOfDeletedBookings.clear();
         listOfArchivedBookings.clear();
+        listOfArrangementBookings.clear();
+        listOfLectureBookings.clear();
+
         fetchBookingsFromDatabase();
-        loadBookingsToTableView();
+        loadBookingTypeIntoTableView();
     }
 
     private void removeBookingFromTableView() {
@@ -518,4 +545,15 @@ public class MainScreenController extends GeneralController {
             e.printStackTrace();
         }
     }
+
+    private void loadBookingTypeIntoTableView(){
+        if(typeOfBooking.equals("Alle")) {
+            loadBookingsToTableView(listOfBookings);
+        }else if(typeOfBooking.equals("Skoletjeneste")){
+            loadBookingsToTableView(listOfLectureBookings);
+        }else{
+            loadBookingsToTableView(listOfArrangementBookings);
+        }
+    }
+
 }
