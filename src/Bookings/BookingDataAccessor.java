@@ -180,22 +180,14 @@ public class BookingDataAccessor {
 
             if(book.getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                 PostToGoogle cancelArrangementBooking = new PostToGoogle((ArrangementBooking) book);
-                try{
-                    cancelArrangementBooking.deleteArrangementInCalendar();
-                }catch(IOException | GeneralSecurityException excep){
-                    excep.printStackTrace();
-                    }
+                cancelArrangementBooking.deleteBookingInCalendar(book);
                 }
             if(book.getBookingType() == (BookingType.LECTUREBOOKING)){
                 PostToGoogle cancelLectureBooking = new PostToGoogle((LectureBooking) book);
-                try{
-                    cancelLectureBooking.deleteLectureInCalendar();
-                }catch (IOException | GeneralSecurityException excep){
-                    excep.printStackTrace();
+                    cancelLectureBooking.deleteBookingInCalendar(book);
                 }
             }
             //connection.close();
-            }
     }
 
     public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {

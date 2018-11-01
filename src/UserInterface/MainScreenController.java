@@ -152,28 +152,11 @@ public class MainScreenController extends GeneralController {
 
             if (alertChoice.get() == ButtonType.OK) {
                 if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        try {
-                            newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                        } catch (IOException | GeneralSecurityException | SQLException excep) {
-                            excep.printStackTrace();
-                        }
-                    }catch (SQLException | ClassNotFoundException excep1){
-                        excep1.printStackTrace();
-                    }
+                    PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    newConfirmedArrangementBooking.postNewArrangementToCalendar();
                 if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        try {
-                            newConfirmedLectureBooking.postNewLectureToCalendar();
-                        } catch (IOException | GeneralSecurityException excep) {
-                            excep.printStackTrace();
-                        }
-                    }catch(ClassNotFoundException | SQLException excep1){
-                            excep1.printStackTrace();
-                        }
-
+                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    newConfirmedLectureBooking.postNewLectureToCalendar();
                     }
                 }}
                 acceptSelectedBooking();
