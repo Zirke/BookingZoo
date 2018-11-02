@@ -12,6 +12,26 @@ public enum BookingType {
         public String toString() {
             return "Børnefødselsdag";
         }
-    }
-}
+    },
+    ALL_BOOKING_TYPES {
+        @Override
+        public String toString() {
+            return "Skoletjeneste";
+        }
+    };
 
+    public static BookingType getBookingType(String input) {
+
+        switch (input) {
+            case "Skoletjeneste":
+                return LECTUREBOOKING;
+            case "Børnefødselsdag":
+                return ARRANGEMENTBOOKING;
+            case "Alle":
+                return ALL_BOOKING_TYPES;
+                default:
+                    throw new IllegalArgumentException();
+        }
+    }
+
+}

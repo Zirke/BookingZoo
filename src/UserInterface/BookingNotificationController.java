@@ -17,7 +17,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class UpcomingBookingController {
+public class BookingNotificationController {
 
     private ArrayList<Booking> upcomingBookings;
     private MainScreenController controller;

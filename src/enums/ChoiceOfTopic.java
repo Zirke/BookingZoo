@@ -64,7 +64,6 @@ public enum ChoiceOfTopic {
     };
 
     public static ChoiceOfTopic topicChosen(String input) {
-
         switch (input) {
             case "Dyr derhjemme":
                 return DYR_DERHJEMME;

@@ -18,15 +18,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/ChoiceOfType.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/PromptScreen.fxml"));
             primaryStage.setScene(new Scene(root));
-            //primaryStage.setTitle("Aalborg Zoo Booking System");
-            //primaryStage.setMaximized(true);
             primaryStage.show();
             root.requestFocus();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

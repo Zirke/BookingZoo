@@ -66,7 +66,7 @@ public class LectureBookingCreationController {
         /*
         timeFieldCreation(hourSpinner,minuteSpinner);
         hourSpinner.getValueFactory().setValue(10);
-        cancelButton.setOnMouseClicked(e -> closeWindow());
+        cancelButton.loadChosenBookingTypeToMainScreen(e -> closeWindow());
         */
     }
 
