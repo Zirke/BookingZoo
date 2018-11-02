@@ -1,6 +1,10 @@
 package UserInterface;
 
+import Bookings.ArrangementBooking;
 import Bookings.Booking;
+import Bookings.LectureBooking;
+import enums.BookingStatus;
+import enums.BookingType;
 import exception.NoUpcomingBookingException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -28,6 +32,15 @@ public class BookingNotificationController {
     public TableColumn<Booking, String> dateColumn;
     public TableView UpcomingBookingTable;
     public Button doneButton;
+    private BookingType typeOfBooking;
+
+    public BookingType getTypeOfBooking() {
+        return typeOfBooking;
+    }
+
+    public void setTypeOfBooking(BookingType typeOfBooking) {
+        this.typeOfBooking = typeOfBooking;
+    }
 
     public void setUpcomingBookings(ArrayList<Booking> upcomingBookings) {
         this.upcomingBookings = upcomingBookings;
@@ -57,7 +70,34 @@ public class BookingNotificationController {
     }
 
     private void loadBookingsToTableView(ArrayList<Booking> listOfbooking) {
+        ObservableList<Booking> bookings = FXCollections.observableArrayList();
+
         if(listOfbooking.size() == 0) throw new NoUpcomingBookingException(); //unhandled exception.
+
+        switch (typeOfBooking) {
+            case ALL_BOOKING_TYPES:
+                for (Booking i : listOfbooking) {
+                    bookings.add(i);
+                }
+                break;
+            case LECTUREBOOKING:
+                for (Booking i : listOfbooking) {
+                    if(i.getClass().equals(LectureBooking.class)){
+                        bookings.add(i);
+                    }
+                }
+                break;
+            case ARRANGEMENTBOOKING:
+                for (Booking i : listOfbooking) {
+                    if(i.getClass().equals(ArrangementBooking.class)){
+                        bookings.add(i);
+                    }
+                }
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+
 
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
@@ -65,10 +105,7 @@ public class BookingNotificationController {
         dateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
         daysUntil.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(String.valueOf(Duration.between( LocalDateTime.now(), cellData.getValue().getDateTime()).toDays()+1)));
 
-        ObservableList<Booking> bookings = FXCollections.observableArrayList();
-        for (Booking booking : listOfbooking) {
-            bookings.addAll(booking);
-        }
+
         UpcomingBookingTable.setItems(bookings);
     }
 }

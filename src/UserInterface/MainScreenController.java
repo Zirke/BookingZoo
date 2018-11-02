@@ -209,17 +209,14 @@ public class MainScreenController extends GeneralController {
             }
         });
 
-        //Notification button
-        ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
-        notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
-        notificationButton.setOnMouseClicked(e -> showUpcomingBookings(noficationBookings));
+
     }
 
     /*
      *   METHODS
      */
 
-    public void initialiseBookingsOfChosenType() {
+    public void initialiseMainScreenAfterTypeChosen() {
         loadBookingTypeIntoTableView();
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
@@ -227,6 +224,11 @@ public class MainScreenController extends GeneralController {
                 loadBookingTypeIntoTableView();
             } else showSearchedForBookingsInTableView(listOfAllBookings);
         });
+
+        //Notification button
+        ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
+        notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
+        notificationButton.setOnMouseClicked(e -> showUpcomingBookings(noficationBookings));
     }
 
     private void fetchBookingsFromDatabase() throws SQLException {
@@ -581,14 +583,41 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings) {
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
+
         while (iter.hasNext()) {
             Booking temp = (Booking) iter.next();
-            if ((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) || temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
-                    && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) {
-                notifiBookings.add(temp);
+            switch (typeOfBooking){
+                case ALL_BOOKING_TYPES: {
+                    if(isNotificationBooking(temp)){
+                        notifiBookings.add(temp);
+                    }
+
+                };break;
+                case ARRANGEMENTBOOKING: {
+                    Boolean isArrangementBooking = temp.getClass().equals(ArrangementBooking.class);
+                    if(isArrangementBooking && isNotificationBooking(temp)){
+                        notifiBookings.add(temp);
+                    }
+                };break;
+                case LECTUREBOOKING: {
+                    Boolean isLectureBooking = temp.getClass().equals(LectureBooking.class);
+                    if(isLectureBooking && isNotificationBooking(temp)){
+                        notifiBookings.add(temp);
+                    }
+                } break;
             }
         }
         return notifiBookings;
+    }
+
+    private Boolean isNotificationBooking(Booking temp){
+        if(((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) ||
+                temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
+                && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) &&
+                !temp.getDateTime().isBefore(LocalDateTime.now()))
+            return true;
+        else
+            return false;
     }
 
     private void showUpcomingBookings(ArrayList<Booking> upcomingBookings) {
@@ -599,6 +628,7 @@ public class MainScreenController extends GeneralController {
             BookingNotificationController controller = loader.getController();
             controller.setUpcomingBookings(upcomingBookings);
             controller.setController(this);
+            controller.setTypeOfBooking(typeOfBooking);
             controller.initData();
 
             Stage stage = new Stage();
@@ -638,5 +668,4 @@ public class MainScreenController extends GeneralController {
                 loadBookingTypeIntoTableView();
         }
     }
-
 }

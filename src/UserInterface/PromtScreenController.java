@@ -31,13 +31,13 @@ public class PromtScreenController {
 
             if(textOfBtn.equals("Børnefødselsdag")){
                 controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                controller.initialiseBookingsOfChosenType();
+                controller.initialiseMainScreenAfterTypeChosen();
             }else if(textOfBtn.equals( "Skoletjeneste")){
                 controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
-                controller.initialiseBookingsOfChosenType();
+                controller.initialiseMainScreenAfterTypeChosen();
             } else if(textOfBtn.equals("Alle")){
                 controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-                controller.initialiseBookingsOfChosenType();
+                controller.initialiseMainScreenAfterTypeChosen();
             }else{
                 throw new IllegalBookingTypeException();
             }
