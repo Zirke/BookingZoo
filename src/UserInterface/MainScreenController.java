@@ -276,6 +276,7 @@ public class MainScreenController extends GeneralController {
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
+        bookingsToShow.clear();
         bookingsToShow.addAll(listOfBookings);
         bookingTableView.setItems(bookingsToShow);
     }
@@ -351,8 +352,7 @@ public class MainScreenController extends GeneralController {
                 default:
                     throw new IllegalArgumentException();
             }
-        }
-        else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
+        } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
                 archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
             switch (typeOfBooking) {
@@ -616,27 +616,23 @@ public class MainScreenController extends GeneralController {
             loadBookingsToTableView(listOfBookings);
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             loadBookingsToTableView(listOfLectureBookings);
-        } else {
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             loadBookingsToTableView(listOfArrangementBookings);
         }
     }
 
     @FXML
-    private void changeTypeOfBooking (ActionEvent event) {
+    private void changeTypeOfBooking(ActionEvent event) {
         MenuItem chosenType = (MenuItem) event.getSource();
         String nameOfChosenBtn = chosenType.getText();
 
-        switch (nameOfChosenBtn) {
-            case "Alle bookings":
-                setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-                loadBookingTypeIntoTableView();
-            case "Børnefødselsdage":
-                setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                loadBookingTypeIntoTableView();
-            case "Skoletjenester":
-                setTypeOfBooking(BookingType.LECTUREBOOKING);
-                loadBookingTypeIntoTableView();
+        if (nameOfChosenBtn.equals("Alle bookings")) {
+            typeOfBooking = BookingType.ALL_BOOKING_TYPES;
+        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
+            typeOfBooking = BookingType.ARRANGEMENTBOOKING;
+        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
+            typeOfBooking = BookingType.LECTUREBOOKING;
         }
+        loadBookingTypeIntoTableView();
     }
-
 }
