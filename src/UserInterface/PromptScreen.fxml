@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.PromtScreenController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../ImageView/AalborgZooLogo.jpg" />
+         </image>
+      </ImageView>
+       <Label prefHeight="46.0" prefWidth="468.0" text="Vælg venligt hvilken type booking programmet skal vise:">
+           <font>
+               <Font size="18.0" />
+           </font>
+       </Label>
+       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+         <children>
+             <Button fx:id="allBookingButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Alle">
+                 <font>
+                     <Font name="System Bold" size="17.0" />
+                 </font>
+             </Button>
+             <Button fx:id="arrangementButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Børnefødselsdag">
+                 <font>
+                     <Font name="System Bold" size="17.0" />
+                 </font>
+             </Button>
+             <Button fx:id="lectureButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Skoletjeneste">
+                 <font>
+                     <Font name="System Bold" size="17.0" />
+                 </font>
+             </Button>
+         </children>
+       </HBox>
+   </children>
+</VBox>

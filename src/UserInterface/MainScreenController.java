@@ -48,13 +48,9 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfLectureBookings = new ArrayList<>();
     private ArrayList<Booking> listOfArrangementBookings = new ArrayList<>();
-    String typeOfBooking = "Ingen";
+    private BookingType typeOfBooking;
 
-    public String getTypeOfBooking() {
-        return typeOfBooking;
-    }
-
-    public void setTypeOfBooking(String typeOfBooking) {
+    public void setTypeOfBooking(BookingType typeOfBooking) {
         this.typeOfBooking = typeOfBooking;
     }
 
@@ -76,6 +72,8 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
+    @FXML
+    private MenuItem allBookingsMenuItem, arrangementBookingsMenuItem, lectureBookingsMenuItem;
 
     //Nodes for booking information display area
     @FXML
@@ -120,11 +118,11 @@ public class MainScreenController extends GeneralController {
          */
 
         //Shows searched for booking in TableView
-        /*searchField.setOnAction(e -> {
+        searchField.setOnAction(e -> {
             if (searchField.getText().isEmpty()) {
                 loadBookingTypeIntoTableView();
             } else showSearchedForBookingsInTableView(listOfAllBookings);
-        });*/
+        });
 
         //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
 
@@ -197,16 +195,14 @@ public class MainScreenController extends GeneralController {
         //Notification button
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
         notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
-        notificationButton.setOnMouseClicked(e -> {
-            showUpcomingBookings(noficationBookings);
-        });
+        notificationButton.setOnMouseClicked(e -> showUpcomingBookings(noficationBookings));
     }
 
     /*
      *   METHODS
      */
 
-    public void initialiseChoiceOfBooking(){
+    public void initialiseBookingsOfChosenType() {
         loadBookingTypeIntoTableView();
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
@@ -263,6 +259,7 @@ public class MainScreenController extends GeneralController {
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
+        bookingsToShow.clear();
         bookingsToShow.addAll(listOfBookings);
         bookingTableView.setItems(bookingsToShow);
     }
@@ -325,66 +322,54 @@ public class MainScreenController extends GeneralController {
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
         if (overviewButton.isSelected()) {
             categorisedBookings.clear();
-            switch (typeOfBooking){
-                case "Alle": categorisedBookings.addAll(listOfBookings); break;
-                case "Skoletjeneste": categorisedBookings.addAll(listOfLectureBookings); break;
-                case "Børnefødselsdag": categorisedBookings.addAll(listOfArrangementBookings); break;
-                default: throw new IllegalArgumentException();
+            switch (typeOfBooking) {
+                case ALL_BOOKING_TYPES:
+                    categorisedBookings.addAll(listOfBookings);
+                    break;
+                case LECTUREBOOKING:
+                    categorisedBookings.addAll(listOfLectureBookings);
+                    break;
+                case ARRANGEMENTBOOKING:
+                    categorisedBookings.addAll(listOfArrangementBookings);
+                    break;
+                default:
+                    throw new IllegalArgumentException();
             }
-        }
-
-        if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected()) {
+        } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
+                archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
-            for (Booking temp : listOfBookings) {
-                BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
-                if (temp.getBookingStatus().equals(chosenBookingStatus)) {
-                    categorisedBookings.add(temp);
-                }
-            }
-        }
-
-        if (archivedBookingsButton.isSelected()) {
-            categorisedBookings.clear();
-            switch (typeOfBooking){
-                case "Alle": {
-                    categorisedBookings.addAll(listOfArchivedBookings);
-                }; break;
-                case "Skoletjeneste": {
-                    for(Booking x : listOfLectureBookings){
-                        if(x.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED))
-                            categorisedBookings.add(x);
+            switch (typeOfBooking) {
+                case ALL_BOOKING_TYPES:
+                    for (Booking temp : listOfBookings) {
+                        BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
+                        if (temp.getBookingStatus().equals(chosenBookingStatus)) {
+                            categorisedBookings.add(temp);
+                        }
                     }
-                }; break;
-                case "Børnefødselsdag": for(Booking x : listOfLectureBookings){
-                    if(x.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED))
-                        categorisedBookings.add(x);
-                }; break;
-                default: throw new IllegalArgumentException();
-            }
-
-        }
-        if (deletedBookingsButton.isSelected()) {
-            categorisedBookings.clear();
-            switch (typeOfBooking){
-                case "Alle": {
-                    categorisedBookings.addAll(listOfArchivedBookings);
-                }; break;
-                case "Skoletjeneste": {
-                    for(Booking x : listOfLectureBookings){
-                        if(x.getBookingStatus().equals(BookingStatus.STATUS_DELETED))
-                            categorisedBookings.add(x);
+                    break;
+                case LECTUREBOOKING:
+                    for (Booking temp : listOfLectureBookings) {
+                        BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
+                        if (temp.getBookingStatus().equals(chosenBookingStatus)) {
+                            categorisedBookings.add(temp);
+                        }
                     }
-                }; break;
-                case "Børnefødselsdag": for(Booking x : listOfLectureBookings){
-                    if(x.getBookingStatus().equals(BookingStatus.STATUS_DELETED))
-                        categorisedBookings.add(x);
-                }; break;
-                default: throw new IllegalArgumentException();
+                    break;
+                case ARRANGEMENTBOOKING:
+                    for (Booking temp : listOfArrangementBookings) {
+                        BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
+                        if (temp.getBookingStatus().equals(chosenBookingStatus)) {
+                            categorisedBookings.add(temp);
+                        }
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException();
             }
         }
-
         bookingTableView.setItems(categorisedBookings);
     }
+
     private void acceptSelectedBooking() {
         try {
             bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
@@ -406,8 +391,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            //refreshBookingTableView();
-        } catch (IOException e) {
+            refreshBookingTableView();
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -425,8 +410,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            //refreshBookingTableView();
-        } catch (IOException e) {
+            refreshBookingTableView();
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -446,8 +431,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            //refreshBookingTableView();
-        } catch (IOException e) {
+            refreshBookingTableView();
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -467,8 +452,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            //refreshBookingTableView();
-        } catch (IOException e) {
+            refreshBookingTableView();
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -591,10 +576,10 @@ public class MainScreenController extends GeneralController {
 
     private void showUpcomingBookings(ArrayList<Booking> upcomingBookings) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("UpcomingBooking.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BookingNotification.fxml"));
             Parent root = loader.load();
 
-            UpcomingBookingController controller = loader.getController();
+            BookingNotificationController controller = loader.getController();
             controller.setUpcomingBookings(upcomingBookings);
             controller.setController(this);
             controller.initData();
@@ -609,14 +594,28 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void loadBookingTypeIntoTableView(){
-        if(typeOfBooking.equals("Alle")) {
+    private void loadBookingTypeIntoTableView() {
+        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             loadBookingsToTableView(listOfBookings);
-        }else if(typeOfBooking.equals("Skoletjeneste")){
+        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             loadBookingsToTableView(listOfLectureBookings);
-        }else{
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             loadBookingsToTableView(listOfArrangementBookings);
         }
     }
 
+    @FXML
+    private void changeTypeOfBooking(ActionEvent event) {
+        MenuItem chosenType = (MenuItem) event.getSource();
+        String nameOfChosenBtn = chosenType.getText();
+
+        if (nameOfChosenBtn.equals("Alle bookings")) {
+            typeOfBooking = BookingType.ALL_BOOKING_TYPES;
+        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
+            typeOfBooking = BookingType.ARRANGEMENTBOOKING;
+        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
+            typeOfBooking = BookingType.LECTUREBOOKING;
+        }
+        loadBookingTypeIntoTableView();
+    }
 }
