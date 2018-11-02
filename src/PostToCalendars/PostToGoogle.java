@@ -62,21 +62,27 @@ public class PostToGoogle {
     private static final String CALENDAR_ID = "aalborgzoo305@gmail.com";
     private static final String USER_ID = "1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com";
 
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        // Load client secrets.
-        InputStream in = PostToGoogle.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
+        Credential credential = null;
+        try {
+            // Load client secrets.
+            InputStream in = PostToGoogle.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+            GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
-        LocalServerReceiver lReceiver = new LocalServerReceiver.Builder().setPort(8888).build();
+            // Build flow and trigger user authorization request.
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                    .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                    .setAccessType("offline")
+                    .build();
+            LocalServerReceiver lReceiver = new LocalServerReceiver.Builder().setPort(8888).build();
 
-        /* logged in as your own google account (has the authorization to post on the calendar) */
-        return new AuthorizationCodeInstalledApp(flow, lReceiver).authorize(USER_ID);
+            /* logged in as your own google account (has the authorization to post on the calendar) */
+            credential = new AuthorizationCodeInstalledApp(flow,lReceiver).authorize(USER_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return credential;
     }
 
     public void postNewArrangementToCalendar(){
