@@ -161,29 +161,12 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                    try {
-                        PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        try {
-                            newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                        } catch (IOException | GeneralSecurityException | SQLException excep) {
-                            excep.printStackTrace();
-                        }
-                    } catch (SQLException | ClassNotFoundException excep1) {
-                        excep1.printStackTrace();
-                    }
-                    if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                        try {
-                            PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                            try {
-                                newConfirmedLectureBooking.postNewLectureToCalendar();
-                            } catch (IOException | GeneralSecurityException excep) {
-                                excep.printStackTrace();
-                            }
-                        } catch (ClassNotFoundException | SQLException excep1) {
-                            excep1.printStackTrace();
-                        }
-
+                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                    PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    newConfirmedArrangementBooking.postNewArrangementToCalendar();
+                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
+                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    newConfirmedLectureBooking.postNewLectureToCalendar();
                     }
                 }
             }
@@ -278,6 +261,7 @@ public class MainScreenController extends GeneralController {
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
+        bookingsToShow.clear();
         bookingsToShow.addAll(listOfBookings);
         bookingTableView.setItems(bookingsToShow);
     }
@@ -353,8 +337,7 @@ public class MainScreenController extends GeneralController {
                 default:
                     throw new IllegalArgumentException();
             }
-        }
-        else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
+        } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
                 archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
             switch (typeOfBooking) {
@@ -646,26 +629,23 @@ public class MainScreenController extends GeneralController {
             loadBookingsToTableView(listOfBookings);
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             loadBookingsToTableView(listOfLectureBookings);
-        } else {
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             loadBookingsToTableView(listOfArrangementBookings);
         }
     }
 
     @FXML
-    private void changeTypeOfBooking (ActionEvent event) {
+    private void changeTypeOfBooking(ActionEvent event) {
         MenuItem chosenType = (MenuItem) event.getSource();
         String nameOfChosenBtn = chosenType.getText();
 
-        switch (nameOfChosenBtn) {
-            case "Alle bookings":
-                setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-                loadBookingTypeIntoTableView();
-            case "Børnefødselsdage":
-                setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                loadBookingTypeIntoTableView();
-            case "Skoletjenester":
-                setTypeOfBooking(BookingType.LECTUREBOOKING);
-                loadBookingTypeIntoTableView();
+        if (nameOfChosenBtn.equals("Alle bookings")) {
+            typeOfBooking = BookingType.ALL_BOOKING_TYPES;
+        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
+            typeOfBooking = BookingType.ARRANGEMENTBOOKING;
+        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
+            typeOfBooking = BookingType.LECTUREBOOKING;
         }
+        loadBookingTypeIntoTableView();
     }
 }
