@@ -54,10 +54,10 @@ public class LectureBooking extends Booking {
         this.grade = grade;
     }
 
-    public LectureBooking(BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDateTime date, int participants,
+    public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDateTime date, int participants,
                           String customerComment, String comment, LectureRoom lectureRoom, Lecturer lecturer,
                           ChoiceOfTopic choiceOfTopic, int noOfTeams, int noOfTeachers, String grade, LectureBookingCustomer customer) {
-        super(bookingType, bookingStatus, customer, creationDate, date,
+        super(id, bookingType, bookingStatus, customer, creationDate, date,
                 participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
         this.lecturer = lecturer;

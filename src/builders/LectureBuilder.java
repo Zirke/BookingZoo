@@ -21,6 +21,7 @@ public class LectureBuilder {
     private int participants;
     private String customerComment;
     private String comment;
+    private int id;
 
     private LectureRoom lectureRoom;
     private Lecturer lecturer;
@@ -106,8 +107,12 @@ public class LectureBuilder {
         return this;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LectureBooking build(){
-        return new LectureBooking(bookingType, bookingStatus, creationDate, date, participants,
+        return new LectureBooking(id, bookingType, bookingStatus, creationDate, date, participants,
                 customerComment, comment, lectureRoom, lecturer, choiceOfTopic, noOfTeams, noOfTeachers, grade, customer);
     }
 }

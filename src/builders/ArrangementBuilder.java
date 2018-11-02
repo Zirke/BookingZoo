@@ -26,6 +26,7 @@ public class ArrangementBuilder {
     private int birthdayChildAge;
     private String formerParticipant;
     private String guide;
+    private int id;
 
 
     public ArrangementBuilder setBookingType(BookingType bookingType){
@@ -98,8 +99,12 @@ public class ArrangementBuilder {
         return this;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public ArrangementBooking build(){
-        return new ArrangementBooking(bookingType, bookingStatus, creationDate, date, participants,
+        return new ArrangementBooking(id, bookingType, bookingStatus, creationDate, date, participants,
                 customerComment, comment, menuChosen, restaurant, birthdayChildName, birthdayChildAge, formerParticipant,
                 guide, customer);
     }

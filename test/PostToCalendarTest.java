@@ -237,10 +237,12 @@ public class PostToCalendarTest {
                 .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
                 .setNoOfTeachers(2)
                 .setNoOfTeams(3)
-                .setGrade("7");
+                .setGrade("7")
+                .setId(999999999);
         useCase = testBooking.build();
 
         PostToGoogle tempPost = new PostToGoogle(useCase);
 
+        assertEquals("aaaaaa999999999", tempPost.idChecker(useCase));
     }
 }
