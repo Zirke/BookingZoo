@@ -641,10 +641,13 @@ public class MainScreenController extends GeneralController {
 
         if (nameOfChosenBtn.equals("Alle bookings")) {
             typeOfBooking = BookingType.ALL_BOOKING_TYPES;
+            initialiseMainScreenAfterTypeChosen();
         } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
             typeOfBooking = BookingType.ARRANGEMENTBOOKING;
+            initialiseMainScreenAfterTypeChosen();
         } else if (nameOfChosenBtn.equals("Skoletjenester")) {
             typeOfBooking = BookingType.LECTUREBOOKING;
+            initialiseMainScreenAfterTypeChosen();
         }
         loadBookingTypeIntoTableView();
     }
