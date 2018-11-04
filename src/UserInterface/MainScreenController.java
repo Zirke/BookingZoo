@@ -25,7 +25,6 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,6 +47,8 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfDeletedBookings = new ArrayList<>();
     private ArrayList<Booking> listOfLectureBookings = new ArrayList<>();
     private ArrayList<Booking> listOfArrangementBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfNonArchivedOrDeletedLectureBookings = new ArrayList<>();
+    private ArrayList<Booking> listOfNonArchivedOrDeletedArrangementBookings = new ArrayList<>();
     private BookingType typeOfBooking;
 
     public void setTypeOfBooking(BookingType typeOfBooking) {
@@ -120,13 +121,10 @@ public class MainScreenController extends GeneralController {
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
             if (searchField.getText().isEmpty()) {
-                loadBookingTypeIntoTableView();
+                setChosenBookingTypeIntoTableView();
             } else showSearchedForBookingsInTableView(listOfAllBookings);
         });
 
-        //Takes all "Booking" objects and loads them into bookingsTableView and sets up the proper columns
-
-        //loadBookingTypeIntoTableView();
 
         bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation(bookingTableView));
 
@@ -161,12 +159,12 @@ public class MainScreenController extends GeneralController {
             Optional<ButtonType> alertChoice = alert.showAndWait();
 
             if (alertChoice.get() == ButtonType.OK) {
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                     PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                     newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                if((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                    newConfirmedLectureBooking.postNewLectureToCalendar();
+                    if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
+                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                        newConfirmedLectureBooking.postNewLectureToCalendar();
                     }
                 }
             }
@@ -199,28 +197,25 @@ public class MainScreenController extends GeneralController {
      *   METHODS
      */
 
+    //Method to be called from PromptScreenController
     public void initialiseMainScreenAfterTypeChosen() {
-        loadBookingTypeIntoTableView();
-        //Shows searched for booking in TableView
-        searchField.setOnAction(e -> {
-            if (searchField.getText().isEmpty()) {
-                loadBookingTypeIntoTableView();
-            } else showSearchedForBookingsInTableView(listOfAllBookings);
-        });
+        setChosenBookingTypeIntoTableView();
 
-        //Notification button
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
         notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
         notificationButton.setOnMouseClicked(e -> showUpcomingBookings(noficationBookings));
     }
 
     private void fetchBookingsFromDatabase() throws SQLException {
+
+        //Lecture bookings
         try {
             listOfLectureBookings.addAll(bda.fetchLecBooks());
             listOfAllBookings.addAll(listOfLectureBookings);
         } catch (NoBookingsInDatabaseException e) {
             System.out.println("No lecture bookings in database"); //Lav om til exception handling
         }
+        //Arrangement bookings
         try {
             listOfArrangementBookings.addAll(bda.fetchArrBooks());
             listOfAllBookings.addAll(listOfArrangementBookings);
@@ -228,7 +223,7 @@ public class MainScreenController extends GeneralController {
             System.out.println("No arrangement bookings in database"); //Lav om til exception handling
         }
 
-
+        //Categorised bookings
         for (Booking tempBooking : listOfAllBookings) {
             if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
                 listOfPendingBookings.add(tempBooking);
@@ -245,15 +240,22 @@ public class MainScreenController extends GeneralController {
             if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DELETED)) {
                 listOfDeletedBookings.add(tempBooking);
             }
+            //No Archived or Deleted bookings (both types)
             if (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED) &&
                     (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DELETED))) {
                 listOfBookings.add(tempBooking);
+                if (tempBooking.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+                    listOfNonArchivedOrDeletedLectureBookings.add(tempBooking);
+                }
+                if (tempBooking.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+                    listOfNonArchivedOrDeletedArrangementBookings.add(tempBooking);
+                }
             }
         }
     }
 
     //Takes an ArrayList of bookings to load into TableView of bookings
-    private void loadBookingsToTableView(ArrayList<Booking> listOfBookings) {
+    private void loadBookingsToTableView(ArrayList<Booking> listOfChosenBookings) {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
@@ -262,7 +264,7 @@ public class MainScreenController extends GeneralController {
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
         bookingsToShow.clear();
-        bookingsToShow.addAll(listOfBookings);
+        bookingsToShow.addAll(listOfChosenBookings);
         bookingTableView.setItems(bookingsToShow);
     }
 
@@ -279,7 +281,7 @@ public class MainScreenController extends GeneralController {
         listOfLectureBookings.clear();
 
         fetchBookingsFromDatabase();
-        loadBookingTypeIntoTableView();
+        setChosenBookingTypeIntoTableView();
     }
 
     private void removeBookingFromTableView() {
@@ -324,22 +326,26 @@ public class MainScreenController extends GeneralController {
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
         if (overviewButton.isSelected()) {
             categorisedBookings.clear();
+
             switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES:
                     categorisedBookings.addAll(listOfBookings);
                     break;
                 case LECTUREBOOKING:
-                    categorisedBookings.addAll(listOfLectureBookings);
+                    categorisedBookings.addAll(listOfNonArchivedOrDeletedLectureBookings);
                     break;
                 case ARRANGEMENTBOOKING:
-                    categorisedBookings.addAll(listOfArrangementBookings);
+                    categorisedBookings.addAll(listOfNonArchivedOrDeletedArrangementBookings);
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
-        } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
+        }
+
+        else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
                 archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
+
             switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES:
                     for (Booking temp : listOfBookings) {
@@ -569,38 +575,40 @@ public class MainScreenController extends GeneralController {
 
         while (iter.hasNext()) {
             Booking temp = (Booking) iter.next();
-            switch (typeOfBooking){
+            switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES: {
-                    if(isNotificationBooking(temp)){
+                    if (isNotificationBooking(temp)) {
                         notifiBookings.add(temp);
                     }
 
-                };break;
+                }
+                ;
+                break;
                 case ARRANGEMENTBOOKING: {
                     Boolean isArrangementBooking = temp.getClass().equals(ArrangementBooking.class);
-                    if(isArrangementBooking && isNotificationBooking(temp)){
+                    if (isArrangementBooking && isNotificationBooking(temp)) {
                         notifiBookings.add(temp);
                     }
-                };break;
+                }
+                ;
+                break;
                 case LECTUREBOOKING: {
                     Boolean isLectureBooking = temp.getClass().equals(LectureBooking.class);
-                    if(isLectureBooking && isNotificationBooking(temp)){
+                    if (isLectureBooking && isNotificationBooking(temp)) {
                         notifiBookings.add(temp);
                     }
-                } break;
+                }
+                break;
             }
         }
         return notifiBookings;
     }
 
-    private Boolean isNotificationBooking(Booking temp){
-        if(((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) ||
+    private Boolean isNotificationBooking(Booking temp) {
+        return ((temp.getDateTime().minusDays(10).isBefore(LocalDateTime.now()) ||
                 temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
                 && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) &&
-                !temp.getDateTime().isBefore(LocalDateTime.now()))
-            return true;
-        else
-            return false;
+                !temp.getDateTime().isBefore(LocalDateTime.now());
     }
 
     private void showUpcomingBookings(ArrayList<Booking> upcomingBookings) {
@@ -624,13 +632,13 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void loadBookingTypeIntoTableView() {
+    private void setChosenBookingTypeIntoTableView() {
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             loadBookingsToTableView(listOfBookings);
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            loadBookingsToTableView(listOfLectureBookings);
+            loadBookingsToTableView(listOfNonArchivedOrDeletedLectureBookings);
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            loadBookingsToTableView(listOfArrangementBookings);
+            loadBookingsToTableView(listOfNonArchivedOrDeletedArrangementBookings);
         }
     }
 
@@ -649,6 +657,6 @@ public class MainScreenController extends GeneralController {
             typeOfBooking = BookingType.LECTUREBOOKING;
             initialiseMainScreenAfterTypeChosen();
         }
-        loadBookingTypeIntoTableView();
+        setChosenBookingTypeIntoTableView();
     }
 }
