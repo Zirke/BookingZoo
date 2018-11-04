@@ -16,7 +16,7 @@ public enum BookingType {
     ALL_BOOKING_TYPES {
         @Override
         public String toString() {
-            return "Skoletjeneste";
+            return "Alle";
         }
     };
 

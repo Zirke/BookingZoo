@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -28,7 +29,6 @@
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
-                <Separator prefWidth="200.0" />
                 <Button fx:id="refreshBookingsButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Opdater">
                     <font>
                         <Font size="16.0" />
@@ -41,7 +41,13 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Separator prefWidth="200.0" />
+            <Label fx:id="chosenBookingTypeLabel">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Separator layoutX="20.0" layoutY="171.0" prefWidth="200.0" />
+            <HBox prefHeight="25.0" prefWidth="200.0" />
                 <Label text="Filtrer efter kategori:">
                     <font>
                         <Font size="16.0" />
@@ -57,7 +63,7 @@
                </toggleGroup>
             </ToggleButton>
             <Separator prefWidth="200.0" />
-            <ToggleButton fx:id="pendingBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Afventende" toggleGroup="$Categories">
+            <ToggleButton fx:id="pendingBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Afventende" toggleGroup="$Categories">
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -69,23 +75,45 @@
                   <Font size="16.0" />
                </font>
             </ToggleButton>
-                <ToggleButton fx:id="activeBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Aktiv" toggleGroup="$Categories">
+                <ToggleButton fx:id="activeBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Aktiv" toggleGroup="$Categories">
                <font>
                   <Font size="16.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../ImageView/process-945x945.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </ToggleButton>
-                <ToggleButton fx:id="finishedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Færdig" toggleGroup="$Categories">
+                <ToggleButton fx:id="finishedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Færdig" toggleGroup="$Categories">
                <font>
                   <Font size="16.0" />
                </font>
-            </ToggleButton>
-                <ToggleButton fx:id="archivedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Arkiveret" toggleGroup="$Categories">
-               <font>
-                  <Font size="16.0" />
-               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../ImageView/approved.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </ToggleButton>
                 <Separator prefWidth="200.0" />
-                <ToggleButton fx:id="deletedBookingsButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Slettet" toggleGroup="$Categories">
+                <ToggleButton fx:id="archivedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Arkiveret" toggleGroup="$Categories">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../ImageView/inbox.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <Separator prefWidth="200.0" />
+                <ToggleButton fx:id="deletedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Slettet" toggleGroup="$Categories">
                <font>
                   <Font size="16.0" />
                </font>
@@ -137,7 +165,7 @@
                                 <Font size="14.0" />
                             </font>
                         </TextField>
-                        <Button fx:id="notificationButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="66.0">
+                        <Button fx:id="notificationButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0">
                      <graphic>
                         <HBox alignment="CENTER_LEFT" minWidth="-Infinity" prefHeight="23.0" prefWidth="35.0">
                            <children>
@@ -370,29 +398,29 @@
                         </HBox>
                     </children>
                 </GridPane>
-                <Label fx:id="customerCommentLabel" text="Kundekommentar:">
+                <Label fx:id="customerCommentLabel" text="Kundekommentar:" visible="false">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
-                <TextArea fx:id="customerCommentTextArea" prefHeight="200.0" prefWidth="200.0">
+                <TextArea fx:id="customerCommentTextArea" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </TextArea>
-                <Label fx:id="commentLabel" text="Kommentar:">
+                <Label fx:id="commentLabel" text="Kommentar:" visible="false">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
-                <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0">
+                <TextArea fx:id="commentTextArea" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </TextArea>
                 <HBox spacing="25.0">
                     <children>
-                        <Button fx:id="acceptBookingButton" minWidth="180.0" mnemonicParsing="false" prefWidth="175.0" text="Accepter booking" textFill="#31a441">
+                        <Button fx:id="acceptBookingButton" minWidth="180.0" mnemonicParsing="false" prefWidth="175.0" text="Accepter booking" textFill="#31a441" visible="false">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -404,7 +432,7 @@
                         </ImageView>
                      </graphic>
                         </Button>
-                        <Button fx:id="cancelBookingButton" minWidth="180.0" mnemonicParsing="false" text="Annuller booking" textFill="RED">
+                        <Button fx:id="cancelBookingButton" minWidth="180.0" mnemonicParsing="false" text="Annuller booking" textFill="RED" visible="false">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -418,7 +446,7 @@
                         </Button>
                         <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="708.0">
                             <children>
-                                <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking">
+                                <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking" visible="false">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
@@ -446,9 +474,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="Vis">
             <items>
-              <MenuItem fx:id="allBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Alle bookings" />
-                  <MenuItem fx:id="arrangementBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Børnefødselsdage" />
-                  <MenuItem fx:id="lectureBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Skoletjenester" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Alle bookings">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="bookingTypeToggleGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Børnefødselsdage" toggleGroup="$bookingTypeToggleGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Rediger">
