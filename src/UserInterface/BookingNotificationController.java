@@ -3,7 +3,6 @@ package UserInterface;
 import Bookings.ArrangementBooking;
 import Bookings.Booking;
 import Bookings.LectureBooking;
-import enums.BookingStatus;
 import enums.BookingType;
 import exception.NoUpcomingBookingException;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -16,7 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,10 +32,6 @@ public class BookingNotificationController {
     public Button doneButton;
     private BookingType typeOfBooking;
 
-    public BookingType getTypeOfBooking() {
-        return typeOfBooking;
-    }
-
     public void setTypeOfBooking(BookingType typeOfBooking) {
         this.typeOfBooking = typeOfBooking;
     }
@@ -50,15 +44,15 @@ public class BookingNotificationController {
         this.controller = controller;
     }
 
-    public void initialize(){
+    public void initialize() {
 
-        doneButton.setOnMouseClicked(e ->{
+        doneButton.setOnMouseClicked(e -> {
             Stage stage = (Stage) doneButton.getScene().getWindow();
             stage.close();
         });
 
-        UpcomingBookingTable.getSelectionModel().selectedIndexProperty().addListener(e ->{
-            controller.showSelectedBookingInformation(UpcomingBookingTable);
+        UpcomingBookingTable.getSelectionModel().selectedIndexProperty().addListener(e -> {
+            controller.displayInformationOfSelectedBooking();
 
             Stage stage = (Stage) doneButton.getScene().getWindow();
             stage.close();
@@ -72,7 +66,7 @@ public class BookingNotificationController {
     private void loadBookingsToTableView(ArrayList<Booking> listOfbooking) {
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
 
-        if(listOfbooking.size() == 0) throw new NoUpcomingBookingException(); //unhandled exception.
+        if (listOfbooking.size() == 0) throw new NoUpcomingBookingException(); //unhandled exception.
 
         switch (typeOfBooking) {
             case ALL_BOOKING_TYPES:
@@ -82,14 +76,14 @@ public class BookingNotificationController {
                 break;
             case LECTUREBOOKING:
                 for (Booking i : listOfbooking) {
-                    if(i.getClass().equals(LectureBooking.class)){
+                    if (i.getClass().equals(LectureBooking.class)) {
                         bookings.add(i);
                     }
                 }
                 break;
             case ARRANGEMENTBOOKING:
                 for (Booking i : listOfbooking) {
-                    if(i.getClass().equals(ArrangementBooking.class)){
+                    if (i.getClass().equals(ArrangementBooking.class)) {
                         bookings.add(i);
                     }
                 }
@@ -97,14 +91,11 @@ public class BookingNotificationController {
             default:
                 throw new IllegalArgumentException();
         }
-
-
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         dateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
-        daysUntil.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(String.valueOf(Duration.between( LocalDateTime.now(), cellData.getValue().getDateTime()).toDays()+1)));
-
+        daysUntil.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(String.valueOf(Duration.between(LocalDateTime.now(), cellData.getValue().getDateTime()).toDays() + 1)));
 
         UpcomingBookingTable.setItems(bookings);
     }

@@ -126,7 +126,7 @@ public class MainScreenController extends GeneralController {
         });
 
 
-        bookingTableView.setOnMouseClicked(e -> showSelectedBookingInformation(bookingTableView));
+        bookingTableView.setOnMouseClicked(e -> displayInformationOfSelectedBooking());
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> createNewLectureBooking());
@@ -135,7 +135,7 @@ public class MainScreenController extends GeneralController {
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
             try {
-                refreshBookingTableView();
+                refetchBookingsFromDataBase();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -198,16 +198,34 @@ public class MainScreenController extends GeneralController {
      */
 
     //Method to be called from PromptScreenController
-    public void initialiseMainScreenAfterTypeChosen() {
+
+    void initialiseBookingType() {
         setChosenBookingTypeIntoTableView();
 
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
         notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
-        notificationButton.setOnMouseClicked(e -> showUpcomingBookings(noficationBookings));
+        notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(noficationBookings));
+    }
+
+    @FXML
+    private void changeTypeOfBooking(ActionEvent event) {
+        MenuItem chosenType = (MenuItem) event.getSource();
+        String nameOfChosenBtn = chosenType.getText();
+
+        if (nameOfChosenBtn.equals("Alle bookings")) {
+            typeOfBooking = BookingType.ALL_BOOKING_TYPES;
+            initialiseBookingType();
+        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
+            typeOfBooking = BookingType.ARRANGEMENTBOOKING;
+            initialiseBookingType();
+        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
+            typeOfBooking = BookingType.LECTUREBOOKING;
+            initialiseBookingType();
+        }
+        setChosenBookingTypeIntoTableView();
     }
 
     private void fetchBookingsFromDatabase() throws SQLException {
-
         //Lecture bookings
         try {
             listOfLectureBookings.addAll(bda.fetchLecBooks());
@@ -244,6 +262,7 @@ public class MainScreenController extends GeneralController {
             if (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED) &&
                     (!tempBooking.getBookingStatus().equals(BookingStatus.STATUS_DELETED))) {
                 listOfBookings.add(tempBooking);
+                //No Archived or Deleted bookings (sorted types)
                 if (tempBooking.getBookingType().equals(BookingType.LECTUREBOOKING)) {
                     listOfNonArchivedOrDeletedLectureBookings.add(tempBooking);
                 }
@@ -251,6 +270,16 @@ public class MainScreenController extends GeneralController {
                     listOfNonArchivedOrDeletedArrangementBookings.add(tempBooking);
                 }
             }
+        }
+    }
+
+    private void setChosenBookingTypeIntoTableView() {
+        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+            loadBookingsToTableView(listOfBookings);
+        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+            loadBookingsToTableView(listOfNonArchivedOrDeletedLectureBookings);
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+            loadBookingsToTableView(listOfNonArchivedOrDeletedArrangementBookings);
         }
     }
 
@@ -268,22 +297,6 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(bookingsToShow);
     }
 
-    //TODO: Use getLastId to refresh TableView.
-    private void refreshBookingTableView() throws SQLException {
-        listOfAllBookings.clear();
-        listOfBookings.clear();
-        listOfPendingBookings.clear();
-        listOfActiveBookings.clear();
-        listOfFinishedBookings.clear();
-        listOfDeletedBookings.clear();
-        listOfArchivedBookings.clear();
-        listOfArrangementBookings.clear();
-        listOfLectureBookings.clear();
-
-        fetchBookingsFromDatabase();
-        setChosenBookingTypeIntoTableView();
-    }
-
     private void removeBookingFromTableView() {
         Booking bookingToRemove = bookingTableView.getSelectionModel().getSelectedItem();
         bookingTableView.getItems().remove(bookingToRemove);
@@ -298,7 +311,7 @@ public class MainScreenController extends GeneralController {
     }
 
     //Displays information of the clicked booking in TableView
-    void showSelectedBookingInformation(TableView bookingTableView) {
+    void displayInformationOfSelectedBooking() {
         if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingTableView.getSelectionModel().getSelectedItem());
         } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {
@@ -386,65 +399,6 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void createNewArrangementBooking() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArrangementBookingCreation.fxml"));
-            Parent root = loader.load();
-
-            ArrangementBookingCreationController controller = loader.getController();
-            controller.setBda(bda);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-            refreshBookingTableView();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createNewLectureBooking() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("LectureBookingCreation.fxml"));
-            Parent root = loader.load();
-
-            LectureBookingCreationController controller = loader.getController();
-            controller.setBda(bda);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-            refreshBookingTableView();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditLectureBooking.fxml"));
-            Parent root = loader.load();
-
-            EditLectureBookingController controller = loader.getController();
-            controller.setSelectedLectureBooking(selectedLectureBooking);
-            controller.setBda(bda);
-            controller.initData();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-            refreshBookingTableView();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void editSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("EditArrangementBooking.fxml"));
@@ -460,10 +414,26 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            refreshBookingTableView();
+            refetchBookingsFromDataBase();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    //TODO: Use getLastId to refresh TableView.
+    private void refetchBookingsFromDataBase() throws SQLException {
+        listOfAllBookings.clear();
+        listOfBookings.clear();
+        listOfPendingBookings.clear();
+        listOfActiveBookings.clear();
+        listOfFinishedBookings.clear();
+        listOfDeletedBookings.clear();
+        listOfArchivedBookings.clear();
+        listOfArrangementBookings.clear();
+        listOfLectureBookings.clear();
+
+        fetchBookingsFromDatabase();
+        setChosenBookingTypeIntoTableView();
     }
 
     private void showPendingButtons(BookingStatus bookingStatus) {
@@ -528,47 +498,6 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
 
-    private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
-
-        showPendingButtons(selectedArrangementBooking.getBookingStatus());
-
-        cityLabel.setVisible(false);
-        contactPersonLabel.setVisible(false);
-        phoneNumberLabel.setVisible(false);
-        emailLabel.setVisible(false);
-        eanLabel.setVisible(false);
-        guide_lecturerLabel.setVisible(false);
-        customerCommentLabel.setVisible(true);
-        customerCommentTextArea.setVisible(true);
-        customerCommentTextArea.setEditable(false);
-        commentLabel.setVisible(true);
-        commentTextArea.setVisible(true);
-        commentTextArea.setEditable(false);
-
-        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
-            editBookingButton.setVisible(false);
-        }
-
-        bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
-        bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
-        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
-        creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
-        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
-        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
-        teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
-        teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
-        gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
-        topicChoiceLabel.setText("Valg af menu: " + selectedArrangementBooking.getMenuChosen());
-        schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
-        schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
-        zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
-        if (selectedArrangementBooking.getGuide() == null) {
-            communeLabel.setText("Guide: Ingen guide tilføjet");
-        } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
-        customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
-        commentTextArea.setText(selectedArrangementBooking.getComment());
-    }
-
     private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings) {
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
@@ -611,7 +540,7 @@ public class MainScreenController extends GeneralController {
                 !temp.getDateTime().isBefore(LocalDateTime.now());
     }
 
-    private void showUpcomingBookings(ArrayList<Booking> upcomingBookings) {
+    private void showUpcomingBookingsWindow(ArrayList<Booking> upcomingBookings) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("BookingNotification.fxml"));
             Parent root = loader.load();
@@ -632,31 +561,103 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void setChosenBookingTypeIntoTableView() {
-        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-            loadBookingsToTableView(listOfBookings);
-        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            loadBookingsToTableView(listOfNonArchivedOrDeletedLectureBookings);
-        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            loadBookingsToTableView(listOfNonArchivedOrDeletedArrangementBookings);
+    private void createNewArrangementBooking() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArrangementBookingCreation.fxml"));
+            Parent root = loader.load();
+
+            ArrangementBookingCreationController controller = loader.getController();
+            controller.setBda(bda);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            refetchBookingsFromDataBase();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    @FXML
-    private void changeTypeOfBooking(ActionEvent event) {
-        MenuItem chosenType = (MenuItem) event.getSource();
-        String nameOfChosenBtn = chosenType.getText();
+    private void createNewLectureBooking() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LectureBookingCreation.fxml"));
+            Parent root = loader.load();
 
-        if (nameOfChosenBtn.equals("Alle bookings")) {
-            typeOfBooking = BookingType.ALL_BOOKING_TYPES;
-            initialiseMainScreenAfterTypeChosen();
-        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
-            typeOfBooking = BookingType.ARRANGEMENTBOOKING;
-            initialiseMainScreenAfterTypeChosen();
-        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
-            typeOfBooking = BookingType.LECTUREBOOKING;
-            initialiseMainScreenAfterTypeChosen();
+            LectureBookingCreationController controller = loader.getController();
+            controller.setBda(bda);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            refetchBookingsFromDataBase();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
         }
-        setChosenBookingTypeIntoTableView();
+    }
+
+    private void editSelectedLectureBooking(LectureBooking selectedLectureBooking) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditLectureBooking.fxml"));
+            Parent root = loader.load();
+
+            EditLectureBookingController controller = loader.getController();
+            controller.setSelectedLectureBooking(selectedLectureBooking);
+            controller.setBda(bda);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            refetchBookingsFromDataBase();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
+
+        showPendingButtons(selectedArrangementBooking.getBookingStatus());
+
+        cityLabel.setVisible(false);
+        contactPersonLabel.setVisible(false);
+        phoneNumberLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        eanLabel.setVisible(false);
+        guide_lecturerLabel.setVisible(false);
+        customerCommentLabel.setVisible(true);
+        customerCommentTextArea.setVisible(true);
+        customerCommentTextArea.setEditable(false);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
+        commentTextArea.setEditable(false);
+
+        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            editBookingButton.setVisible(false);
+        }
+
+        bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
+        bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
+        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
+        creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
+        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
+        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
+        teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
+        teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
+        gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
+        topicChoiceLabel.setText("Valg af menu: " + selectedArrangementBooking.getMenuChosen());
+        schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
+        schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
+        zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
+        if (selectedArrangementBooking.getGuide() == null) {
+            communeLabel.setText("Guide: Ingen guide tilføjet");
+        } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
+        customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
+        commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 }
