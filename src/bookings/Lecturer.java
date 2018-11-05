@@ -1,4 +1,4 @@
-package Bookings;
+package bookings;
 
 import enums.LecturerStatus;
 

@@ -1,8 +1,8 @@
-package UserInterface;
+package userInterface;
 
-import Bookings.BookingDataAccessor;
-import Bookings.LectureBooking;
-import Bookings.Lecturer;
+import bookings.BookingDataAccessor;
+import bookings.LectureBooking;
+import bookings.Lecturer;
 import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;

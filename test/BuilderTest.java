@@ -1,9 +1,9 @@
 package BookingZoo.test;
 
-import Bookings.ArrangementBooking;
-import Bookings.FoodOrder;
-import Bookings.LectureBooking;
-import Bookings.Lecturer;
+import bookings.ArrangementBooking;
+import bookings.FoodOrder;
+import bookings.LectureBooking;
+import bookings.Lecturer;
 import builders.ArrangementBuilder;
 import builders.LectureBuilder;
 import enums.*;

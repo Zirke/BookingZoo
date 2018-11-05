@@ -1,8 +1,8 @@
 package builders;
 
-import Bookings.LectureBooking;
-import Bookings.Lecturer;
-import Customers.LectureBookingCustomer;
+import bookings.LectureBooking;
+import bookings.Lecturer;
+import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfTopic;

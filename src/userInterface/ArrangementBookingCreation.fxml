@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <VBox prefHeight="640.0" prefWidth="900.0" spacing="10.0" style="-fx-border-color: black;"
       xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="UserInterface.ArrangementBookingCreationController">
+      fx:controller="userInterface.ArrangementBookingCreationController">
    <padding>
        <Insets bottom="10.0" left="35.0" right="35.0" top="10.0"/>
    </padding>

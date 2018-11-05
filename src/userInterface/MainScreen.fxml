@@ -1,34 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.MainScreenController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
+                <Label fx:id="chosenBookingTypeLabel">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                </Label>
+                <Separator layoutX="20.0" layoutY="225.0" prefWidth="200.0"/>
                 <Button fx:id="refreshBookingsButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Opdater">
                     <font>
                         <Font size="16.0" />
@@ -36,18 +24,12 @@
                     <graphic>
                         <ImageView fitHeight="21.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../ImageView/sync-512.png" />
+                                <Image url="@../imageView/sync-512.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                 </Button>
-            <Label fx:id="chosenBookingTypeLabel">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
             <Separator layoutX="20.0" layoutY="171.0" prefWidth="200.0" />
-            <HBox prefHeight="25.0" prefWidth="200.0" />
                 <Label text="Filtrer efter kategori:">
                     <font>
                         <Font size="16.0" />
@@ -67,7 +49,7 @@
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../ImageView/hourglass.png" />
+                                <Image url="@../imageView/hourglass.png"/>
                             </image>
                         </ImageView>
                </graphic>
@@ -82,7 +64,7 @@
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../ImageView/process-945x945.png" />
+                         <Image url="@../imageView/process-945x945.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -94,7 +76,7 @@
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../ImageView/approved.png" />
+                         <Image url="@../imageView/approved.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -107,7 +89,7 @@
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../ImageView/inbox.png" />
+                         <Image url="@../imageView/inbox.png"/>
                      </image>
                   </ImageView>
                </graphic>
@@ -120,7 +102,7 @@
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../ImageView/dustbin.png" />
+                                <Image url="@../imageView/dustbin.png"/>
                             </image>
                         </ImageView>
                </graphic>
@@ -137,7 +119,7 @@
                     <graphic>
                         <ImageView fitHeight="53.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../ImageView/appointment.png" />
+                                <Image url="@../imageView/appointment.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -157,7 +139,7 @@
                     <children>
                         <ImageView fitHeight="26.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 50;">
                             <image>
-                                <Image url="@../ImageView/active-search-symbol.png" />
+                                <Image url="@../imageView/active-search-symbol.png"/>
                             </image>
                         </ImageView>
                         <TextField fx:id="searchField" prefHeight="31.0" prefWidth="394.0" promptText="Søg efter booking (Kontaktperson)">
@@ -171,7 +153,7 @@
                            <children>
                                <ImageView fitHeight="33.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../ImageView/notifications.png" />
+                                     <Image url="@../imageView/notifications.png"/>
                                  </image>
                               </ImageView>
                                <Label fx:id="notificationLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" textFill="RED">
@@ -427,7 +409,7 @@
                      <graphic>
                          <ImageView fitHeight="25.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@../ImageView/if_sign-check_299110.png" />
+                               <Image url="@../imageView/if_sign-check_299110.png"/>
                            </image>
                         </ImageView>
                      </graphic>
@@ -439,7 +421,7 @@
                      <graphic>
                          <ImageView fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@../ImageView/if_sign-error_299045.png" />
+                               <Image url="@../imageView/if_sign-error_299045.png"/>
                            </image>
                         </ImageView>
                      </graphic>
@@ -453,7 +435,7 @@
                                     <graphic>
                                         <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../ImageView/edit.png" />
+                                                <Image url="@../imageView/edit.png"/>
                                             </image>
                                         </ImageView>
                                     </graphic>

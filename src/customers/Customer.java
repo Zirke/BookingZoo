@@ -1,4 +1,4 @@
-package Customers;
+package customers;
 
 public class Customer {
     private String contactPerson;

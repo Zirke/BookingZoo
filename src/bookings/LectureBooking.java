@@ -1,6 +1,6 @@
-package Bookings;
+package bookings;
 
-import Customers.LectureBookingCustomer;
+import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfTopic;
@@ -136,6 +136,6 @@ public class LectureBooking extends Booking {
 
     @Override
     public String toString() {
-        return "LectureBooking" + getBookingStatus() + getId();
+        return getCustomer().getContactPerson();
     }
 }

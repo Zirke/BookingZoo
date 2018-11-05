@@ -1,11 +1,11 @@
-package Bookings;
+package bookings;
 
-import Customers.LectureBookingCustomer;
-import PostToCalendars.PostToGoogle;
+import customers.LectureBookingCustomer;
 import enums.*;
 import exception.NoBookingsInDatabaseException;
 import facilities.LectureRoom;
 import facilities.Restaurant;
+import postToCalendars.PostToGoogle;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

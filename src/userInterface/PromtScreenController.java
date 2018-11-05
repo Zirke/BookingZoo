@@ -1,4 +1,4 @@
-package UserInterface;
+package userInterface;
 
 import enums.BookingType;
 import exception.IllegalBookingTypeException;
@@ -14,7 +14,6 @@ import java.io.IOException;
 
 public class PromtScreenController {
 
-
     @FXML
     public void loadChosenBookingTypeToMainScreen(ActionEvent actionEvent) {
         try {
@@ -29,10 +28,10 @@ public class PromtScreenController {
             Stage currentStage = (Stage) chosenBtn.getScene().getWindow();
             currentStage.close();
 
-            if(textOfBtn.equals("Børnefødselsdag")){
+            if (textOfBtn.equals("Børnefødselsdage")) {
                 controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
                 //controller.initialiseBookingType();
-            }else if(textOfBtn.equals( "Skoletjeneste")){
+            } else if (textOfBtn.equals("Skoletjenester")) {
                 controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
                // controller.initialiseBookingType();
             } else if(textOfBtn.equals("Alle")){

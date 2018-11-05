@@ -1,6 +1,6 @@
-package Bookings;
+package bookings;
 
-import Customers.Customer;
+import customers.Customer;
 import enums.BookingStatus;
 import enums.BookingType;
 

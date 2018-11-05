@@ -1,9 +1,9 @@
-package UserInterface;
+package userInterface;
 
-import Bookings.ArrangementBooking;
-import Bookings.BookingDataAccessor;
-import Bookings.FoodOrder;
-import Customers.Customer;
+import bookings.ArrangementBooking;
+import bookings.BookingDataAccessor;
+import bookings.FoodOrder;
+import customers.Customer;
 import enums.BookingStatus;
 import enums.ChoiceOfMenu;
 import enums.FacilityState;

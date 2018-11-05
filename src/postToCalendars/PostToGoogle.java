@@ -1,10 +1,9 @@
-package PostToCalendars;
+package postToCalendars;
 
-import Bookings.ArrangementBooking;
-import Bookings.Booking;
-import Bookings.BookingDataAccessor;
-import Bookings.LectureBooking;
-import Customers.LectureBookingCustomer;
+import bookings.ArrangementBooking;
+import bookings.Booking;
+import bookings.BookingDataAccessor;
+import bookings.LectureBooking;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -20,6 +19,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class PostToGoogle {
 
     /* If you change scope, delete all tokens */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "/PostToCalendars/client_secret_1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com.json";
+    private static final String CREDENTIALS_FILE_PATH = "/postToCalendars/client_secret_1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com.json";
 
     /* Calendar id for the google calendar and the user id for posting on the calendar
     *  Only approved users can post to the calendar - must be added manually*/

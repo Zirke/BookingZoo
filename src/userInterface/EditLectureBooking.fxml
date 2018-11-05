@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <VBox minHeight="800.0" prefWidth="900.0" spacing="25.0" style="-fx-border-color: black;"
       xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="UserInterface.EditLectureBookingController">
+      fx:controller="userInterface.EditLectureBookingController">
     <children>
         <GridPane hgap="10.0" prefHeight="450.0" prefWidth="828.0" vgap="10.0">
             <children>

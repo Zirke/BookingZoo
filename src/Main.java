@@ -19,7 +19,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("UserInterface/PromptScreen.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("userInterface/PromptScreen.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
             root.requestFocus();

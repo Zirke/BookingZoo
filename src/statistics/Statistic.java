@@ -1,9 +1,9 @@
 package statistics;
 
-import Bookings.ArrangementBooking;
-import Bookings.Booking;
-import Bookings.LectureBooking;
-import Customers.LectureBookingCustomer;
+import bookings.ArrangementBooking;
+import bookings.Booking;
+import bookings.LectureBooking;
+import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
 
 import java.util.ArrayList;

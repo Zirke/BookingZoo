@@ -1,4 +1,4 @@
-package Customers;
+package customers;
 
 public class LectureBookingCustomer extends Customer {
     private String schoolName;

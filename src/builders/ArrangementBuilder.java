@@ -1,8 +1,8 @@
 package builders;
 
-import Bookings.ArrangementBooking;
-import Bookings.FoodOrder;
-import Customers.Customer;
+import bookings.ArrangementBooking;
+import bookings.FoodOrder;
+import customers.Customer;
 import enums.BookingStatus;
 import enums.BookingType;
 import facilities.Restaurant;

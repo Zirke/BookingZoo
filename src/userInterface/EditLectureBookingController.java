@@ -1,9 +1,9 @@
-package UserInterface;
+package userInterface;
 
-import Bookings.BookingDataAccessor;
-import Bookings.LectureBooking;
-import Bookings.Lecturer;
-import Customers.LectureBookingCustomer;
+import bookings.BookingDataAccessor;
+import bookings.LectureBooking;
+import bookings.Lecturer;
+import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.ChoiceOfTopic;
 import enums.FacilityState;

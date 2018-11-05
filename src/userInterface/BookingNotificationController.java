@@ -1,8 +1,8 @@
-package UserInterface;
+package userInterface;
 
-import Bookings.ArrangementBooking;
-import Bookings.Booking;
-import Bookings.LectureBooking;
+import bookings.ArrangementBooking;
+import bookings.Booking;
+import bookings.LectureBooking;
 import enums.BookingType;
 import exception.NoUpcomingBookingException;
 import javafx.beans.property.ReadOnlyStringWrapper;

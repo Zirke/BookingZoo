@@ -7,12 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.PromtScreenController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="360.0" prefWidth="590.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.PromtScreenController">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+       <ImageView fitHeight="179.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../ImageView/AalborgZooLogo.jpg" />
+             <Image url="@../imageView/AalborgZooLogo.jpg"/>
          </image>
       </ImageView>
        <Label prefHeight="46.0" prefWidth="468.0" text="Vælg venligt hvilken type booking programmet skal vise:">
@@ -24,17 +25,19 @@
          <children>
              <Button fx:id="allBookingButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Alle">
                  <font>
-                     <Font name="System Bold" size="17.0" />
+                     <Font name="System Bold" size="16.0"/>
                  </font>
              </Button>
-             <Button fx:id="arrangementButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Børnefødselsdag">
+             <Button fx:id="arrangementButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen"
+                     prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Børnefødselsdage">
                  <font>
-                     <Font name="System Bold" size="17.0" />
+                     <Font name="System Bold" size="16.0"/>
                  </font>
              </Button>
-             <Button fx:id="lectureButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen" prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Skoletjeneste">
+             <Button fx:id="lectureButton" mnemonicParsing="false" onAction="#loadChosenBookingTypeToMainScreen"
+                     prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: #f4b342;" text="Skoletjenester">
                  <font>
-                     <Font name="System Bold" size="17.0" />
+                     <Font name="System Bold" size="16.0"/>
                  </font>
              </Button>
          </children>

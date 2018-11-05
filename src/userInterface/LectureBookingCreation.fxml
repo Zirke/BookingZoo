@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox prefHeight="700.0" spacing="10.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserInterface.LectureBookingCreationController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.LectureBookingCreationController">
     <children>
         <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="10.0">
             <columnConstraints>

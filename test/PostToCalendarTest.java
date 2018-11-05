@@ -1,19 +1,21 @@
 package BookingZoo.test;
 
-import Bookings.ArrangementBooking;
-import Bookings.FoodOrder;
-import Bookings.LectureBooking;
-import Bookings.Lecturer;
-import PostToCalendars.PostToGoogle;
+import bookings.ArrangementBooking;
+import bookings.FoodOrder;
+import bookings.LectureBooking;
+import bookings.Lecturer;
 import builders.ArrangementBuilder;
 import builders.LectureBuilder;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 import org.junit.Test;
+import postToCalendars.PostToGoogle;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class PostToCalendarTest {
