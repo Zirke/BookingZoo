@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum ChoiceOfTopic {
 
     DYR_DERHJEMME {
@@ -63,7 +65,8 @@ public enum ChoiceOfTopic {
         }
     };
 
-    public static ChoiceOfTopic topicChosen(String input) {
+    public static ChoiceOfTopic topicChosen(String input) throws InvalidEnumException {
+
         switch (input) {
             case "Dyr derhjemme":
                 return DYR_DERHJEMME;
@@ -86,7 +89,7 @@ public enum ChoiceOfTopic {
             case "Aalborg Zoo som virksomhed (Handelsskole)":
                 return ZOO_SOM_VIRKSOMHED;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidEnumException("Input string is not a valid topic: " + input);
         }
     }
 

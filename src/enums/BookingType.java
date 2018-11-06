@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum BookingType {
     LECTUREBOOKING {
         @Override
@@ -20,7 +22,7 @@ public enum BookingType {
         }
     };
 
-    public static BookingType getBookingType(String input) {
+    public static BookingType getBookingType(String input) throws InvalidEnumException {
 
         switch (input) {
             case "Skoletjeneste":
@@ -30,7 +32,7 @@ public enum BookingType {
             case "Alle":
                 return ALL_BOOKING_TYPES;
                 default:
-                    throw new IllegalArgumentException();
+                    throw new InvalidEnumException("Input string is not a valid booking type: " + input);
         }
     }
 

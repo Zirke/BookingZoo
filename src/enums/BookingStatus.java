@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum BookingStatus {
     STATUS_PENDING {
         @Override
@@ -32,7 +34,7 @@ public enum BookingStatus {
         }
     };
 
-    public static BookingStatus statusChosen(String input) {
+    public static BookingStatus statusChosen(String input) throws InvalidEnumException {
         switch (input) {
             case "Afventende":
                 return STATUS_PENDING;
@@ -45,7 +47,7 @@ public enum BookingStatus {
             case "Slettet":
                 return STATUS_DELETED;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidEnumException("Input string is not a valid booking status: " + input);
         }
     }
 }

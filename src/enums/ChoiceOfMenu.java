@@ -1,5 +1,6 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
 import javafx.scene.control.RadioButton;
 
 public enum ChoiceOfMenu {
@@ -34,7 +35,7 @@ public enum ChoiceOfMenu {
         }
     };
 
-    public static ChoiceOfMenu getChoiceOfMenu(RadioButton menuChoiceButton) {
+    public static ChoiceOfMenu getChoiceOfMenu(RadioButton menuChoiceButton) throws InvalidEnumException {
 
         switch (menuChoiceButton.getText()) {
             case "Kakao, boller og kage":
@@ -47,7 +48,8 @@ public enum ChoiceOfMenu {
                 return MENU_FOUR;
             case "Ingen mad":
                 return NO_FOOD;
-            default: throw new IllegalArgumentException();
+            default:
+                throw new InvalidEnumException("Menu chosen is not a valid choice: " + menuChoiceButton.getText());
         }
     }
 }

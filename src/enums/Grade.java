@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum Grade {
     PRESCHOOL,
     FIRST,
@@ -66,7 +68,7 @@ public enum Grade {
         return returnSring;
     }
 
-    public static Grade gradeChosen(String input) {
+    public static Grade gradeChosen(String input) throws InvalidEnumException {
         switch (input) {
             case "Børnehaveklasse":
                 return PRESCHOOL;
@@ -97,7 +99,7 @@ public enum Grade {
             case "3.G":
                 return THIRDG;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidEnumException("Input string is not a valid grade: " + input);
         }
     }
 }

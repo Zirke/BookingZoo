@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum ArrangementStartEnd {
 
     CHOICE_ONE {
@@ -15,14 +17,14 @@ public enum ArrangementStartEnd {
         }
     };
 
-    public static ArrangementStartEnd timeChoice(String input) {
+    public static ArrangementStartEnd timeChoice(String input) throws InvalidEnumException {
         switch (input) {
             case "10:00 - 12:00":
                 return CHOICE_ONE;
             case "12:30 - 14:00":
                 return CHOICE_TWO;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidEnumException("Input string is not a valid time: " + input);
         }
     }
 

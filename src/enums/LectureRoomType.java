@@ -1,5 +1,7 @@
 package enums;
 
+import customExceptions.InvalidEnumException;
+
 public enum LectureRoomType {
     SAVANNAH_TYPE {
         @Override
@@ -20,7 +22,7 @@ public enum LectureRoomType {
         }
     };
 
-    public static LectureRoomType roomTypeChoice(String input) {
+    public static LectureRoomType roomTypeChoice(String input) throws InvalidEnumException {
 
         switch (input) {
             case "Savannelokale":
@@ -30,7 +32,7 @@ public enum LectureRoomType {
             case "Intet lokale valgt":
                 return NOT_CHOSEN;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidEnumException("Input string is not a valid lecture room: " + input);
         }
     }
 }
