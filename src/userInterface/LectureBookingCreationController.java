@@ -96,8 +96,8 @@ public class LectureBookingCreationController {
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
         int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
-        ChoiceOfTopic topicChoice = null;
 
+        ChoiceOfTopic topicChoice = null;
         topicChoice = ChoiceOfTopic.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
 
         String grade = gradeChoiceBox.getText();
