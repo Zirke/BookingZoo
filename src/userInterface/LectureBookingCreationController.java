@@ -33,7 +33,7 @@ public class LectureBookingCreationController {
     private DatePicker datePicker;
 
     @FXML
-    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeChoiceBox,
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
 
@@ -100,7 +100,7 @@ public class LectureBookingCreationController {
 
         topicChoice = ChoiceOfTopic.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
 
-        String grade = gradeTextField.getText();
+        String grade = gradeChoiceBox.getText();
         LectureRoom lectureRoomChosen = null;
         if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Savannelokale")) {
             lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE);

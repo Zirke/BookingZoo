@@ -66,7 +66,6 @@ public class MainScreenController extends GeneralController {
 
         TextFields.bindAutoCompletion(searchField, setCorrectTypeOfBookingsToSearchFor());
         setChosenBookingTypeIntoTableView();
-
     }
 
     @FXML
@@ -666,15 +665,44 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    public void showPendingBookingPopUp(int numberOfPendingBookings) {
+    void showPendingBookingPopUp() {
+        int numberOfPendingBookings = 0;
+        ArrayList<Booking> tempArray = new ArrayList<>();
+
+        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+            numberOfPendingBookings = listOfPendingBookings.size();
+        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+            for (Booking temp : listOfPendingBookings) {
+                if (temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+                    tempArray.add(temp);
+                }
+            }
+            numberOfPendingBookings = tempArray.size();
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+            for (Booking temp : listOfPendingBookings) {
+                if (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+                    tempArray.add(temp);
+                }
+            }
+            numberOfPendingBookings = tempArray.size();
+        }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende bookings");
-        alert.setContentText("Vis bookings:");
+        alert.setContentText("Hvilken kategori vil du vise?");
+
+        ButtonType buttonTypeOne = new ButtonType("Afventende bookings");
+        ButtonType buttonTypeTwo = new ButtonType("Oversigt");
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
         Optional<ButtonType> alertChoice = alert.showAndWait();
 
-        if (alertChoice.get() == ButtonType.OK) {
-
+        if (alertChoice.get() == buttonTypeOne) {
+            pendingBookingsButton.setSelected(true);
+            loadBookingsToTableView(tempArray);
+        } else if (alertChoice.get() == buttonTypeTwo) {
+            overviewButton.setSelected(true);
         }
     }
 }

@@ -178,7 +178,6 @@
                 <TextField fx:id="noOfTeamsTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField fx:id="noOfTeachersTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <ChoiceBox fx:id="topicChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <TextField fx:id="gradeTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                 <ChoiceBox fx:id="lectureRoomChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 <TextField fx:id="lecturerChosenTextField" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                 <TextField fx:id="schoolNameTextField" prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
@@ -220,6 +219,8 @@
                 </Label>
                 <ChoiceBox fx:id="timeChoiceBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1"
                            GridPane.rowIndex="2"/>
+                <ChoiceBox fx:id="gradeChoiceBox" layoutX="170.0" layoutY="253.0" prefHeight="25.0" prefWidth="250.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="7"/>
             </children>
         </GridPane>
         <GridPane prefHeight="200.0" prefWidth="755.0" vgap="20.0">

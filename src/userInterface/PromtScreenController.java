@@ -47,6 +47,8 @@ public class PromtScreenController {
             stage.setMaximized(true);
             root.requestFocus();
             stage.show();
+
+            controller.showPendingBookingPopUp();
         } catch (IOException x) {
             x.printStackTrace();
         }
