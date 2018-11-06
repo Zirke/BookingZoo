@@ -672,12 +672,14 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showStatisticInfo(){
-
         Menu menu = new Menu("Statistic");
         menu.getItems().add(new MenuItem("New"));
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(new MenuItem("Exit"));
         Menubar.getMenus().add(menu);
 
+
     }
+
+
 }
