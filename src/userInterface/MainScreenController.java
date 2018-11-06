@@ -696,23 +696,24 @@ public class MainScreenController extends GeneralController {
             }
             numberOfPendingBookings = tempArray.size();
         }
+        if (numberOfPendingBookings > 0) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende bookings");
+            alert.setContentText("Hvilken kategori vil du vise?");
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende bookings");
-        alert.setContentText("Hvilken kategori vil du vise?");
+            ButtonType buttonTypeOne = new ButtonType("Afventende bookings");
+            ButtonType buttonTypeTwo = new ButtonType("Oversigt");
 
-        ButtonType buttonTypeOne = new ButtonType("Afventende bookings");
-        ButtonType buttonTypeTwo = new ButtonType("Oversigt");
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+            Optional<ButtonType> alertChoice = alert.showAndWait();
 
-        Optional<ButtonType> alertChoice = alert.showAndWait();
-
-        if (alertChoice.get() == buttonTypeOne) {
-            pendingBookingsButton.setSelected(true);
-            loadBookingsToTableView(tempArray);
-        } else if (alertChoice.get() == buttonTypeTwo) {
-            overviewButton.setSelected(true);
+            if (alertChoice.get() == buttonTypeOne) {
+                pendingBookingsButton.setSelected(true);
+                loadBookingsToTableView(tempArray);
+            } else if (alertChoice.get() == buttonTypeTwo) {
+                overviewButton.setSelected(true);
+            }
         }
     }
 
