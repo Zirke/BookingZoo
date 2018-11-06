@@ -4,10 +4,7 @@ import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
 import customers.LectureBookingCustomer;
-import enums.BookingStatus;
-import enums.ChoiceOfTopic;
-import enums.FacilityState;
-import enums.LectureRoomType;
+import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -43,7 +40,7 @@ public class EditLectureBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox, gradeChoiceBox, categoryChoiceBox;
     @FXML
     private ToggleGroup communeGroup;
     @FXML
@@ -143,7 +140,7 @@ public class EditLectureBookingController {
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
         ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
-        selectedLectureBooking.setGrade(gradeTextField.getText());
+        selectedLectureBooking.setGrade(Grade.gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString()));
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);

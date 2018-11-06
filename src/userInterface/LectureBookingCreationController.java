@@ -126,7 +126,7 @@ public class LectureBookingCreationController {
         LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                 LocalDate.now(), date, numberOfPupils, customerComment, comment, lectureRoomChosen,
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
-                grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
+                Grade.gradeChosen(grade), contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
         bda.createLecBookManually(lbook);
     }
@@ -141,7 +141,7 @@ public class LectureBookingCreationController {
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null  || noOfPupilsTextField.getText().isEmpty() ||
                     noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
-                    gradeTextField.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    gradeChoiceBox.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
                     lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
                     zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
                     schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
