@@ -38,6 +38,8 @@ public class MainScreenController extends GeneralController {
             "jyjczxth",
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
+    @FXML
+    public MenuBar Menubar;
     private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
     private ArrayList<Booking> listOfBookings = new ArrayList<>(); //Without archived and deleted
     private ArrayList<Booking> listOfPendingBookings = new ArrayList<>();
@@ -58,6 +60,13 @@ public class MainScreenController extends GeneralController {
         this.typeOfBooking = typeOfBooking;
 
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
+
+        switch (typeOfBooking){
+            case LECTUREBOOKING:{
+                showStatisticInfo();
+            }break;
+            default:
+        }
 
         //Opens notification window
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
@@ -660,5 +669,15 @@ public class MainScreenController extends GeneralController {
         } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
+    }
+
+    private void showStatisticInfo(){
+
+        Menu menu = new Menu("Statistic");
+        menu.getItems().add(new MenuItem("New"));
+        menu.getItems().add(new SeparatorMenuItem());
+        menu.getItems().add(new MenuItem("Exit"));
+        Menubar.getMenus().add(menu);
+
     }
 }

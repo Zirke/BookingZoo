@@ -11,8 +11,8 @@ import java.util.Iterator;
 
 public class Statistic {
 
-    //number of participants from schools from Aalborg commune
-    public int amountOFSchoolFromAalborgCommune(ArrayList<Booking> lectureBookings){
+    //number of participants from schools from Aalborg Municipality
+    public int amountOFSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
 
