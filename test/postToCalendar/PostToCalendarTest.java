@@ -1,4 +1,4 @@
-package BookingZoo.test;
+package postToCalendar;
 
 import Bookings.ArrangementBooking;
 import Bookings.FoodOrder;

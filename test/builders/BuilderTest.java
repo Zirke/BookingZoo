@@ -1,4 +1,4 @@
-package BookingZoo.test;
+package builders;
 
 import Bookings.ArrangementBooking;
 import Bookings.FoodOrder;
