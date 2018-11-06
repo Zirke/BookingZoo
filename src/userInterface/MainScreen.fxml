@@ -465,10 +465,15 @@
                   <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Rediger">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
+            <Menu mnemonicParsing="false" text="Statistik">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Antal elever"/>
+                    <MenuItem mnemonicParsing="false" text="Antal lærere"/>
+                    <MenuItem mnemonicParsing="false" text="Klassetrin"/>
+                    <MenuItem mnemonicParsing="false" text="Emne"/>
+                    <MenuItem mnemonicParsing="false" text="Aalborg Kommune"/>
+                    <MenuItem mnemonicParsing="false" text="Udenfor Aalborg Kommune"/>
+                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
