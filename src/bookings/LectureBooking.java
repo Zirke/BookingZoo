@@ -4,6 +4,7 @@ import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfTopic;
+import enums.Grade;
 import facilities.LectureRoom;
 
 import java.time.LocalDate;
@@ -16,13 +17,13 @@ public class LectureBooking extends Booking {
     private ChoiceOfTopic choiceOfTopic;
     private int noOfTeams;
     private int noOfTeachers;
-    private String grade;
+    private Grade grade;
 
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                           LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
-                          int noOfTeams, int noOfTeachers, String grade, String customerContactPerson,
+                          int noOfTeams, int noOfTeachers, Grade grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
                           String commune, String schoolPhoneNumber, long eanNumber) {
         super(id, bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
@@ -40,7 +41,7 @@ public class LectureBooking extends Booking {
     public LectureBooking(BookingType bookingType, BookingStatus bookingStatus,
                           LocalDate creationDate, LocalDateTime date, int participants, String customerComment,
                           String comment, LectureRoom lectureRoom, Lecturer lecturer, ChoiceOfTopic choiceOfTopic,
-                          int noOfTeams, int noOfTeachers, String grade, String customerContactPerson,
+                          int noOfTeams, int noOfTeachers, Grade grade, String customerContactPerson,
                           String customerPhoneNumber, String customerEmail, String schoolName, int zipCode, String city,
                           String commune, String schoolPhoneNumber, long eanNumber) {
         super(bookingType, bookingStatus, new LectureBookingCustomer(customerContactPerson, customerPhoneNumber,
@@ -56,7 +57,7 @@ public class LectureBooking extends Booking {
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus, LocalDate creationDate, LocalDateTime date, int participants,
                           String customerComment, String comment, LectureRoom lectureRoom, Lecturer lecturer,
-                          ChoiceOfTopic choiceOfTopic, int noOfTeams, int noOfTeachers, String grade, LectureBookingCustomer customer) {
+                          ChoiceOfTopic choiceOfTopic, int noOfTeams, int noOfTeachers, Grade grade, LectureBookingCustomer customer) {
         super(id, bookingType, bookingStatus, customer, creationDate, date,
                 participants, customerComment, comment);
         this.lectureRoom = lectureRoom;
@@ -107,11 +108,11 @@ public class LectureBooking extends Booking {
         this.noOfTeachers = noOfTeachers;
     }
 
-    public String getGrade() {
+    public Grade getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(Grade grade) {
         this.grade = grade;
     }
 

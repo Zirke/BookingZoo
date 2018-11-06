@@ -3,6 +3,7 @@ package statistics;
 import bookings.ArrangementBooking;
 import bookings.Booking;
 import bookings.LectureBooking;
+import builders.LectureBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
 
@@ -52,7 +53,8 @@ public class Statistic {
         HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
 
         for(Object x : lecturebookings){
-
+            LectureBooking i = (LectureBooking) x;
+            //i.getGrade()
         }
         return amountInEachClass;
     }
