@@ -6,6 +6,7 @@ import enums.BookingType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public abstract class Booking {
 
@@ -40,9 +41,6 @@ public abstract class Booking {
         this.participants = participants;
         this.customerComment = customerComment;
         this.comment = comment;
-    }
-
-    public Booking() {
     }
 
     public int getId() {
@@ -115,5 +113,26 @@ public abstract class Booking {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Booking)) return false;
+        Booking booking = (Booking) o;
+        return id == booking.id &&
+                participants == booking.participants &&
+                bookingType == booking.bookingType &&
+                bookingStatus == booking.bookingStatus &&
+                Objects.equals(customer, booking.customer) &&
+                Objects.equals(creationDate, booking.creationDate) &&
+                Objects.equals(dateTime, booking.dateTime) &&
+                Objects.equals(customerComment, booking.customerComment) &&
+                Objects.equals(comment, booking.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bookingType, bookingStatus, customer, creationDate, dateTime, participants, customerComment, comment);
     }
 }

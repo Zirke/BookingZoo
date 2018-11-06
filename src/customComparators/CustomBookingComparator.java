@@ -1,20 +1,15 @@
 package customComparators;
 
+import bookings.Booking;
+
 import java.util.Comparator;
 
-public class CustomBookingComparator implements Comparator<String> {
+public class CustomBookingComparator implements Comparator<Booking> {
     @Override
-    public int compare(String o1, String o2) {
-        if (o1.equals(o2)) {
-            return 0;
-        }
-        if (o1 == null) {
-            return -1;
-        }
-        if (o2 == null) {
-            return 1;
-        }
-        return o1.compareTo(o2);
+    public int compare(Booking o1, Booking o2) {
+        String bstatus1 = o1.getBookingStatus().toString();
+        String bstatus2 = o2.getBookingStatus().toString();
+        return bstatus1.compareTo(bstatus2);
     }
 }
 

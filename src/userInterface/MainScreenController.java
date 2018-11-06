@@ -4,6 +4,7 @@ import bookings.ArrangementBooking;
 import bookings.Booking;
 import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
+import customComparators.CustomBookingComparator;
 import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
@@ -38,8 +39,7 @@ public class MainScreenController extends GeneralController {
             "jyjczxth",
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
-    @FXML
-    public MenuBar Menubar;
+
     private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
     private ArrayList<Booking> listOfBookings = new ArrayList<>(); //Without archived and deleted
     private ArrayList<Booking> listOfPendingBookings = new ArrayList<>();
@@ -61,8 +61,14 @@ public class MainScreenController extends GeneralController {
 
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
 
-        switch (typeOfBooking){
-            case LECTUREBOOKING:{
+        switch (typeOfBooking) {
+            case ALL_BOOKING_TYPES: {
+
+            }
+            case ARRANGEMENTBOOKING: {
+
+            }
+            case LECTUREBOOKING: {
                 showStatisticInfo();
             }break;
             default:
@@ -78,12 +84,12 @@ public class MainScreenController extends GeneralController {
     }
 
     @FXML
+    private MenuBar menuBar;
+    @FXML
     private Label chosenBookingTypeLabel, notificationLabel;
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
-    @FXML
-    private ToggleGroup Categories;
     @FXML
     private Button refreshBookingsButton, notificationButton;
     @FXML
@@ -96,8 +102,6 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
-    @FXML
-    private MenuItem allBookingsMenuItem, arrangementBookingsMenuItem, lectureBookingsMenuItem;
 
     //Nodes for booking information display area
     @FXML
@@ -199,25 +203,26 @@ public class MainScreenController extends GeneralController {
      *   METHODS
      */
 
-
     @FXML
-    private void changeTypeOfBooking(ActionEvent event) throws SQLException {
+    private void changeTypeOfBooking(ActionEvent event) {
         MenuItem chosenType = (MenuItem) event.getSource();
         String nameOfChosenBtn = chosenType.getText();
 
         switch (nameOfChosenBtn) {
             case "Alle bookings":
                 setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
+                //showPendingBookingPopUp();
                 break;
             case "Børnefødselsdage":
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
+                //showPendingBookingPopUp();
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
+                //showPendingBookingPopUp();
                 break;
         }
         setChosenBookingTypeIntoTableView();
-
     }
 
     private void fetchBookingsFromDatabase() throws SQLException {
@@ -288,6 +293,7 @@ public class MainScreenController extends GeneralController {
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
         bookingsToShow.clear();
         bookingsToShow.addAll(listOfChosenBookings);
+        bookingsToShow.sort(new CustomBookingComparator());
         bookingTableView.setItems(bookingsToShow);
     }
 
@@ -390,6 +396,7 @@ public class MainScreenController extends GeneralController {
                     throw new IllegalArgumentException();
             }
         }
+        categorisedBookings.sort(new CustomBookingComparator());
         bookingTableView.setItems(categorisedBookings);
     }
 
@@ -725,6 +732,6 @@ public class MainScreenController extends GeneralController {
         menu.getItems().add(new MenuItem("New"));
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(new MenuItem("Exit"));
-        Menubar.getMenus().add(menu);
+        menuBar.getMenus().add(menu);
     }
 }

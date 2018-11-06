@@ -469,7 +469,7 @@
                 <Insets right="10.0" />
             </opaqueInsets>
         </VBox>
-        <MenuBar layoutX="107.0" layoutY="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+        <MenuBar fx:id="menuBar" layoutX="107.0" layoutY="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                  AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Vis">

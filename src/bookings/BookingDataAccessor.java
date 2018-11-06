@@ -224,7 +224,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setString(4, lbook.getChoiceOfTopic().name());
         pstmtTypeSpecific.setInt(5, lbook.getNoOfTeams());
         pstmtTypeSpecific.setInt(6, lbook.getNoOfTeachers());
-        pstmtTypeSpecific.setString(7, lbook.getGrade().toString());
+        pstmtTypeSpecific.setString(7, lbook.getGrade().name());
 
 
         //Insert data into customer table
