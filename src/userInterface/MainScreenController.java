@@ -197,17 +197,22 @@ public class MainScreenController extends GeneralController {
      *   METHODS
      */
 
+
     @FXML
     private void changeTypeOfBooking(ActionEvent event) throws SQLException {
         MenuItem chosenType = (MenuItem) event.getSource();
         String nameOfChosenBtn = chosenType.getText();
 
-        if (nameOfChosenBtn.equals("Alle bookings")) {
-            setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-        } else if (nameOfChosenBtn.equals("Børnefødselsdage")) {
-            setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-        } else if (nameOfChosenBtn.equals("Skoletjenester")) {
-            setTypeOfBooking(BookingType.LECTUREBOOKING);
+        switch (nameOfChosenBtn) {
+            case "Alle bookings":
+                setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
+                break;
+            case "Børnefødselsdage":
+                setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
+                break;
+            case "Skoletjenester":
+                setTypeOfBooking(BookingType.LECTUREBOOKING);
+                break;
         }
         setChosenBookingTypeIntoTableView();
 
@@ -279,7 +284,6 @@ public class MainScreenController extends GeneralController {
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
-
         bookingsToShow.clear();
         bookingsToShow.addAll(listOfChosenBookings);
         bookingTableView.setItems(bookingsToShow);
@@ -357,7 +361,7 @@ public class MainScreenController extends GeneralController {
 
             switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES:
-                    for (Booking temp : listOfBookings) {
+                    for (Booking temp : listOfAllBookings) {
                         BookingStatus chosenBookingStatus = BookingStatus.statusChosen(nameOfChosenBtn);
                         if (temp.getBookingStatus().equals(chosenBookingStatus)) {
                             categorisedBookings.add(temp);
@@ -671,15 +675,53 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    private void showStatisticInfo(){
+    void showPendingBookingPopUp() {
+        int numberOfPendingBookings = 0;
+        ArrayList<Booking> tempArray = new ArrayList<>();
+
+        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+            numberOfPendingBookings = listOfPendingBookings.size();
+        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+            for (Booking temp : listOfPendingBookings) {
+                if (temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+                    tempArray.add(temp);
+                }
+            }
+            numberOfPendingBookings = tempArray.size();
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+            for (Booking temp : listOfPendingBookings) {
+                if (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+                    tempArray.add(temp);
+                }
+            }
+            numberOfPendingBookings = tempArray.size();
+        }
+        if (numberOfPendingBookings > 0) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende bookings");
+            alert.setContentText("Hvilken kategori vil du vise?");
+
+            ButtonType buttonTypeOne = new ButtonType("Afventende bookings");
+            ButtonType buttonTypeTwo = new ButtonType("Oversigt");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+            Optional<ButtonType> alertChoice = alert.showAndWait();
+
+            if (alertChoice.get() == buttonTypeOne) {
+                pendingBookingsButton.setSelected(true);
+                loadBookingsToTableView(tempArray);
+            } else if (alertChoice.get() == buttonTypeTwo) {
+                overviewButton.setSelected(true);
+            }
+        }
+    }
+
+    private void showStatisticInfo() {
         Menu menu = new Menu("Statistic");
         menu.getItems().add(new MenuItem("New"));
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(new MenuItem("Exit"));
         Menubar.getMenus().add(menu);
-
-
     }
-
-
 }

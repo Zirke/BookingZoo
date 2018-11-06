@@ -4,10 +4,7 @@ import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
 import customers.LectureBookingCustomer;
-import enums.BookingStatus;
-import enums.ChoiceOfTopic;
-import enums.FacilityState;
-import enums.LectureRoomType;
+import enums.*;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,6 +18,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static enums.ChoiceOfTopic.topicChosen;
+import static enums.Grade.gradeChosen;
 
 public class EditLectureBookingController {
     private BookingDataAccessor bda;
@@ -37,13 +35,13 @@ public class EditLectureBookingController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
             lecturerTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
     private ToggleGroup communeGroup;
     @FXML
@@ -55,6 +53,9 @@ public class EditLectureBookingController {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
+        gradeChoiceBox.getItems().addAll("Børnehaveklasse", "1. klasse", "2. klasse", "3. klasse", "4. klasse",
+                "5. klasse", "6. klasse", "7. klasse", "8. klasse", "9. klasse", "10. klasse",
+                "1.G", "2.G", "3.G");
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
@@ -92,12 +93,11 @@ public class EditLectureBookingController {
                 break;
         }
         timeChoiceBox.setValue(tempTime);
-
         noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
         noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
         noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
         topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic().toString());
-        gradeTextField.setText(String.valueOf(selectedLectureBooking.getGrade()));
+        gradeChoiceBox.setValue(String.valueOf(selectedLectureBooking.getGrade()));
         lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
         lecturerTextField.setText(selectedLectureBooking.getLecturer().toString());
         categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus().toString());
@@ -143,7 +143,8 @@ public class EditLectureBookingController {
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
         ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
-        selectedLectureBooking.setGrade(gradeTextField.getText());
+        Grade grade = gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString());
+        selectedLectureBooking.setGrade(grade);
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);

@@ -54,7 +54,8 @@
                     </font>
                 </Label>
                 <Separator prefWidth="200.0" />
-            <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" text="Oversigt">
+                <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
+                              prefHeight="35.0" prefWidth="250.0" selected="true" text="Oversigt">
                <font>
                   <Font size="16.0" />
                </font>
@@ -481,11 +482,6 @@
                   </RadioMenuItem>
                   <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Børnefødselsdage" toggleGroup="$bookingTypeToggleGroup" />
                   <RadioMenuItem mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Rediger">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

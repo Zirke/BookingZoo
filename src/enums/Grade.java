@@ -16,41 +16,88 @@ public enum Grade {
     SECONDG,
     THIRDG;
 
-
     @Override
     public String toString() {
         String returnSring = "somethingWentWrong";
-        switch (this){
-            case PRESCHOOL: returnSring = "børnehaveklasse";
+        switch (this) {
+            case PRESCHOOL:
+                returnSring = "Børnehaveklasse";
                 break;
-            case FIRST: returnSring = "første klasse";
+            case FIRST:
+                returnSring = "1. klasse";
                 break;
-            case SECOND: returnSring = "anden klasse";
+            case SECOND:
+                returnSring = "2. klasse";
                 break;
-            case THIRD: returnSring = "tredje klasse";
+            case THIRD:
+                returnSring = "3. klasse";
                 break;
-            case FOURTH: returnSring = "fjerde klasse";
+            case FOURTH:
+                returnSring = "4. klasse";
                 break;
-            case FIFTH: returnSring = "femte klasse";
+            case FIFTH:
+                returnSring = "5. klasse";
                 break;
-            case SIXTH: returnSring = "sjette klasse";
+            case SIXTH:
+                returnSring = "6. klasse";
                 break;
-            case SEVENTH: returnSring = "syvende klasse";
+            case SEVENTH:
+                returnSring = "7. klasse";
                 break;
-            case EIGHTH: returnSring = "ottende klasse";
+            case EIGHTH:
+                returnSring = "8. klasse";
                 break;
-            case NINTH: returnSring = "nine klasse";
+            case NINTH:
+                returnSring = "9. klasse";
                 break;
-            case TENTH: returnSring = "tiende klasse";
+            case TENTH:
+                returnSring = "10. klasse";
                 break;
-            case ONEG: returnSring = "første G";
+            case ONEG:
+                returnSring = "1.G";
                 break;
-            case SECONDG: returnSring = "anden G";
+            case SECONDG:
+                returnSring = "2.G";
                 break;
-            case THIRDG: returnSring = "trejde G";
+            case THIRDG:
+                returnSring = "3.G";
                 break;
         }
-
         return returnSring;
+    }
+
+    public static Grade gradeChosen(String input) {
+        switch (input) {
+            case "Børnehaveklasse":
+                return PRESCHOOL;
+            case "1. klasse":
+                return FIRST;
+            case "2. klasse":
+                return SECOND;
+            case "3. klasse":
+                return THIRD;
+            case "4. klasse":
+                return FOURTH;
+            case "5. klasse":
+                return FIFTH;
+            case "6. klasse":
+                return SIXTH;
+            case "7. klasse":
+                return SEVENTH;
+            case "8. klasse":
+                return EIGHTH;
+            case "9. klasse":
+                return NINTH;
+            case "10. klasse":
+                return TENTH;
+            case "1.G":
+                return ONEG;
+            case "2.G":
+                return SECONDG;
+            case "3.G":
+                return THIRDG;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

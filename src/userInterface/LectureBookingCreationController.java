@@ -33,7 +33,7 @@ public class LectureBookingCreationController {
     private DatePicker datePicker;
 
     @FXML
-    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
 
@@ -44,7 +44,7 @@ public class LectureBookingCreationController {
     private ToggleGroup communeGroup;
 
     @FXML
-    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox;
 
 
     @FXML
@@ -52,6 +52,9 @@ public class LectureBookingCreationController {
         createBookingButton();
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
+        gradeChoiceBox.getItems().addAll("Børnehaveklasse", "1. klasse", "2. klasse", "3. klasse", "4. klasse",
+                "5. klasse", "6. klasse", "7. klasse", "8. klasse", "9. klasse", "10. klasse",
+                "1.G", "2.G", "3.G");
         topicChoiceBox.getItems().addAll("Dyr derhjemme", "Hverdagen i Zoo", "Krybdyr", "Grønlands dyr",
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
@@ -96,11 +99,12 @@ public class LectureBookingCreationController {
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
         int numberOfTeachers = Integer.parseInt(noOfTeachersTextField.getText());
-        ChoiceOfTopic topicChoice = null;
 
+        ChoiceOfTopic topicChoice = null;
         topicChoice = ChoiceOfTopic.topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
 
-        String grade = gradeTextField.getText();
+        Grade grade = Grade.gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString());
+
         LectureRoom lectureRoomChosen = null;
         if (lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Savannelokale")) {
             lectureRoomChosen = new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE);
@@ -141,7 +145,7 @@ public class LectureBookingCreationController {
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null  || noOfPupilsTextField.getText().isEmpty() ||
                     noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
-                    gradeTextField.getText().isEmpty() || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    gradeChoiceBox.getSelectionModel().getSelectedItem() == null || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
                     lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
                     zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
                     schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
