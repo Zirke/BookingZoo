@@ -54,7 +54,9 @@ public class Statistic {
 
         for(Object x : lecturebookings){
             LectureBooking i = (LectureBooking) x;
-            //i.getGrade()
+            switch (i.getGrade()){
+                case PRESCHOOL: break;
+            }
         }
         return amountInEachClass;
     }
