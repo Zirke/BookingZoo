@@ -58,40 +58,67 @@ public class Statistic {
             LectureBooking i = (LectureBooking) x;
             switch (i.getGrade()){
                 case PRESCHOOL: {
-                    amountInEachClass.get(Grade.PRESCHOOL).intValue() + 
+                    amountInEachClass.put(Grade.PRESCHOOL, amountInEachClass.get(Grade.PRESCHOOL).intValue() + 1);
                 }break;
-                case FIRST:
+                case FIRST:{
+                    amountInEachClass.put(Grade.FIRST, amountInEachClass.get(Grade.FIRST).intValue() + 1);
+                }
                     break;
-                case SECOND:
+                case SECOND:{
+                    amountInEachClass.put(Grade.SECOND, amountInEachClass.get(Grade.SECOND).intValue() + 1);
+                }
                     break;
-                case THIRD:
+                case THIRD:{
+                    amountInEachClass.put(Grade.THIRD, amountInEachClass.get(Grade.THIRD).intValue() + 1);
+                }
                     break;
-                case FOURTH:
+                case FOURTH:{
+                    amountInEachClass.put(Grade.FOURTH, amountInEachClass.get(Grade.FOURTH).intValue() + 1);
+                }
                     break;
                 case FIFTH:
+                {
+                    amountInEachClass.put(Grade.FIFTH, amountInEachClass.get(Grade.FIFTH).intValue() + 1);
+                }
                     break;
-                case SIXTH:
+                case SIXTH:{
+                    amountInEachClass.put(Grade.SIXTH, amountInEachClass.get(Grade.SIXTH).intValue() + 1);
+                }
                     break;
-                case SEVENTH:
+                case SEVENTH:{
+                    amountInEachClass.put(Grade.SEVENTH, amountInEachClass.get(Grade.SEVENTH).intValue() + 1);
+                }
                     break;
-                case EIGHTH:
+                case EIGHTH:{
+                    amountInEachClass.put(Grade.EIGHTH, amountInEachClass.get(Grade.EIGHTH).intValue() + 1);
+                }
                     break;
-                case NINTH:
+                case NINTH:{
+                    amountInEachClass.put(Grade.NINTH, amountInEachClass.get(Grade.NINTH).intValue() + 1);
+                }
                     break;
-                case TENTH:
+                case TENTH:{
+                    amountInEachClass.put(Grade.TENTH, amountInEachClass.get(Grade.TENTH).intValue() + 1);
+                }
                     break;
-                case ONEG:
+                case ONEG:{
+                    amountInEachClass.put(Grade.ONEG, amountInEachClass.get(Grade.ONEG).intValue() + 1);
+                }
                     break;
-                case SECONDG:
+                case SECONDG:{
+                    amountInEachClass.put(Grade.SECONDG, amountInEachClass.get(Grade.SECONDG).intValue() + 1);
+                }
                     break;
-                case THIRDG:
+                case THIRDG:{
+                    amountInEachClass.put(Grade.THIRDG, amountInEachClass.get(Grade.THIRDG).intValue() + 1);
+                }
                     break;
             }
         }
         return amountInEachClass;
     }
 
-    private HashMap<Grade, Integer> initialiseGradeHashMap(HashMap<Grade, Integer> amountInEachClass){
+    private void initialiseGradeHashMap(HashMap<Grade, Integer> amountInEachClass){
 
         initialiseGradeForHashMap(Grade.PRESCHOOL, amountInEachClass);
         initialiseGradeForHashMap(Grade.FIRST, amountInEachClass);
@@ -108,7 +135,6 @@ public class Statistic {
         initialiseGradeForHashMap(Grade.SECONDG, amountInEachClass);
         initialiseGradeForHashMap(Grade.THIRDG, amountInEachClass);
 
-        return amountInEachClass;
     }
 
     private void initialiseGradeForHashMap(Grade grade, HashMap<Grade, Integer> amountInEachClass){
