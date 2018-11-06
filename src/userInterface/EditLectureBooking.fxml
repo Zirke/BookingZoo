@@ -85,7 +85,6 @@
                 <TextField fx:id="noOfTeamsTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <TextField fx:id="noOfTeachersTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <ChoiceBox fx:id="topicChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <TextField fx:id="gradeTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                 <ChoiceBox fx:id="lectureRoomChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 <TextField fx:id="lecturerTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                 <ChoiceBox fx:id="categoryChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
@@ -138,6 +137,8 @@
                 <TextField fx:id="eanNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                 <TextField fx:id="phoneNumberTextField" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                 <ChoiceBox fx:id="timeChoiceBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <ChoiceBox fx:id="gradeChoiceBox" layoutX="194.0" layoutY="266.0" prefWidth="200.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="7"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" />
