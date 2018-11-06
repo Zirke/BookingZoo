@@ -343,7 +343,7 @@ public class PostToGoogle {
                 "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
                 "\n Antal hold: " + String.valueOf(inputLectureBooking.getNoOfTeams()) +
                 "\n Antal lærer: " + String.valueOf(inputLectureBooking.getNoOfTeachers()) +
-                "\n Klassetrin: " + String.valueOf(inputLectureBooking.getGrade()) +
+                "\n Klassetrin: " + inputLectureBooking.getGrade() +
                 "\n\n Kunde kommentar: " + customercomment +
                 "\n\n Egen kommentar: " + comment +
                 "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +

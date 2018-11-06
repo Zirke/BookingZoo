@@ -6,6 +6,7 @@ import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
 import enums.ChoiceOfTopic;
+import enums.Grade;
 import facilities.LectureRoom;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class LectureBuilder {
     private ChoiceOfTopic choiceOfTopic;
     private int noOfTeams;
     private int noOfTeachers;
-    private String grade;
+    private Grade grade;
 
     public LectureBuilder setBookingType(BookingType bookingType){
         this.bookingType = bookingType;
@@ -102,9 +103,8 @@ public class LectureBuilder {
         return this;
     }
 
-    public LectureBuilder setGrade(String grade){
+    public void setGrade(Grade grade) {
         this.grade = grade;
-        return this;
     }
 
     public void setId(int id) {
