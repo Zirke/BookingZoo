@@ -20,48 +20,34 @@ public enum Grade {
     @Override
     public String toString() {
         String returnSring = "somethingWentWrong";
-        switch (this) {
-            case PRESCHOOL:
-                returnSring = "børnehaveklasse";
+        switch (this){
+            case PRESCHOOL: returnSring = "børnehaveklasse";
                 break;
-            case FIRST:
-                returnSring = "første klasse";
+            case FIRST: returnSring = "første klasse";
                 break;
-            case SECOND:
-                returnSring = "anden klasse";
+            case SECOND: returnSring = "anden klasse";
                 break;
-            case THIRD:
-                returnSring = "tredje klasse";
+            case THIRD: returnSring = "tredje klasse";
                 break;
-            case FOURTH:
-                returnSring = "fjerde klasse";
+            case FOURTH: returnSring = "fjerde klasse";
                 break;
-            case FIFTH:
-                returnSring = "femte klasse";
+            case FIFTH: returnSring = "femte klasse";
                 break;
-            case SIXTH:
-                returnSring = "sjette klasse";
+            case SIXTH: returnSring = "sjette klasse";
                 break;
-            case SEVENTH:
-                returnSring = "syvende klasse";
+            case SEVENTH: returnSring = "syvende klasse";
                 break;
-            case EIGHTH:
-                returnSring = "ottende klasse";
+            case EIGHTH: returnSring = "ottende klasse";
                 break;
-            case NINTH:
-                returnSring = "nine klasse";
+            case NINTH: returnSring = "nine klasse";
                 break;
-            case TENTH:
-                returnSring = "tiende klasse";
+            case TENTH: returnSring = "tiende klasse";
                 break;
-            case ONEG:
-                returnSring = "første G";
+            case ONEG: returnSring = "første G";
                 break;
-            case SECONDG:
-                returnSring = "anden G";
+            case SECONDG: returnSring = "anden G";
                 break;
-            case THIRDG:
-                returnSring = "trejde G";
+            case THIRDG: returnSring = "trejde G";
                 break;
         }
 

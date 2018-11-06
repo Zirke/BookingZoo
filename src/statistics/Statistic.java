@@ -3,16 +3,18 @@ package statistics;
 import bookings.ArrangementBooking;
 import bookings.Booking;
 import bookings.LectureBooking;
+import builders.LectureBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-
+import enums.Grade;
 public class Statistic {
 
-    //number of participants from schools from Aalborg commune
-    public int amountOFSchoolFromAalborgCommune(ArrayList<Booking> lectureBookings){
+    //number of participants from schools from Aalborg Municipality
+    public int amountOFSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
 
@@ -25,15 +27,42 @@ public class Statistic {
         return amount;
     }
 
-    public int amountOfParticipantsFromSchools(ArrayList<Booking> lecturebookings){
+    //Amount of students from the lecture bookings.
+    public int amountOfStudentsFromSchools(ArrayList<Booking> lecturebookings){
         int amount = 0;
 
         for (Object lecturebooking : lecturebookings) {
             LectureBooking booking = (LectureBooking) lecturebooking;
-            amount += booking.getNoOfTeachers() + booking.getParticipants();
+            amount += booking.getParticipants();
         }
         return amount;
     }
+
+    //Amount of teachers from the lecture bookings.
+    public int amountOFTeachers(ArrayList<Booking> lecturebookings){
+        int amount = 0;
+
+        for (Object lecturebooking : lecturebookings) {
+            LectureBooking booking = (LectureBooking) lecturebooking;
+            amount += booking.getNoOfTeachers();
+        }
+        return amount;
+    }
+
+    public HashMap<Grade, Integer> amountStudentsInClass(ArrayList<Booking> lecturebookings){
+        HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
+
+        for(Object x : lecturebookings){
+            LectureBooking i = (LectureBooking) x;
+            //i.getGrade()
+        }
+        return amountInEachClass;
+    }
+
+
+
+
+
 
     public int amountOfArrangementParticipants(ArrayList<Booking> arrangements){
         int amount = 0;

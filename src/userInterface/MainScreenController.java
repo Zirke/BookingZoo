@@ -38,6 +38,8 @@ public class MainScreenController extends GeneralController {
             "jyjczxth",
             "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
     );
+    @FXML
+    public MenuBar Menubar;
     private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
     private ArrayList<Booking> listOfBookings = new ArrayList<>(); //Without archived and deleted
     private ArrayList<Booking> listOfPendingBookings = new ArrayList<>();
@@ -58,6 +60,13 @@ public class MainScreenController extends GeneralController {
         this.typeOfBooking = typeOfBooking;
 
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
+
+        switch (typeOfBooking){
+            case LECTUREBOOKING:{
+                showStatisticInfo();
+            }break;
+            default:
+        }
 
         //Opens notification window
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
@@ -206,6 +215,7 @@ public class MainScreenController extends GeneralController {
                 break;
         }
         setChosenBookingTypeIntoTableView();
+
     }
 
     private void fetchBookingsFromDatabase() throws SQLException {
