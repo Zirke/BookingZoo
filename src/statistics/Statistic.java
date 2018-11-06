@@ -6,8 +6,6 @@ import bookings.LectureBooking;
 import builders.LectureBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
-
-import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -185,5 +183,6 @@ public class Statistic {
 
         return amount;
     }
+
 
 }
