@@ -105,7 +105,4 @@ public class Statistic {
         return amount;
     }
 
-
-
-
 }

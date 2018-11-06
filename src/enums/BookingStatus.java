@@ -32,6 +32,7 @@ public enum BookingStatus {
         }
     };
 
+
     public static BookingStatus statusChosen(String input) {
         switch (input) {
             case "Afventende":
