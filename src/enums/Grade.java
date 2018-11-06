@@ -71,23 +71,23 @@ public enum Grade {
             case "Børnehaveklasse":
                 return PRESCHOOL;
             case "1. klasse":
-                return SECOND;
+                return FIRST;
             case "2. klasse":
-                return THIRD;
+                return SECOND;
             case "3. klasse":
-                return FOURTH;
+                return THIRD;
             case "4. klasse":
-                return FIFTH;
+                return FOURTH;
             case "5. klasse":
-                return SIXTH;
+                return FIFTH;
             case "6. klasse":
-                return SEVENTH;
+                return SIXTH;
             case "7. klasse":
-                return EIGHTH;
+                return SEVENTH;
             case "8. klasse":
-                return NINTH;
+                return EIGHTH;
             case "9. klasse":
-                return TENTH;
+                return NINTH;
             case "10. klasse":
                 return TENTH;
             case "1.G":

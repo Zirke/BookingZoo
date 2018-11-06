@@ -143,11 +143,8 @@ public class EditLectureBookingController {
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
         ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
-
         Grade grade = gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setGrade(grade);
-
-
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);
