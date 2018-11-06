@@ -83,6 +83,8 @@ public class MainScreenController extends GeneralController {
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
     @FXML
+    private ToggleGroup Categories;
+    @FXML
     private Button refreshBookingsButton, notificationButton;
     @FXML
     private MenuItem lectureBookingItem, arrangementBookingItem;
@@ -681,6 +683,7 @@ public class MainScreenController extends GeneralController {
 
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             numberOfPendingBookings = listOfPendingBookings.size();
+            tempArray.addAll(listOfPendingBookings);
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             for (Booking temp : listOfPendingBookings) {
                 if (temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
