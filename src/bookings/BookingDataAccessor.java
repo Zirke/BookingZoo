@@ -343,7 +343,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setString(1,lbook.getLectureRoom().getType().name()); pstmtTypeSpecific.setString(2,lbook.getLecturer().toString());
         pstmtTypeSpecific.setString(3,lbook.getChoiceOfTopic().name()); pstmtTypeSpecific.setInt(4,lbook.getNoOfTeams());
         pstmtTypeSpecific.setInt(5, lbook.getNoOfTeachers());
-        pstmtTypeSpecific.setString(6, lbook.getGrade().toString());
+        pstmtTypeSpecific.setString(6, lbook.getGrade().name());
         pstmtTypeSpecific.setInt(7,lbook.getId());
 
         PreparedStatement pstmtCustomer = connection.prepareStatement(editCustomer);

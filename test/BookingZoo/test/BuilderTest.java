@@ -61,7 +61,7 @@ public class BuilderTest {
                 .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
                 .setNoOfTeams(3)
                 .setNoOfTeachers(6)
-                .setGrade("7");
+                .setGrade(Grade.TENTH);
         testCase = builder.build();
         assertEquals("hallo",testCase.getCustomerComment());
     }

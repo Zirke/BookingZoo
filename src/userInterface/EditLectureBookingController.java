@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static enums.ChoiceOfTopic.topicChosen;
+import static enums.Grade.gradeChosen;
 
 public class EditLectureBookingController {
     private BookingDataAccessor bda;
@@ -34,13 +35,13 @@ public class EditLectureBookingController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField, gradeTextField,
+    private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
             lecturerTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private ChoiceBox timeChoiceBox, topicChoiceBox, lectureRoomChoiceBox, gradeChoiceBox, categoryChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
     @FXML
     private ToggleGroup communeGroup;
     @FXML
@@ -92,12 +93,11 @@ public class EditLectureBookingController {
                 break;
         }
         timeChoiceBox.setValue(tempTime);
-
         noOfPupilsTextField.setText(String.valueOf(selectedLectureBooking.getParticipants()));
         noOfTeamsTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeams()));
         noOfTeachersTextField.setText(String.valueOf(selectedLectureBooking.getNoOfTeachers()));
         topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic().toString());
-        gradeTextField.setText(String.valueOf(selectedLectureBooking.getGrade()));
+        gradeChoiceBox.setValue(String.valueOf(selectedLectureBooking.getGrade()));
         lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
         lecturerTextField.setText(selectedLectureBooking.getLecturer().toString());
         categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus().toString());
@@ -143,7 +143,11 @@ public class EditLectureBookingController {
         selectedLectureBooking.setNoOfTeachers(Integer.parseInt(noOfTeachersTextField.getText()));
         ChoiceOfTopic topicChoice = topicChosen(topicChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setChoiceOfTopic(topicChoice);
-        selectedLectureBooking.setGrade(Grade.gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString()));
+
+        Grade grade = gradeChosen(gradeChoiceBox.getSelectionModel().getSelectedItem().toString());
+        selectedLectureBooking.setGrade(grade);
+
+
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);
