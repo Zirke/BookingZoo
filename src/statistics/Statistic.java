@@ -7,6 +7,7 @@ import builders.LectureBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,18 +52,70 @@ public class Statistic {
 
     public HashMap<Grade, Integer> amountStudentsInClass(ArrayList<Booking> lecturebookings){
         HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
+        initialiseGradeHashMap(amountInEachClass);
 
         for(Object x : lecturebookings){
             LectureBooking i = (LectureBooking) x;
             switch (i.getGrade()){
-                case PRESCHOOL: break;
+                case PRESCHOOL: {
+                    amountInEachClass.get(Grade.PRESCHOOL).intValue() + 
+                }break;
+                case FIRST:
+                    break;
+                case SECOND:
+                    break;
+                case THIRD:
+                    break;
+                case FOURTH:
+                    break;
+                case FIFTH:
+                    break;
+                case SIXTH:
+                    break;
+                case SEVENTH:
+                    break;
+                case EIGHTH:
+                    break;
+                case NINTH:
+                    break;
+                case TENTH:
+                    break;
+                case ONEG:
+                    break;
+                case SECONDG:
+                    break;
+                case THIRDG:
+                    break;
             }
         }
         return amountInEachClass;
     }
 
+    private HashMap<Grade, Integer> initialiseGradeHashMap(HashMap<Grade, Integer> amountInEachClass){
 
+        initialiseGradeForHashMap(Grade.PRESCHOOL, amountInEachClass);
+        initialiseGradeForHashMap(Grade.FIRST, amountInEachClass);
+        initialiseGradeForHashMap(Grade.SECOND, amountInEachClass);
+        initialiseGradeForHashMap(Grade.THIRD, amountInEachClass);
+        initialiseGradeForHashMap(Grade.FOURTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.FIFTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.SIXTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.SEVENTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.EIGHTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.NINTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.TENTH, amountInEachClass);
+        initialiseGradeForHashMap(Grade.ONEG, amountInEachClass);
+        initialiseGradeForHashMap(Grade.SECONDG, amountInEachClass);
+        initialiseGradeForHashMap(Grade.THIRDG, amountInEachClass);
 
+        return amountInEachClass;
+    }
+
+    private void initialiseGradeForHashMap(Grade grade, HashMap<Grade, Integer> amountInEachClass){
+        if(!amountInEachClass.containsKey(grade)){
+            amountInEachClass.put(grade,0);
+        }
+    }
 
 
 
