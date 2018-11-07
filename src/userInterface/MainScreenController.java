@@ -64,6 +64,7 @@ public class MainScreenController extends GeneralController {
         switch (typeOfBooking){
             case LECTUREBOOKING:{
                 showStatisticInfo();
+                statestikPressed();
             }break;
             default:
         }
@@ -718,10 +719,42 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showStatisticInfo() {
-        Menu menu = new Menu("Statistic");
-        menu.getItems().add(new MenuItem("New"));
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(new MenuItem("Exit"));
+        Menu menu = new Menu("Statestik");
+        menu.getItems().add(new MenuItem("Vis statestik"));
+        //menu.getItems().add(new MenuItem("Antal lærer"));
+        //menu.getItems().add(new MenuItem(""));
         Menubar.getMenus().add(menu);
+    }
+
+    private void statestikPressed(){
+        MenuItem item = new MenuItem();
+        ObservableList list = Menubar.getMenus();
+        for(Object i : list) {
+            if(((Menu)i).getText().equals("Statestik")){
+                item = ((Menu)i).getItems().get(0);
+            }
+        }
+
+        item.setOnAction(e -> {
+        showStatisticWindow();
+        });
+    }
+
+    private void showStatisticWindow(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
+            Parent root = loader.load();
+
+            StatisticController control = loader.getController();
+            control.setMainScreenController(this);
+            control.setLectureBookings(listOfLectureBookings);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

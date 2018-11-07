@@ -13,7 +13,7 @@ import enums.Grade;
 public class Statistic {
 
     //number of participants from schools from Aalborg Municipality
-    public int amountOfSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
+    public static int amountOFSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
 
@@ -27,7 +27,7 @@ public class Statistic {
     }
 
     //Amount of students from the lecture bookings.
-    public int amountOfStudentsFromSchools(ArrayList<Booking> lecturebookings){
+    public static int amountOfStudentsFromSchools(ArrayList<Booking> lecturebookings){
         int amount = 0;
 
         for (Object lecturebooking : lecturebookings) {
@@ -38,7 +38,7 @@ public class Statistic {
     }
 
     //Amount of teachers from the lecture bookings.
-    public int amountOfTeachers(ArrayList<Booking> lecturebookings){
+    public static int amountOFTeachers(ArrayList<Booking> lecturebookings){
         int amount = 0;
 
         for (Object lecturebooking : lecturebookings) {
@@ -48,7 +48,7 @@ public class Statistic {
         return amount;
     }
 
-    public HashMap<Grade, Integer> amountStudentsInGrade(ArrayList<Booking> lecturebookings){
+    public static HashMap<Grade, Integer> amountStudentsInClass(ArrayList<Booking> lecturebookings){
         HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
         initialiseGradeHashMap(amountInEachClass);
 
@@ -116,7 +116,7 @@ public class Statistic {
         return amountInEachClass;
     }
 
-    private void initialiseGradeHashMap(HashMap<Grade, Integer> amountInEachClass){
+    private static void initialiseGradeHashMap(HashMap<Grade, Integer> amountInEachClass){
 
         initialiseGradeForHashMap(Grade.PRESCHOOL, amountInEachClass);
         initialiseGradeForHashMap(Grade.FIRST, amountInEachClass);
@@ -135,7 +135,7 @@ public class Statistic {
 
     }
 
-    private void initialiseGradeForHashMap(Grade grade, HashMap<Grade, Integer> amountInEachClass){
+    private static void initialiseGradeForHashMap(Grade grade, HashMap<Grade, Integer> amountInEachClass){
         if(!amountInEachClass.containsKey(grade)){
             amountInEachClass.put(grade,0);
         }
@@ -143,7 +143,7 @@ public class Statistic {
 
 
 
-    public int amountOfArrangementParticipants(ArrayList<Booking> arrangements){
+    public static int amountOfArrangementParticipants(ArrayList<Booking> arrangements){
         int amount = 0;
 
         for (Object arrangement : arrangements) {
@@ -153,7 +153,7 @@ public class Statistic {
     }
 
     //test om nested if virker
-    public int amountInGivenMonth(int month, int year, ArrayList<Booking> allBookings){
+    public static int amountInGivenMonth(int month, int year, ArrayList<Booking> allBookings){
         int amount = 0;
         Iterator iter = allBookings.iterator();
 
@@ -170,7 +170,7 @@ public class Statistic {
         return amount;
     }
 
-    public int amountOfChosenCategory(ChoiceOfTopic topic, ArrayList<Booking> allBookings){
+    public static int amountOfChosenCategory(ChoiceOfTopic topic, ArrayList<Booking> allBookings){
         int amount = 0;
         Iterator iter = allBookings.iterator();
 
