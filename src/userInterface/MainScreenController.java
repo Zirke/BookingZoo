@@ -6,6 +6,7 @@ import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import customComparators.CustomBookingComparator;
 import customers.LectureBookingCustomer;
+import email.SendEmail;
 import enums.BookingStatus;
 import enums.BookingType;
 import exception.NoBookingsInDatabaseException;
@@ -173,6 +174,7 @@ public class MainScreenController extends GeneralController {
                     PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                     newConfirmedArrangementBooking.postNewArrangementToCalendar();
                     if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
+                        SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                         PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                         newConfirmedLectureBooking.postNewLectureToCalendar();
                     }
@@ -288,9 +290,7 @@ public class MainScreenController extends GeneralController {
     private void loadBookingsToTableView(ArrayList<Booking> listOfChosenBookings) {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
-        //bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-
-
+        bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 

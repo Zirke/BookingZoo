@@ -58,11 +58,6 @@ public class LectureBuilder {
         return this;
     }
 
-    public LectureBuilder setTime(String time){
-        this.time = time;
-        return this;
-    }
-
     public LectureBuilder setParticipants(int participants){
         this.participants = participants;
         return this;

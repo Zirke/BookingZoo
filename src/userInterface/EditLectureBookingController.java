@@ -10,8 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -183,7 +181,7 @@ public class EditLectureBookingController {
                 try {
                     bda.editLecBook(overwriteSelectedLectureBooking());
                     closeWindow();
-                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
+                } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
             }

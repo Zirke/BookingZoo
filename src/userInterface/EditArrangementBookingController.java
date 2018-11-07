@@ -12,8 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -128,7 +126,7 @@ public class EditArrangementBookingController {
                 try {
                     bda.editArrBook(overwriteSelectedArrangementBooking());
                     closeWindow();
-                } catch (SQLException | IOException | GeneralSecurityException | ClassNotFoundException e1) {
+                } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
             }

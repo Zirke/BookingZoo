@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class SendEmail {
 
-    public static void SendEmail(LectureBooking lectureBooking) {
+    public static void sendConfirmationEmail(LectureBooking lectureBooking) {
         String subject = LectureBookingConformationMail.subject();
         String body = LectureBookingConformationMail.body(lectureBooking);
         String to = lectureBooking.getCustomer().getEmail();
@@ -21,7 +21,7 @@ public class SendEmail {
         Setup(subject, body, to);
     }
 
-    public static void SendEmail(ArrangementBooking arrangementBooking) {
+    public static void sendConfirmationEmail(ArrangementBooking arrangementBooking) {
         String subject = ArrangementBookingConfirmationMail.subject();
         String body = ArrangementBookingConfirmationMail.body(arrangementBooking);
         String to = arrangementBooking.getCustomer().getEmail();
@@ -47,11 +47,11 @@ public class SendEmail {
         Session session = Session.getDefaultInstance(props, null);
 
         try {
-
+            String foo = "ds305e18@gmail.com";
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
+                    InternetAddress.parse(foo));
             message.setSubject(subject);
             message.setContent(body, "text/html");
 
