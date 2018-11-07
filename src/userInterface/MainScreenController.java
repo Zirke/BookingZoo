@@ -27,6 +27,7 @@ import postToCalendars.PostToGoogle;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -70,7 +71,8 @@ public class MainScreenController extends GeneralController {
             }
             case LECTUREBOOKING: {
                 showStatisticInfo();
-            }break;
+            }
+            break;
             default:
         }
 
@@ -286,7 +288,9 @@ public class MainScreenController extends GeneralController {
     private void loadBookingsToTableView(ArrayList<Booking> listOfChosenBookings) {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
-        bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
+        //bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
+
+
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
@@ -296,6 +300,7 @@ public class MainScreenController extends GeneralController {
         bookingsToShow.sort(new CustomBookingComparator());
         bookingTableView.setItems(bookingsToShow);
     }
+
 
     private void acceptSelectedBooking() {
         try {
@@ -313,7 +318,7 @@ public class MainScreenController extends GeneralController {
     private void deleteSelectedBookingFromDatabase() {
         try {
             bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -733,5 +738,26 @@ public class MainScreenController extends GeneralController {
         menu.getItems().add(new SeparatorMenuItem());
         menu.getItems().add(new MenuItem("Exit"));
         menuBar.getMenus().add(menu);
+    }
+
+    public void moveBookingToArchived() {
+        for (Booking temp : listOfBookings) {
+            int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
+            if (time == 0 && temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+                try {
+                    temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
+                    bda.editLecBook((LectureBooking) temp);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else if (time == 0 && temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+                try {
+                    temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
+                    bda.editArrBook((ArrangementBooking) temp);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

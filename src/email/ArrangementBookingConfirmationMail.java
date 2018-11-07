@@ -1,6 +1,8 @@
 package email;
 
-public class lectorMail {
+import bookings.ArrangementBooking;
+
+public class ArrangementBookingConfirmationMail {
 
     public static String subject() {
 
@@ -11,7 +13,7 @@ public class lectorMail {
         return subject;
     }
 
-    public static String body() {
+    public static String body(ArrangementBooking arrangementBooking) {
 
         String body;
 
@@ -19,4 +21,6 @@ public class lectorMail {
 
         return body;
     }
+
+
 }

@@ -1,26 +1,42 @@
 package email;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import bookings.ArrangementBooking;
+import bookings.LectureBooking;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class SendEmail {
 
-    public static void SendEmail(String to,int bookingType) {
+    public static void SendEmail(LectureBooking lectureBooking) {
+        String subject = LectureBookingConformationMail.subject();
+        String body = LectureBookingConformationMail.body(lectureBooking);
+        String to = lectureBooking.getCustomer().getEmail();
+
+        Setup(subject, body, to);
+    }
+
+    public static void SendEmail(ArrangementBooking arrangementBooking) {
+        String subject = ArrangementBookingConfirmationMail.subject();
+        String body = ArrangementBookingConfirmationMail.body(arrangementBooking);
+        String to = arrangementBooking.getCustomer().getEmail();
+
+        Setup(subject, body, to);
+    }
+
+    private static void Setup(String subject, String body, String to) {
 
         //From
         String from = "AalborgZoo";
-        String subject;
-        String body;
 
         //Email
         final String username = "ds305e18@gmail.com";
         final String password = "hummermike";
-
-        if (bookingType == 1) {
-            subject = lectorMail.subject();
-            body = lectorMail.body();
-        }
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -36,9 +52,8 @@ public class SendEmail {
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
-            message.setSubject("Testing Subject");
-            message.setContent("Dear Mail Crawler,"
-                    + "\n\n <h1> html+ </h1> No spam to my email, please!","text/html");
+            message.setSubject(subject);
+            message.setContent(body, "text/html");
 
             Transport transport = session.getTransport("smtp");
             transport.connect("smtp.gmail.com",username,password);

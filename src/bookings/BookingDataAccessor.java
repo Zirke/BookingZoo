@@ -7,8 +7,6 @@ import facilities.LectureRoom;
 import facilities.Restaurant;
 import postToCalendars.PostToGoogle;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -68,7 +66,7 @@ public class BookingDataAccessor {
         throw new NoBookingsInDatabaseException();
     }
 
-    public void createArrBookManually(ArrangementBooking abook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {
+    public void createArrBookManually(ArrangementBooking abook) throws SQLException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((2),(?),(?),(?),(?),(?),(?))";
@@ -125,7 +123,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void deleteBooking(Booking book) throws SQLException, ClassNotFoundException {
+    public void deleteBooking(Booking book) throws SQLException {
 
         //Get CustomerID
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
@@ -190,7 +188,7 @@ public class BookingDataAccessor {
             //connection.close();
     }
 
-    public void createLecBookManually(LectureBooking lbook) throws SQLException, GeneralSecurityException, IOException, ClassNotFoundException {
+    public void createLecBookManually(LectureBooking lbook) throws SQLException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment)" +
                 "VALUES ((1),(?),(?),(?),(?),(?),(?))";
@@ -273,7 +271,7 @@ public class BookingDataAccessor {
         pstmt.executeUpdate();
     }
 
-    public void editArrBook(ArrangementBooking abook) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException {
+    public void editArrBook(ArrangementBooking abook) throws SQLException {
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
         pstmtGetCustomerID.setInt(1,abook.getId());
@@ -315,7 +313,7 @@ public class BookingDataAccessor {
         //connection.close();
     }
 
-    public void editLecBook(LectureBooking lbook) throws SQLException, IOException, GeneralSecurityException, ClassNotFoundException{
+    public void editLecBook(LectureBooking lbook) throws SQLException {
 
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
