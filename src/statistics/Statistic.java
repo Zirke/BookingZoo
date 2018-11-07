@@ -13,7 +13,7 @@ import enums.Grade;
 public class Statistic {
 
     //number of participants from schools from Aalborg Municipality
-    public static int amountOFSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
+    public static int amountOfSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
 
@@ -38,7 +38,7 @@ public class Statistic {
     }
 
     //Amount of teachers from the lecture bookings.
-    public static int amountOFTeachers(ArrayList<Booking> lecturebookings){
+    public static int amountOfTeachers(ArrayList<Booking> lecturebookings){
         int amount = 0;
 
         for (Object lecturebooking : lecturebookings) {
@@ -48,7 +48,7 @@ public class Statistic {
         return amount;
     }
 
-    public static HashMap<Grade, Integer> amountStudentsInClass(ArrayList<Booking> lecturebookings){
+    public static HashMap<Grade, Integer> amountStudentsInGrade(ArrayList<Booking> lecturebookings){
         HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
         initialiseGradeHashMap(amountInEachClass);
 

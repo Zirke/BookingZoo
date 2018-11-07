@@ -7,6 +7,7 @@ import builders.ArrangementBuilder;
 import builders.LectureBuilder;
 import enums.*;
 import org.junit.Test;
+import statistics.Statistic.*;
 
 import java.awt.print.Book;
 import java.time.LocalDateTime;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static statistics.Statistic.*;
 
 public class StatisticTest {
 
     @Test
-    public void amountOfSchoolFromAalborgMunicipality() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountOfSchoolFromAalborgMunicipality() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -43,13 +44,12 @@ public class StatisticTest {
         BookingsArrayList.add(useCase);
         BookingsArrayList.add(useCase1);
 
-        assertEquals(202,tempStatistic.amountOfSchoolFromAalborgMunicipality(BookingsArrayList));
+        assertEquals(202, amountOfSchoolFromAalborgMunicipality(BookingsArrayList));
 
     }
 
     @Test
-    public void amountOfStudentsFromSchools() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountOfStudentsFromSchools() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -73,12 +73,11 @@ public class StatisticTest {
         BookingsArrayList.add(useCase);
         BookingsArrayList.add(useCase1);
 
-        assertEquals(210, tempStatistic.amountOfStudentsFromSchools(BookingsArrayList));
+        assertEquals(210, amountOfStudentsFromSchools(BookingsArrayList));
     }
 
     @Test
-    public void amountOfTeachers() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountOfTeachers() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -102,12 +101,11 @@ public class StatisticTest {
         BookingsArrayList.add(useCase);
         BookingsArrayList.add(useCase1);
 
-        assertEquals(3, tempStatistic.amountOfTeachers(BookingsArrayList));
+        assertEquals(3, amountOfTeachers(BookingsArrayList));
     }
 
     @Test
-    public void amountStudentsInGrade() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountStudentsInGrade() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
@@ -132,7 +130,7 @@ public class StatisticTest {
         BookingArrayList.add(useCase1);
         BookingArrayList.add(useCase2);
 
-        HashMap<Grade, Integer> testMap = tempStatistic.amountStudentsInGrade(BookingArrayList);
+        HashMap<Grade, Integer> testMap = amountStudentsInGrade(BookingArrayList);
         assertTrue(testMap.containsKey(Grade.FIFTH));
         assertEquals(14,testMap.size());
         assertNotNull(testMap);
@@ -142,8 +140,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void amountOfArrangementParticipants() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountOfArrangementParticipants() {
         ArrangementBuilder arrangementBuilder = new ArrangementBuilder();
         ArrangementBooking useCase;
 
@@ -155,13 +152,12 @@ public class StatisticTest {
 
         BookingArrayList.add(useCase);
 
-        assertEquals(200,tempStatistic.amountOfArrangementParticipants(BookingArrayList));
+        assertEquals(200,amountOfArrangementParticipants(BookingArrayList));
 
     }
 
     @Test
-    public void amountInGivenMonth() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountInGivenMonth() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
@@ -191,13 +187,12 @@ public class StatisticTest {
         BookingArrayList.add(useCase1);
         BookingTeacherAL.add(useCase2);
 
-        assertEquals(47,tempStatistic.amountInGivenMonth(10,2018,BookingArrayList));
-        assertEquals(10,tempStatistic.amountInGivenMonth(11,2018,BookingTeacherAL));
+        assertEquals(47,amountInGivenMonth(10,2018,BookingArrayList));
+        assertEquals(10,amountInGivenMonth(11,2018,BookingTeacherAL));
     }
 
     @Test
-    public void amountOfChosenCategory() {
-        Statistic tempStatistic = new Statistic();
+    public void testAmountOfChosenCategory() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
@@ -225,7 +220,7 @@ public class StatisticTest {
         BookingArrayList.add(useCase1);
         BookingArrayList.add(useCase2);
 
-        assertEquals(7,tempStatistic.amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER,BookingArrayList));
-        assertEquals(9,tempStatistic.amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME,BookingArrayList));
+        assertEquals(7,amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER,BookingArrayList));
+        assertEquals(9,amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME,BookingArrayList));
     }
 }
