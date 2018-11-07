@@ -113,14 +113,16 @@ public class LectureBuilder {
         return this;
     }
 
-    public void setGrade(Grade grade) {
+    public LectureBuilder setGrade(Grade grade) {
         this.grade = grade;
         n.setGrade(grade);
+        return this;
     }
 
-    public void setId(int id) {
+    public LectureBuilder setId(int id) {
         this.id = id;
         n.setId(id);
+        return this;
     }
 
     public LectureBooking build(){

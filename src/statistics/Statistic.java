@@ -13,7 +13,7 @@ import enums.Grade;
 public class Statistic {
 
     //number of participants from schools from Aalborg Municipality
-    public int amountOFSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
+    public int amountOfSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
 
@@ -38,7 +38,7 @@ public class Statistic {
     }
 
     //Amount of teachers from the lecture bookings.
-    public int amountOFTeachers(ArrayList<Booking> lecturebookings){
+    public int amountOfTeachers(ArrayList<Booking> lecturebookings){
         int amount = 0;
 
         for (Object lecturebooking : lecturebookings) {
@@ -48,7 +48,7 @@ public class Statistic {
         return amount;
     }
 
-    public HashMap<Grade, Integer> amountStudentsInClass(ArrayList<Booking> lecturebookings){
+    public HashMap<Grade, Integer> amountStudentsInGrade(ArrayList<Booking> lecturebookings){
         HashMap<Grade, Integer> amountInEachClass = new HashMap<>();
         initialiseGradeHashMap(amountInEachClass);
 
@@ -56,43 +56,43 @@ public class Statistic {
             LectureBooking i = (LectureBooking) x;
             switch (i.getGrade()){
                 case PRESCHOOL: {
-                    amountInEachClass.put(Grade.PRESCHOOL, amountInEachClass.get(Grade.PRESCHOOL).intValue() + 1);
+                    amountInEachClass.put(Grade.PRESCHOOL, amountInEachClass.get(Grade.PRESCHOOL).intValue() + i.getParticipants());
                 }break;
                 case FIRST:{
-                    amountInEachClass.put(Grade.FIRST, amountInEachClass.get(Grade.FIRST).intValue() + 1);
+                    amountInEachClass.put(Grade.FIRST, amountInEachClass.get(Grade.FIRST).intValue() + i.getParticipants());
                 }
                     break;
                 case SECOND:{
-                    amountInEachClass.put(Grade.SECOND, amountInEachClass.get(Grade.SECOND).intValue() + 1);
+                    amountInEachClass.put(Grade.SECOND, amountInEachClass.get(Grade.SECOND).intValue() + i.getParticipants());
                 }
                     break;
                 case THIRD:{
-                    amountInEachClass.put(Grade.THIRD, amountInEachClass.get(Grade.THIRD).intValue() + 1);
+                    amountInEachClass.put(Grade.THIRD, amountInEachClass.get(Grade.THIRD).intValue() + i.getParticipants());
                 }
                     break;
                 case FOURTH:{
-                    amountInEachClass.put(Grade.FOURTH, amountInEachClass.get(Grade.FOURTH).intValue() + 1);
+                    amountInEachClass.put(Grade.FOURTH, amountInEachClass.get(Grade.FOURTH).intValue() + i.getParticipants());
                 }
                     break;
                 case FIFTH:
                 {
-                    amountInEachClass.put(Grade.FIFTH, amountInEachClass.get(Grade.FIFTH).intValue() + 1);
+                    amountInEachClass.put(Grade.FIFTH, amountInEachClass.get(Grade.FIFTH).intValue() + i.getParticipants());
                 }
                     break;
                 case SIXTH:{
-                    amountInEachClass.put(Grade.SIXTH, amountInEachClass.get(Grade.SIXTH).intValue() + 1);
+                    amountInEachClass.put(Grade.SIXTH, amountInEachClass.get(Grade.SIXTH).intValue() + i.getParticipants());
                 }
                     break;
                 case SEVENTH:{
-                    amountInEachClass.put(Grade.SEVENTH, amountInEachClass.get(Grade.SEVENTH).intValue() + 1);
+                    amountInEachClass.put(Grade.SEVENTH, amountInEachClass.get(Grade.SEVENTH).intValue() + i.getParticipants());
                 }
                     break;
                 case EIGHTH:{
-                    amountInEachClass.put(Grade.EIGHTH, amountInEachClass.get(Grade.EIGHTH).intValue() + 1);
+                    amountInEachClass.put(Grade.EIGHTH, amountInEachClass.get(Grade.EIGHTH).intValue() + i.getParticipants());
                 }
                     break;
                 case NINTH:{
-                    amountInEachClass.put(Grade.NINTH, amountInEachClass.get(Grade.NINTH).intValue() + 1);
+                    amountInEachClass.put(Grade.NINTH, amountInEachClass.get(Grade.NINTH).intValue() + i.getParticipants());
                 }
                     break;
                 case TENTH:{
