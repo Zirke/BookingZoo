@@ -7,6 +7,7 @@ import bookings.LectureBooking;
 import customers.LectureBookingCustomer;
 import enums.BookingStatus;
 import enums.BookingType;
+import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -720,34 +721,50 @@ public class MainScreenController extends GeneralController {
 
     private void showStatisticInfo() {
         Menu menu = new Menu("Statestik");
-        menu.getItems().add(new MenuItem("Vis statestik"));
-        //menu.getItems().add(new MenuItem("Antal lærer"));
-        //menu.getItems().add(new MenuItem(""));
+        menu.getItems().add(new MenuItem("Over elever og lærer"));
+        menu.getItems().add(new MenuItem("Over emnevalg"));
+        menu.getItems().add(new MenuItem("Over klassetrin"));
+        menu.getItems().add(new MenuItem("Over Aalborg kommune"));
+
         Menubar.getMenus().add(menu);
     }
 
     private void statestikPressed(){
         MenuItem item = new MenuItem();
+        ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = Menubar.getMenus();
         for(Object i : list) {
             if(((Menu)i).getText().equals("Statestik")){
-                item = ((Menu)i).getItems().get(0);
+                items.addAll(((Menu)i).getItems());
             }
         }
 
-        item.setOnAction(e -> {
-        showStatisticWindow();
-        });
+        listenerForStatisticMenuBar(items);
+        //items.get(0).setOnAction(e -> {
+        //showStatisticWindow(StatisticType.STUDENTS_AND_TEACHER);
+        //});
     }
 
-    private void showStatisticWindow(){
+    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
+        for(int i = 0; i < menuItems.size(); i++){
+            int finalI = i;
+            menuItems.get(i).setOnAction(e -> {
+                showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
+            });
+        }
+    }
+
+    private void showStatisticWindow(StatisticType type){
+        ArrayList<Booking> listOfBooking = new ArrayList<>();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
             Parent root = loader.load();
 
             StatisticController control = loader.getController();
-            control.setMainScreenController(this);
-            control.setLectureBookings(listOfLectureBookings);
+            listOfBooking.addAll(listOfLectureBookings);
+            control.setLectureBookings(listOfBooking);
+            control.setSetting(type);
+            control.initialise();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
