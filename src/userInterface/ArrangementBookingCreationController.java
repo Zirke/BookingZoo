@@ -12,8 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +40,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     @FXML
     private Button createAndCloseButton, cancelButton;
 
-    public void initialize() throws IOException, GeneralSecurityException {
+    public void initialize() {
 
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
@@ -63,7 +61,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                     try {
                         createArrangementBookingFromInput();
                         closeWindow();
-                    } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
+                    } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
                 }
@@ -84,7 +82,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
-    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
+    private void createArrangementBookingFromInput() throws SQLException {
         LocalDate tempDate = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;

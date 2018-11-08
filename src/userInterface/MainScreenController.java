@@ -789,7 +789,8 @@ public class MainScreenController extends GeneralController {
             e.printStackTrace();
         }
     }
-    public void moveBookingToArchived() {
+
+    private void moveBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
             if (time <= 0 && (temp.getBookingType().equals(BookingType.LECTUREBOOKING))) {
