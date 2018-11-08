@@ -746,7 +746,6 @@ public class MainScreenController extends GeneralController {
     }
 
     private void statestikPressed(){
-        MenuItem item = new MenuItem();
         ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = menuBar.getMenus();
         for(Object i : list) {
