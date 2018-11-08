@@ -20,7 +20,7 @@ import static statistics.Statistic.*;
 public class StatisticTest {
 
     @Test
-    public void testAmountOfSchoolFromAalborgMunicipality() {
+    public void AmountOfSchoolFromAalborgMunicipality01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -49,7 +49,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountOfStudentsFromSchools() {
+    public void AmountOfStudentsFromSchools01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -77,7 +77,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountOfTeachers() {
+    public void AmountOfTeachers01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBooking useCase, useCase1;
@@ -105,7 +105,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountStudentsInGrade() {
+    public void AmountStudentsInGrade01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
@@ -140,7 +140,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountOfArrangementParticipants() {
+    public void AmountOfArrangementParticipants01() {
         ArrangementBuilder arrangementBuilder = new ArrangementBuilder();
         ArrangementBooking useCase;
 
@@ -157,7 +157,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountInGivenMonth() {
+    public void AmountInGivenMonth01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
@@ -192,7 +192,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testAmountOfChosenCategory() {
+    public void AmountOfChosenCategory01() {
         LectureBuilder lectureBuilder = new LectureBuilder();
         LectureBuilder lectureBuilder1 = new LectureBuilder();
         LectureBuilder lectureBuilder2 = new LectureBuilder();
