@@ -73,6 +73,7 @@ public class MainScreenController extends GeneralController {
             }
             case LECTUREBOOKING: {
                 showStatisticInfo();
+                statestikPressed();
             }
             break;
             default:
