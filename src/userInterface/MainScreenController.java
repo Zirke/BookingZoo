@@ -9,6 +9,7 @@ import customers.LectureBookingCustomer;
 import email.SendEmail;
 import enums.BookingStatus;
 import enums.BookingType;
+import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -72,8 +73,8 @@ public class MainScreenController extends GeneralController {
             }
             case LECTUREBOOKING: {
                 showStatisticInfo();
-            }
-            break;
+                statestikPressed();
+            }break;
             default:
         }
 
@@ -733,13 +734,60 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showStatisticInfo() {
-        Menu menu = new Menu("Statistic");
-        menu.getItems().add(new MenuItem("New"));
-        menu.getItems().add(new SeparatorMenuItem());
-        menu.getItems().add(new MenuItem("Exit"));
-        menuBar.getMenus().add(menu);
+        Menu menu = new Menu("Statestik");
+        menu.getItems().add(new MenuItem("Over elever og lærer"));
+        menu.getItems().add(new MenuItem("Over emnevalg"));
+        menu.getItems().add(new MenuItem("Over klassetrin"));
+        menu.getItems().add(new MenuItem("Over Aalborg kommune"));
+
+        Menubar.getMenus().add(menu);
     }
 
+    private void statestikPressed(){
+        MenuItem item = new MenuItem();
+        ArrayList<MenuItem> items = new ArrayList<>();
+        ObservableList list = Menubar.getMenus();
+        for(Object i : list) {
+            if(((Menu)i).getText().equals("Statestik")){
+                items.addAll(((Menu)i).getItems());
+            }
+        }
+
+        listenerForStatisticMenuBar(items);
+        //items.get(0).setOnAction(e -> {
+        //showStatisticWindow(StatisticType.STUDENTS_AND_TEACHER);
+        //});
+    }
+
+    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
+        for(int i = 0; i < menuItems.size(); i++){
+            int finalI = i;
+            menuItems.get(i).setOnAction(e -> {
+                showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
+            });
+        }
+    }
+
+    private void showStatisticWindow(StatisticType type){
+        ArrayList<Booking> listOfBooking = new ArrayList<>();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
+            Parent root = loader.load();
+
+            StatisticController control = loader.getController();
+            listOfBooking.addAll(listOfLectureBookings);
+            control.setLectureBookings(listOfBooking);
+            control.setSetting(type);
+            control.initialise();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void moveBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());

@@ -18,7 +18,6 @@ public class LectureBuilder {
     private LectureBookingCustomer customer;
     private LocalDate creationDate;
     private LocalDateTime date;
-    private String time;
     private int participants;
     private String customerComment;
     private String comment;
@@ -31,13 +30,17 @@ public class LectureBuilder {
     private int noOfTeachers;
     private Grade grade;
 
+    LectureBooking n = new LectureBooking();
+
     public LectureBuilder setBookingType(BookingType bookingType){
         this.bookingType = bookingType;
+        n.setBookingType(bookingType);
         return this;
     }
 
     public LectureBuilder setBookingStatus(BookingStatus bookingStatus){
         this.bookingStatus = bookingStatus;
+        n.setBookingStatus(bookingStatus);
         return this;
     }
 
@@ -45,69 +48,86 @@ public class LectureBuilder {
                                       String city, String commune, String schoolPhoneNumber, long eanNumber){
         this.customer = new LectureBookingCustomer(contactPerson, phoneNumber, email, schoolName, zipCode, city, commune,
                 schoolPhoneNumber, eanNumber);
+        n.setCustomer(new LectureBookingCustomer(contactPerson, phoneNumber, email, schoolName, zipCode, city, commune,
+                schoolPhoneNumber, eanNumber));
         return this;
     }
 
     public LectureBuilder setCreationDate(LocalDate creationDate){
         this.creationDate = creationDate;
+        n.setCreationDate(creationDate);
         return this;
     }
 
     public LectureBuilder setDate(LocalDateTime date){
         this.date = date;
+        n.setDateTime(date);
         return this;
     }
 
     public LectureBuilder setParticipants(int participants){
         this.participants = participants;
+        n.setParticipants(participants);
         return this;
     }
 
     public LectureBuilder setCustomerComment(String customerComment){
         this.customerComment = customerComment;
+        n.setCustomerComment(customerComment);
         return this;
     }
 
     public LectureBuilder setComment(String comment){
         this.comment = comment;
+        n.setComment(comment);
         return this;
     }
 
     public LectureBuilder setLectureRoom(LectureRoom lectureRoom){
         this.lectureRoom = lectureRoom;
+        n.setLectureRoom(lectureRoom);
         return this;
     }
 
     public LectureBuilder setLecturer(Lecturer lecturer){
         this.lecturer = lecturer;
+        n.setLecturer(lecturer);
         return this;
     }
 
     public LectureBuilder setChoiceOfTopic(ChoiceOfTopic choiceOfTopic){
         this.choiceOfTopic = choiceOfTopic;
+        n.setChoiceOfTopic(choiceOfTopic);
         return this;
     }
 
     public LectureBuilder setNoOfTeams(int noOfTeams){
         this.noOfTeams = noOfTeams;
+        n.setNoOfTeams(noOfTeams);
         return this;
     }
 
     public LectureBuilder setNoOfTeachers(int noOfTeachers){
         this.noOfTeachers = noOfTeachers;
+        n.setNoOfTeachers(noOfTeachers);
         return this;
     }
 
-    public void setGrade(Grade grade) {
+    public LectureBuilder setGrade(Grade grade) {
         this.grade = grade;
+        n.setGrade(grade);
+        return this;
     }
 
-    public void setId(int id) {
+    public LectureBuilder setId(int id) {
         this.id = id;
+        n.setId(id);
+        return this;
     }
 
     public LectureBooking build(){
-        return new LectureBooking(id, bookingType, bookingStatus, creationDate, date, participants,
-                customerComment, comment, lectureRoom, lecturer, choiceOfTopic, noOfTeams, noOfTeachers, grade, customer);
+        //return new LectureBooking(id, bookingType, bookingStatus, creationDate, date, participants,
+          //      customerComment, comment, lectureRoom, lecturer, choiceOfTopic, noOfTeams, noOfTeachers, grade, customer);
+        return n;
     }
 }

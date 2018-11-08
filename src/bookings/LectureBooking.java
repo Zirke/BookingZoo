@@ -19,6 +19,8 @@ public class LectureBooking extends Booking {
     private int noOfTeachers;
     private Grade grade;
 
+    public LectureBooking() {
+    }
 
     public LectureBooking(int id, BookingType bookingType, BookingStatus bookingStatus,
                           LocalDate creationDate, LocalDateTime date, int participants, String customerComment,

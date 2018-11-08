@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<VBox prefHeight="539.0" prefWidth="664.0" spacing="15.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.StatisticController">
+    <children>
+        <Label fx:id="headlineLabel" prefHeight="49.0" prefWidth="600.0" text="Stastistik">
+            <font>
+                <Font size="31.0" />
+            </font>
+        </Label>
+      <VBox prefHeight="53.0" prefWidth="592.0">
+         <children>
+            <HBox prefHeight="22.0" prefWidth="592.0">
+               <children>
+                  <Label text="Startsdato : ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="startPicker" />
+                  <Label text="Slutsdato : ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="60.0" />
+                     </HBox.margin>
+                  </Label>
+                  <DatePicker fx:id="finishPicker" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <CheckComboBox fx:id="gradeComboBox" prefHeight="25.0" prefWidth="138.0" />
+                  <Button fx:id="calculateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="159.0" text="Udregn for valgt interval">
+                     <HBox.margin>
+                        <Insets left="300.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+        <HBox fx:id="hboxWithCharts">
+         <children>
+            <VBox fx:id="dataVBOx" prefHeight="200.0" prefWidth="188.0">
+               <children>
+                  <Label prefHeight="41.0" prefWidth="79.0" text="Data :" visible="false">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+        </HBox>
+        <HBox alignment="CENTER_RIGHT" spacing="25.0">
+            <children>
+                <Button fx:id="returnButton" mnemonicParsing="false" text="Luk">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="35.0" right="35.0" top="20.0" />
+    </padding>
+</VBox>
