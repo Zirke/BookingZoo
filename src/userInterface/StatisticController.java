@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static statistics.Statistic.*;
 
@@ -105,6 +106,7 @@ public class StatisticController {
     }
 
     private void labelGenerationForTeachersAndStudents(){
+        int count = 0;
         int studentCount =amountOfStudentsFromSchools(lectureBookings);
         if(studentCount > 0) {
             Label amountOfStudent = new Label();
@@ -114,7 +116,7 @@ public class StatisticController {
         }
         int teacherCount = amountOfTeachers(lectureBookings);
         if(teacherCount > 0){
-            Label amountOfTeachers = new Label("Antal lærer: " + teacherCount);
+            Label amountOfTeachers = new Label("Antal lærere: " + teacherCount);
             amountOfTeachers.setFont(Font.font(14));
             dataVBOx.getChildren().add(amountOfTeachers);
         }
@@ -126,35 +128,36 @@ public class StatisticController {
         final LineChart<String,Number> lineChart =
                 new LineChart<String,Number>(xStudent,yStudent);
 
-        //lineChart.setTitle("ELevmfkjgsv");
         XYChart.Series studentSeries = new XYChart.Series();
         ArrayList<Booking> temp = new ArrayList<>();
-        ArrayList<String> dates = new ArrayList<>();
         lineChart.setLegendVisible(false);
-        for(Booking i : lectureBookings){
-            temp.add(i);
-            studentSeries.getData().add(new XYChart.Data(i.getDateTime().toLocalDate().toString(), amountOfStudentsFromSchools(temp)));
-            /*if(dates.size()  == 0) {
-                studentSeries.getData().add(new XYChart.Data(i.getDateTime().toLocalDate().toString(), amountOfStudentsFromSchools(temp)));
-                dates.add(i.getDateTime().toLocalDate().toString());
-            }else{
-                for(int s = 0; s< dates.size();s++){
-                    if(dates.get(s).equals(i.getDateTime().toLocalDate().toString())){
-                        int formerY = (int)((XYChart.Data) studentSeries.getData().get(s)).getYValue();
-                        ((XYChart.Data) studentSeries.getData().get(s)).setYValue(formerY + amountOfStudentsFromSchools(temp));
-                    }else{
-                        studentSeries.getData().add(new XYChart.Data(i.getDateTime().toLocalDate().toString(), amountOfStudentsFromSchools(temp)));
-                        dates.add(i.getDateTime().toLocalDate().toString());
-                    }
-                }
-            }*/
-            temp.remove(i);
+        HashMap<String, Integer> studentMap = hashMapGenerationForStudent();
+        for(String i : studentMap.keySet()){
+            studentSeries.getData().add(new XYChart.Data(i, studentMap.get(i)));
+            count += studentMap.get(i);
         }
+        assert count == studentCount;
         LineChart<String,Number> teacherChart = lineChartForTeachers();
         lineChart.getData().add(studentSeries);
         VBox charts = new VBox();
         charts.getChildren().addAll(lineChart,teacherChart);
         hboxWithCharts.getChildren().add(charts);
+    }
+
+    private HashMap<String, Integer> hashMapGenerationForStudent(){
+        HashMap<String, Integer> temp = new HashMap<>();
+        ArrayList<Booking> j = new ArrayList<>();
+        for(Booking i : lectureBookings){
+            j.add(i);
+            if(temp.containsKey(i.getDateTime().toLocalDate().toString())){
+                int t = temp.get(i.getDateTime().toLocalDate().toString());
+                temp.put(i.getDateTime().toLocalDate().toString(), t + amountOfStudentsFromSchools(j));
+            }else{
+                temp.put(i.getDateTime().toLocalDate().toString(), amountOfStudentsFromSchools(j));
+            }
+            j.remove(i);
+        }
+        return temp;
     }
 
     private LineChart<String,Number> lineChartForTeachers(){
@@ -166,15 +169,28 @@ public class StatisticController {
                 new LineChart<String,Number>(xTeacher,yTeacher);
 
         XYChart.Series teacherSeries = new XYChart.Series();
-        ArrayList<Booking> temp = new ArrayList<>();
         lineChart.setLegendVisible(false);
-        for(Booking i : lectureBookings){
-            temp.add(i);
-            teacherSeries.getData().add(new XYChart.Data(i.getDateTime().toLocalDate().toString(), amountOfTeachers(temp)));
-            temp.remove(i);
+        HashMap<String,Integer> teacherMap = hashMapGenerationForTeacher();
+        for(String i : teacherMap.keySet()){
+            teacherSeries.getData().add(new XYChart.Data(i, teacherMap.get(i)));
         }
         lineChart.getData().addAll(teacherSeries);
         return lineChart;
+    }
+    private HashMap<String, Integer> hashMapGenerationForTeacher(){
+        HashMap<String, Integer> temp = new HashMap<>();
+        ArrayList<Booking> j = new ArrayList<>();
+        for(Booking i : lectureBookings){
+            j.add(i);
+            if(temp.containsKey(i.getDateTime().toLocalDate().toString())){
+                int t = temp.get(i.getDateTime().toLocalDate().toString());
+                temp.put(i.getDateTime().toLocalDate().toString(), t + amountOfTeachers(j));
+            }else{
+                temp.put(i.getDateTime().toLocalDate().toString(), amountOfTeachers(j));
+            }
+            j.remove(i);
+        }
+        return temp;
     }
 
     //Noget galt med amountOfChosenCategory() metode.
