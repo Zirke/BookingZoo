@@ -120,6 +120,7 @@ public class MainScreenController extends GeneralController {
     public void initialize() throws SQLException {
 
         fetchBookingsFromDatabase();
+        moveBookingToArchived();
 
         /*
          *   Event handlers
@@ -147,6 +148,7 @@ public class MainScreenController extends GeneralController {
         refreshBookingsButton.setOnMouseClicked(e -> {
             try {
                 refetchBookingsFromDataBase();
+                moveBookingToArchived();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -740,17 +742,17 @@ public class MainScreenController extends GeneralController {
         menuBar.getMenus().add(menu);
     }
 
-    public void moveBookingToArchived() {
+    private void moveBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
-            if (time == 0 && temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+            if (time <= 0 && (temp.getBookingType().equals(BookingType.LECTUREBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editLecBook((LectureBooking) temp);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            } else if (time == 0 && temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+            } else if (time <= 0 && (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editArrBook((ArrangementBooking) temp);
