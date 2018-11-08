@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
@@ -43,14 +43,14 @@
                   <Font size="16.0" />
                </font>
                <toggleGroup>
-                  <ToggleGroup fx:id="Categories" />
+                   <ToggleGroup fx:id="categoryButtonsToggleGroup"/>
                </toggleGroup>
             </ToggleButton>
             <Separator prefWidth="200.0" />
                 <ToggleButton fx:id="pendingBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
                               mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
                               prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Afventende"
-                              toggleGroup="$Categories">
+                              toggleGroup="$categoryButtonsToggleGroup">
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -65,7 +65,7 @@
                 <ToggleButton fx:id="activeBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
                               mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
                               prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Aktiv"
-                              toggleGroup="$Categories">
+                              toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -80,7 +80,7 @@
                 <ToggleButton fx:id="finishedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
                               mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
                               prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Færdig"
-                              toggleGroup="$Categories">
+                              toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -96,7 +96,7 @@
                 <ToggleButton fx:id="archivedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
                               mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
                               prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Arkiveret"
-                              toggleGroup="$Categories">
+                              toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -112,7 +112,7 @@
                 <ToggleButton fx:id="deletedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
                               mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
                               prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Slettet"
-                              toggleGroup="$Categories">
+                              toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>

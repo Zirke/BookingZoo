@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class MainScreenController extends GeneralController {
+public class MainScreenController {
     private final BookingDataAccessor bda = new BookingDataAccessor(
             "org.postgresql.Driver",
             "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
@@ -64,6 +64,7 @@ public class MainScreenController extends GeneralController {
 
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
 
+        /*
         switch (typeOfBooking) {
             case ALL_BOOKING_TYPES: {
 
@@ -78,6 +79,7 @@ public class MainScreenController extends GeneralController {
             break;
             default:
         }
+        */
 
         //Opens notification window
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
@@ -95,6 +97,8 @@ public class MainScreenController extends GeneralController {
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
             finishedBookingsButton, archivedBookingsButton, deletedBookingsButton;
+    @FXML
+    private ToggleGroup categoryButtonsToggleGroup;
     @FXML
     private Button refreshBookingsButton, notificationButton;
     @FXML
@@ -123,6 +127,9 @@ public class MainScreenController extends GeneralController {
 
         fetchBookingsFromDatabase();
         moveBookingToArchived();
+
+        //Makes sure that no ToggleButton can be unselected
+        GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
 
         /*
          *   Event handlers
