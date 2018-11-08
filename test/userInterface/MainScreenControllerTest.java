@@ -1,15 +1,16 @@
-package BookingZoo.test;
+package userInterface;
 
 import bookings.LectureBooking;
 import builders.LectureBuilder;
 import enums.BookingStatus;
 import enums.BookingType;
 import org.junit.Ignore;
-import userInterface.MainScreenController;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertEquals;
 
 public class MainScreenControllerTest {
     MainScreenController mainScreenController = new MainScreenController();
@@ -23,17 +24,13 @@ public class MainScreenControllerTest {
         LectureBooking testCase;
 
         builder.setBookingType(BookingType.LECTUREBOOKING)
-                .setBookingStatus(BookingStatus.STATUS_DONE)
-                .setCustomer("contactperson", "1231341", "simon@hotmail.dk",
-                        "SchoolName", 9000, "Aalborg", "Yes", "40404040",
-                        535435643)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
                 .setCreationDate(LocalDate.now())
-                .setDate(LocalDateTime.now())
-                .setParticipants(58)
-                .setCustomerComment("hallo")
-                .setComment("haallo2");
+                .setDate(LocalDateTime.of(2018, 11, 5, 12, 12));
         testCase = builder.build();
 
+//        mainScreenController.moveBookingToArchived(testCase);
 
+        assertEquals(BookingStatus.STATUS_ARCHIVED, testCase.getBookingStatus());
     }
 }

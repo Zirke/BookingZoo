@@ -73,8 +73,8 @@ public class MainScreenController extends GeneralController {
             }
             case LECTUREBOOKING: {
                 showStatisticInfo();
-                statestikPressed();
-            }break;
+            }
+            break;
             default:
         }
 
@@ -121,6 +121,7 @@ public class MainScreenController extends GeneralController {
     public void initialize() throws SQLException {
 
         fetchBookingsFromDatabase();
+        moveBookingToArchived();
 
         /*
          *   Event handlers
@@ -148,6 +149,7 @@ public class MainScreenController extends GeneralController {
         refreshBookingsButton.setOnMouseClicked(e -> {
             try {
                 refetchBookingsFromDataBase();
+                moveBookingToArchived();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -740,13 +742,13 @@ public class MainScreenController extends GeneralController {
         menu.getItems().add(new MenuItem("Over klassetrin"));
         menu.getItems().add(new MenuItem("Over Aalborg kommune"));
 
-        Menubar.getMenus().add(menu);
+        menuBar.getMenus().add(menu);
     }
 
     private void statestikPressed(){
         MenuItem item = new MenuItem();
         ArrayList<MenuItem> items = new ArrayList<>();
-        ObservableList list = Menubar.getMenus();
+        ObservableList list = menuBar.getMenus();
         for(Object i : list) {
             if(((Menu)i).getText().equals("Statestik")){
                 items.addAll(((Menu)i).getItems());
@@ -791,14 +793,14 @@ public class MainScreenController extends GeneralController {
     public void moveBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
-            if (time == 0 && temp.getBookingType().equals(BookingType.LECTUREBOOKING)) {
+            if (time <= 0 && (temp.getBookingType().equals(BookingType.LECTUREBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editLecBook((LectureBooking) temp);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            } else if (time == 0 && temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
+            } else if (time <= 0 && (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editArrBook((ArrangementBooking) temp);
