@@ -109,7 +109,7 @@ public class MainScreenController extends GeneralController {
     public void initialize() throws SQLException {
 
         fetchBookingsFromDatabase();
-        moveBookingToArchived();
+        moveConductedBookingToArchived();
 
         //Makes sure that no ToggleButton can be unselected
         GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
@@ -146,7 +146,7 @@ public class MainScreenController extends GeneralController {
         refreshBookingsButton.setOnMouseClicked(e -> {
             try {
                 refetchBookingsFromDataBase();
-                moveBookingToArchived();
+                moveConductedBookingToArchived();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -162,45 +162,10 @@ public class MainScreenController extends GeneralController {
         });
 
         //Changes the "BookingStatus" of the selected booking in TableView
-        acceptBookingButton.setOnMouseClicked(e -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Vil du acceptere bookingen?");
-            alert.setContentText("Bookingen flyttes til 'Aktive'");
-
-            Optional<ButtonType> alertChoice = alert.showAndWait();
-
-            if (alertChoice.get() == ButtonType.OK) {
-                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                    PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                    newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                    if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                        SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                        newConfirmedLectureBooking.postNewLectureToCalendar();
-                    }
-                }
-            }
-            acceptSelectedBooking();
-            removeBookingFromTableView();
-        });
+        acceptBookingButton.setOnMouseClicked(e -> acceptBookingDialog());
 
         //Cancelling the selected booking when pressing cancelBookingButton
-        cancelBookingButton.setOnMouseClicked(e -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Vil du slette bookingen?");
-            alert.setContentText("Handlingen vil slette bookingen");
-
-            Optional<ButtonType> alertChoice = alert.showAndWait();
-
-            if (alertChoice.get() == ButtonType.OK) {
-                try {
-                    bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                removeBookingFromTableView();
-            }
-        });
+        cancelBookingButton.setOnMouseClicked(e -> cancelBookingDialog());
     }
 
     /*
@@ -232,8 +197,6 @@ public class MainScreenController extends GeneralController {
         }
         //setChosenBookingTypeIntoTableView() //virker fint uden
     }
-
-
 
     private void fetchBookingsFromDatabase() throws SQLException {
         //Lecture bookings
@@ -433,7 +396,7 @@ public class MainScreenController extends GeneralController {
     }
 
     //TODO: Use getLastId to refresh TableView.
-    private void refetchBookingsFromDataBase() throws SQLException {
+    public void refetchBookingsFromDataBase() throws SQLException {
         listOfAllBookings.clear();
         listOfBookings.clear();
         listOfPendingBookings.clear();
@@ -608,8 +571,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            refetchBookingsFromDataBase();
-        } catch (IOException | SQLException e) {
+            //refetchBookingsFromDataBase();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -627,8 +590,8 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            refetchBookingsFromDataBase();
-        } catch (IOException | SQLException e) {
+            //refetchBookingsFromDataBase();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -650,6 +613,27 @@ public class MainScreenController extends GeneralController {
             stage.showAndWait();
             refetchBookingsFromDataBase();
         } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showStatisticWindow(StatisticType type) {
+        ArrayList<Booking> listOfBooking = new ArrayList<>();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
+            Parent root = loader.load();
+
+            StatisticController control = loader.getController();
+            listOfBooking.addAll(listOfLectureBookings);
+            control.setLectureBookings(listOfBooking);
+            control.setSetting(type);
+            control.initialise();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -695,6 +679,45 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
+    private void acceptBookingDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Vil du acceptere bookingen?");
+        alert.setContentText("Bookingen flyttes til 'Aktive'");
+
+        Optional<ButtonType> alertChoice = alert.showAndWait();
+
+        if (alertChoice.get() == ButtonType.OK) {
+            if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                newConfirmedArrangementBooking.postNewArrangementToCalendar();
+                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
+                    SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                    newConfirmedLectureBooking.postNewLectureToCalendar();
+                }
+            }
+        }
+        acceptSelectedBooking();
+        removeBookingFromTableView();
+    }
+
+    private void cancelBookingDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Vil du slette bookingen?");
+        alert.setContentText("Handlingen vil slette bookingen");
+
+        Optional<ButtonType> alertChoice = alert.showAndWait();
+
+        if (alertChoice.get() == ButtonType.OK) {
+            try {
+                bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            removeBookingFromTableView();
+        }
+    }
+
     void showPendingBookingPopUp() {
         int numberOfPendingBookings = 0;
         ArrayList<Booking> tempArray = new ArrayList<>();
@@ -718,12 +741,14 @@ public class MainScreenController extends GeneralController {
             numberOfPendingBookings = tempArray.size();
         }
         if (numberOfPendingBookings > 0) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende bookings");
-            alert.setContentText("Hvilken kategori vil du vise?");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende booking(s)");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.initStyle(StageStyle.UNIFIED);
 
-            ButtonType buttonTypeOne = new ButtonType("Afventende bookings");
-            ButtonType buttonTypeTwo = new ButtonType("Oversigt");
+            ButtonType buttonTypeOne = new ButtonType("Vis afventende bookings");
+            ButtonType buttonTypeTwo = new ButtonType("Luk", ButtonBar.ButtonData.CANCEL_CLOSE);
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 
@@ -732,9 +757,7 @@ public class MainScreenController extends GeneralController {
             if (alertChoice.get() == buttonTypeOne) {
                 pendingBookingsButton.setSelected(true);
                 loadBookingsToTableView(tempArray);
-            } else if (alertChoice.get() == buttonTypeTwo) {
-                overviewButton.setSelected(true);
-            }
+            } else overviewButton.setSelected(true);
         }
     }
 
@@ -775,28 +798,7 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void showStatisticWindow(StatisticType type) {
-        ArrayList<Booking> listOfBooking = new ArrayList<>();
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
-            Parent root = loader.load();
-
-            StatisticController control = loader.getController();
-            listOfBooking.addAll(listOfLectureBookings);
-            control.setLectureBookings(listOfBooking);
-            control.setSetting(type);
-            control.initialise();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void moveBookingToArchived() {
+    private void moveConductedBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
             if (time <= 0 && (temp.getBookingType().equals(BookingType.LECTUREBOOKING))) {

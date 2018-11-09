@@ -58,7 +58,7 @@ public class EditLectureBookingController {
                 "Afrikas savanner", "Aktiveringsværksted", "Sanseoplevelser", "Dyrs tilpasning og forskelligheder (Udskoling)",
                 "Evolution/Klassifikation (Gymnasium)", "Aalborg Zoo som virksomhed (Handelsskole)");
 
-        safeButtonPress();
+        saveButtonPress();
 
         textfieldWithOnlyNumbers(noOfPupilsTextField);
         textfieldWithOnlyNumbers(noOfTeamsTextField);
@@ -160,7 +160,6 @@ public class EditLectureBookingController {
                 Long.parseLong(eanNumberTextField.getText()));
         selectedLectureBooking.setCustomer(temp);
 
-
         return selectedLectureBooking;
     }
 
@@ -170,7 +169,7 @@ public class EditLectureBookingController {
         stage.close();
     }
 
-    private void safeButtonPress() {
+    private void saveButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
@@ -188,26 +187,6 @@ public class EditLectureBookingController {
         });
     }
 
-    /*
-
-    public static void timeFieldCreation(Spinner hourSpinner, Spinner minutSpinner) {
-        SpinnerValueFactory<Integer> valueFactoryHour =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23);
-        hourSpinner.setValueFactory(valueFactoryHour);
-        hourSpinner.setEditable(true);
-
-        SpinnerValueFactory<Integer> valueFactoryMinuts =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59);
-        minutSpinner.setValueFactory(valueFactoryMinuts);
-        minutSpinner.setEditable(true);
-    }
-
-    private void timeFieldInitialisation() {
-        hourSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getHour());
-        minutSpinner.getValueFactory().setValue(selectedLectureBooking.getDateTime().toLocalTime().getMinute());
-    }
-    */
-    //aendre navn po metode senere.
     private void textfieldWithOnlyNumbers(TextField var) {
         var.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {

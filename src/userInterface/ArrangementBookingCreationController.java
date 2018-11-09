@@ -20,6 +20,10 @@ import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
+    private MainScreenController msc = new MainScreenController();
+
+    public ArrangementBookingCreationController() throws SQLException, ClassNotFoundException {
+    }
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
@@ -68,6 +72,7 @@ public class ArrangementBookingCreationController extends GeneralController {
             }
         });
 
+        //TODO Make a static method for this (Also in lectureBookingCreationController)
         noOfChildrenTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 noOfChildrenTextField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -119,5 +124,4 @@ public class ArrangementBookingCreationController extends GeneralController {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
-
 }

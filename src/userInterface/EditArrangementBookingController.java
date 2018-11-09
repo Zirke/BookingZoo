@@ -112,10 +112,9 @@ public class EditArrangementBookingController {
         }
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
-
     }
 
-    private void saveButtonPress(){
+    private void saveButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
@@ -138,16 +137,15 @@ public class EditArrangementBookingController {
         statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedArrangementBooking.setBookingStatus(statusChoice);
 
-
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;
-        if(selectedTimeBtn.getText().equals("10:00 - 12:00")){
-            tempTime = LocalTime.of(10,00,00);
-        } else{
-            tempTime = LocalTime.of(12,30,00);
+        if (selectedTimeBtn.getText().equals("10:00 - 12:00")) {
+            tempTime = LocalTime.of(10, 00, 00);
+        } else {
+            tempTime = LocalTime.of(12, 30, 00);
         }
         LocalDate tempDate = datePicker.getValue();
-        LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
+        LocalDateTime date = LocalDateTime.of(tempDate, tempTime);
         selectedArrangementBooking.setDateTime(date);
         selectedArrangementBooking.setParticipants(Integer.parseInt(noOfChildrenTextField.getText()));
         selectedArrangementBooking.setCustomerComment(customerCommentTextArea.getText());
@@ -165,10 +163,8 @@ public class EditArrangementBookingController {
                 emailTextField.getText());
         selectedArrangementBooking.setCustomer(temp);
 
-
         return selectedArrangementBooking;
     }
-
 
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
