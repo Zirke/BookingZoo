@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,6 +26,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
@@ -57,7 +59,7 @@ public class StatisticController {
         return setting;
     }
 
-    public void setSetting(StatisticType setting) {
+    void setSetting(StatisticType setting) {
         this.setting = setting;
     }
 
@@ -156,8 +158,10 @@ public class StatisticController {
         LineChart<String,Number> teacherChart = lineChartForTeachers();
         lineChart.getData().add(studentSeries);
         VBox charts = new VBox();
+        hboxWithCharts.getScene().getWindow().setHeight(540*1.5);
         charts.getChildren().addAll(lineChart,teacherChart);
         hboxWithCharts.getChildren().add(charts);
+
     }
 
     private HashMap<String, Integer> hashMapGenerationForStudent(){

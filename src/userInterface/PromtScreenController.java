@@ -33,6 +33,7 @@ public class PromtScreenController {
                 //controller.initialiseBookingType();
             } else if (textOfBtn.equals("Skoletjenester")) {
                 controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
+                controller.showStatisticInfo();
                // controller.initialiseBookingType();
             } else if(textOfBtn.equals("Alle")){
                 controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);

@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class MainScreenController {
+public class MainScreenController extends GeneralController {
     private final BookingDataAccessor bda = new BookingDataAccessor(
             "org.postgresql.Driver",
             "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
@@ -63,23 +63,6 @@ public class MainScreenController {
         this.typeOfBooking = typeOfBooking;
 
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
-
-        /*
-        switch (typeOfBooking) {
-            case ALL_BOOKING_TYPES: {
-
-            }
-            case ARRANGEMENTBOOKING: {
-
-            }
-            case LECTUREBOOKING: {
-                showStatisticInfo();
-                statestikPressed();
-            }
-            break;
-            default:
-        }
-        */
 
         //Opens notification window
         ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
@@ -233,18 +216,23 @@ public class MainScreenController {
             case "Alle bookings":
                 setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
                 showPendingBookingPopUp();
+                //removeStatisticMenu(BookingType.ALL_BOOKING_TYPES);
                 break;
             case "Børnefødselsdage":
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
                 showPendingBookingPopUp();
+                //removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
                 showPendingBookingPopUp();
+                showStatisticInfo();
                 break;
         }
-        setChosenBookingTypeIntoTableView();
+        //setChosenBookingTypeIntoTableView() //virker fint uden
     }
+
+
 
     private void fetchBookingsFromDatabase() throws SQLException {
         //Lecture bookings
@@ -312,7 +300,7 @@ public class MainScreenController {
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
 
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
-        bookingsToShow.clear();
+        //bookingsToShow.clear();
         bookingsToShow.addAll(listOfChosenBookings);
         bookingsToShow.sort(new CustomBookingComparator());
         bookingTableView.setItems(bookingsToShow);
@@ -749,22 +737,24 @@ public class MainScreenController {
         }
     }
 
-    private void showStatisticInfo() {
-        Menu menu = new Menu("Statestik");
+    void showStatisticInfo() {
+        Menu menu = new Menu("Statistik");
         menu.getItems().add(new MenuItem("Over elever og lærer"));
         menu.getItems().add(new MenuItem("Over emnevalg"));
         menu.getItems().add(new MenuItem("Over klassetrin"));
         menu.getItems().add(new MenuItem("Over Aalborg kommune"));
-
         menuBar.getMenus().add(menu);
+
+        statestikPressed();
     }
 
-    private void statestikPressed() {
+    private void statestikPressed(){
         ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = menuBar.getMenus();
-        for (Object i : list) {
-            if (((Menu) i).getText().equals("Statestik")) {
-                items.addAll(((Menu) i).getItems());
+
+        for(Object i : list) {
+            if(((Menu)i).getText().equals("Statistik")){
+                items.addAll(((Menu)i).getItems());
             }
         }
 
@@ -772,10 +762,11 @@ public class MainScreenController {
         //items.get(0).setOnAction(e -> {
         //showStatisticWindow(StatisticType.STUDENTS_AND_TEACHER);
         //});
+
     }
 
-    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems) {
-        for (int i = 0; i < menuItems.size(); i++) {
+    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
+        for(int i = 0; i < menuItems.size()-1; i++){
             int finalI = i;
             menuItems.get(i).setOnAction(e -> {
                 showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
@@ -854,5 +845,18 @@ public class MainScreenController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
         deleteButton.setVisible(false);
+    }
+
+    private void removeStatisticMenu(BookingType type){
+        ArrayList<Menu> temp = new ArrayList<>();
+        if(!type.equals(BookingType.LECTUREBOOKING)) {
+
+            for(Menu i : menuBar.getMenus()){
+                if(i.getText().equals("Statistisk")){
+                    temp.add(i);
+                }
+            }
+        }
+        menuBar.getMenus().removeAll(temp);
     }
 }
