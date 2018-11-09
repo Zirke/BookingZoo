@@ -70,6 +70,12 @@
                     </font>
                 </Button>
             </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets bottom="10.0" top="100.0" />
+         </VBox.margin>
         </HBox>
     </children>
     <padding>

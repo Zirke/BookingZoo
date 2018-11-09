@@ -8,33 +8,25 @@ import enums.StatisticType;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static enums.StatisticType.GRADE;
 import static statistics.Statistic.*;
 
 public class StatisticController {
@@ -104,6 +96,7 @@ public class StatisticController {
             switch (setting){
                 case STUDENTS_AND_TEACHER: labelGenerationForTeachersAndStudents();break;
                 case TOPIC: labelGenerationForTopic();break;
+                case GRADE: labelGenerationForGrade();break;
             }
 
         });
@@ -158,10 +151,19 @@ public class StatisticController {
         LineChart<String,Number> teacherChart = lineChartForTeachers();
         lineChart.getData().add(studentSeries);
         VBox charts = new VBox();
-        hboxWithCharts.getScene().getWindow().setHeight(540*1.5);
+        setSceneToMaxHeight();
+
         charts.getChildren().addAll(lineChart,teacherChart);
         hboxWithCharts.getChildren().add(charts);
 
+    }
+
+    private void setSceneToMaxHeight(){
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+        hboxWithCharts.getScene().getWindow().setY(bounds.getMinY());
+        hboxWithCharts.getScene().getWindow().setHeight(bounds.getHeight());
+        returnButton.setLayoutY(bounds.getMinY() - 10);
     }
 
     private HashMap<String, Integer> hashMapGenerationForStudent(){
@@ -239,14 +241,24 @@ public class StatisticController {
         labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.EVOLUTION.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.ZOO_SOM_VIRKSOMHED, lectureBookings); totalAmount += temp;
         labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.ZOO_SOM_VIRKSOMHED.toString()+": " + temp);
+        setSceneToMaxHeight();
         topicPieChartGeneration(totalAmount);
     }
 
     private void labelGeneration(int amount, String labelText){
         if(amount > 0){
-            Label amountLabel = new Label(labelText);
-            amountLabel.setFont(Font.font(14));
-            dataVBOx.getChildren().add(amountLabel);
+            if(labelText.length() > 19){
+                Label amountLabel = new Label(labelText.substring(0,20));
+                Label amountLabel1 = new Label(labelText.substring(20));
+                amountLabel.setFont(Font.font(14));
+                amountLabel1.setFont(Font.font(14));
+                dataVBOx.getChildren().add(amountLabel);
+                dataVBOx.getChildren().add(amountLabel1);
+            }else {
+                Label amountLabel = new Label(labelText);
+                amountLabel.setFont(Font.font(14));
+                dataVBOx.getChildren().add(amountLabel);
+            }
         }
     }
 
@@ -306,10 +318,63 @@ public class StatisticController {
             i.toString();
         }
         gradeComboBox.getItems().addAll(items);
-        /*gradeComboBox.getItems().addAll(Grade.PRESCHOOL.toString() ,Grade.FIRST.toString(), Grade.SECOND.toString(), Grade.THIRD.toString(),
-                Grade.FOURTH.toString(), Grade.FIFTH.toString(),
-                Grade.SIXTH.toString(), Grade.SEVENTH.toString(), Grade.EIGHTH.toString(), Grade.NINTH.toString(), Grade.TENTH.toString(),
-                Grade.ONEG.toString(), Grade.SECONDG.toString(), Grade.THIRDG.toString());*/
+    }
 
+    private void labelGenerationForGrade(){
+        ObservableList<Integer> chosenItems = gradeComboBox.getCheckModel().getCheckedIndices();
+        ArrayList<Grade> grades = new ArrayList<>();
+
+        setSceneToMaxHeight();
+        for(Integer i : chosenItems){
+            String x = (String)gradeComboBox.getCheckModel().getItem(i);
+            grades.add(Grade.gradeChosen(x));
+        }
+
+        ArrayList<Booking> gradeBookings = arrayListWithOnlyGrades(grades);
+        HashMap<Grade, Integer> gradeHashMap = amountStudentsInGrade(gradeBookings);
+        for(Grade i : grades){
+            String labelText = ("Elever i " + i.toString() +" :  " + gradeHashMap.get(i));
+            labelGeneration(1, labelText);
+        }
+
+        BarChart<String,Number> bc = barChartFOrGrade();
+        XYChart.Series series = new XYChart.Series();
+        for(Grade i : grades){
+            if(gradeHashMap.get(i) > 0) {
+                series.getData().add(new XYChart.Data(i.toString(), gradeHashMap.get(i)));
+            }
+        }
+        if(!series.getData().isEmpty()) {
+            bc.getData().add(series);
+            hboxWithCharts.getChildren().add(bc);
+        }
+
+    }
+
+    private ArrayList<Booking> arrayListWithOnlyGrades(ArrayList<Grade> gradeList){
+        ArrayList<Booking> gradeBookingList = new ArrayList<>();
+
+        for(Booking i : lectureBookings){
+            LectureBooking x = (LectureBooking) i;
+            for(Grade j : gradeList){
+                if(x.getGrade().equals(j)){
+                    gradeBookingList.add(i);
+                }
+            }
+        }
+
+        return gradeBookingList;
+    }
+
+    private BarChart<String,Number> barChartFOrGrade(){
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> bc =
+                new BarChart<String,Number>(xAxis,yAxis);
+        bc.setTitle("Antal elever i klasser");
+        xAxis.setLabel("Klassetrin");
+        yAxis.setLabel("Antal elever");
+
+        return bc;
     }
 }
