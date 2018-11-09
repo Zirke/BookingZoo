@@ -70,9 +70,9 @@
                   <Font size="16.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="26.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                   <ImageView fitHeight="25.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                         <Image url="@../imageView/process-945x945.png" />
+                         <Image url="@../imageView/process_1175396.png"/>
                      </image>
                   </ImageView>
                </graphic>

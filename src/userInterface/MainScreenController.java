@@ -131,6 +131,12 @@ public class MainScreenController {
         //Makes sure that no ToggleButton can be unselected
         GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
 
+        bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                //hideBookingInformation();
+            }
+        });
+
         /*
          *   Event handlers
          */
@@ -226,15 +232,15 @@ public class MainScreenController {
         switch (nameOfChosenBtn) {
             case "Alle bookings":
                 setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-                //showPendingBookingPopUp();
+                showPendingBookingPopUp();
                 break;
             case "Børnefødselsdage":
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                //showPendingBookingPopUp();
+                showPendingBookingPopUp();
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
-                //showPendingBookingPopUp();
+                showPendingBookingPopUp();
                 break;
         }
         setChosenBookingTypeIntoTableView();
@@ -753,12 +759,12 @@ public class MainScreenController {
         menuBar.getMenus().add(menu);
     }
 
-    private void statestikPressed(){
+    private void statestikPressed() {
         ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = menuBar.getMenus();
-        for(Object i : list) {
-            if(((Menu)i).getText().equals("Statestik")){
-                items.addAll(((Menu)i).getItems());
+        for (Object i : list) {
+            if (((Menu) i).getText().equals("Statestik")) {
+                items.addAll(((Menu) i).getItems());
             }
         }
 
@@ -768,8 +774,8 @@ public class MainScreenController {
         //});
     }
 
-    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
-        for(int i = 0; i < menuItems.size(); i++){
+    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems) {
+        for (int i = 0; i < menuItems.size(); i++) {
             int finalI = i;
             menuItems.get(i).setOnAction(e -> {
                 showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
@@ -777,7 +783,7 @@ public class MainScreenController {
         }
     }
 
-    private void showStatisticWindow(StatisticType type){
+    private void showStatisticWindow(StatisticType type) {
         ArrayList<Booking> listOfBooking = new ArrayList<>();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
@@ -817,5 +823,36 @@ public class MainScreenController {
                 }
             }
         }
+    }
+
+    private void hideBookingInformation() {
+        commentLabel.setVisible(false);
+        customerCommentLabel.setVisible(false);
+        bookingTypeLabel.setVisible(false);
+        bookingStatusLabel.setVisible(false);
+        creationDateLabel.setVisible(false);
+        dateLabel.setVisible(false);
+        timeLabel.setVisible(false);
+        pupilNoLabel.setVisible(false);
+        teamNoLabel.setVisible(false);
+        teacherNoLabel.setVisible(false);
+        gradeLabel.setVisible(false);
+        topicChoiceLabel.setVisible(false);
+        schoolNameLabel.setVisible(false);
+        schoolPhoneNumberLabel.setVisible(false);
+        zipcodeLabel.setVisible(false);
+        cityLabel.setVisible(false);
+        communeLabel.setVisible(false);
+        phoneNumberLabel.setVisible(false);
+        contactPersonLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        eanLabel.setVisible(false);
+        guide_lecturerLabel.setVisible(false);
+        customerCommentTextArea.setVisible(false);
+        commentTextArea.setVisible(false);
+        acceptBookingButton.setVisible(false);
+        cancelBookingButton.setVisible(false);
+        editBookingButton.setVisible(false);
+        deleteButton.setVisible(false);
     }
 }
