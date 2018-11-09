@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,20 +27,22 @@ public class PromtScreenController {
             String textOfBtn = chosenBtn.getText();
 
             Stage currentStage = (Stage) chosenBtn.getScene().getWindow();
+            currentStage.getIcons().add(new Image("imageView/zooicon.png"));
             currentStage.close();
 
-            if (textOfBtn.equals("Børnefødselsdage")) {
-                controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                //controller.initialiseBookingType();
-            } else if (textOfBtn.equals("Skoletjenester")) {
-                controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
-                controller.showStatisticInfo();
-               // controller.initialiseBookingType();
-            } else if(textOfBtn.equals("Alle")){
-                controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
-               // controller.initialiseBookingType();
-            }else{
-                throw new IllegalBookingTypeException();
+            switch (textOfBtn) {
+                case "Børnefødselsdage":
+                    controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
+                    break;
+                case "Skoletjenester":
+                    controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
+                    controller.showStatisticInfo();
+                    break;
+                case "Alle":
+                    controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
+                    break;
+                default:
+                    throw new IllegalBookingTypeException();
             }
 
             Stage stage = new Stage();

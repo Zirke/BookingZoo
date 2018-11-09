@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -374,26 +375,7 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(categorisedBookings);
     }
 
-    private void editSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditArrangementBooking.fxml"));
-            Parent root = loader.load();
 
-            EditArrangementBookingController controller = loader.getController();
-            controller.setSelectedArrangementBooking(selectedArrangementBooking);
-            controller.setBda(bda);
-            controller.initData();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-            refetchBookingsFromDataBase();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     //TODO: Use getLastId to refresh TableView.
     public void refetchBookingsFromDataBase() throws SQLException {
@@ -514,26 +496,7 @@ public class MainScreenController extends GeneralController {
                 !temp.getDateTime().isBefore(LocalDateTime.now());
     }
 
-    private void showUpcomingBookingsWindow(ArrayList<Booking> upcomingBookings) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("BookingNotification.fxml"));
-            Parent root = loader.load();
 
-            BookingNotificationController controller = loader.getController();
-            controller.setUpcomingBookings(upcomingBookings);
-            controller.setController(this);
-            controller.setTypeOfBooking(typeOfBooking);
-            controller.initData();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
@@ -611,8 +574,50 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
-            refetchBookingsFromDataBase();
-        } catch (IOException | SQLException e) {
+            //refetchBookingsFromDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void editSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditArrangementBooking.fxml"));
+            Parent root = loader.load();
+
+            EditArrangementBookingController controller = loader.getController();
+            controller.setSelectedArrangementBooking(selectedArrangementBooking);
+            controller.setBda(bda);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+            //refetchBookingsFromDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showUpcomingBookingsWindow(ArrayList<Booking> upcomingBookings) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BookingNotification.fxml"));
+            Parent root = loader.load();
+
+            BookingNotificationController controller = loader.getController();
+            controller.setUpcomingBookings(upcomingBookings);
+            controller.setController(this);
+            controller.setTypeOfBooking(typeOfBooking);
+            controller.initData();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -745,7 +750,7 @@ public class MainScreenController extends GeneralController {
             alert.setTitle("Information");
             alert.setHeaderText("Der er " + numberOfPendingBookings + " afventende booking(s)");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.initStyle(StageStyle.UNIFIED);
+            stage.getIcons().add(new Image("imageView/zooicon.png"));
 
             ButtonType buttonTypeOne = new ButtonType("Vis afventende bookings");
             ButtonType buttonTypeTwo = new ButtonType("Luk", ButtonBar.ButtonData.CANCEL_CLOSE);

@@ -19,10 +19,9 @@ import java.util.Optional;
 
 
 public class LectureBookingCreationController {
-
     private BookingDataAccessor bda;
 
-    public void setBda(BookingDataAccessor bda) {
+    void setBda(BookingDataAccessor bda) {
         this.bda = bda;
     }
 
@@ -72,8 +71,6 @@ public class LectureBookingCreationController {
         cancelButton.loadChosenBookingTypeToMainScreen(e -> closeWindow());
         */
     }
-
-    /*"Hverdagen i Zoo" and "Aalborg Zoo som virksomhed" does not occupy lecture rooms*/
 
     @FXML
     private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {

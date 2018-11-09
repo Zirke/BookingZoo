@@ -20,10 +20,6 @@ import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
-    private MainScreenController msc = new MainScreenController();
-
-    public ArrangementBookingCreationController() throws SQLException, ClassNotFoundException {
-    }
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
