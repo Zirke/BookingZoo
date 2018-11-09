@@ -216,15 +216,16 @@ public class MainScreenController extends GeneralController {
             case "Alle bookings":
                 setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
                 showPendingBookingPopUp();
-                //removeStatisticMenu(BookingType.ALL_BOOKING_TYPES);
+                removeStatisticMenu(BookingType.ALL_BOOKING_TYPES);
                 break;
             case "Børnefødselsdage":
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
+                removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
                 showPendingBookingPopUp();
-                //removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
+
                 showPendingBookingPopUp();
                 showStatisticInfo();
                 break;
@@ -848,15 +849,15 @@ public class MainScreenController extends GeneralController {
     }
 
     private void removeStatisticMenu(BookingType type){
-        ArrayList<Menu> temp = new ArrayList<>();
-        if(!type.equals(BookingType.LECTUREBOOKING)) {
-
-            for(Menu i : menuBar.getMenus()){
-                if(i.getText().equals("Statistisk")){
-                    temp.add(i);
-                }
+        ArrayList<Integer> removeIndexed = new ArrayList<>();
+        for(int i = 0; i< menuBar.getMenus().size(); i++){
+            if(menuBar.getMenus().get(i).getText().equals("Statistik")){
+                removeIndexed.add(i);
             }
         }
-        menuBar.getMenus().removeAll(temp);
+        for(int i = removeIndexed.size()-1; i>=0; i--){
+            int delete = removeIndexed.get(i);
+            menuBar.getMenus().remove(delete);
+        }
     }
 }
