@@ -136,7 +136,7 @@ public class MainScreenController extends GeneralController {
             } else showSearchedForBookingsInTableView(listOfAllBookings);
         });
 
-        bookingTableView.setOnMouseClicked(e -> displayInformationOfSelectedBooking());
+        bookingTableView.setOnMouseClicked(e -> displayInformationOfSelectedBooking(bookingTableView));
 
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> createNewLectureBooking());
@@ -329,8 +329,8 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    //Displays information of the clicked booking in TableView
-    void displayInformationOfSelectedBooking() {
+    //Displays information of the clicked booking in TableView. (The method will be used on both the MainScreen and BookingNotification)
+    void displayInformationOfSelectedBooking(TableView<Booking> bookingTableView) {
         if (bookingTableView.getSelectionModel().getSelectedItem() instanceof LectureBooking) {
             showLectureBookingInformation((LectureBooking) bookingTableView.getSelectionModel().getSelectedItem());
         } else if (bookingTableView.getSelectionModel().getSelectedItem() instanceof ArrangementBooking) {

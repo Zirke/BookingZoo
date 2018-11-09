@@ -52,7 +52,7 @@ public class BookingNotificationController {
         });
 
         UpcomingBookingTable.getSelectionModel().selectedIndexProperty().addListener(e -> {
-            controller.displayInformationOfSelectedBooking();
+            controller.displayInformationOfSelectedBooking(UpcomingBookingTable);
 
             Stage stage = (Stage) doneButton.getScene().getWindow();
             stage.close();
