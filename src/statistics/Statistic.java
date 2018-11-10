@@ -3,9 +3,10 @@ package statistics;
 import bookings.ArrangementBooking;
 import bookings.Booking;
 import bookings.LectureBooking;
-import builders.LectureBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfTopic;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,13 +17,18 @@ public class Statistic {
     public static int amountOfSchoolFromAalborgMunicipality(ArrayList<Booking> lectureBookings){
         int amount = 0;
         Iterator iter = lectureBookings.iterator();
+        ArrayList<Booking> removeList = new ArrayList<>();
 
         while(iter.hasNext()){
             LectureBooking booking =(LectureBooking)iter.next();
             if(((LectureBookingCustomer)booking.getCustomer()).getCommune().equals("Ja")){
-                amount += booking.getNoOfTeachers() + booking.getParticipants();
+                amount += booking.getParticipants();
+            }else {
+                removeList.add(booking);
             }
         }
+        lectureBookings.removeAll(removeList);
+
         return amount;
     }
 

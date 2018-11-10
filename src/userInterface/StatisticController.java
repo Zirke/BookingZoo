@@ -25,6 +25,7 @@ import org.controlsfx.control.CheckComboBox;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static statistics.Statistic.*;
@@ -97,6 +98,7 @@ public class StatisticController {
                 case STUDENTS_AND_TEACHER: labelGenerationForTeachersAndStudents();break;
                 case TOPIC: labelGenerationForTopic();break;
                 case GRADE: labelGenerationForGrade();break;
+                case MUNICIPALITY: labelGenerationMunicipality();break;
             }
 
         });
@@ -117,6 +119,8 @@ public class StatisticController {
     }
 
     private void labelGenerationForTeachersAndStudents(){
+        setSceneToMaxHeight();
+
         int count = 0;
         int studentCount =amountOfStudentsFromSchools(lectureBookings);
         if(studentCount > 0) {
@@ -151,7 +155,6 @@ public class StatisticController {
         LineChart<String,Number> teacherChart = lineChartForTeachers();
         lineChart.getData().add(studentSeries);
         VBox charts = new VBox();
-        setSceneToMaxHeight();
 
         charts.getChildren().addAll(lineChart,teacherChart);
         hboxWithCharts.getChildren().add(charts);
@@ -247,7 +250,11 @@ public class StatisticController {
 
     private void labelGeneration(int amount, String labelText){
         if(amount > 0){
-            if(labelText.length() > 19){
+            Label amountLabel = new Label(labelText);
+            amountLabel.setFont(Font.font(14));
+            dataVBOx.getChildren().add(amountLabel);
+
+            /*if(labelText.length() > 19){
                 Label amountLabel = new Label(labelText.substring(0,20));
                 Label amountLabel1 = new Label(labelText.substring(20));
                 amountLabel.setFont(Font.font(14));
@@ -258,7 +265,7 @@ public class StatisticController {
                 Label amountLabel = new Label(labelText);
                 amountLabel.setFont(Font.font(14));
                 dataVBOx.getChildren().add(amountLabel);
-            }
+            }*/
         }
     }
 
@@ -313,6 +320,7 @@ public class StatisticController {
     private void gradeSceneGeneration(){
         gradeComboBox.setVisible(true);
         final ObservableList<String> items = FXCollections.observableArrayList();
+        items.add("Vælg Alle");
         for (Grade i : Grade.values()) {
             items.add(i.toString());
             i.toString();
@@ -325,9 +333,17 @@ public class StatisticController {
         ArrayList<Grade> grades = new ArrayList<>();
 
         setSceneToMaxHeight();
+
         for(Integer i : chosenItems){
             String x = (String)gradeComboBox.getCheckModel().getItem(i);
-            grades.add(Grade.gradeChosen(x));
+            if("Vælg Alle".equals(x)){
+                grades.clear();
+                grades.addAll(Arrays.asList(Grade.values()));
+                break;
+            }else{
+                grades.add(Grade.gradeChosen(x));
+            }
+
         }
 
         ArrayList<Booking> gradeBookings = arrayListWithOnlyGrades(grades);
@@ -376,5 +392,39 @@ public class StatisticController {
         yAxis.setLabel("Antal elever");
 
         return bc;
+    }
+
+    private void labelGenerationMunicipality(){
+        lectureBookingInSelectedInterval();
+        setSceneToMaxHeight();
+        ArrayList<Booking> fromAalborgMunicipality =(ArrayList<Booking>) lectureBookings.clone();
+        int amountFromAalborg = amountOfSchoolFromAalborgMunicipality(fromAalborgMunicipality);
+        int totalAmount = 0;
+        for(Booking i : lectureBookings){
+            totalAmount += i.getParticipants();
+        }
+        int amountNotAalborg = totalAmount - amountFromAalborg;
+        labelGeneration(1, "Antal elever: " + totalAmount);
+        labelGeneration(1, "Antal elever fra Aalborg kommune: " + amountFromAalborg);
+        labelGeneration(1, "Antal elever ikke fra Aalborg kommune: " + amountNotAalborg);
+
+        ObservableList<PieChart.Data> data =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Fra Aalborg Kommune", amountFromAalborg),
+                        new PieChart.Data("Ikke Fra Aalborg Kommune", amountNotAalborg));
+        final PieChart chart = new PieChart(data);
+        chart.setTitle("Fordeling af elever i og udenfor Aalborg kommune");
+        chart.setLabelsVisible(false);
+        DecimalFormat numberFormat = new DecimalFormat("#.00");
+        int finalTotalAmount = totalAmount;
+        chart.getData().forEach(e ->
+                e.nameProperty().bind(
+                        Bindings.concat(
+                                e.getName(), " ", String.valueOf(numberFormat.format(((e.getPieValue()/ finalTotalAmount)*100))) , " %"
+                        )
+                )
+        );
+        hboxWithCharts.getChildren().add(chart);
+
     }
 }

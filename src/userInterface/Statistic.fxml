@@ -16,6 +16,11 @@
                 <Font size="31.0" />
             </font>
         </Label>
+      <Label prefHeight="17.0" prefWidth="612.0" text="Vælg start- og slutdata for stastistik over skoletjenete bookings">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
       <VBox prefHeight="53.0" prefWidth="592.0">
          <children>
             <HBox prefHeight="22.0" prefWidth="592.0">

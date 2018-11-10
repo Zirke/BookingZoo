@@ -795,7 +795,7 @@ public class MainScreenController extends GeneralController {
     }
 
     private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
-        for(int i = 0; i < menuItems.size()-1; i++){
+        for(int i = 0; i < menuItems.size(); i++){
             int finalI = i;
             menuItems.get(i).setOnAction(e -> {
                 showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
