@@ -169,6 +169,19 @@ public class StatisticController {
         returnButton.setLayoutY(bounds.getMinY() - 10);
     }
 
+    private void setSceneForTopic(){
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+        hboxWithCharts.getScene().getWindow().setY(bounds.getMinY());
+        double formerX = hboxWithCharts.getScene().getWindow().getX();
+        double formerWidth = hboxWithCharts.getScene().getWindow().getWidth();
+        hboxWithCharts.getScene().getWindow().setX(formerX - 100);
+
+        hboxWithCharts.getScene().getWindow().setWidth(formerWidth + 200);
+        hboxWithCharts.getScene().getWindow().setHeight(bounds.getHeight());
+        returnButton.setLayoutY(bounds.getMinY() - 10);
+    }
+
     private HashMap<String, Integer> hashMapGenerationForStudent(){
         HashMap<String, Integer> temp = new HashMap<>();
         ArrayList<Booking> j = new ArrayList<>();
@@ -225,7 +238,7 @@ public class StatisticController {
         totalAmount += dyrDerHjemmeTopic;
         labelGeneration(1, "Antal hold i:");
         labelGeneration(dyrDerHjemmeTopic,  ChoiceOfTopic.DYR_DERHJEMME.toString()+": " + dyrDerHjemmeTopic);
-        dataVBOx.setMinWidth(250);
+        dataVBOx.setMinWidth(300);
         int temp = amountOfChosenCategory(ChoiceOfTopic.HVERDAG_ZOO, lectureBookings); totalAmount += temp;
         labelGeneration(temp, ChoiceOfTopic.HVERDAG_ZOO.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.KRYBDYR, lectureBookings); totalAmount += temp;
@@ -244,7 +257,7 @@ public class StatisticController {
         labelGeneration(temp,  ChoiceOfTopic.EVOLUTION.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.ZOO_SOM_VIRKSOMHED, lectureBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.ZOO_SOM_VIRKSOMHED.toString()+": " + temp);
-        setSceneToMaxHeight();
+        setSceneForTopic();
         topicPieChartGeneration(totalAmount);
     }
 
