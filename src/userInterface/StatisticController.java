@@ -223,27 +223,27 @@ public class StatisticController {
         int totalAmount = 0;
         int dyrDerHjemmeTopic = amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME, lectureBookings);
         totalAmount += dyrDerHjemmeTopic;
-        labelGeneration(dyrDerHjemmeTopic, "Antal hold i " + ChoiceOfTopic.DYR_DERHJEMME.toString()+": " + dyrDerHjemmeTopic);
+        labelGeneration(1, "Antal hold i:");
+        labelGeneration(dyrDerHjemmeTopic,  ChoiceOfTopic.DYR_DERHJEMME.toString()+": " + dyrDerHjemmeTopic);
         dataVBOx.setMinWidth(250);
-
         int temp = amountOfChosenCategory(ChoiceOfTopic.HVERDAG_ZOO, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.HVERDAG_ZOO.toString()+": " + temp);
+        labelGeneration(temp, ChoiceOfTopic.HVERDAG_ZOO.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.KRYBDYR, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.KRYBDYR.toString()+": " + temp);
+        labelGeneration(temp, ChoiceOfTopic.KRYBDYR.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.GROENDLANDS_DYR, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.GROENDLANDS_DYR.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.GROENDLANDS_DYR.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.AFRIKAS_SAVANNER.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.AFRIKAS_SAVANNER.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.AKTIVERINGSVAERKSTED, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.AKTIVERINGSVAERKSTED.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.AKTIVERINGSVAERKSTED.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.SANSEOPLEVELSER, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.SANSEOPLEVELSER.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.SANSEOPLEVELSER.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.DYRS_TILPASNING, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.DYRS_TILPASNING.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.DYRS_TILPASNING.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.EVOLUTION, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.EVOLUTION.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.EVOLUTION.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.ZOO_SOM_VIRKSOMHED, lectureBookings); totalAmount += temp;
-        labelGeneration(temp, "Antal hold i " + ChoiceOfTopic.ZOO_SOM_VIRKSOMHED.toString()+": " + temp);
+        labelGeneration(temp,  ChoiceOfTopic.ZOO_SOM_VIRKSOMHED.toString()+": " + temp);
         setSceneToMaxHeight();
         topicPieChartGeneration(totalAmount);
     }
@@ -348,8 +348,9 @@ public class StatisticController {
 
         ArrayList<Booking> gradeBookings = arrayListWithOnlyGrades(grades);
         HashMap<Grade, Integer> gradeHashMap = amountStudentsInGrade(gradeBookings);
+        labelGeneration(1, "Elever i:");
         for(Grade i : grades){
-            String labelText = ("Elever i " + i.toString() +" :  " + gradeHashMap.get(i));
+            String labelText = (i.toString() +" :  " + gradeHashMap.get(i));
             labelGeneration(1, labelText);
         }
 
@@ -424,7 +425,10 @@ public class StatisticController {
                         )
                 )
         );
+        dataVBOx.setMinWidth(300);
         hboxWithCharts.getChildren().add(chart);
+
+
 
     }
 }
