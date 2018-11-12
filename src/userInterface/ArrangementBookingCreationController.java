@@ -3,10 +3,7 @@ package userInterface;
 import bookings.ArrangementBooking;
 import bookings.BookingDataAccessor;
 import bookings.FoodOrder;
-import enums.BookingStatus;
-import enums.BookingType;
-import enums.ChoiceOfMenu;
-import enums.FacilityState;
+import enums.*;
 import facilities.Restaurant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +16,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
+    public ChoiceBox restaurantChoiceBox;
     private BookingDataAccessor bda;
 
     void setBda(BookingDataAccessor bda) {
@@ -41,6 +39,10 @@ public class ArrangementBookingCreationController extends GeneralController {
     private Button createAndCloseButton, cancelButton;
 
     public void initialize() {
+
+        for(RestaurantType i : RestaurantType.values()){
+            restaurantChoiceBox.getItems().add(i);
+        }
 
         createAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
@@ -110,7 +112,8 @@ public class ArrangementBookingCreationController extends GeneralController {
 
         ArrangementBooking abook = new ArrangementBooking(
                 BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date,
-                noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.OCCUPIED),
+                noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.OCCUPIED,
+                RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString())),
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
         bda.createArrBookManually(abook);

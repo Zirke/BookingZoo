@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -55,6 +56,7 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfArrangementBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedLectureBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedArrangementBookings = new ArrayList<>();
+    private HashMap<LocalDateTime,LectureBooking> LecRoomHashMap = new HashMap<>();
     private BookingType typeOfBooking;
 
     public MainScreenController() throws SQLException, ClassNotFoundException {
@@ -243,6 +245,14 @@ public class MainScreenController extends GeneralController {
                 }
                 if (tempBooking.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
                     listOfNonArchivedOrDeletedArrangementBookings.add(tempBooking);
+                }
+            }
+            //mangler en if.
+            if(tempBooking instanceof LectureBooking){
+                if(!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
+                    LecRoomHashMap.put(tempBooking.getDateTime(), (LectureBooking) tempBooking);
+                }else{
+                    LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking)tempBooking);
                 }
             }
         }
@@ -570,6 +580,7 @@ public class MainScreenController extends GeneralController {
             EditLectureBookingController controller = loader.getController();
             controller.setSelectedLectureBooking(selectedLectureBooking);
             controller.setBda(bda);
+            controller.setLecRoomHashMap(LecRoomHashMap);
             controller.initData();
 
             Stage stage = new Stage();
@@ -662,7 +673,7 @@ public class MainScreenController extends GeneralController {
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
         commentTextArea.setEditable(false);
-        //roomLabel.setVisible(true);
+        roomLabel.setVisible(false);
 
         if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
             editBookingButton.setVisible(false);
@@ -688,8 +699,8 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
 
         if(selectedArrangementBooking.getRestaurant().getType() != null){
-            roomLabel.setVisible(true);
-            roomLabel.setText("Den valgte restaurant er: " + selectedArrangementBooking.getRestaurant().getType().toString());
+            eanLabel.setVisible(true);
+            eanLabel.setText("Restaurant: " + selectedArrangementBooking.getRestaurant().getType().toString());
         }
 
     }
@@ -748,7 +759,7 @@ public class MainScreenController extends GeneralController {
                 }
             }
             numberOfPendingBookings = tempArray.size();
-        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+        }else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             for (Booking temp : listOfPendingBookings) {
                 if (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
                     tempArray.add(temp);
@@ -756,6 +767,7 @@ public class MainScreenController extends GeneralController {
             }
             numberOfPendingBookings = tempArray.size();
         }
+
         if (numberOfPendingBookings > 0) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
@@ -864,6 +876,7 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setVisible(false);
         editBookingButton.setVisible(false);
         deleteButton.setVisible(false);
+        roomLabel.setVisible(false);
     }
 
     private void removeStatisticMenu(BookingType type) {

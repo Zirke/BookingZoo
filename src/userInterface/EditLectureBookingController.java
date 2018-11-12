@@ -1,5 +1,6 @@
 package userInterface;
 
+import bookings.Booking;
 import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static enums.ChoiceOfTopic.topicChosen;
@@ -21,6 +23,11 @@ import static enums.Grade.gradeChosen;
 public class EditLectureBookingController {
     private BookingDataAccessor bda;
     private LectureBooking selectedLectureBooking;
+    private HashMap<LocalDateTime, LectureBooking> lecRoomHashMap;
+
+    public void setLecRoomHashMap(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
+        this.lecRoomHashMap = lecRoomHashMap;
+    }
 
     void setSelectedLectureBooking(LectureBooking selectedLectureBooking) {
         this.selectedLectureBooking = selectedLectureBooking;
@@ -152,6 +159,23 @@ public class EditLectureBookingController {
         selectedLectureBooking.setBookingStatus(statusChoice);
         selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedLectureBooking.setComment(commentTextArea.getText());
+
+        //mangler at teste
+        if(lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime())){
+            if((selectedLectureBooking.getLectureRoom().getType().toString().
+                    equals(lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getType().toString())) &&
+                    lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getState().equals(FacilityState.OCCUPIED)){
+                throw new IllegalArgumentException();
+            }
+
+
+        }else if(lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime().plusMinutes(1))){
+            if((selectedLectureBooking.getLectureRoom().getType().toString().
+                    equals(lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getType().toString())) &&
+                    lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getState().equals(FacilityState.OCCUPIED)){
+                throw new IllegalArgumentException();
+            }
+        }
 
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
         LectureBookingCustomer temp = new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
