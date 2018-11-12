@@ -8,12 +8,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class PromtScreenController {
+
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     @FXML
     public void loadChosenBookingTypeToMainScreen(ActionEvent actionEvent) {
@@ -25,6 +29,7 @@ public class PromtScreenController {
 
             Button chosenBtn = (Button) actionEvent.getSource();
             String textOfBtn = chosenBtn.getText();
+            progressIndicator.setStyle(" -fx-progress-color: #f4b342;");
 
             Stage currentStage = (Stage) chosenBtn.getScene().getWindow();
             currentStage.getIcons().add(new Image("imageView/zooicon.png"));
@@ -32,13 +37,16 @@ public class PromtScreenController {
 
             switch (textOfBtn) {
                 case "Børnefødselsdage":
+                    progressIndicator.setVisible(true);
                     controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
                     break;
                 case "Skoletjenester":
+                    progressIndicator.setVisible(true);
                     controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
                     controller.showStatisticInfo();
                     break;
                 case "Alle":
+                    progressIndicator.setVisible(true);
                     controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
                     break;
                 default:
