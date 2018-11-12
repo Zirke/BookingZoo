@@ -443,7 +443,5 @@ public class StatisticController {
             hboxWithCharts.getChildren().add(chart);
         }
 
-
-
     }
 }
