@@ -49,7 +49,7 @@ public class EditLectureBookingController {
 
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
-        lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
+        lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale", "Intet lokale valgt");
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
         gradeChoiceBox.getItems().addAll("Børnehaveklasse", "1. klasse", "2. klasse", "3. klasse", "4. klasse",
                 "5. klasse", "6. klasse", "7. klasse", "8. klasse", "9. klasse", "10. klasse",

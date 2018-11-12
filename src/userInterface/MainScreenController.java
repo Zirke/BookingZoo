@@ -103,7 +103,7 @@ public class MainScreenController extends GeneralController {
     private Label commentLabel, customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
             timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
             schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
-            emailLabel, eanLabel, guide_lecturerLabel;
+            emailLabel, eanLabel, guide_lecturerLabel, roomLabel;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
@@ -414,6 +414,7 @@ public class MainScreenController extends GeneralController {
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
         commentTextArea.setEditable(false);
+        roomLabel.setVisible(true); //new
 
         if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
             editBookingButton.setVisible(false);
@@ -442,8 +443,10 @@ public class MainScreenController extends GeneralController {
         if (selectedLectureBooking.getLecturer() == null) {
             guide_lecturerLabel.setText("Underviser: Ingen underviser tilføjet");
         } else guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
+        roomLabel.setText("Klasseværelse: " + selectedLectureBooking.getLectureRoom().getType().toString());
         customerCommentTextArea.setText(selectedLectureBooking.getComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
+
     }
 
     private void showPendingButtons(BookingStatus bookingStatus) {
@@ -659,6 +662,7 @@ public class MainScreenController extends GeneralController {
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
         commentTextArea.setEditable(false);
+        //roomLabel.setVisible(true);
 
         if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
             editBookingButton.setVisible(false);
@@ -682,6 +686,12 @@ public class MainScreenController extends GeneralController {
         } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
+
+        if(selectedArrangementBooking.getRestaurant().getType() != null){
+            roomLabel.setVisible(true);
+            roomLabel.setText("Den valgte restaurant er: " + selectedArrangementBooking.getRestaurant().getType().toString());
+        }
+
     }
 
     private void acceptBookingDialog() {

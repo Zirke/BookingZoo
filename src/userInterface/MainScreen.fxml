@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="userInterface.MainScreenController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
@@ -36,21 +54,16 @@
                     </font>
                 </Label>
                 <Separator prefWidth="200.0" />
-                <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings"
-                              prefHeight="35.0" prefWidth="250.0" selected="true"
-                              stylesheets="@button-selected-toggle.css" text="Oversigt">
+                <ToggleButton fx:id="overviewButton" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" selected="true" stylesheets="@button-selected-toggle.css" text="Oversigt">
                <font>
                   <Font size="16.0" />
                </font>
                <toggleGroup>
-                   <ToggleGroup fx:id="categoryButtonsToggleGroup"/>
+                   <ToggleGroup fx:id="categoryButtonsToggleGroup" />
                </toggleGroup>
             </ToggleButton>
             <Separator prefWidth="200.0" />
-                <ToggleButton fx:id="pendingBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
-                              mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                              prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Afventende"
-                              toggleGroup="$categoryButtonsToggleGroup">
+                <ToggleButton fx:id="pendingBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Afventende" toggleGroup="$categoryButtonsToggleGroup">
                <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -62,25 +75,19 @@
                   <Font size="16.0" />
                </font>
             </ToggleButton>
-                <ToggleButton fx:id="activeBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
-                              mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                              prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Aktiv"
-                              toggleGroup="$categoryButtonsToggleGroup">
+                <ToggleButton fx:id="activeBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Aktiv" toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
                <graphic>
                    <ImageView fitHeight="25.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                         <Image url="@../imageView/process_1175396.png"/>
+                         <Image url="@../imageView/process_1175396.png" />
                      </image>
                   </ImageView>
                </graphic>
             </ToggleButton>
-                <ToggleButton fx:id="finishedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
-                              mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                              prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Færdig"
-                              toggleGroup="$categoryButtonsToggleGroup">
+                <ToggleButton fx:id="finishedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Færdig" toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -93,10 +100,7 @@
                </graphic>
             </ToggleButton>
                 <Separator prefWidth="200.0" />
-                <ToggleButton fx:id="archivedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
-                              mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                              prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Arkiveret"
-                              toggleGroup="$categoryButtonsToggleGroup">
+                <ToggleButton fx:id="archivedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Arkiveret" toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -109,10 +113,7 @@
                </graphic>
             </ToggleButton>
             <Separator prefWidth="200.0" />
-                <ToggleButton fx:id="deletedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0"
-                              mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0"
-                              prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Slettet"
-                              toggleGroup="$categoryButtonsToggleGroup">
+                <ToggleButton fx:id="deletedBookingsButton" alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#showChosenCategoryBookings" prefHeight="35.0" prefWidth="250.0" stylesheets="@button-selected-toggle.css" text="Slettet" toggleGroup="$categoryButtonsToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
@@ -386,6 +387,14 @@
                                 </Label>
                             </children>
                         </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                     <children>
+                        <Label fx:id="roomLabel" visible="false">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                     </children>
+                  </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="11">
                             <children>
                                 <Label fx:id="guide_lecturerLabel">
@@ -469,8 +478,7 @@
                 <Insets right="10.0" />
             </opaqueInsets>
         </VBox>
-        <MenuBar fx:id="menuBar" layoutX="107.0" layoutY="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                 AnchorPane.topAnchor="0.0">
+        <MenuBar fx:id="menuBar" layoutX="107.0" layoutY="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Vis">
             <items>

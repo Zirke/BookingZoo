@@ -7,6 +7,7 @@ import customers.Customer;
 import enums.BookingStatus;
 import enums.ChoiceOfMenu;
 import enums.FacilityState;
+import enums.RestaurantType;
 import facilities.Restaurant;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -41,7 +42,7 @@ public class EditArrangementBookingController {
     private TextField noOfChildrenTextField, childNameTextField, childAgeTextField, contactPersonTextField,
             phoneNumberTextField, emailTextField, guideTextField;
     @FXML
-    private ChoiceBox categoryChoiceBox;
+    private ChoiceBox categoryChoiceBox, restaurantChoiceBox;
     @FXML
     private Button cancelButton, saveAndCloseButton;
     @FXML
@@ -50,6 +51,10 @@ public class EditArrangementBookingController {
     public void initialize() {
 
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
+
+        for(RestaurantType i : RestaurantType.values()){
+            restaurantChoiceBox.getItems().add(i.toString());
+        }
 
         saveButtonPress();
 
@@ -162,6 +167,8 @@ public class EditArrangementBookingController {
         Customer temp = new Customer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
                 emailTextField.getText());
         selectedArrangementBooking.setCustomer(temp);
+        selectedArrangementBooking.getRestaurant().setType(RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString()));
+
 
         return selectedArrangementBooking;
     }

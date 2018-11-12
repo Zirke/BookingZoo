@@ -38,4 +38,5 @@ public class LectureRoom extends Facility {
     public String toString() {
         return type.toString();
     }
+
 }
