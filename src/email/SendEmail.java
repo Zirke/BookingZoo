@@ -18,7 +18,7 @@ public class SendEmail {
         String body = LectureBookingConformationMail.body(lectureBooking);
         String to = lectureBooking.getCustomer().getEmail();
 
-        Setup(subject, body, to);
+        setup(subject, body, to);
     }
 
     public static void sendConfirmationEmail(ArrangementBooking arrangementBooking) {
@@ -26,10 +26,10 @@ public class SendEmail {
         String body = ArrangementBookingConfirmationMail.body(arrangementBooking);
         String to = arrangementBooking.getCustomer().getEmail();
 
-        Setup(subject, body, to);
+        setup(subject, body, to);
     }
 
-    private static void Setup(String subject, String body, String to) {
+    private static void setup(String subject, String body, String to) {
 
         //From
         String from = "AalborgZoo";
