@@ -439,7 +439,9 @@ public class StatisticController {
                 )
         );
         dataVBOx.setMinWidth(300);
-        hboxWithCharts.getChildren().add(chart);
+        if(totalAmount != 0){
+            hboxWithCharts.getChildren().add(chart);
+        }
 
 
 
