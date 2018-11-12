@@ -95,6 +95,8 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
+    @FXML
+    private RadioMenuItem allBookingsMenuItem, arrangementBookingsMenuItem, lectureBooingsMenuItem;
 
     //Nodes for booking information display area
     @FXML
@@ -205,14 +207,14 @@ public class MainScreenController extends GeneralController {
             listOfLectureBookings.addAll(bda.fetchLecBooks());
             listOfAllBookings.addAll(listOfLectureBookings);
         } catch (NoBookingsInDatabaseException e) {
-            System.out.println("No lecture bookings in database"); //Lav om til exception handling
+            System.out.println("No lecture bookings in database"); //TODO Lav om til exception handling
         }
         //Arrangement bookings
         try {
             listOfArrangementBookings.addAll(bda.fetchArrBooks());
             listOfAllBookings.addAll(listOfArrangementBookings);
         } catch (NoBookingsInDatabaseException e) {
-            System.out.println("No arrangement bookings in database"); //Lav om til exception handling
+            System.out.println("No arrangement bookings in database"); //TODO Lav om til exception handling
         }
         //Categorised bookings
         for (Booking tempBooking : listOfAllBookings) {
@@ -376,7 +378,6 @@ public class MainScreenController extends GeneralController {
     }
 
 
-
     //TODO: Use getLastId to refresh TableView.
     public void refetchBookingsFromDataBase() throws SQLException {
         listOfAllBookings.clear();
@@ -495,7 +496,6 @@ public class MainScreenController extends GeneralController {
                 && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) &&
                 !temp.getDateTime().isBefore(LocalDateTime.now());
     }
-
 
 
     private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
@@ -693,16 +693,17 @@ public class MainScreenController extends GeneralController {
 
         if (alertChoice.get() == ButtonType.OK) {
             if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
+                SendEmail.sendConfirmationEmail((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                 PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
                 newConfirmedArrangementBooking.postNewArrangementToCalendar();
-                if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
-                    SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                    PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                    newConfirmedLectureBooking.postNewLectureToCalendar();
-                }
+            } else if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
+                SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                newConfirmedLectureBooking.postNewLectureToCalendar();
             }
         }
         acceptSelectedBooking();
+
         removeBookingFromTableView();
     }
 
@@ -777,13 +778,13 @@ public class MainScreenController extends GeneralController {
         statestikPressed();
     }
 
-    private void statestikPressed(){
+    private void statestikPressed() {
         ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = menuBar.getMenus();
 
-        for(Object i : list) {
-            if(((Menu)i).getText().equals("Statistik")){
-                items.addAll(((Menu)i).getItems());
+        for (Object i : list) {
+            if (((Menu) i).getText().equals("Statistik")) {
+                items.addAll(((Menu) i).getItems());
             }
         }
 
@@ -794,8 +795,8 @@ public class MainScreenController extends GeneralController {
 
     }
 
-    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems){
-        for(int i = 0; i < menuItems.size(); i++){
+    private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems) {
+        for (int i = 0; i < menuItems.size(); i++) {
             int finalI = i;
             menuItems.get(i).setOnAction(e -> {
                 showStatisticWindow(StatisticType.toStatisticType(menuItems.get(finalI).getText()));
@@ -855,14 +856,14 @@ public class MainScreenController extends GeneralController {
         deleteButton.setVisible(false);
     }
 
-    private void removeStatisticMenu(BookingType type){
+    private void removeStatisticMenu(BookingType type) {
         ArrayList<Integer> removeIndexed = new ArrayList<>();
-        for(int i = 0; i< menuBar.getMenus().size(); i++){
-            if(menuBar.getMenus().get(i).getText().equals("Statistik")){
+        for (int i = 0; i < menuBar.getMenus().size(); i++) {
+            if (menuBar.getMenus().get(i).getText().equals("Statistik")) {
                 removeIndexed.add(i);
             }
         }
-        for(int i = removeIndexed.size()-1; i>=0; i--){
+        for (int i = removeIndexed.size() - 1; i >= 0; i--) {
             int delete = removeIndexed.get(i);
             menuBar.getMenus().remove(delete);
         }

@@ -4,22 +4,22 @@ package email;
 import bookings.LectureBooking;
 import customers.LectureBookingCustomer;
 
-public class LectureBookingConformationMail {
+class LectureBookingConformationMail {
 
-    public static String subject() {
+    static String subject() {
 
         String subject;
 
-        subject = "";
+        subject = "Skoletjeneste Aalborg Zoo";
 
         return subject;
     }
 
-    public static String body(LectureBooking lectureBooking) {
+    static String body(LectureBooking lectureBooking) {
         LectureBookingCustomer lectureBookingCustomer = (LectureBookingCustomer) lectureBooking.getCustomer();
         String body;
 
-        body = "'<div style=\"margin:0; padding:4%;\">" +
+        body = "<div style=\"margin:0; padding:4%;\">" +
                 "<div class=\"head\" style=\"width: 100%; padding-bottom: 40px; overflow: hidden;\">" +
                 "\t<div class=\"afsender\" style=\"float:left; width:40%;\">" +
                 lectureBookingCustomer.getSchoolName() + "<br>" +
@@ -30,11 +30,11 @@ public class LectureBookingConformationMail {
                 "</div>" +
                 "</div>" +
                 "" +
-                "Vi bekræfter hermed, at " + lectureBooking.getParticipants() + " elever og " + lectureBooking.getNoOfTeachers() + " lærere kommer til undervisning i Aalborg Zoo’s skoletjeneste<br>\n" +
-                "\t<p style=\"padding-left: 4em;\">Dato: " + lectureBooking.getDateTime() + ". Kl.</p>\n" +
+                "Vi bekræfter hermed, at " + lectureBooking.getParticipants() + " elever og " + lectureBooking.getNoOfTeachers() + " lærere kommer til undervisning i Aalborg Zoo\'s skoletjeneste<br>\n" +
+                "\t<p style=\"padding-left: 4em;\">Dato: " + lectureBooking.getDateTime().toLocalDate() + ". Kl. " + lectureBooking.getDateTime().toLocalTime() + "</p>\n" +
                 "\t<p style=\"padding-left: 4em;\">For at høre om: " + lectureBooking.getChoiceOfTopic().toString() + "</p>\n" +
                 "\n" +
-                "I bedes medbringe dette brev til Zoo’s billetsalg, da der herefter betales undervisningspris på 40 kr. pr\n" +
+                "I bedes medbringe dette brev til Zoo\'s billetsalg, da der herefter betales undervisningspris på 40 kr. pr\n" +
                 "person for entré og undervisning. Der betales både for elever og lærere. Skoleforvaltningen i Aalborg\n" +
                 "Kommune afholder alle udgifter ved besøget. Fra Zoos billetsalg går I til skoletjenestens lokaler hvor jeres\n" +
                 "underviser vil tage imod jer.<br>\n" +
