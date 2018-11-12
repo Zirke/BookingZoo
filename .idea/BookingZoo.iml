@@ -72,5 +72,8 @@
     <orderEntry type="library" name="Google" level="project" />
     <orderEntry type="library" name="controlsfx-9.0" level="project" />
     <orderEntry type="library" exported="" name="javax.mail" level="project" />
+    <orderEntry type="library" name="Jars" level="project" />
+    <orderEntry type="library" name="controlsfx-9.0.0" level="project" />
+    <orderEntry type="library" name="JarFiler" level="project" />
   </component>
 </module>
