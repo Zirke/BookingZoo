@@ -4,7 +4,7 @@ public enum StatisticType {
     STUDENTS_AND_TEACHER{
         @Override
         public String toString() {
-            return "Statistik over elever og lærer";
+            return "Statistik over elever og lærere";
         }
     },
     TOPIC{
@@ -22,16 +22,18 @@ public enum StatisticType {
     MUNICIPALITY{
         @Override
         public String toString() {
-            return "Statistik over Aalborg kommune";
+            return "Statistik over Aalborg Kommune";
         }
     };
 
     public static StatisticType toStatisticType(String input){
         switch(input){
-            case "Over elever og lærer": return STUDENTS_AND_TEACHER;
+            case "Over elever og lærere":
+                return STUDENTS_AND_TEACHER;
             case "Over emnevalg": return TOPIC;
             case "Over klassetrin": return GRADE;
-            case "Over Aalborg kommune": return MUNICIPALITY;
+            case "Over Aalborg Kommune":
+                return MUNICIPALITY;
             default: throw new IllegalArgumentException();
         }
     }

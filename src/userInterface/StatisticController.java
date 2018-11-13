@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -38,7 +39,7 @@ public class StatisticController {
     private StatisticType setting;
 
     public HBox hboxWithCharts;
-    public VBox dataVBOx;
+    public VBox dataVBox;
     public DatePicker startPicker;
     public DatePicker finishPicker;
     public Button calculateButton;
@@ -74,12 +75,10 @@ public class StatisticController {
             }break;
         }
 
-
         returnButton.setOnMouseClicked(e ->{
             Stage stage = ((Stage)returnButton.getScene().getWindow());
             stage.close();
         });
-
     }
 
     private void calculateButtonPressed(){
@@ -91,7 +90,7 @@ public class StatisticController {
                 clearWindow();
             }
             calculateAlreadePressed = true;
-            for(Node i : dataVBOx.getChildren()){
+            for (Node i : dataVBox.getChildren()) {
                 i.setVisible(true);
             }
             switch (setting){
@@ -114,8 +113,12 @@ public class StatisticController {
                 removeList.add(i);
             }
         }
-
         lectureBookings.removeAll(removeList);
+
+        if (lectureBookings.size() == 0) {
+            GeneralController.showAlertBox(Alert.AlertType.INFORMATION, "Prøv igen",
+                    "Der er ingen bookings inden for det valgte interval");
+        }
     }
 
     private void labelGenerationForTeachersAndStudents(){
@@ -127,13 +130,13 @@ public class StatisticController {
             Label amountOfStudent = new Label();
             amountOfStudent.setText("Antal elever: " + studentCount);
             amountOfStudent.setFont(Font.font(14));
-            dataVBOx.getChildren().add(amountOfStudent);
+            dataVBox.getChildren().add(amountOfStudent);
         }
         int teacherCount = amountOfTeachers(lectureBookings);
         if(teacherCount > 0){
             Label amountOfTeachers = new Label("Antal lærere: " + teacherCount);
             amountOfTeachers.setFont(Font.font(14));
-            dataVBOx.getChildren().add(amountOfTeachers);
+            dataVBox.getChildren().add(amountOfTeachers);
         }
 
         final CategoryAxis xStudent = new CategoryAxis();
@@ -238,7 +241,7 @@ public class StatisticController {
         totalAmount += dyrDerHjemmeTopic;
         labelGeneration(1, "Antal hold i:");
         labelGeneration(dyrDerHjemmeTopic,  ChoiceOfTopic.DYR_DERHJEMME.toString()+": " + dyrDerHjemmeTopic);
-        dataVBOx.setMinWidth(300);
+        dataVBox.setMinWidth(300);
         int temp = amountOfChosenCategory(ChoiceOfTopic.HVERDAG_ZOO, lectureBookings); totalAmount += temp;
         labelGeneration(temp, ChoiceOfTopic.HVERDAG_ZOO.toString()+": " + temp);
         temp = amountOfChosenCategory(ChoiceOfTopic.KRYBDYR, lectureBookings); totalAmount += temp;
@@ -265,19 +268,19 @@ public class StatisticController {
         if(amount > 0){
             Label amountLabel = new Label(labelText);
             amountLabel.setFont(Font.font(14));
-            dataVBOx.getChildren().add(amountLabel);
+            dataVBox.getChildren().add(amountLabel);
 
             /*if(labelText.length() > 19){
                 Label amountLabel = new Label(labelText.substring(0,20));
                 Label amountLabel1 = new Label(labelText.substring(20));
                 amountLabel.setFont(Font.font(14));
                 amountLabel1.setFont(Font.font(14));
-                dataVBOx.getChildren().add(amountLabel);
-                dataVBOx.getChildren().add(amountLabel1);
+                dataVBox.getChildren().add(amountLabel);
+                dataVBox.getChildren().add(amountLabel1);
             }else {
                 Label amountLabel = new Label(labelText);
                 amountLabel.setFont(Font.font(14));
-                dataVBOx.getChildren().add(amountLabel);
+                dataVBox.getChildren().add(amountLabel);
             }*/
         }
     }
@@ -324,10 +327,10 @@ public class StatisticController {
         hboxWithCharts.getChildren().clear();
         hboxWithCharts.getChildren().add(temp);
 
-        temp = dataVBOx.getChildren().get(0);
+        temp = dataVBox.getChildren().get(0);
         temp.setVisible(false);
-        dataVBOx.getChildren().clear();
-        dataVBOx.getChildren().add(temp);
+        dataVBox.getChildren().clear();
+        dataVBox.getChildren().add(temp);
     }
 
     private void gradeSceneGeneration(){
@@ -419,15 +422,15 @@ public class StatisticController {
         }
         int amountNotAalborg = totalAmount - amountFromAalborg;
         labelGeneration(1, "Antal elever: " + totalAmount);
-        labelGeneration(1, "Antal elever fra Aalborg kommune: " + amountFromAalborg);
-        labelGeneration(1, "Antal elever ikke fra Aalborg kommune: " + amountNotAalborg);
+        labelGeneration(1, "Antal elever fra Aalborg Kommune: " + amountFromAalborg);
+        labelGeneration(1, "Antal elever uden for Aalborg Kommune: " + amountNotAalborg);
 
         ObservableList<PieChart.Data> data =
                 FXCollections.observableArrayList(
                         new PieChart.Data("Fra Aalborg Kommune", amountFromAalborg),
                         new PieChart.Data("Ikke Fra Aalborg Kommune", amountNotAalborg));
         final PieChart chart = new PieChart(data);
-        chart.setTitle("Fordeling af elever i og udenfor Aalborg kommune");
+        chart.setTitle("Fordeling af elever i og uden for Aalborg Kommune");
         chart.setLabelsVisible(false);
         DecimalFormat numberFormat = new DecimalFormat("#.00");
         int finalTotalAmount = totalAmount;
@@ -438,7 +441,7 @@ public class StatisticController {
                         )
                 )
         );
-        dataVBOx.setMinWidth(300);
+        dataVBox.setMinWidth(300);
         if(totalAmount != 0){
             hboxWithCharts.getChildren().add(chart);
         }

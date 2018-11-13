@@ -791,10 +791,10 @@ public class MainScreenController extends GeneralController {
 
     void showStatisticInfo() {
         Menu menu = new Menu("Statistik");
-        menu.getItems().add(new MenuItem("Over elever og lærer"));
+        menu.getItems().add(new MenuItem("Over elever og lærere"));
         menu.getItems().add(new MenuItem("Over emnevalg"));
         menu.getItems().add(new MenuItem("Over klassetrin"));
-        menu.getItems().add(new MenuItem("Over Aalborg kommune"));
+        menu.getItems().add(new MenuItem("Over Aalborg Kommune"));
         menuBar.getMenus().add(menu);
 
         statestikPressed();
