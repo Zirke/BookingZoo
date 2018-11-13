@@ -3,6 +3,12 @@ package enums;
 import customExceptions.InvalidEnumException;
 
 public enum RestaurantType {
+    NO_CHOICE {
+        @Override
+        public String toString() {
+            return "Ingen valgt";
+        }
+    },
     ROOM1{
         @Override
         public String toString() {
@@ -25,6 +31,8 @@ public enum RestaurantType {
     public static RestaurantType roomTypeChoice(String input) throws InvalidEnumException {
 
         switch (input) {
+            case "Ingen valgt":
+                return NO_CHOICE;
             case "Lokale 1":
                 return ROOM1;
             case "Lokale 2":

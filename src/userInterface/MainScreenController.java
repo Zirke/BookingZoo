@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -56,7 +57,7 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfArrangementBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedLectureBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedArrangementBookings = new ArrayList<>();
-    private HashMap<LocalDateTime,LectureBooking> LecRoomHashMap = new HashMap<>();
+    private HashMap<LocalDateTime, LectureBooking> LecRoomHashMap = new HashMap<>();
     private BookingType typeOfBooking;
 
     public MainScreenController() throws SQLException, ClassNotFoundException {
@@ -102,6 +103,8 @@ public class MainScreenController extends GeneralController {
 
     //Nodes for booking information display area
     @FXML
+    private VBox informationDisplayVBox;
+    @FXML
     private Label commentLabel, customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
             timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
             schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
@@ -121,8 +124,8 @@ public class MainScreenController extends GeneralController {
 
         bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                //hideBookingInformation();
-            }
+                informationDisplayVBox.setVisible(true);
+            } else informationDisplayVBox.setVisible(false);
         });
 
         /*
@@ -167,10 +170,14 @@ public class MainScreenController extends GeneralController {
         });
 
         //Changes the "BookingStatus" of the selected booking in TableView
-        acceptBookingButton.setOnMouseClicked(e -> acceptBookingDialog());
+        acceptBookingButton.setOnMouseClicked(e ->
+
+                acceptBookingDialog());
 
         //Cancelling the selected booking when pressing cancelBookingButton
-        cancelBookingButton.setOnMouseClicked(e -> cancelBookingDialog());
+        cancelBookingButton.setOnMouseClicked(e ->
+
+                cancelBookingDialog());
     }
 
     /*
@@ -248,11 +255,11 @@ public class MainScreenController extends GeneralController {
                 }
             }
             //mangler en if.
-            if(tempBooking instanceof LectureBooking){
-                if(!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
+            if (tempBooking instanceof LectureBooking) {
+                if (!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
                     LecRoomHashMap.put(tempBooking.getDateTime(), (LectureBooking) tempBooking);
-                }else{
-                    LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking)tempBooking);
+                } else {
+                    LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking) tempBooking);
                 }
             }
         }
@@ -408,7 +415,6 @@ public class MainScreenController extends GeneralController {
 
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
-
         showPendingButtons(selectedLectureBooking.getBookingStatus());
 
         communeLabel.setVisible(true);
@@ -418,13 +424,13 @@ public class MainScreenController extends GeneralController {
         emailLabel.setVisible(true);
         eanLabel.setVisible(true);
         guide_lecturerLabel.setVisible(true);
+        roomLabel.setVisible(true);
         customerCommentLabel.setVisible(true);
         customerCommentTextArea.setVisible(true);
         customerCommentTextArea.setEditable(false);
         commentLabel.setVisible(true);
         commentTextArea.setVisible(true);
         commentTextArea.setEditable(false);
-        roomLabel.setVisible(true); //new
 
         if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
             editBookingButton.setVisible(false);
@@ -453,10 +459,52 @@ public class MainScreenController extends GeneralController {
         if (selectedLectureBooking.getLecturer() == null) {
             guide_lecturerLabel.setText("Underviser: Ingen underviser tilføjet");
         } else guide_lecturerLabel.setText("Underviser: " + selectedLectureBooking.getLecturer().toString());
-        roomLabel.setText("Klasseværelse: " + selectedLectureBooking.getLectureRoom().getType().toString());
+        roomLabel.setText("Lokale: " + selectedLectureBooking.getLectureRoom().getType().toString());
         customerCommentTextArea.setText(selectedLectureBooking.getComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
+    }
 
+    private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
+
+        showPendingButtons(selectedArrangementBooking.getBookingStatus());
+
+        cityLabel.setVisible(false);
+        contactPersonLabel.setVisible(false);
+        phoneNumberLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        eanLabel.setVisible(false);
+        guide_lecturerLabel.setVisible(true);
+        customerCommentLabel.setVisible(true);
+        customerCommentTextArea.setVisible(true);
+        customerCommentTextArea.setEditable(false);
+        commentLabel.setVisible(true);
+        commentTextArea.setVisible(true);
+        commentTextArea.setEditable(false);
+        roomLabel.setVisible(false);
+
+        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            editBookingButton.setVisible(false);
+        }
+
+        bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
+        bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
+        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
+        creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
+        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
+        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
+        teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
+        teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
+        gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
+        topicChoiceLabel.setText("Valg af menu: " + selectedArrangementBooking.getMenuChosen());
+        schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
+        schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
+        zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
+        if (selectedArrangementBooking.getGuide() == null) {
+            communeLabel.setText("Guide: Ingen guide tilføjet");
+        } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
+        guide_lecturerLabel.setText("Lokale: " + selectedArrangementBooking.getRestaurant().getType().toString());
+        customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
+        commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
     private void showPendingButtons(BookingStatus bookingStatus) {
@@ -657,54 +705,6 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
-
-        showPendingButtons(selectedArrangementBooking.getBookingStatus());
-
-        cityLabel.setVisible(false);
-        contactPersonLabel.setVisible(false);
-        phoneNumberLabel.setVisible(false);
-        emailLabel.setVisible(false);
-        eanLabel.setVisible(false);
-        guide_lecturerLabel.setVisible(false);
-        customerCommentLabel.setVisible(true);
-        customerCommentTextArea.setVisible(true);
-        customerCommentTextArea.setEditable(false);
-        commentLabel.setVisible(true);
-        commentTextArea.setVisible(true);
-        commentTextArea.setEditable(false);
-        roomLabel.setVisible(false);
-
-        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
-            editBookingButton.setVisible(false);
-        }
-
-        bookingTypeLabel.setText(selectedArrangementBooking.getBookingType().toString());
-        bookingStatusLabel.setText(selectedArrangementBooking.getBookingStatus().toString());
-        dateLabel.setText("Dato: " + selectedArrangementBooking.getDateTime().toLocalDate().toString());
-        creationDateLabel.setText("Oprettet: " + selectedArrangementBooking.getCreationDate().toString());
-        timeLabel.setText("Tidspunkt: " + selectedArrangementBooking.getDateTime().toLocalTime().toString());
-        pupilNoLabel.setText("Antal børn: " + selectedArrangementBooking.getParticipants());
-        teamNoLabel.setText("Fødselsdagsbarnets navn: " + selectedArrangementBooking.getBirthdayChildName());
-        teacherNoLabel.setText("Barnets alder: " + selectedArrangementBooking.getBirthdayChildAge());
-        gradeLabel.setText("Tidligere deltager (Ja/Nej): " + selectedArrangementBooking.getFormerParticipant());
-        topicChoiceLabel.setText("Valg af menu: " + selectedArrangementBooking.getMenuChosen());
-        schoolNameLabel.setText("Kontaktperson: " + selectedArrangementBooking.getCustomer().getContactPerson());
-        schoolPhoneNumberLabel.setText("Telefonnummer: " + selectedArrangementBooking.getCustomer().getPhoneNumber());
-        zipcodeLabel.setText("E-mail: " + selectedArrangementBooking.getCustomer().getEmail());
-        if (selectedArrangementBooking.getGuide() == null) {
-            communeLabel.setText("Guide: Ingen guide tilføjet");
-        } else communeLabel.setText("Guide: " + selectedArrangementBooking.getGuide());
-        customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
-        commentTextArea.setText(selectedArrangementBooking.getComment());
-
-        if(selectedArrangementBooking.getRestaurant().getType() != null){
-            eanLabel.setVisible(true);
-            eanLabel.setText("Restaurant: " + selectedArrangementBooking.getRestaurant().getType().toString());
-        }
-
-    }
-
     private void acceptBookingDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Vil du acceptere bookingen?");
@@ -759,7 +759,7 @@ public class MainScreenController extends GeneralController {
                 }
             }
             numberOfPendingBookings = tempArray.size();
-        }else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             for (Booking temp : listOfPendingBookings) {
                 if (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING)) {
                     tempArray.add(temp);
@@ -845,38 +845,6 @@ public class MainScreenController extends GeneralController {
                 }
             }
         }
-    }
-
-    private void hideBookingInformation() {
-        commentLabel.setVisible(false);
-        customerCommentLabel.setVisible(false);
-        bookingTypeLabel.setVisible(false);
-        bookingStatusLabel.setVisible(false);
-        creationDateLabel.setVisible(false);
-        dateLabel.setVisible(false);
-        timeLabel.setVisible(false);
-        pupilNoLabel.setVisible(false);
-        teamNoLabel.setVisible(false);
-        teacherNoLabel.setVisible(false);
-        gradeLabel.setVisible(false);
-        topicChoiceLabel.setVisible(false);
-        schoolNameLabel.setVisible(false);
-        schoolPhoneNumberLabel.setVisible(false);
-        zipcodeLabel.setVisible(false);
-        cityLabel.setVisible(false);
-        communeLabel.setVisible(false);
-        phoneNumberLabel.setVisible(false);
-        contactPersonLabel.setVisible(false);
-        emailLabel.setVisible(false);
-        eanLabel.setVisible(false);
-        guide_lecturerLabel.setVisible(false);
-        customerCommentTextArea.setVisible(false);
-        commentTextArea.setVisible(false);
-        acceptBookingButton.setVisible(false);
-        cancelBookingButton.setVisible(false);
-        editBookingButton.setVisible(false);
-        deleteButton.setVisible(false);
-        roomLabel.setVisible(false);
     }
 
     private void removeStatisticMenu(BookingType type) {

@@ -16,12 +16,15 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
-    public ChoiceBox restaurantChoiceBox;
+
     private BookingDataAccessor bda;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
     }
+
+    @FXML
+    private ChoiceBox restaurantChoiceBox;
 
     @FXML
     private DatePicker datePicker;
@@ -39,6 +42,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     private Button createAndCloseButton, cancelButton;
 
     public void initialize() {
+        restaurantChoiceBox.setValue(RestaurantType.NO_CHOICE.toString());
 
         for(RestaurantType i : RestaurantType.values()){
             restaurantChoiceBox.getItems().add(i);

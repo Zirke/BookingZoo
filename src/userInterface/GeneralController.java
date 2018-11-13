@@ -72,7 +72,7 @@ class GeneralController {
         }
     }
 
-    Alert showAlertBox(Alert.AlertType alertType, String title, String message) {
+    static Alert showAlertBox(Alert.AlertType alertType, String title, String message) {
         Alert userCreationAlert = new Alert(alertType);
         userCreationAlert.setTitle(title);
         userCreationAlert.setHeaderText(null);

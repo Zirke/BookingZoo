@@ -52,7 +52,7 @@ public class EditArrangementBookingController {
 
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
 
-        for(RestaurantType i : RestaurantType.values()){
+        for (RestaurantType i : RestaurantType.values()) {
             restaurantChoiceBox.getItems().add(i.toString());
         }
 
@@ -115,23 +115,30 @@ public class EditArrangementBookingController {
                 menuFourRadioButton.setSelected(true);
                 break;
         }
+        restaurantChoiceBox.setValue(selectedArrangementBooking.getRestaurant().getType().toString());
         customerCommentTextArea.setText(selectedArrangementBooking.getCustomerComment());
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
     private void saveButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
-            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-            alert2.setContentText("Er den indtastede information korrekt?");
+            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
+                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
+                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
+                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setContentText("Er den indtastede information korrekt?");
 
-            Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
-            if (alertChoice2.get() == ButtonType.OK) {
-                try {
-                    bda.editArrBook(overwriteSelectedArrangementBooking());
-                    closeWindow();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        bda.editArrBook(overwriteSelectedArrangementBooking());
+                        closeWindow();
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });

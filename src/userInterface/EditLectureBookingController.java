@@ -1,6 +1,5 @@
 package userInterface;
 
-import bookings.Booking;
 import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
@@ -41,7 +40,7 @@ public class EditLectureBookingController {
     private DatePicker datePicker;
     @FXML
     private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
-            lecturerTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
+            lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
@@ -104,7 +103,7 @@ public class EditLectureBookingController {
         topicChoiceBox.setValue(selectedLectureBooking.getChoiceOfTopic().toString());
         gradeChoiceBox.setValue(String.valueOf(selectedLectureBooking.getGrade()));
         lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
-        lecturerTextField.setText(selectedLectureBooking.getLecturer().toString());
+        lecturerChosenTextField.setText(selectedLectureBooking.getLecturer().toString());
         categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus().toString());
 
         //Customer information
@@ -153,7 +152,7 @@ public class EditLectureBookingController {
         LectureRoomType roomTypeChoice = LectureRoomType.roomTypeChoice(lectureRoomChoiceBox.getSelectionModel().getSelectedItem().toString());
         LectureRoom foo = new LectureRoom(FacilityState.OCCUPIED, roomTypeChoice);
         selectedLectureBooking.setLectureRoom(foo);
-        Lecturer bar = new Lecturer(lecturerTextField.getText());
+        Lecturer bar = new Lecturer(lecturerChosenTextField.getText());
         selectedLectureBooking.setLecturer(bar);
         BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedLectureBooking.setBookingStatus(statusChoice);
@@ -195,6 +194,15 @@ public class EditLectureBookingController {
 
     private void saveButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
+            if (datePicker.getValue() == null || noOfPupilsTextField.getText().isEmpty() ||
+                    noOfTeamsTextField.getText().isEmpty() || noOfTeachersTextField.getText().isEmpty() || topicChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    gradeChoiceBox.getSelectionModel().getSelectedItem() == null || lectureRoomChoiceBox.getSelectionModel().getSelectedItem() == null ||
+                    lecturerChosenTextField.getText().isEmpty() || schoolNameTextField.getText().isEmpty() ||
+                    zipCodeTextField.getText().isEmpty() || cityTextField.getText().isEmpty() || !communeGroup.getSelectedToggle().isSelected() ||
+                    schoolPhoneNumberTextField.getText().isEmpty() || eanNumberTextField.getText().isEmpty() ||
+                    contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()) {
+                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
+            }
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
 
