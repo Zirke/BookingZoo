@@ -199,10 +199,11 @@ public class MainScreenController extends GeneralController {
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
                 removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
                 showPendingBookingPopUp();
+                showArrangementStatisticsInfo();
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
-
+                removeStatisticMenu(BookingType.LECTUREBOOKING);
                 showPendingBookingPopUp();
                 showStatisticInfo();
                 break;
@@ -223,6 +224,7 @@ public class MainScreenController extends GeneralController {
             listOfArrangementBookings.addAll(bda.fetchArrBooks());
             listOfAllBookings.addAll(listOfArrangementBookings);
         } catch (NoBookingsInDatabaseException e) {
+            e.printStackTrace();
             System.out.println("No arrangement bookings in database"); //TODO Lav om til exception handling
         }
         //Categorised bookings
@@ -691,8 +693,13 @@ public class MainScreenController extends GeneralController {
             Parent root = loader.load();
 
             StatisticController control = loader.getController();
-            listOfBooking.addAll(listOfLectureBookings);
-            control.setLectureBookings(listOfBooking);
+            if(typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+                listOfBooking.addAll(listOfLectureBookings);
+                control.setListOfBookings(listOfBooking);
+            }else {
+                listOfBooking.addAll(listOfArrangementBookings);
+                control.setListOfBookings(listOfBooking);
+            }
             control.setSetting(type);
             control.initialise();
             Stage stage = new Stage();
@@ -795,6 +802,13 @@ public class MainScreenController extends GeneralController {
         menu.getItems().add(new MenuItem("Over emnevalg"));
         menu.getItems().add(new MenuItem("Over klassetrin"));
         menu.getItems().add(new MenuItem("Over Aalborg Kommune"));
+        menuBar.getMenus().add(menu);
+
+        statestikPressed();
+    }
+    void showArrangementStatisticsInfo(){
+        Menu menu = new Menu("Statistik");
+        menu.getItems().add(new MenuItem("Over valgte menuer"));
         menuBar.getMenus().add(menu);
 
         statestikPressed();

@@ -2,6 +2,7 @@ package statistics;
 
 import bookings.ArrangementBooking;
 import bookings.Booking;
+import bookings.FoodOrder;
 import bookings.LectureBooking;
 import builders.ArrangementBuilder;
 import builders.LectureBuilder;
@@ -222,5 +223,22 @@ public class StatisticTest {
 
         assertEquals(7,amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER,BookingArrayList));
         assertEquals(9,amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME,BookingArrayList));
+    }
+
+    @Test
+    public void AmountOfMenuChosen01(){
+        ArrangementBuilder arrangementBuilder = new ArrangementBuilder();
+        ArrangementBooking useCase;
+
+        ArrayList<Booking> BookingArrayList = new ArrayList<>();
+
+        arrangementBuilder.setBookingType(BookingType.ARRANGEMENTBOOKING)
+                    .setMenuChosen(new FoodOrder(ChoiceOfMenu.MENU_FOUR))
+                    .setParticipants(200);
+        useCase = arrangementBuilder.build();
+
+        BookingArrayList.add(useCase);
+
+        assertEquals(200,amountOfMenuChosen(ChoiceOfMenu.MENU_FOUR,BookingArrayList));
     }
 }

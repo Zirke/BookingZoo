@@ -2,8 +2,11 @@ package statistics;
 
 import bookings.ArrangementBooking;
 import bookings.Booking;
+import bookings.FoodOrder;
 import bookings.LectureBooking;
+import builders.ArrangementBuilder;
 import customers.LectureBookingCustomer;
+import enums.ChoiceOfMenu;
 import enums.ChoiceOfTopic;
 
 import java.lang.reflect.Array;
@@ -147,8 +150,6 @@ public class Statistic {
         }
     }
 
-
-
     public static int amountOfArrangementParticipants(ArrayList<Booking> arrangements){
         int amount = 0;
 
@@ -187,6 +188,19 @@ public class Statistic {
             }
         }
 
+        return amount;
+    }
+
+    public static int amountOfMenuChosen(ChoiceOfMenu menu, ArrayList<Booking> allBookings){
+        int amount = 0;
+        Iterator iter = allBookings.iterator();
+
+        while (iter.hasNext()){
+            Booking temp = (Booking)iter.next();
+            if(ArrangementBooking.class.isInstance(temp) && ((ArrangementBooking)temp).getMenuChosen().getChoiceOfMenu().equals(menu)){
+                amount += temp.getParticipants();
+            }
+        }
         return amount;
     }
 

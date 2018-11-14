@@ -1,7 +1,9 @@
 package userInterface;
 
+import bookings.ArrangementBooking;
 import bookings.Booking;
 import bookings.LectureBooking;
+import enums.ChoiceOfMenu;
 import enums.ChoiceOfTopic;
 import enums.Grade;
 import enums.StatisticType;
@@ -33,7 +35,7 @@ import static statistics.Statistic.*;
 
 public class StatisticController {
     public CheckComboBox gradeComboBox;
-    private ArrayList<Booking> lectureBookings;
+    private ArrayList<Booking> listOfBookings;
     private LocalDate startDate;
     private LocalDate finishDate;
     private StatisticType setting;
@@ -57,8 +59,8 @@ public class StatisticController {
         this.setting = setting;
     }
 
-    void setLectureBookings(ArrayList<Booking> lectureBookings) {
-        this.lectureBookings = lectureBookings;
+    void setListOfBookings(ArrayList<Booking> listOfBookings) {
+        this.listOfBookings = listOfBookings;
     }
 
     void initialise(){
@@ -85,7 +87,11 @@ public class StatisticController {
         calculateButton.setOnMouseClicked(e ->{
             startDate = startPicker.getValue();
             finishDate = finishPicker.getValue();
-            lectureBookingInSelectedInterval();
+            if(listOfBookings.get(0) instanceof LectureBooking) {
+                lectureBookingInSelectedInterval();
+            }else{
+                arrangementBookingInSelectedInterval();
+            }
             if(calculateAlreadePressed){
                 clearWindow();
             }
@@ -98,6 +104,7 @@ public class StatisticController {
                 case TOPIC: labelGenerationForTopic();break;
                 case GRADE: labelGenerationForGrade();break;
                 case MUNICIPALITY: labelGenerationMunicipality();break;
+                case FOOD: labelGenerationForMenu();break;
             }
 
         });
@@ -105,7 +112,7 @@ public class StatisticController {
 
     private void lectureBookingInSelectedInterval(){
         ArrayList<Booking> removeList = new ArrayList<>();
-        for(Booking i : lectureBookings){
+        for(Booking i : listOfBookings){
             LectureBooking x = (LectureBooking) i;
             Boolean isAfterFinishDate = x.getDateTime().toLocalDate().isAfter(finishDate);
             Boolean isBeforeStartDate = x.getDateTime().toLocalDate().isBefore(startDate);
@@ -113,9 +120,9 @@ public class StatisticController {
                 removeList.add(i);
             }
         }
-        lectureBookings.removeAll(removeList);
+        listOfBookings.removeAll(removeList);
 
-        if (lectureBookings.size() == 0) {
+        if (listOfBookings.size() == 0) {
             GeneralController.showAlertBox(Alert.AlertType.INFORMATION, "Prøv igen",
                     "Der er ingen bookings inden for det valgte interval");
         }
@@ -125,14 +132,14 @@ public class StatisticController {
         setSceneToMaxHeight();
 
         int count = 0;
-        int studentCount =amountOfStudentsFromSchools(lectureBookings);
+        int studentCount =amountOfStudentsFromSchools(listOfBookings);
         if(studentCount > 0) {
             Label amountOfStudent = new Label();
             amountOfStudent.setText("Antal elever: " + studentCount);
             amountOfStudent.setFont(Font.font(14));
             dataVBox.getChildren().add(amountOfStudent);
         }
-        int teacherCount = amountOfTeachers(lectureBookings);
+        int teacherCount = amountOfTeachers(listOfBookings);
         if(teacherCount > 0){
             Label amountOfTeachers = new Label("Antal lærere: " + teacherCount);
             amountOfTeachers.setFont(Font.font(14));
@@ -188,7 +195,7 @@ public class StatisticController {
     private HashMap<String, Integer> hashMapGenerationForStudent(){
         HashMap<String, Integer> temp = new HashMap<>();
         ArrayList<Booking> j = new ArrayList<>();
-        for(Booking i : lectureBookings){
+        for(Booking i : listOfBookings){
             j.add(i);
             if(temp.containsKey(i.getDateTime().toLocalDate().toString())){
                 int t = temp.get(i.getDateTime().toLocalDate().toString());
@@ -221,7 +228,7 @@ public class StatisticController {
     private HashMap<String, Integer> hashMapGenerationForTeacher(){
         HashMap<String, Integer> temp = new HashMap<>();
         ArrayList<Booking> j = new ArrayList<>();
-        for(Booking i : lectureBookings){
+        for(Booking i : listOfBookings){
             j.add(i);
             if(temp.containsKey(i.getDateTime().toLocalDate().toString())){
                 int t = temp.get(i.getDateTime().toLocalDate().toString());
@@ -237,28 +244,28 @@ public class StatisticController {
 
     private void labelGenerationForTopic(){
         int totalAmount = 0;
-        int dyrDerHjemmeTopic = amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME, lectureBookings);
+        int dyrDerHjemmeTopic = amountOfChosenCategory(ChoiceOfTopic.DYR_DERHJEMME, listOfBookings);
         totalAmount += dyrDerHjemmeTopic;
         labelGeneration(1, "Antal hold i:");
         labelGeneration(dyrDerHjemmeTopic,  ChoiceOfTopic.DYR_DERHJEMME.toString()+": " + dyrDerHjemmeTopic);
         dataVBox.setMinWidth(300);
-        int temp = amountOfChosenCategory(ChoiceOfTopic.HVERDAG_ZOO, lectureBookings); totalAmount += temp;
+        int temp = amountOfChosenCategory(ChoiceOfTopic.HVERDAG_ZOO, listOfBookings); totalAmount += temp;
         labelGeneration(temp, ChoiceOfTopic.HVERDAG_ZOO.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.KRYBDYR, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.KRYBDYR, listOfBookings); totalAmount += temp;
         labelGeneration(temp, ChoiceOfTopic.KRYBDYR.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.GROENDLANDS_DYR, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.GROENDLANDS_DYR, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.GROENDLANDS_DYR.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.AFRIKAS_SAVANNER, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.AFRIKAS_SAVANNER.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.AKTIVERINGSVAERKSTED, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.AKTIVERINGSVAERKSTED, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.AKTIVERINGSVAERKSTED.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.SANSEOPLEVELSER, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.SANSEOPLEVELSER, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.SANSEOPLEVELSER.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.DYRS_TILPASNING, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.DYRS_TILPASNING, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.DYRS_TILPASNING.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.EVOLUTION, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.EVOLUTION, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.EVOLUTION.toString()+": " + temp);
-        temp = amountOfChosenCategory(ChoiceOfTopic.ZOO_SOM_VIRKSOMHED, lectureBookings); totalAmount += temp;
+        temp = amountOfChosenCategory(ChoiceOfTopic.ZOO_SOM_VIRKSOMHED, listOfBookings); totalAmount += temp;
         labelGeneration(temp,  ChoiceOfTopic.ZOO_SOM_VIRKSOMHED.toString()+": " + temp);
         setSceneForTopic();
         topicPieChartGeneration(totalAmount);
@@ -316,9 +323,9 @@ public class StatisticController {
     }
 
     private void addPieChartData(ObservableList<PieChart.Data> topicChart, ChoiceOfTopic topic){
-        int temp = amountOfChosenCategory(topic, lectureBookings);
+        int temp = amountOfChosenCategory(topic, listOfBookings);
         if(temp > 0){
-            topicChart.add(new PieChart.Data(topic.toString(), amountOfChosenCategory(topic, lectureBookings)));
+            topicChart.add(new PieChart.Data(topic.toString(), amountOfChosenCategory(topic, listOfBookings)));
         }
     }
 
@@ -387,7 +394,7 @@ public class StatisticController {
     private ArrayList<Booking> arrayListWithOnlyGrades(ArrayList<Grade> gradeList){
         ArrayList<Booking> gradeBookingList = new ArrayList<>();
 
-        for(Booking i : lectureBookings){
+        for(Booking i : listOfBookings){
             LectureBooking x = (LectureBooking) i;
             for(Grade j : gradeList){
                 if(x.getGrade().equals(j)){
@@ -414,10 +421,10 @@ public class StatisticController {
     private void labelGenerationMunicipality(){
         lectureBookingInSelectedInterval();
         setSceneToMaxHeight();
-        ArrayList<Booking> fromAalborgMunicipality =(ArrayList<Booking>) lectureBookings.clone();
+        ArrayList<Booking> fromAalborgMunicipality =(ArrayList<Booking>) listOfBookings.clone();
         int amountFromAalborg = amountOfSchoolFromAalborgMunicipality(fromAalborgMunicipality);
         int totalAmount = 0;
-        for(Booking i : lectureBookings){
+        for(Booking i : listOfBookings){
             totalAmount += i.getParticipants();
         }
         int amountNotAalborg = totalAmount - amountFromAalborg;
@@ -445,6 +452,73 @@ public class StatisticController {
         if(totalAmount != 0){
             hboxWithCharts.getChildren().add(chart);
         }
+    }
 
+
+    private void addPieChartMenuData(ObservableList<PieChart.Data> topicChart, ChoiceOfMenu menu){
+        int temp = amountOfMenuChosen(menu, listOfBookings);
+        if(temp > 0){
+            topicChart.add(new PieChart.Data(menu.toString(), amountOfMenuChosen(menu, listOfBookings)));
+        }
+    }
+    private void menuPieChartGeneration(int totalAmount){
+        ObservableList<PieChart.Data> menuChart = FXCollections.observableArrayList();
+        addPieChartMenuData(menuChart, ChoiceOfMenu.NO_FOOD);
+        addPieChartMenuData(menuChart, ChoiceOfMenu.MENU_ONE);
+        addPieChartMenuData(menuChart, ChoiceOfMenu.MENU_TWO);
+        addPieChartMenuData(menuChart, ChoiceOfMenu.MENU_THREE);
+        addPieChartMenuData(menuChart, ChoiceOfMenu.MENU_FOUR);
+
+        final PieChart chart = new PieChart(menuChart);
+
+        chart.setTitle("Madfordeling");
+
+        chart.setLabelsVisible(false);
+        DecimalFormat numberFormat = new DecimalFormat("#.00");
+        chart.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " ", String.valueOf(numberFormat.format(((data.getPieValue()/totalAmount)*100))) , " %"
+                        )
+                )
+        );
+
+        hboxWithCharts.getChildren().add(chart);
+    }
+    private void labelGenerationForMenu(){
+        int totalAmount = 0;
+        int noFoodChosen = amountOfMenuChosen(ChoiceOfMenu.NO_FOOD, listOfBookings);
+        totalAmount += noFoodChosen;
+        labelGeneration(1, "Antal personer har fået:");
+        labelGeneration(noFoodChosen,  ChoiceOfMenu.NO_FOOD.toString()+": " + noFoodChosen);
+        dataVBox.setMinWidth(300);
+        int temp = amountOfMenuChosen(ChoiceOfMenu.MENU_ONE, listOfBookings); totalAmount += temp;
+        labelGeneration(temp, ChoiceOfMenu.MENU_ONE.toString()+": " + temp);
+        temp = amountOfMenuChosen(ChoiceOfMenu.MENU_TWO, listOfBookings); totalAmount += temp;
+        labelGeneration(temp, ChoiceOfMenu.MENU_TWO.toString()+": " + temp);
+        temp = amountOfMenuChosen(ChoiceOfMenu.MENU_THREE, listOfBookings); totalAmount += temp;
+        labelGeneration(temp,  ChoiceOfMenu.MENU_THREE.toString()+": " + temp);
+        temp = amountOfMenuChosen(ChoiceOfMenu.MENU_FOUR, listOfBookings); totalAmount += temp;
+        labelGeneration(temp,  ChoiceOfMenu.MENU_FOUR.toString()+": " + temp);
+        setSceneForTopic();
+        menuPieChartGeneration(totalAmount);
+    }
+
+    private void arrangementBookingInSelectedInterval(){
+        ArrayList<Booking> removeList = new ArrayList<>();
+        for(Booking i : listOfBookings){
+            ArrangementBooking x = (ArrangementBooking) i;
+            Boolean isAfterFinishDate = x.getDateTime().toLocalDate().isAfter(finishDate);
+            Boolean isBeforeStartDate = x.getDateTime().toLocalDate().isBefore(startDate);
+            if(isAfterFinishDate || isBeforeStartDate){
+                removeList.add(i);
+            }
+        }
+        listOfBookings.removeAll(removeList);
+
+        if (listOfBookings.size() == 0) {
+            GeneralController.showAlertBox(Alert.AlertType.INFORMATION, "Prøv igen",
+                    "Der er ingen bookings inden for det valgte interval");
+        }
     }
 }
