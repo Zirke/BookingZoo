@@ -179,11 +179,15 @@ public class MainScreenController extends GeneralController {
         cancelBookingButton.setOnMouseClicked(e ->
 
                 cancelBookingDialog());
+
+
     }
+
 
     /*
      *   METHODS
      */
+
 
     @FXML
     private void changeTypeOfBooking(ActionEvent event) {
@@ -596,6 +600,8 @@ public class MainScreenController extends GeneralController {
             ArrangementBookingCreationController controller = loader.getController();
             controller.setBda(bda);
 
+            controller.setMsc(this);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -614,6 +620,7 @@ public class MainScreenController extends GeneralController {
 
             LectureBookingCreationController controller = loader.getController();
             controller.setBda(bda);
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -636,6 +643,7 @@ public class MainScreenController extends GeneralController {
             controller.setBda(bda);
             controller.setLecRoomHashMap(LecRoomHashMap);
             controller.initData();
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -657,6 +665,7 @@ public class MainScreenController extends GeneralController {
             controller.setSelectedArrangementBooking(selectedArrangementBooking);
             controller.setBda(bda);
             controller.initData();
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -877,4 +886,5 @@ public class MainScreenController extends GeneralController {
             menuBar.getMenus().remove(delete);
         }
     }
+
 }

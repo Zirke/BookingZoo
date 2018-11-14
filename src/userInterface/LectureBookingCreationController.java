@@ -45,6 +45,8 @@ public class LectureBookingCreationController {
     @FXML
     private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox;
 
+    private MainScreenController msc;
+
 
     @FXML
     public void initialize() {
@@ -158,9 +160,11 @@ public class LectureBookingCreationController {
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
                 if (alertChoice2.get() == ButtonType.OK) {
+
                     try {
-                        createNewLectureBookingFromInput();
                         closeWindow();
+                        createNewLectureBookingFromInput();
+                        msc.refetchBookingsFromDataBase();
                     } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
                         e1.printStackTrace();
                     }
@@ -175,5 +179,9 @@ public class LectureBookingCreationController {
                 var.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    public void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 }

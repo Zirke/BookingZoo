@@ -54,6 +54,8 @@ public class EditLectureBookingController {
     @FXML
     private Button saveAndCloseButton, cancelButton;
 
+    private MainScreenController msc;
+
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale", "Intet lokale valgt");
@@ -242,8 +244,9 @@ public class EditLectureBookingController {
             if(overWrite.getLectureRoom().getType() != LectureRoomType.WRONG_ROOM) {
                 if (alertChoice2.get() == ButtonType.OK) {
                     try {
-                        bda.editLecBook(overWrite);
                         closeWindow();
+                        bda.editLecBook(overWrite);
+                        msc.refetchBookingsFromDataBase();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -258,5 +261,9 @@ public class EditLectureBookingController {
                 var.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    public void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 }

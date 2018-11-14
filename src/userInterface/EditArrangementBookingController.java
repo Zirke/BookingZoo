@@ -48,6 +48,9 @@ public class EditArrangementBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
+    private MainScreenController msc;
+
+
     public void initialize() {
 
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
@@ -133,9 +136,11 @@ public class EditArrangementBookingController {
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
                 if (alertChoice2.get() == ButtonType.OK) {
+
                     try {
-                        bda.editArrBook(overwriteSelectedArrangementBooking());
                         closeWindow();
+                        bda.editArrBook(overwriteSelectedArrangementBooking());
+                        msc.refetchBookingsFromDataBase();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -183,5 +188,9 @@ public class EditArrangementBookingController {
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 }
