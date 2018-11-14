@@ -478,6 +478,28 @@
                                text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup"/>
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Statistik">
+                <items>
+                    <Menu mnemonicParsing="false" text="Over Børnefødselsdage">
+                        <items>
+                            <MenuItem fx:id="chosenMenuesMenuItem" mnemonicParsing="false"
+                                      onAction="#showStatisticWindow" text="Over valgte menuer"/>
+                        </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Over Skoletjenester">
+                        <items>
+                            <MenuItem fx:id="pupilsAndTeachersMenuItem" mnemonicParsing="false"
+                                      onAction="#showStatisticWindow" text="Over elever og lærere"/>
+                            <MenuItem fx:id="choiceOfTopicMenuItem" mnemonicParsing="false"
+                                      onAction="#showStatisticWindow" text="Over emnevalg"/>
+                            <MenuItem fx:id="gradeMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow"
+                                      text="Over klassetrin"/>
+                            <MenuItem fx:id="municipalityMenuItem" mnemonicParsing="false"
+                                      onAction="#showStatisticWindow" text="Over Aalborg Kommune"/>
+                        </items>
+                    </Menu>
+                </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="Om" />

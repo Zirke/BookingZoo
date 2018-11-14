@@ -70,7 +70,6 @@ public class EditArrangementBookingController {
             }
         });
         cancelButton.setOnMouseClicked(e -> closeWindow());
-
     }
 
     void initData() {
@@ -175,7 +174,6 @@ public class EditArrangementBookingController {
                 emailTextField.getText());
         selectedArrangementBooking.setCustomer(temp);
         selectedArrangementBooking.getRestaurant().setType(RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString()));
-
 
         return selectedArrangementBooking;
     }

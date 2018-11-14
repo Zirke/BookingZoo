@@ -100,6 +100,8 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingDateColumn;
     @FXML
     private RadioMenuItem allBookingsMenuItem, arrangementBookingsMenuItem, lectureBooingsMenuItem;
+    @FXML
+    private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
 
     //Nodes for booking information display area
     @FXML
@@ -193,19 +195,19 @@ public class MainScreenController extends GeneralController {
             case "Alle bookings":
                 setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
                 showPendingBookingPopUp();
-                removeStatisticMenu(BookingType.ALL_BOOKING_TYPES);
+                //removeStatisticMenu(BookingType.ALL_BOOKING_TYPES);
                 break;
             case "Børnefødselsdage":
                 setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
+                //removeStatisticMenu(BookingType.ARRANGEMENTBOOKING);
                 showPendingBookingPopUp();
-                showArrangementStatisticsInfo();
+                //showArrangementStatisticsInfo();
                 break;
             case "Skoletjenester":
                 setTypeOfBooking(BookingType.LECTUREBOOKING);
-                removeStatisticMenu(BookingType.LECTUREBOOKING);
+                //removeStatisticMenu(BookingType.LECTUREBOOKING);
                 showPendingBookingPopUp();
-                showStatisticInfo();
+                //showStatisticInfo();
                 break;
         }
         //setChosenBookingTypeIntoTableView() //virker fint uden
@@ -467,7 +469,6 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
-
         showPendingButtons(selectedArrangementBooking.getBookingStatus());
 
         cityLabel.setVisible(false);
@@ -559,7 +560,6 @@ public class MainScreenController extends GeneralController {
                 && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) &&
                 !temp.getDateTime().isBefore(LocalDateTime.now());
     }
-
 
     private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
@@ -686,22 +686,42 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void showStatisticWindow(StatisticType type) {
-        ArrayList<Booking> listOfBooking = new ArrayList<>();
+    @FXML
+    private void showStatisticWindow(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Statistic.fxml"));
             Parent root = loader.load();
+            StatisticController controller = loader.getController();
 
-            StatisticController control = loader.getController();
-            if(typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-                listOfBooking.addAll(listOfLectureBookings);
-                control.setListOfBookings(listOfBooking);
-            }else {
-                listOfBooking.addAll(listOfArrangementBookings);
-                control.setListOfBookings(listOfBooking);
+            MenuItem chosenStatistic = (MenuItem) event.getSource();
+            String menuItemText = chosenStatistic.getText();
+
+            if (chosenStatistic.equals(chosenMenuesMenuItem)) {
+                controller.setListOfBookings(listOfArrangementBookings);
+                controller.setSetting(StatisticType.FOOD);
+                controller.initData();
             }
-            control.setSetting(type);
-            control.initialise();
+            if (chosenStatistic.equals(pupilsAndTeachersMenuItem) || chosenStatistic.equals(choiceOfTopicMenuItem) ||
+                    chosenStatistic.equals(gradeMenuItem) || chosenStatistic.equals(municipalityMenuItem)) {
+                controller.setListOfBookings((ArrayList<Booking>) listOfLectureBookings.clone());
+                switch (menuItemText) {
+                    case "Over elever og lærere":
+                        controller.setSetting(StatisticType.STUDENTS_AND_TEACHER);
+                        break;
+                    case "Over emnevalg":
+                        controller.setSetting(StatisticType.TOPIC);
+                        break;
+                    case "Over klassetrin":
+                        controller.setSetting(StatisticType.GRADE);
+                        break;
+                    case "Over Aalborg Kommune":
+                        controller.setSetting(StatisticType.MUNICIPALITY);
+                        break;
+                }
+                controller.initData();
+
+            }
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -796,6 +816,7 @@ public class MainScreenController extends GeneralController {
         }
     }
 
+    /*
     void showStatisticInfo() {
         Menu menu = new Menu("Statistik");
         menu.getItems().add(new MenuItem("Over elever og lærere"));
@@ -806,6 +827,8 @@ public class MainScreenController extends GeneralController {
 
         statestikPressed();
     }
+    */
+    /*
     void showArrangementStatisticsInfo(){
         Menu menu = new Menu("Statistik");
         menu.getItems().add(new MenuItem("Over valgte menuer"));
@@ -813,7 +836,8 @@ public class MainScreenController extends GeneralController {
 
         statestikPressed();
     }
-
+    */
+    /*
     private void statestikPressed() {
         ArrayList<MenuItem> items = new ArrayList<>();
         ObservableList list = menuBar.getMenus();
@@ -830,7 +854,8 @@ public class MainScreenController extends GeneralController {
         //});
 
     }
-
+    */
+    /*
     private void listenerForStatisticMenuBar(ArrayList<MenuItem> menuItems) {
         for (int i = 0; i < menuItems.size(); i++) {
             int finalI = i;
@@ -839,7 +864,7 @@ public class MainScreenController extends GeneralController {
             });
         }
     }
-
+    */
     private void moveConductedBookingToArchived() {
         for (Booking temp : listOfBookings) {
             int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
@@ -860,7 +885,7 @@ public class MainScreenController extends GeneralController {
             }
         }
     }
-
+    /*
     private void removeStatisticMenu(BookingType type) {
         ArrayList<Integer> removeIndexed = new ArrayList<>();
         for (int i = 0; i < menuBar.getMenus().size(); i++) {
@@ -873,4 +898,5 @@ public class MainScreenController extends GeneralController {
             menuBar.getMenus().remove(delete);
         }
     }
+    */
 }

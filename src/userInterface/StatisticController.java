@@ -35,7 +35,7 @@ import static statistics.Statistic.*;
 
 public class StatisticController {
     public CheckComboBox gradeComboBox;
-    private ArrayList<Booking> listOfBookings;
+    private ArrayList<Booking> listOfBookings = new ArrayList<>();
     private LocalDate startDate;
     private LocalDate finishDate;
     private StatisticType setting;
@@ -50,7 +50,6 @@ public class StatisticController {
     private Button returnButton;
     private Boolean calculateAlreadePressed = false;
 
-
     public StatisticType getSetting() {
         return setting;
     }
@@ -60,10 +59,10 @@ public class StatisticController {
     }
 
     void setListOfBookings(ArrayList<Booking> listOfBookings) {
-        this.listOfBookings = listOfBookings;
+        this.listOfBookings.addAll(listOfBookings);
     }
 
-    void initialise(){
+    void initData() {
         gradeComboBox.setVisible(false);
         headlineLabel.setText(setting.toString());
         calculateButtonPressed();

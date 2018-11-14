@@ -43,11 +43,11 @@ public class PromtScreenController {
             switch (textOfBtn) {
                 case "Børnefødselsdage":
                     controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                    controller.showArrangementStatisticsInfo();
+                    //controller.showArrangementStatisticsInfo();
                     break;
                 case "Skoletjenester":
                     controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
-                    controller.showStatisticInfo();
+                    //controller.showStatisticInfo();
                     break;
                 case "Alle":
                     controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
