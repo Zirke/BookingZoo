@@ -9,6 +9,7 @@ import customers.LectureBookingCustomer;
 import email.SendEmail;
 import enums.BookingStatus;
 import enums.BookingType;
+import enums.FacilityState;
 import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -259,11 +260,13 @@ public class MainScreenController extends GeneralController {
                 }
             }
             //mangler en if.
-            if (tempBooking instanceof LectureBooking) {
-                if (!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
+            if(tempBooking instanceof LectureBooking){
+                if(!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
                     LecRoomHashMap.put(tempBooking.getDateTime(), (LectureBooking) tempBooking);
-                } else {
-                    LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking) tempBooking);
+                    ((LectureBooking) tempBooking).getLectureRoom().setState(FacilityState.OCCUPIED);
+                }else{
+                    LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking)tempBooking);
+                    ((LectureBooking) tempBooking).getLectureRoom().setState(FacilityState.OCCUPIED);
                 }
             }
         }
@@ -419,6 +422,7 @@ public class MainScreenController extends GeneralController {
 
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
+
         showPendingButtons(selectedLectureBooking.getBookingStatus());
 
         communeLabel.setVisible(true);
@@ -592,6 +596,8 @@ public class MainScreenController extends GeneralController {
             ArrangementBookingCreationController controller = loader.getController();
             controller.setBda(bda);
 
+            controller.setMsc(this);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -610,6 +616,7 @@ public class MainScreenController extends GeneralController {
 
             LectureBookingCreationController controller = loader.getController();
             controller.setBda(bda);
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -632,6 +639,7 @@ public class MainScreenController extends GeneralController {
             controller.setBda(bda);
             controller.setLecRoomHashMap(LecRoomHashMap);
             controller.initData();
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -653,6 +661,7 @@ public class MainScreenController extends GeneralController {
             controller.setSelectedArrangementBooking(selectedArrangementBooking);
             controller.setBda(bda);
             controller.initData();
+            controller.setMsc(this);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));

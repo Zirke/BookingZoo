@@ -5,6 +5,7 @@ import bookings.LectureBooking;
 import bookings.Lecturer;
 import customers.LectureBookingCustomer;
 import enums.*;
+import exception.IllegalFacilityException;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -52,6 +53,8 @@ public class EditLectureBookingController {
     private RadioButton communeRadioBtnYes, communeRadioBtnNo;
     @FXML
     private Button saveAndCloseButton, cancelButton;
+
+    private MainScreenController msc;
 
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
@@ -159,22 +162,27 @@ public class EditLectureBookingController {
         selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedLectureBooking.setComment(commentTextArea.getText());
 
-        //mangler at teste
-        if(lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime())){
-            if((selectedLectureBooking.getLectureRoom().getType().toString().
-                    equals(lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getType().toString())) &&
-                    lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getState().equals(FacilityState.OCCUPIED)){
-                throw new IllegalArgumentException();
-            }
 
-
-        }else if(lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime().plusMinutes(1))){
-            if((selectedLectureBooking.getLectureRoom().getType().toString().
-                    equals(lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getType().toString())) &&
-                    lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getState().equals(FacilityState.OCCUPIED)){
-                throw new IllegalArgumentException();
-            }
+        Boolean isChosenFacilityOccupied = lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime()) &&
+                (!lecRoomHashMap.get(selectedLectureBooking.getDateTime()).equals(selectedLectureBooking)) &&
+                lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
+                lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
+        Boolean isChosenFacilityOccupied01 = lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime().plusMinutes(1)) &&
+                (!lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).equals(selectedLectureBooking)) &&
+                lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
+                lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
+        //mangler plusOneDay
+        if(isChosenFacilityOccupied || isChosenFacilityOccupied01){
+            String facilityOccupiedString = "Det valgte lokale " + selectedLectureBooking.getLectureRoom().getType() + " er allerede optaget";
+            alertWhenFacilityException(selectedLectureBooking, facilityOccupiedString);
+            return selectedLectureBooking;
         }
+
+        //when lecture room cannot be used for chosen topic.
+        isFacilityLegal(ChoiceOfTopic.GROENDLANDS_DYR, LectureRoomType.BIOLOGICAL_TYPE);
+        isFacilityLegal(ChoiceOfTopic.AFRIKAS_SAVANNER, LectureRoomType.BIOLOGICAL_TYPE);
+        isFacilityLegal(ChoiceOfTopic.EVOLUTION, LectureRoomType.SAVANNAH_TYPE);
+
 
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
         LectureBookingCustomer temp = new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
@@ -184,6 +192,29 @@ public class EditLectureBookingController {
         selectedLectureBooking.setCustomer(temp);
 
         return selectedLectureBooking;
+    }
+
+    private void alertWhenFacilityException(LectureBooking lec, String msg){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText(msg);
+
+        Optional<ButtonType> alertChoice = alert.showAndWait();
+
+        if (alertChoice.get() == ButtonType.OK) {
+            lec.getLectureRoom().setType(LectureRoomType.WRONG_ROOM);
+        }
+    }
+
+    private void isFacilityLegal(ChoiceOfTopic topic, LectureRoomType room){
+        try {
+            if (selectedLectureBooking.getChoiceOfTopic().equals(topic) &&
+                    selectedLectureBooking.getLectureRoom().getType().equals(room)) {
+                throw new IllegalFacilityException(selectedLectureBooking.getLectureRoom());
+            }
+        }catch (IllegalFacilityException e){
+            String facilityIncompatible = topic.toString() + " kan ikke afholdes i\n" + room.toString();
+            alertWhenFacilityException(selectedLectureBooking, facilityIncompatible);
+        }
     }
 
     @FXML
@@ -203,17 +234,22 @@ public class EditLectureBookingController {
                     contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()) {
                 GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
             }
+
             Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
             alert2.setContentText("Er den indtastede information korrekt?");
 
             Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
-            if (alertChoice2.get() == ButtonType.OK) {
-                try {
-                    bda.editLecBook(overwriteSelectedLectureBooking());
-                    closeWindow();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
+            LectureBooking overWrite = overwriteSelectedLectureBooking();
+            if(overWrite.getLectureRoom().getType() != LectureRoomType.WRONG_ROOM) {
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        closeWindow();
+                        bda.editLecBook(overWrite);
+                        msc.refetchBookingsFromDataBase();
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -225,5 +261,9 @@ public class EditLectureBookingController {
                 var.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    public void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 }

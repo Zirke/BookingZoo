@@ -41,6 +41,8 @@ public class ArrangementBookingCreationController extends GeneralController {
     @FXML
     private Button createAndCloseButton, cancelButton;
 
+    private MainScreenController msc;
+
     public void initialize() {
         restaurantChoiceBox.setValue(RestaurantType.NO_CHOICE.toString());
 
@@ -64,9 +66,11 @@ public class ArrangementBookingCreationController extends GeneralController {
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
                 if (alertChoice2.get() == ButtonType.OK) {
+
                     try {
-                        createArrangementBookingFromInput();
                         closeWindow();
+                        createArrangementBookingFromInput();
+                        msc.refetchBookingsFromDataBase();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -126,5 +130,9 @@ public class ArrangementBookingCreationController extends GeneralController {
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 }
