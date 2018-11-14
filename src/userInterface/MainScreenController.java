@@ -117,6 +117,8 @@ public class MainScreenController extends GeneralController {
     @FXML
     private Button acceptBookingButton, cancelBookingButton, editBookingButton, deleteButton;
 
+
+
     public void initialize() throws SQLException {
 
         fetchBookingsFromDatabase();

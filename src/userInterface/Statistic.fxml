@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
-<VBox spacing="15.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.StatisticController">
+
+<VBox spacing="15.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.StatisticController">
     <children>
         <VBox>
             <children>
                 <Label fx:id="headlineLabel" alignment="TOP_LEFT" text="Statistik">
                     <font>
-                        <Font size="31.0"/>
+                        <Font size="31.0" />
                     </font>
                 </Label>
-                <Label prefHeight="17.0" prefWidth="612.0"
-                       text="Vælg start- og slutdata for stastistik over skoletjenete bookings">
+                <Label prefHeight="17.0" prefWidth="612.0" text="Vælg start- og slutdata for stastistik over skoletjenete bookings">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                 </Label>
             </children>
         </VBox>
         <GridPane vgap="5.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
-                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES"/>
-                <RowConstraints vgrow="SOMETIMES"/>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label text="Startdato: ">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                 </Label>
-                <DatePicker fx:id="startPicker" GridPane.columnIndex="1"/>
+                <DatePicker fx:id="startPicker" GridPane.columnIndex="1" />
                 <Label text="Slutdato: " GridPane.columnIndex="2">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                 </Label>
-                <DatePicker fx:id="finishPicker" GridPane.columnIndex="3"/>
-                <CheckComboBox fx:id="gradeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <Button fx:id="calculateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0"
-                        text="Udregn for valgt interval" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <DatePicker fx:id="finishPicker" GridPane.columnIndex="3" />
+                <CheckComboBox fx:id="gradeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="calculateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Udregn for valgt interval" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
         </GridPane>
         <HBox fx:id="hboxWithCharts">
@@ -67,21 +71,32 @@
         </HBox>
         <HBox alignment="CENTER_RIGHT">
             <children>
+            <Button fx:id="printButton" mnemonicParsing="false" text="Udskriv til billede">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
                 <Button fx:id="returnButton" mnemonicParsing="false" text="Luk">
                     <font>
                         <Font size="14.0" />
                     </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
                 </Button>
             </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <VBox.margin>
-             <Insets/>
+             <Insets />
          </VBox.margin>
         </HBox>
     </children>
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
     </padding>
 </VBox>

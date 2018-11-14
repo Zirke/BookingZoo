@@ -10,21 +10,29 @@ import enums.StatisticType;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,7 +55,7 @@ public class StatisticController {
     public Button calculateButton;
     public Label headlineLabel;
     @FXML
-    private Button returnButton;
+    private Button returnButton, printButton;
     private Boolean calculateAlreadePressed = false;
 
     public StatisticType getSetting() {
@@ -66,6 +74,7 @@ public class StatisticController {
         gradeComboBox.setVisible(false);
         headlineLabel.setText(setting.toString());
         calculateButtonPressed();
+        printButtonPressed();
 
         switch (setting){
             case STUDENTS_AND_TEACHER:{
@@ -80,6 +89,9 @@ public class StatisticController {
             Stage stage = ((Stage)returnButton.getScene().getWindow());
             stage.close();
         });
+    }
+    private void printButtonPressed(){
+        printButton.setOnMouseClicked(e -> saveChartsAsPicture(hboxWithCharts));
     }
 
     private void calculateButtonPressed(){
@@ -470,6 +482,7 @@ public class StatisticController {
 
         final PieChart chart = new PieChart(menuChart);
 
+
         chart.setTitle("Madfordeling");
 
         chart.setLabelsVisible(false);
@@ -483,6 +496,7 @@ public class StatisticController {
         );
 
         hboxWithCharts.getChildren().add(chart);
+        //printButton.setOnMouseClicked(e->saveMenuAsPNG(hboxWithCharts));
     }
     private void labelGenerationForMenu(){
         int totalAmount = 0;
@@ -518,6 +532,21 @@ public class StatisticController {
         if (listOfBookings.size() == 0) {
             GeneralController.showAlertBox(Alert.AlertType.INFORMATION, "Prøv igen",
                     "Der er ingen bookings inden for det valgte interval");
+        }
+    }
+    private void saveChartsAsPicture(HBox hboxWithCharts){
+        WritableImage image = hboxWithCharts.snapshot(new SnapshotParameters(), null);
+        FileChooser.ExtensionFilter imageFilter
+                = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Image");
+        fileChooser.getExtensionFilters().add(imageFilter);
+        File file = fileChooser.showSaveDialog(printButton.getScene().getWindow());
+        try{
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
