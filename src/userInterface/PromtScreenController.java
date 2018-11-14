@@ -26,8 +26,9 @@ public class PromtScreenController {
 
     @FXML
     public void loadChosenBookingTypeToMainScreen(ActionEvent actionEvent) {
+        progressIndicator.setVisible(true);
         try {
-            progressIndicator.setVisible(true);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
             Parent root = loader.load();
 

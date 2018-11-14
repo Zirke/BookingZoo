@@ -20,6 +20,12 @@ public enum LectureRoomType {
         public String toString() {
             return "Intet lokale valgt";
         }
+    },
+    WRONG_ROOM{
+        @Override
+        public String toString() {
+            return "Forkert valg";
+        }
     };
 
     public static LectureRoomType roomTypeChoice(String input) throws InvalidEnumException {
@@ -29,6 +35,7 @@ public enum LectureRoomType {
                 return SAVANNAH_TYPE;
             case "Biologisk lokale":
                 return BIOLOGICAL_TYPE;
+            case "Forkert valgt": return WRONG_ROOM;
             case "Intet lokale valgt":
                 return NOT_CHOSEN;
             default:
