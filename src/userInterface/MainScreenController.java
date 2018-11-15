@@ -146,7 +146,11 @@ public class MainScreenController extends GeneralController {
         searchField.setOnAction(e -> {
             if (searchField.getText().isEmpty()) {
                 setChosenBookingTypeIntoTableView();
-            } else showSearchedForBookingsInTableView(listOfAllBookings);
+            } else if(typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)){
+                showSearchedForBookingsInTableView(listOfAllBookings);
+            } else if(typeOfBooking.equals(BookingType.LECTUREBOOKING)){
+                showSearchedForBookingsInTableView(listOfLectureBookings);
+            } else showSearchedForBookingsInTableView(listOfArrangementBookings);
         });
 
         //Displays information contained in selected booking
@@ -327,7 +331,17 @@ public class MainScreenController extends GeneralController {
 
         for (Booking temp : listOfBookings) {
             String enteredBooking = searchField.getText();
-            if (temp.getCustomer().getContactPerson().equals(enteredBooking)) {
+            if ( temp instanceof LectureBooking &&(temp.getCustomer().getContactPerson().equals(enteredBooking)
+                    || temp.getCustomer().getEmail().equals(enteredBooking)
+                    || (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
+                    || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
+                    || (((LectureBookingCustomer) temp.getCustomer()).getCity().equals(enteredBooking)))) {
+                bookingTableView.getSelectionModel().clearSelection();
+                ObservableList<Booking> bookings = FXCollections.observableArrayList();
+                bookings.add(temp);
+                bookingTableView.setItems(bookings);
+            }else if(temp.getCustomer().getContactPerson().equals(enteredBooking)
+                    || temp.getCustomer().getEmail().equals(enteredBooking)){
                 bookingTableView.getSelectionModel().clearSelection();
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
