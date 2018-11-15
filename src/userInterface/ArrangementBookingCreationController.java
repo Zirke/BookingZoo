@@ -18,6 +18,7 @@ import java.util.Optional;
 public class ArrangementBookingCreationController extends GeneralController {
 
     private BookingDataAccessor bda;
+    private ArrangementBooking createdBooking;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
@@ -70,7 +71,10 @@ public class ArrangementBookingCreationController extends GeneralController {
                     try {
                         closeWindow();
                         createArrangementBookingFromInput();
+                        ArrangementBooking temp = createdBooking;
                         msc.refetchBookingsFromDataBase();
+                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -124,6 +128,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                 RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString())),
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
+        createdBooking = abook;
         bda.createArrBookManually(abook);
     }
 

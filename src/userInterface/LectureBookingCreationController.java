@@ -20,6 +20,7 @@ import java.util.Optional;
 
 public class LectureBookingCreationController {
     private BookingDataAccessor bda;
+    private LectureBooking createdBooking;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
@@ -131,6 +132,7 @@ public class LectureBookingCreationController {
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
+        createdBooking = lbook;
         bda.createLecBookManually(lbook);
     }
 
@@ -164,7 +166,10 @@ public class LectureBookingCreationController {
                     try {
                         closeWindow();
                         createNewLectureBookingFromInput();
+                        LectureBooking temp = createdBooking;
                         msc.refetchBookingsFromDataBase();
+                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
                         e1.printStackTrace();
                     }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static enums.StatisticType.GRADE;
 import static statistics.Statistic.*;
 
 public class StatisticController {
@@ -76,13 +77,8 @@ public class StatisticController {
         calculateButtonPressed();
         printButtonPressed();
 
-        switch (setting){
-            case STUDENTS_AND_TEACHER:{
-                calculateButtonPressed();
-            }break;
-            case GRADE:{
-                gradeSceneGeneration();
-            }break;
+        if(setting.equals(GRADE)){
+            gradeSceneGeneration();
         }
 
         returnButton.setOnMouseClicked(e ->{
@@ -287,19 +283,6 @@ public class StatisticController {
             Label amountLabel = new Label(labelText);
             amountLabel.setFont(Font.font(14));
             dataVBox.getChildren().add(amountLabel);
-
-            /*if(labelText.length() > 19){
-                Label amountLabel = new Label(labelText.substring(0,20));
-                Label amountLabel1 = new Label(labelText.substring(20));
-                amountLabel.setFont(Font.font(14));
-                amountLabel1.setFont(Font.font(14));
-                dataVBox.getChildren().add(amountLabel);
-                dataVBox.getChildren().add(amountLabel1);
-            }else {
-                Label amountLabel = new Label(labelText);
-                amountLabel.setFont(Font.font(14));
-                dataVBox.getChildren().add(amountLabel);
-            }*/
         }
     }
 

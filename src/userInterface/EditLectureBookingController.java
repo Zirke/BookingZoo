@@ -162,17 +162,13 @@ public class EditLectureBookingController {
         selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedLectureBooking.setComment(commentTextArea.getText());
 
+        Boolean isChosenFacilityOccupied = isTimeAlreadyChosen(selectedLectureBooking.getDateTime()) &&
+                isFacilityOccupied(selectedLectureBooking.getDateTime());
 
-        Boolean isChosenFacilityOccupied = lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime()) &&
-                (!lecRoomHashMap.get(selectedLectureBooking.getDateTime()).equals(selectedLectureBooking)) &&
-                lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
-                lecRoomHashMap.get(selectedLectureBooking.getDateTime()).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
-        Boolean isChosenFacilityOccupied01 = lecRoomHashMap.containsKey(selectedLectureBooking.getDateTime().plusMinutes(1)) &&
-                (!lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).equals(selectedLectureBooking)) &&
-                lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
-                lecRoomHashMap.get(selectedLectureBooking.getDateTime().plusMinutes(1)).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
-        //mangler plusOneDay
-        if(isChosenFacilityOccupied || isChosenFacilityOccupied01){
+        Boolean isChosenFacilityOccupiedPlus1Minute = isTimeAlreadyChosen(selectedLectureBooking.getDateTime().plusMinutes(1)) &&
+                isFacilityOccupied(selectedLectureBooking.getDateTime().plusMinutes(1));
+
+        if(isChosenFacilityOccupied || isChosenFacilityOccupiedPlus1Minute){
             String facilityOccupiedString = "Det valgte lokale " + selectedLectureBooking.getLectureRoom().getType() + " er allerede optaget";
             alertWhenFacilityException(selectedLectureBooking, facilityOccupiedString);
             return selectedLectureBooking;
@@ -183,15 +179,26 @@ public class EditLectureBookingController {
         isFacilityLegal(ChoiceOfTopic.AFRIKAS_SAVANNER, LectureRoomType.BIOLOGICAL_TYPE);
         isFacilityLegal(ChoiceOfTopic.EVOLUTION, LectureRoomType.SAVANNAH_TYPE);
 
+        selectedLectureBooking.setCustomer(createLectureBookingCustommer());
 
+        return selectedLectureBooking;
+    }
+
+    private Boolean isTimeAlreadyChosen(LocalDateTime i){
+        return lecRoomHashMap.containsKey(i) && (!lecRoomHashMap.get(i).equals(selectedLectureBooking));
+    }
+
+    private Boolean isFacilityOccupied(LocalDateTime i){
+        return lecRoomHashMap.get(i).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
+         lecRoomHashMap.get(i).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
+    }
+
+    private LectureBookingCustomer createLectureBookingCustommer(){
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
-        LectureBookingCustomer temp = new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
+        return new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
                 emailTextField.getText(), schoolNameTextField.getText(), Integer.parseInt(zipCodeTextField.getText()),
                 cityTextField.getText(), selectedCommuneAnswer.getText(), schoolPhoneNumberTextField.getText(),
                 Long.parseLong(eanNumberTextField.getText()));
-        selectedLectureBooking.setCustomer(temp);
-
-        return selectedLectureBooking;
     }
 
     private void alertWhenFacilityException(LectureBooking lec, String msg){
@@ -246,7 +253,10 @@ public class EditLectureBookingController {
                     try {
                         closeWindow();
                         bda.editLecBook(overWrite);
+                        LectureBooking temp = selectedLectureBooking;
                         msc.refetchBookingsFromDataBase();
+                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }

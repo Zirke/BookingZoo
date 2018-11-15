@@ -139,7 +139,10 @@ public class EditArrangementBookingController {
                     try {
                         closeWindow();
                         bda.editArrBook(overwriteSelectedArrangementBooking());
+                        ArrangementBooking temp = selectedArrangementBooking;
                         msc.refetchBookingsFromDataBase();
+                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }

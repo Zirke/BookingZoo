@@ -35,7 +35,8 @@ public enum LectureRoomType {
                 return SAVANNAH_TYPE;
             case "Biologisk lokale":
                 return BIOLOGICAL_TYPE;
-            case "Forkert valgt": return WRONG_ROOM;
+            case "Forkert valgt":
+                return WRONG_ROOM;
             case "Intet lokale valgt":
                 return NOT_CHOSEN;
             default:

@@ -830,4 +830,8 @@ public class MainScreenController extends GeneralController {
             }
         }
     }
+
+    public TableView<Booking> getBookingTableView() {
+        return bookingTableView;
+    }
 }
