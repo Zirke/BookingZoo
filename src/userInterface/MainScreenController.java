@@ -339,17 +339,20 @@ public class MainScreenController extends GeneralController {
 
         for (Booking temp : listOfBookings) {
             String enteredBooking = searchField.getText();
-            if ( temp instanceof LectureBooking &&(temp.getCustomer().getContactPerson().equals(enteredBooking)
-                    || temp.getCustomer().getEmail().equals(enteredBooking)
-                    || (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
-                    || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
-                    || (((LectureBookingCustomer) temp.getCustomer()).getCity().equals(enteredBooking)))) {
+            Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking)
+                    || temp.getCustomer().getEmail().equals(enteredBooking);
+            Boolean isLectureCustomer = false;
+            if(temp instanceof LectureBooking) {
+                isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
+                        || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
+                        || (((LectureBookingCustomer) temp.getCustomer()).getCity().equals(enteredBooking));
+            }
+            if ( temp instanceof LectureBooking && isCustomer || isLectureCustomer) {
                 bookingTableView.getSelectionModel().clearSelection();
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
-            }else if(temp.getCustomer().getContactPerson().equals(enteredBooking)
-                    || temp.getCustomer().getEmail().equals(enteredBooking)){
+            }else if(isCustomer){
                 bookingTableView.getSelectionModel().clearSelection();
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
@@ -586,16 +589,27 @@ public class MainScreenController extends GeneralController {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfAllBookings) {
                 listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                if(temp instanceof LectureBooking){
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
+                }
             }
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfArrangementBookings) {
                 listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfLectureBookings) {
                 listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
+                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
             }
         }
         return listOfContactPersonNames;
