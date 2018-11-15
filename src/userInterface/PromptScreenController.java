@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PromtScreenController {
+public class PromptScreenController {
 
     @FXML
     private ProgressIndicator progressIndicator;
