@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import postToCalendars.PostToGoogle;
 
@@ -60,6 +61,8 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfNonArchivedOrDeletedArrangementBookings = new ArrayList<>();
     private HashMap<LocalDateTime, LectureBooking> LecRoomHashMap = new HashMap<>();
     private BookingType typeOfBooking;
+    private AutoCompletionBinding<String> autoCompletionBinding;
+
 
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
@@ -74,7 +77,12 @@ public class MainScreenController extends GeneralController {
         notificationLabel.setText("(" + Integer.toString(notificationBookings.size()) + ")");
         notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(notificationBookings));
 
-        TextFields.bindAutoCompletion(searchField, setCorrectTypeOfBookingsToSearchFor());
+
+        ArrayList<String> temp = setCorrectTypeOfBookingsToSearchFor();
+        if(autoCompletionBinding != null){
+            autoCompletionBinding.dispose();
+        }
+        autoCompletionBinding = TextFields.bindAutoCompletion(searchField,temp);
         setChosenBookingTypeIntoTableView();
     }
 
@@ -573,7 +581,6 @@ public class MainScreenController extends GeneralController {
 
     private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
         ArrayList<String> listOfContactPersonNames = new ArrayList<>();
-        listOfContactPersonNames.clear();
 
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             listOfContactPersonNames.clear();
