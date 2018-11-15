@@ -70,9 +70,9 @@ public class MainScreenController extends GeneralController {
         chosenBookingTypeLabel.setText(typeOfBooking.toString());
 
         //Opens notification window
-        ArrayList<Booking> noficationBookings = getNotificationBookings(listOfAllBookings);
-        notificationLabel.setText("(" + Integer.toString(noficationBookings.size()) + ")");
-        notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(noficationBookings));
+        ArrayList<Booking> notificationBookings = getNotificationBookings(listOfAllBookings);
+        notificationLabel.setText("(" + Integer.toString(notificationBookings.size()) + ")");
+        notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(notificationBookings));
 
         TextFields.bindAutoCompletion(searchField, setCorrectTypeOfBookingsToSearchFor());
         setChosenBookingTypeIntoTableView();
