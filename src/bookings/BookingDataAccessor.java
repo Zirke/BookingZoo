@@ -474,4 +474,32 @@ public class BookingDataAccessor {
         throw new InputMismatchException();
     }
 
+
+    public ArrayList<Booking> refreshListView(ArrayList<Booking> CurrentListView) throws SQLException, NoBookingsInDatabaseException {
+        int lastID = 0;
+        for (Booking book : CurrentListView){
+            if (lastID < book.getId()){
+                lastID = book.getId();
+            }
+        }
+
+        ArrayList<Booking> arr = new ArrayList<>();
+
+        String sql = "SELECT * FROM booking WHERE bookingid > (?)";
+        PreparedStatement pstmtGeneral = connection.prepareStatement(sql);
+        pstmtGeneral.setInt(1,lastID);
+
+        ResultSet rsGeneral = pstmtGeneral.executeQuery();
+        if (rsGeneral.next()) {
+            rsGeneral.previous();
+            arr = fetchFromDatabase(rsGeneral);
+        }
+        if (arr != null && CurrentListView != null) {
+            throw new NoBookingsInDatabaseException();
+        }
+        CurrentListView.addAll(arr);
+        return CurrentListView;
+
+    }
+
 }
