@@ -71,7 +71,7 @@
         </HBox>
         <HBox alignment="CENTER_RIGHT">
             <children>
-            <Button fx:id="printButton" mnemonicParsing="false" text="Udskriv til billede">
+            <Button fx:id="printButton" mnemonicParsing="false" text="Gem som billede">
                <font>
                   <Font size="14.0" />
                </font>

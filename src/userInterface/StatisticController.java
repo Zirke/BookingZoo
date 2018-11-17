@@ -527,8 +527,10 @@ public class StatisticController {
         fileChooser.getExtensionFilters().add(imageFilter);
         File file = fileChooser.showSaveDialog(printButton.getScene().getWindow());
         try{
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        } catch (IOException e) {
+            if(file != null){
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            }
+        } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
