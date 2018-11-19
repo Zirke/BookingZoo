@@ -66,7 +66,6 @@ public class MainScreenController extends GeneralController {
     private BookingType typeOfBooking;
     private AutoCompletionBinding<String> autoCompletionBinding;
 
-
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
@@ -79,7 +78,6 @@ public class MainScreenController extends GeneralController {
         ArrayList<Booking> notificationBookings = getNotificationBookings(listOfAllBookings);
         notificationLabel.setText("(" + Integer.toString(notificationBookings.size()) + ")");
         notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(notificationBookings));
-
 
         ArrayList<String> temp = setCorrectTypeOfBookingsToSearchFor();
         if(autoCompletionBinding != null){
@@ -188,11 +186,12 @@ public class MainScreenController extends GeneralController {
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
             try {
-                refetchBookingsFromDataBase();
-                moveConductedBookingToArchived();
+                listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
+                setChosenBookingTypeIntoTableView();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+            moveConductedBookingToArchived();
         });
 
         //Opens edit pop-up window corresponding to chosen Booking in TableView

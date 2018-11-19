@@ -19,9 +19,14 @@ public class ArrangementBookingCreationController extends GeneralController {
 
     private BookingDataAccessor bda;
     private ArrangementBooking createdBooking;
+    private MainScreenController msc;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
+    }
+
+    void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 
     @FXML
@@ -36,13 +41,12 @@ public class ArrangementBookingCreationController extends GeneralController {
     @FXML
     private TextField noOfChildrenTextField, childNameTextField, childAgeTextField, contactPersonTextField,
             phoneNumberTextField, emailTextField, guideTextField;
+
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
     @FXML
     private Button createAndCloseButton, cancelButton;
-
-    private MainScreenController msc;
 
     public void initialize() {
         restaurantChoiceBox.setValue(RestaurantType.NO_CHOICE.toString());
@@ -135,9 +139,5 @@ public class ArrangementBookingCreationController extends GeneralController {
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    public void setMsc(MainScreenController msc) {
-        this.msc = msc;
     }
 }

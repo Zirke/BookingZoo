@@ -489,8 +489,8 @@ public class BookingDataAccessor {
             System.out.println("No new bookings in db");
         }
         currentBookingsList.addAll(arr);*/
-        if (!arr.isEmpty()) {
+        /*if (!arr.isEmpty()) {*/
             return arr;
-        } else throw new NoNewBookingsInDatabaseException();
+        /*} else throw new NoNewBookingsInDatabaseException();*/
     }
 }
