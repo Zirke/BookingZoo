@@ -2,6 +2,7 @@ package userInterface;
 
 import enums.BookingType;
 import exception.IllegalBookingTypeException;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +27,7 @@ public class PromptScreenController {
 
     @FXML
     public void loadChosenBookingTypeToMainScreen(ActionEvent actionEvent) {
-        progressIndicator.setVisible(true);
+
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
@@ -68,5 +69,9 @@ public class PromptScreenController {
         } catch (IOException x) {
             x.printStackTrace();
         }
+    }
+
+    public void setProgressIndicatorVisible(){
+        progressIndicator.setVisible(true);
     }
 }
