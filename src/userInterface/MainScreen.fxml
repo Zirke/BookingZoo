@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="userInterface.MainScreenController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
@@ -108,7 +126,7 @@
                </graphic>
             </ToggleButton>
                 <Separator prefWidth="200.0" />
-                <MenuButton mnemonicParsing="false" text="Opret ny booking">
+                <MenuButton mnemonicParsing="false" stylesheets="@application.css" text="Opret ny booking">
                     <items>
                         <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste" />
                         <MenuItem fx:id="arrangementBookingItem" mnemonicParsing="false" text="Børnefødselsdag" />
@@ -187,14 +205,12 @@
                 <Insets />
             </opaqueInsets>
         </VBox>
-        <VBox fx:id="informationDisplayVBox" layoutX="770.0" layoutY="133.0" prefHeight="200.0" prefWidth="100.0"
-              spacing="25.0" style="-fx-border-color: lightgrey;" AnchorPane.bottomAnchor="10.0"
-              AnchorPane.leftAnchor="770.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
+        <VBox fx:id="informationDisplayVBox" layoutX="770.0" layoutY="133.0" prefHeight="200.0" prefWidth="100.0" spacing="25.0" style="-fx-border-color: lightgrey;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="770.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
             <children>
                 <GridPane>
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -465,37 +481,28 @@
         <menus>
           <Menu mnemonicParsing="false" text="Vis">
             <items>
-                <RadioMenuItem fx:id="allBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking"
-                               text="Alle bookings">
+                <RadioMenuItem fx:id="allBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Alle bookings">
                      <toggleGroup>
                         <ToggleGroup fx:id="bookingTypeToggleGroup" />
                      </toggleGroup>
                   </RadioMenuItem>
-                <RadioMenuItem fx:id="arrangementBookingsMenuItem" mnemonicParsing="false"
-                               onAction="#changeTypeOfBooking" text="Børnefødselsdage"
-                               toggleGroup="$bookingTypeToggleGroup"/>
-                <RadioMenuItem fx:id="lectureBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking"
-                               text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup"/>
+                <RadioMenuItem fx:id="arrangementBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Børnefødselsdage" toggleGroup="$bookingTypeToggleGroup" />
+                <RadioMenuItem fx:id="lectureBookingsMenuItem" mnemonicParsing="false" onAction="#changeTypeOfBooking" text="Skoletjenester" toggleGroup="$bookingTypeToggleGroup" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Statistik">
                 <items>
                     <Menu mnemonicParsing="false" text="Over Børnefødselsdage">
                         <items>
-                            <MenuItem fx:id="chosenMenuesMenuItem" mnemonicParsing="false"
-                                      onAction="#showStatisticWindow" text="Over valgte menuer"/>
+                            <MenuItem fx:id="chosenMenuesMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over valgte menuer" />
                         </items>
                     </Menu>
                     <Menu mnemonicParsing="false" text="Over Skoletjenester">
                         <items>
-                            <MenuItem fx:id="pupilsAndTeachersMenuItem" mnemonicParsing="false"
-                                      onAction="#showStatisticWindow" text="Over elever og lærere"/>
-                            <MenuItem fx:id="choiceOfTopicMenuItem" mnemonicParsing="false"
-                                      onAction="#showStatisticWindow" text="Over emnevalg"/>
-                            <MenuItem fx:id="gradeMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow"
-                                      text="Over klassetrin"/>
-                            <MenuItem fx:id="municipalityMenuItem" mnemonicParsing="false"
-                                      onAction="#showStatisticWindow" text="Over Aalborg Kommune"/>
+                            <MenuItem fx:id="pupilsAndTeachersMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over elever og lærere" />
+                            <MenuItem fx:id="choiceOfTopicMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over emnevalg" />
+                            <MenuItem fx:id="gradeMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over klassetrin" />
+                            <MenuItem fx:id="municipalityMenuItem" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over Aalborg Kommune" />
                         </items>
                     </Menu>
                 </items>
