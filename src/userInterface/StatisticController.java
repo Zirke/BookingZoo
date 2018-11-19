@@ -44,6 +44,8 @@ import static statistics.Statistic.*;
 
 public class StatisticController {
     public CheckComboBox gradeComboBox;
+    public VBox outerVBox;
+    public Label classLabel;
     private ArrayList<Booking> listOfBookings = new ArrayList<>();
     private LocalDate startDate;
     private LocalDate finishDate;
@@ -336,6 +338,7 @@ public class StatisticController {
 
     private void gradeSceneGeneration(){
         gradeComboBox.setVisible(true);
+        classLabel.setVisible(true);
         final ObservableList<String> items = FXCollections.observableArrayList();
         items.add("Vælg Alle");
         for (Grade i : Grade.values()) {
@@ -517,8 +520,8 @@ public class StatisticController {
                     "Der er ingen bookings inden for det valgte interval");
         }
     }
-    private void saveChartsAsPicture(HBox hboxWithCharts){
-        WritableImage image = hboxWithCharts.snapshot(new SnapshotParameters(), null);
+    private void saveChartsAsPicture(HBox HboxWithcChart){
+        WritableImage image = HboxWithcChart.snapshot(new SnapshotParameters(), null);
         FileChooser.ExtensionFilter imageFilter
                 = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
 

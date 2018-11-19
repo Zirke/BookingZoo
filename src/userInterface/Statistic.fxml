@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox spacing="15.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.StatisticController">
+<VBox fx:id="outerVBox" spacing="15.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.StatisticController">
     <children>
         <VBox>
             <children>
@@ -52,8 +52,13 @@
                     </font>
                 </Label>
                 <DatePicker fx:id="finishPicker" GridPane.columnIndex="3" />
-                <CheckComboBox fx:id="gradeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <CheckComboBox fx:id="gradeComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Button fx:id="calculateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Udregn for valgt interval" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label fx:id="classLabel" prefHeight="25.0" prefWidth="88.0" text="Vælg Klasse:" visible="false" GridPane.rowIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
         </GridPane>
         <HBox fx:id="hboxWithCharts">
