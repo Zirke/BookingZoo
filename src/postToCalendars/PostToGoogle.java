@@ -21,6 +21,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import customers.LectureBookingCustomer;
 import enums.BookingStatus;
+import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,22 +33,7 @@ import java.util.List;
 
 public class PostToGoogle {
 
-    private String tempMonth = "0";
-    private String tempDay = "0";
-    private String tempHour = "0";
-    private String tempMinute = "0";
-    private String idAddition = "aaaaaa"; // ID must be at least 5 characters
-
-    private ArrangementBooking inputArrangementBooking;
-    private LectureBooking inputLectureBooking;
-
-    public PostToGoogle(ArrangementBooking calendarArrangementBooking) {
-        this.inputArrangementBooking = calendarArrangementBooking;
-    }
-
-    public PostToGoogle(LectureBooking inputLectureBooking){
-        this.inputLectureBooking = inputLectureBooking;
-    }
+    private static String idAddition = "aaaaaa"; // ID must be at least 5 characters
 
     private static final String APPLICATION_NAME = "Aalborg Zoo Semester Project";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -58,7 +44,7 @@ public class PostToGoogle {
     private static final String CREDENTIALS_FILE_PATH = "/postToCalendars/client_secret_1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com.json";
 
     /* Calendar id for the google calendar and the user id for posting on the calendar
-    *  Only approved users can post to the calendar - must be added manually*/
+     *  Only approved users can post to the calendar - must be added manually*/
     private static final String CALENDAR_ID = "aalborgzoo305@gmail.com";
     private static final String USER_ID = "1087141990564-5fvbiisgl771m51nij44vjpngfm0j0vt.apps.googleusercontent.com";
 
@@ -78,190 +64,182 @@ public class PostToGoogle {
             LocalServerReceiver lReceiver = new LocalServerReceiver.Builder().setPort(8888).build();
 
             /* logged in as your own google account (has the authorization to post on the calendar) */
-            credential = new AuthorizationCodeInstalledApp(flow,lReceiver).authorize(USER_ID);
+            credential = new AuthorizationCodeInstalledApp(flow, lReceiver).authorize(USER_ID);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return credential;
     }
 
-    public void postNewArrangementToCalendar(){
+    public static void postToCalendar(Booking inputBooking) {
+        Calendar calendar = connectToGoogleCalendar();
         try {
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
-            Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
-
-            Event arrangement_event = new Event()
-                    .setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
-                    .setDescription(descriptionBuilderArrangement(commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
-                    .setTransparency("transparent")
-                    .setColorId("5") // Yellow
-                    .setSequence(1)
-                    .setId(idChecker(inputArrangementBooking));
-
-            //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-            tempMonth = monthsLessThanTen(inputArrangementBooking);
-            tempDay = daysLessThanTen(inputArrangementBooking);
-            tempHour = hoursLessThanTen(inputArrangementBooking);
-            tempMinute = minutesLessThanTen(inputArrangementBooking);
-
-            // initiate the start hour of the event
-            DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking,tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-            arrangement_event.setStart(begin);
-
-            // when the event ends
-            DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-            arrangement_event.setEnd(end);
-
-            service.events().insert(CALENDAR_ID, arrangement_event).execute();
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void postNewLectureToCalendar(){
-        try {
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
-            Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
-
-            LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
-
-            Event lecture_event = new Event()
-                    .setSummary("Skoletjeneste: " + temp.getSchoolName())
-                    .setDescription(descriptionBuilderLecture(commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
-                    .setTransparency("transparent")
-                    .setLocation(String.valueOf(inputLectureBooking.getLectureRoom()))
-                    .setColorId("7") // Turquoise
-                    .setSequence(1)
-                    .setId(idChecker(inputLectureBooking));
-
-            //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-            tempMonth = monthsLessThanTen(inputLectureBooking);
-            tempDay = daysLessThanTen(inputLectureBooking);
-            tempHour = hoursLessThanTen(inputLectureBooking);
-            tempMinute = minutesLessThanTen(inputLectureBooking);
-
-            DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking,tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-            lecture_event.setStart(begin);
-
-            DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-            lecture_event.setEnd(end);
-
-            service.events().insert(CALENDAR_ID, lecture_event).execute();
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void updateArrangementInCalendar(){
-        try {
-            String idModifier = idAddition + inputArrangementBooking.getId();
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
-            Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
-
-            Event updatedArrangementEvent = service.events().get(CALENDAR_ID, idModifier).execute();
-
-            updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + inputArrangementBooking.getBirthdayChildName())
-                                   .setDescription(descriptionBuilderArrangement(commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
-                                   .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
-
-            //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-            tempMonth = monthsLessThanTen(inputArrangementBooking);
-            tempDay = daysLessThanTen(inputArrangementBooking);
-            tempHour = hoursLessThanTen(inputArrangementBooking);
-            tempMinute = minutesLessThanTen(inputArrangementBooking);
-
-            DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking,tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-            updatedArrangementEvent.setStart(begin);
-
-            DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-            updatedArrangementEvent.setEnd(end);
-
-            service.events().update(CALENDAR_ID, (idModifier), updatedArrangementEvent).execute();
-
-            if(inputArrangementBooking.getBookingStatus() == BookingStatus.STATUS_DELETED){
-                deleteBookingInCalendar(inputArrangementBooking);
+            if (inputBooking instanceof ArrangementBooking) {
+                calendar.events().insert(CALENDAR_ID, newArrangementEvent(inputBooking)).execute();
+            } else {
+                calendar.events().insert(CALENDAR_ID, newLectureEvent(inputBooking)).execute();
             }
-        } catch (GeneralSecurityException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void updateLectureInCalendar(){
+
+    public static void updateCalendar(Booking inputBooking) {
+        String idModifier = idAddition + inputBooking.getId();
+        Calendar calendar = connectToGoogleCalendar();
         try {
-            String idModifier = idAddition + inputLectureBooking.getId();
+            Event updateEvent = calendar.events().get(CALENDAR_ID, idModifier).execute();
+            if (inputBooking instanceof ArrangementBooking) {
+                calendar.events().update(CALENDAR_ID, idModifier, updateArrangementInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
+            } else {
+                calendar.events().update(CALENDAR_ID, idModifier, updateLectureInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+    public static Event newArrangementEvent(Booking inputArrangementBooking) {
+        Event arrangement_event = new Event()
+                .setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
+                .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
+                .setTransparency("transparent")
+                .setColorId("5") // Yellow
+                .setSequence(1)
+                .setId(idChecker(inputArrangementBooking));
 
-            Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        String tempMonth = monthsLessThanTen(inputArrangementBooking);
+        String tempDay = daysLessThanTen(inputArrangementBooking);
+        String tempHour = hoursLessThanTen(inputArrangementBooking);
+        String tempMinute = minutesLessThanTen(inputArrangementBooking);
 
+        // initiate the start hour of the event
+        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
+        arrangement_event.setStart(begin);
+
+        // when the event ends
+        DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
+        arrangement_event.setEnd(end);
+
+        return arrangement_event;
+    }
+
+    public static Event newLectureEvent(Booking inputLectureBooking) {
+        LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
+
+        Event lecture_event = new Event()
+                .setSummary("Skoletjeneste: " + temp.getSchoolName())
+                .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
+                .setTransparency("transparent")
+                .setLocation(String.valueOf(((LectureBooking) inputLectureBooking).getLectureRoom()))
+                .setColorId("7") // Turquoise
+                .setSequence(1)
+                .setId(idChecker(inputLectureBooking));
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        String tempMonth = monthsLessThanTen(inputLectureBooking);
+        String tempDay = daysLessThanTen(inputLectureBooking);
+        String tempHour = hoursLessThanTen(inputLectureBooking);
+        String tempMinute = minutesLessThanTen(inputLectureBooking);
+
+        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
+        lecture_event.setStart(begin);
+
+        DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
+        lecture_event.setEnd(end);
+
+        return lecture_event;
+    }
+
+    public static Event updateArrangementInCalendar(Event updatedArrangementEvent, Booking inputArrangementBooking, String idModifier, Calendar calendar) {
+        try {
+            updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
+                    .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
+                    .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        String tempMonth = monthsLessThanTen(inputArrangementBooking);
+        String tempDay = daysLessThanTen(inputArrangementBooking);
+        String tempHour = hoursLessThanTen(inputArrangementBooking);
+        String tempMinute = minutesLessThanTen(inputArrangementBooking);
+
+        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
+        updatedArrangementEvent.setStart(begin);
+
+        DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
+        updatedArrangementEvent.setEnd(end);
+
+
+        if (inputArrangementBooking.getBookingStatus() == BookingStatus.STATUS_DELETED) {
+            deleteBookingInCalendar(inputArrangementBooking);
+        }
+
+        return updatedArrangementEvent;
+    }
+
+    public static Event updateLectureInCalendar(Event updatedLectureEvent, Booking inputLectureBooking, String idModifier, Calendar calendar) {
+        try {
             LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
-
-            Event updatedLectureEvent = service.events().get(CALENDAR_ID, idModifier).execute();
-
 
             updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
-                               .setDescription(descriptionBuilderLecture(commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
-                               .setSequence(service.events().get(CALENDAR_ID,idModifier).execute().getSequence());
-
-            //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-            tempMonth = monthsLessThanTen(inputLectureBooking);
-            tempDay = daysLessThanTen(inputLectureBooking);
-            tempHour = hoursLessThanTen(inputLectureBooking);
-            tempMinute = minutesLessThanTen(inputLectureBooking);
-
-            DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking,tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-            updatedLectureEvent.setStart(begin);
-
-            DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(tempMonth,tempDay,tempHour,tempMinute));
-            EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-            updatedLectureEvent.setEnd(end);
-
-            service.events().update(CALENDAR_ID, idModifier, updatedLectureEvent).execute();
-
-            if(inputLectureBooking.getBookingStatus() == BookingStatus.STATUS_DELETED){
-                deleteBookingInCalendar(inputLectureBooking);
-            }
-        } catch (GeneralSecurityException | IOException e) {
+                    .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
+                    .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
+        String tempMonth = monthsLessThanTen(inputLectureBooking);
+        String tempDay = daysLessThanTen(inputLectureBooking);
+        String tempHour = hoursLessThanTen(inputLectureBooking);
+        String tempMinute = minutesLessThanTen(inputLectureBooking);
+
+        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
+        updatedLectureEvent.setStart(begin);
+
+        DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
+        updatedLectureEvent.setEnd(end);
+
+        if (inputLectureBooking.getBookingStatus() == BookingStatus.STATUS_DELETED) {
+            deleteBookingInCalendar(inputLectureBooking);
+        }
+        return updatedLectureEvent;
     }
-    public String commentBookingChecker(Booking temp){
+
+    public static String commentBookingChecker(Booking temp) {
         String tempComment = "Ingen kommentar";
-        if((temp.getComment() != null) && !(temp.getComment().isEmpty())){
+        if ((temp.getComment() != null) && !(temp.getComment().isEmpty())) {
             tempComment = temp.getComment();
         }
 
         return tempComment;
     }
-    public String commentBookingCustomerChecker(Booking temp){
+
+    public static String commentBookingCustomerChecker(Booking temp) {
         String tempComment = "Ingen kommentar";
-        if((temp.getCustomerComment() != null) && !(temp.getCustomerComment().isEmpty())){
+        if ((temp.getCustomerComment() != null) && !(temp.getCustomerComment().isEmpty())) {
             tempComment = temp.getCustomerComment();
         }
         return tempComment;
     }
 
-    public String idChecker(Booking temp){
+    public static String idChecker(Booking temp) {
         String idModifier = idAddition + temp.getId();
 
         try {
-             final BookingDataAccessor bda = new BookingDataAccessor(
+            final BookingDataAccessor bda = new BookingDataAccessor(
                     "org.postgresql.Driver",
                     "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
                     "jyjczxth",
@@ -271,98 +249,122 @@ public class PostToGoogle {
             if (temp.getId() == 0) {
                 idModifier = idAddition + bda.getLastID();
             }
-        }catch (SQLException | ClassNotFoundException e){
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return idModifier;
     }
-    public String monthsLessThanTen(Booking temp){
-        if(temp.getDateTime().getMonthValue() < 10){
+
+    public static String monthsLessThanTen(Booking temp) {
+        String tempMonth = "0";
+
+        if (temp.getDateTime().getMonthValue() < 10) {
             tempMonth += String.valueOf(temp.getDateTime().getMonthValue());
-        }
-        else{
+        } else {
             tempMonth = String.valueOf(temp.getDateTime().getMonthValue());
         }
         return tempMonth;
     }
-    public String daysLessThanTen(Booking temp){
-        if(temp.getDateTime().getDayOfMonth() < 10){
+
+    public static String daysLessThanTen(Booking temp) {
+        String tempDay = "0";
+
+        if (temp.getDateTime().getDayOfMonth() < 10) {
             tempDay += String.valueOf(temp.getDateTime().getDayOfMonth());
-        }
-        else{
+        } else {
             tempDay = String.valueOf(temp.getDateTime().getDayOfMonth());
         }
         return tempDay;
     }
-    public String hoursLessThanTen(Booking temp){
-        if(temp.getDateTime().getHour() < 10){
+
+    public static String hoursLessThanTen(Booking temp) {
+        String tempHour = "0";
+
+        if (temp.getDateTime().getHour() < 10) {
             tempHour += String.valueOf(temp.getDateTime().getHour());
-        }
-        else{
+        } else {
             tempHour = String.valueOf(temp.getDateTime().getHour());
         }
         return tempHour;
     }
-    public String minutesLessThanTen(Booking temp){
-        if(temp.getDateTime().getMinute() < 10){
+
+    public static String minutesLessThanTen(Booking temp) {
+        String tempMinute = "0";
+
+        if (temp.getDateTime().getMinute() < 10) {
             tempMinute += String.valueOf(temp.getDateTime().getMinute());
-        }
-        else {
+        } else {
             tempMinute = String.valueOf(temp.getDateTime().getMinute());
         }
         return tempMinute;
     }
-    public String beginTimeStringBuilder(Booking temp, String months, String days, String hours, String minutes){
+
+    public static String beginTimeStringBuilder(Booking temp, String months, String days, String hours, String minutes) {
         return String.valueOf(temp.getDateTime().getYear()) + "-" + months + "-" + days + "T" + hours + ":" + minutes + ":00+01:00";
     }
-    private String endTimeStringBuilderArrCalculator(String months, String days, String hours, String minutes){
+
+    private static String endTimeStringBuilderArrCalculator(Booking inputArrangementBooking, String months, String days, String hours, String minutes) {
         return String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" + months + "-" +
-                days + "T" + (String.valueOf(Integer.valueOf(hours)+2)) + ":" + minutes + ":00+01:00";
+                days + "T" + (String.valueOf(Integer.valueOf(hours) + 2)) + ":" + minutes + ":00+01:00";
 
     }
-    private String endTimeStringBuilderLecCalculator(String months, String days, String hours, String minutes){
+
+    private static String endTimeStringBuilderLecCalculator(Booking inputLectureBooking, String months, String days, String hours, String minutes) {
         return String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" + months + "-" +
-                days + "T" + (String.valueOf(Integer.valueOf(hours)+1)) + ":" + minutes + ":00+01:00";
+                days + "T" + (String.valueOf(Integer.valueOf(hours) + 1)) + ":" + minutes + ":00+01:00";
 
     }
-    private String descriptionBuilderArrangement(String customercomment, String comment){
-        return ("\n Fødselsdagsalder: " + String.valueOf(inputArrangementBooking.getBirthdayChildAge()) +
+
+    private static String descriptionBuilderArrangement(Booking inputArrangementBooking, String customercomment, String comment) {
+        return ("\n Fødselsdagsalder: " + String.valueOf(((ArrangementBooking) inputArrangementBooking).getBirthdayChildAge()) +
                 "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
-                "\n Rundviser: " + inputArrangementBooking.getGuide() +
-                "\n Bestilling af mad: " + inputArrangementBooking.getMenuChosen().toString() +
-                "\n Tidligere deltager: " + inputArrangementBooking.getFormerParticipant() +
+                "\n Rundviser: " + ((ArrangementBooking) inputArrangementBooking).getGuide()) +
+                "\n Bestilling af mad: " + ((ArrangementBooking) inputArrangementBooking).getMenuChosen().toString() +
+                "\n Tidligere deltager: " + ((ArrangementBooking) inputArrangementBooking).getFormerParticipant() +
                 "\n\n Kunde kommentar: " + customercomment +
                 "\n\n Egen kommentar: " + comment +
                 "\n\n Kontaktperson: " + inputArrangementBooking.getCustomer().getContactPerson() +
                 "\n Telefon: " + inputArrangementBooking.getCustomer().getPhoneNumber() +
-                "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail());
+                "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail();
     }
-    private String descriptionBuilderLecture(String customercomment, String comment){
-        return ("\n Valg af emne: " + String.valueOf(inputLectureBooking.getChoiceOfTopic().toString()) +
-                "\n Underviser: " + inputLectureBooking.getLecturer() +
+
+    private static String descriptionBuilderLecture(Booking inputLectureBooking, String customercomment, String comment) {
+        return ("\n Valg af emne: " + String.valueOf(((LectureBooking) inputLectureBooking).getChoiceOfTopic().toString()) +
+                "\n Underviser: " + ((LectureBooking) inputLectureBooking).getLecturer() +
                 "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
-                "\n Antal hold: " + String.valueOf(inputLectureBooking.getNoOfTeams()) +
-                "\n Antal lærer: " + String.valueOf(inputLectureBooking.getNoOfTeachers()) +
-                "\n Klassetrin: " + inputLectureBooking.getGrade() +
+                "\n Antal hold: " + String.valueOf(((LectureBooking) inputLectureBooking).getNoOfTeams()) +
+                "\n Antal lærer: " + String.valueOf(((LectureBooking) inputLectureBooking).getNoOfTeachers()) +
+                "\n Klassetrin: " + ((LectureBooking) inputLectureBooking).getGrade() +
                 "\n\n Kunde kommentar: " + customercomment +
                 "\n\n Egen kommentar: " + comment +
                 "\n\n Kontaktperson: " + inputLectureBooking.getCustomer().getContactPerson() +
                 "\n Telefon: " + inputLectureBooking.getCustomer().getPhoneNumber() +
                 "\n E-mail: " + inputLectureBooking.getCustomer().getEmail());
     }
-    public void deleteBookingInCalendar(Booking temp){
+
+    public static void deleteBookingInCalendar(Booking temp) {
         try {
             String idModifier = idAddition + temp.getId();
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
-            Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
+            Calendar calendar = connectToGoogleCalendar();
 
             // Deletes an event
-            service.events().delete(CALENDAR_ID, idModifier).execute();
+            calendar.events().delete(CALENDAR_ID, idModifier).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Calendar connectToGoogleCalendar() {
+        Calendar calendar = null;
+        try {
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+            calendar = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
+        return calendar;
     }
 }
