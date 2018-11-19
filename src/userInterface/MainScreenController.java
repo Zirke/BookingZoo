@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
 
+import static enums.BookingStatus.*;
 import static postToCalendars.PostToGoogle.postToCalendar;
 
 public class MainScreenController extends GeneralController {
@@ -255,7 +256,7 @@ public class MainScreenController extends GeneralController {
         }
         //Categorised bookings
         for (Booking tempBooking : listOfAllBookings) {
-            if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+            if (tempBooking.getBookingStatus().equals(STATUS_PENDING)) {
                 listOfPendingBookings.add(tempBooking);
             }
             if (tempBooking.getBookingStatus().equals(BookingStatus.STATUS_ACTIVE)) {
@@ -297,12 +298,49 @@ public class MainScreenController extends GeneralController {
 
     private void setChosenBookingTypeIntoTableView() {
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-            loadBookingsToTableView(listOfBookings);
+            loadBookingsToTableView(getBookingStatusArrayList(BookingType.ALL_BOOKING_TYPES));
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            loadBookingsToTableView(listOfNonArchivedOrDeletedLectureBookings);
+            loadBookingsToTableView(getBookingStatusArrayList(BookingType.LECTUREBOOKING));
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            loadBookingsToTableView(listOfNonArchivedOrDeletedArrangementBookings);
+            loadBookingsToTableView(getBookingStatusArrayList(BookingType.ARRANGEMENTBOOKING));
         }
+    }
+
+    private ArrayList<Booking> getBookingStatusArrayList(BookingType type){
+        ArrayList<Booking> result = new ArrayList<>();
+        switch (type) {
+            case LECTUREBOOKING:{
+                result = listOfBookingStatusArrayList(listOfLectureBookings);
+            }break;
+            case ARRANGEMENTBOOKING:
+                result = listOfBookingStatusArrayList(listOfArrangementBookings);
+                break;
+            case ALL_BOOKING_TYPES:
+                result = listOfBookingStatusArrayList(listOfAllBookings);
+                break;
+        }
+
+        return result;
+    }
+
+    private ArrayList<Booking> listOfBookingStatusArrayList(ArrayList<Booking> bookingList){
+        ArrayList<Booking> result = new ArrayList<>();
+        for(Booking i : bookingList){
+            if(overviewButton.isSelected()){
+                result.add(i);
+            }else if(pendingBookingsButton.isSelected() && i.getBookingStatus().equals(STATUS_PENDING)){
+                result.add(i);
+            }else if(activeBookingsButton.isSelected() && i.getBookingStatus().equals(STATUS_ACTIVE)){
+                result.add(i);
+            }else if(finishedBookingsButton.isSelected() && i.getBookingStatus().equals(STATUS_DONE)){
+                result.add(i);
+            }else if(archivedBookingsButton.isSelected() && i.getBookingStatus().equals(STATUS_ARCHIVED)){
+                result.add(i);
+            }else if(deletedBookingsButton.isSelected() && i.getBookingStatus().equals(STATUS_DELETED)){
+                result.add(i);
+            }
+        }
+        return result;
     }
 
     //Takes an ArrayList of bookings to load into TableView of bookings
@@ -473,7 +511,7 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setVisible(true);
         commentTextArea.setEditable(false);
 
-        if (selectedLectureBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+        if (selectedLectureBooking.getBookingStatus().equals(STATUS_PENDING)) {
             editBookingButton.setVisible(false);
         }
 
@@ -522,7 +560,7 @@ public class MainScreenController extends GeneralController {
         commentTextArea.setEditable(false);
         roomLabel.setVisible(false);
 
-        if (selectedArrangementBooking.getBookingStatus().equals(BookingStatus.STATUS_PENDING)) {
+        if (selectedArrangementBooking.getBookingStatus().equals(STATUS_PENDING)) {
             editBookingButton.setVisible(false);
         }
 
@@ -548,7 +586,7 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showPendingButtons(BookingStatus bookingStatus) {
-        if (bookingStatus.equals(BookingStatus.STATUS_PENDING)) {
+        if (bookingStatus.equals(STATUS_PENDING)) {
             acceptBookingButton.setVisible(true);
             cancelBookingButton.setVisible(true);
             editBookingButton.setVisible(true);
