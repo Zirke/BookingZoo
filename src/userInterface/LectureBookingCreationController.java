@@ -167,7 +167,7 @@ public class LectureBookingCreationController {
                         closeWindow();
                         createNewLectureBookingFromInput();
                         LectureBooking temp = createdBooking;
-                        msc.refetchBookingsFromDataBase();
+                        msc.fetchOnlyNewBookingsFromDataBase();
                         msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {

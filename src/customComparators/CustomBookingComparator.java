@@ -16,4 +16,3 @@ public class CustomBookingComparator implements Comparator<Booking> {
         return o1.getBookingType().toString().compareTo(o2.getBookingType().toString());
     }
 }
-

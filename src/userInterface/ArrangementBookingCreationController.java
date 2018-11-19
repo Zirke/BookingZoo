@@ -76,7 +76,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                         closeWindow();
                         createArrangementBookingFromInput();
                         ArrangementBooking temp = createdBooking;
-                        msc.refetchBookingsFromDataBase();
+                        msc.fetchOnlyNewBookingsFromDataBase();
                         msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {

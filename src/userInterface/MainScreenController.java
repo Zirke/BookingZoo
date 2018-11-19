@@ -12,7 +12,6 @@ import enums.BookingType;
 import enums.FacilityState;
 import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
-import exception.NoNewBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -148,21 +147,8 @@ public class MainScreenController extends GeneralController {
 
 
         deleteButton.setOnMouseClicked(e -> {
-
-            ArrayList<Booking> foo;
-            try {
-                foo = bda.refreshBookings(listOfAllBookings);
-                System.out.println(foo.size());
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } catch (NoNewBookingsInDatabaseException e1) {
-                System.out.println("No New Bookings In Database Exception hehe xd");
-            }
-
-
-            //deleteSelectedBookingFromDatabase();
-            //removeBookingFromTableView();
-
+            deleteSelectedBookingFromDatabase();
+            removeBookingFromTableView();
         });
 
         //Shows searched for booking in TableView
@@ -185,12 +171,7 @@ public class MainScreenController extends GeneralController {
 
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
-            try {
-                listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
-                setChosenBookingTypeIntoTableView();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            fetchOnlyNewBookingsFromDataBase();
             moveConductedBookingToArchived();
         });
 
@@ -204,12 +185,10 @@ public class MainScreenController extends GeneralController {
         });
 
         //Changes the "BookingStatus" of the selected booking in TableView
-        acceptBookingButton.setOnMouseClicked(e ->
-                acceptBookingDialog());
+        acceptBookingButton.setOnMouseClicked(e -> acceptBookingDialog());
 
         //Cancelling the selected booking when pressing cancelBookingButton
-        cancelBookingButton.setOnMouseClicked(e ->
-                cancelBookingDialog());
+        cancelBookingButton.setOnMouseClicked(e -> cancelBookingDialog());
     }
 
     /*
@@ -488,6 +467,15 @@ public class MainScreenController extends GeneralController {
         listOfNonArchivedOrDeletedArrangementBookings.clear();
 
         fetchBookingsFromDatabase();
+        setChosenBookingTypeIntoTableView();
+    }
+
+    public void fetchOnlyNewBookingsFromDataBase() {
+        try {
+            listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         setChosenBookingTypeIntoTableView();
     }
 
