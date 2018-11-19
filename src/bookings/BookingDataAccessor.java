@@ -3,13 +3,15 @@ package bookings;
 import customers.LectureBookingCustomer;
 import enums.*;
 import exception.NoBookingsInDatabaseException;
+import exception.NoNewBookingsInDatabaseException;
 import facilities.LectureRoom;
 import facilities.Restaurant;
-import static postToCalendars.PostToGoogle.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+
+import static postToCalendars.PostToGoogle.*;
 
 public class BookingDataAccessor {
     private Connection connection;
@@ -465,18 +467,17 @@ public class BookingDataAccessor {
     }
 
 
-    public ArrayList<Booking> refreshListView(ArrayList<Booking> CurrentListView) throws SQLException, NoBookingsInDatabaseException {
+    public ArrayList<Booking> refreshBookings(ArrayList<Booking> currentBookingsList) throws SQLException, NoNewBookingsInDatabaseException {
         int lastID = 0;
-        for (Booking book : CurrentListView){
+        for (Booking book : currentBookingsList) {
             if (lastID < book.getId()){
                 lastID = book.getId();
             }
         }
-
         ArrayList<Booking> arr = new ArrayList<>();
 
         String sql = "SELECT * FROM booking WHERE bookingid > (?)";
-        PreparedStatement pstmtGeneral = connection.prepareStatement(sql);
+        PreparedStatement pstmtGeneral = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         pstmtGeneral.setInt(1,lastID);
 
         ResultSet rsGeneral = pstmtGeneral.executeQuery();
@@ -484,12 +485,12 @@ public class BookingDataAccessor {
             rsGeneral.previous();
             arr = fetchFromDatabase(rsGeneral);
         }
-        if (arr != null && CurrentListView != null) {
-            throw new NoBookingsInDatabaseException();
+        /*if (arr.isEmpty() && currentBookingsList != null) {
+            System.out.println("No new bookings in db");
         }
-        CurrentListView.addAll(arr);
-        return CurrentListView;
-
+        currentBookingsList.addAll(arr);*/
+        if (!arr.isEmpty()) {
+            return arr;
+        } else throw new NoNewBookingsInDatabaseException();
     }
-
 }

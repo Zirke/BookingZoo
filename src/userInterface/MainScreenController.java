@@ -12,6 +12,7 @@ import enums.BookingType;
 import enums.FacilityState;
 import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
+import exception.NoNewBookingsInDatabaseException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +30,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
-import static postToCalendars.PostToGoogle.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
+
+import static postToCalendars.PostToGoogle.postToCalendar;
 
 public class MainScreenController extends GeneralController {
     private final BookingDataAccessor bda = new BookingDataAccessor(
@@ -145,9 +147,23 @@ public class MainScreenController extends GeneralController {
          *   Event handlers
          */
 
+
         deleteButton.setOnMouseClicked(e -> {
-            deleteSelectedBookingFromDatabase();
-            removeBookingFromTableView();
+
+            ArrayList<Booking> foo;
+            try {
+                foo = bda.refreshBookings(listOfAllBookings);
+                System.out.println(foo.size());
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } catch (NoNewBookingsInDatabaseException e1) {
+                System.out.println("No New Bookings In Database Exception hehe xd");
+            }
+
+
+            //deleteSelectedBookingFromDatabase();
+            //removeBookingFromTableView();
+
         });
 
         //Shows searched for booking in TableView

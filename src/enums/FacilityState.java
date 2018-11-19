@@ -12,5 +12,11 @@ public enum FacilityState {
         public String toString() {
             return "Ledig";
         }
+    },
+    NOT_SPECIFIED {
+        @Override
+        public String toString() {
+            return "Ikke valgt";
+        }
     }
 }
