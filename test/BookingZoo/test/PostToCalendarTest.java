@@ -14,7 +14,7 @@ import postToCalendars.PostToGoogle;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import static postToCalendars.PostToGoogle.*;
 import static org.junit.Assert.assertEquals;
 
 
@@ -43,9 +43,7 @@ public class PostToCalendarTest {
                     .setGuide("Jonas");
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-         assertEquals("Ingen kommentar",  tempPost.commentBookingChecker(useCase));
+        assertEquals("Ingen kommentar",  commentBookingChecker(useCase));
     }
 
     // This test checks if the customer comment field is left null somewhere in the program
@@ -70,9 +68,7 @@ public class PostToCalendarTest {
                 .setGuide("Jonas");
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("Ingen kommentar", tempPost.commentBookingCustomerChecker(useCase));
+        assertEquals("Ingen kommentar", commentBookingCustomerChecker(useCase));
     }
 
     /*Tests when the given LocalDateTime is given to the method that it converts it to a string and adds a "0" if the int is less than 10.
@@ -99,9 +95,8 @@ public class PostToCalendarTest {
                 .setGuide("Jonas");
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
 
-        assertEquals("09", tempPost.monthsLessThanTen(useCase));
+        assertEquals("09", monthsLessThanTen(useCase));
     }
 
     /* This test is done with a lecture booking instead of an arrangement booking like the previous examples to show both types of bookings work.
@@ -129,9 +124,7 @@ public class PostToCalendarTest {
                 .setGrade(Grade.TENTH);
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("07", tempPost.daysLessThanTen(useCase));
+        assertEquals("07", daysLessThanTen(useCase));
 
     }
     /* This test checks if the hours input are less than 10 on this specific lecture booking.
@@ -158,9 +151,7 @@ public class PostToCalendarTest {
                 .setGrade(Grade.TENTH);
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("05", tempPost.hoursLessThanTen(useCase));
+        assertEquals("05", hoursLessThanTen(useCase));
     }
 
     /*
@@ -187,9 +178,7 @@ public class PostToCalendarTest {
                 .setGuide("Jonas");
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("05", tempPost.minutesLessThanTen(useCase));
+        assertEquals("05", minutesLessThanTen(useCase));
     }
     /* This test will check if the string is put together correctly when
     assembling the years,months,days,hours,minutes, and giving google calendar the correct string */
@@ -215,9 +204,7 @@ public class PostToCalendarTest {
                 .setGrade(Grade.TENTH);
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("2018-11-04T05:30:00+01:00",tempPost.beginTimeStringBuilder(useCase, tempPost.monthsLessThanTen(useCase),tempPost.daysLessThanTen(useCase),tempPost.hoursLessThanTen(useCase),tempPost.minutesLessThanTen(useCase)));
+        assertEquals("2018-11-04T05:30:00+01:00",beginTimeStringBuilder(useCase, monthsLessThanTen(useCase),daysLessThanTen(useCase),hoursLessThanTen(useCase),minutesLessThanTen(useCase)));
     }
 
     @Test
@@ -244,8 +231,6 @@ public class PostToCalendarTest {
 
         useCase = testBooking.build();
 
-        PostToGoogle tempPost = new PostToGoogle(useCase);
-
-        assertEquals("aaaaaa999999999", tempPost.idChecker(useCase));
+        assertEquals("aaaaaa999999999", idChecker(useCase));
     }
 }

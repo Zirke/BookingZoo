@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
-import postToCalendars.PostToGoogle;
+import static postToCalendars.PostToGoogle.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -772,12 +772,10 @@ public class MainScreenController extends GeneralController {
         if (alertChoice.get() == ButtonType.OK) {
             if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                 SendEmail.sendConfirmationEmail((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                PostToGoogle newConfirmedArrangementBooking = new PostToGoogle((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                newConfirmedArrangementBooking.postNewArrangementToCalendar();
+                postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
             } else if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
                 SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                PostToGoogle newConfirmedLectureBooking = new PostToGoogle((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                newConfirmedLectureBooking.postNewLectureToCalendar();
+                postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
             }
         }
         acceptSelectedBooking();

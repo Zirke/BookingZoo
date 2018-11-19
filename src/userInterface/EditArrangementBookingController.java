@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
-public class EditArrangementBookingController {
+public class    EditArrangementBookingController {
     private BookingDataAccessor bda;
     private ArrangementBooking selectedArrangementBooking;
 

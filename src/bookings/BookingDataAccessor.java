@@ -5,7 +5,7 @@ import enums.*;
 import exception.NoBookingsInDatabaseException;
 import facilities.LectureRoom;
 import facilities.Restaurant;
-import postToCalendars.PostToGoogle;
+import static postToCalendars.PostToGoogle.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -118,8 +118,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
 
-        PostToGoogle postArrangement = new PostToGoogle(abook);
-        postArrangement.postNewArrangementToCalendar();
+        postToCalendar(abook);
 
         //connection.close();
     }
@@ -177,14 +176,8 @@ public class BookingDataAccessor {
             pstmtCustomer.executeUpdate();
             pstmtBooking.executeUpdate();
 
-            if(book.getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
-                PostToGoogle cancelArrangementBooking = new PostToGoogle((ArrangementBooking) book);
-                cancelArrangementBooking.deleteBookingInCalendar(book);
-                }
-            if(book.getBookingType() == (BookingType.LECTUREBOOKING)){
-                PostToGoogle cancelLectureBooking = new PostToGoogle((LectureBooking) book);
-                    cancelLectureBooking.deleteBookingInCalendar(book);
-                }
+
+            deleteBookingInCalendar(book);
             }
             //connection.close();
     }
@@ -258,8 +251,7 @@ public class BookingDataAccessor {
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
 
-        PostToGoogle postArrangement = new PostToGoogle(lbook);
-        postArrangement.postNewLectureToCalendar();
+        postToCalendar(lbook);
         //connection.close();
     }
 
@@ -312,8 +304,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
 
-        PostToGoogle updateArrangementBooking = new PostToGoogle(abook);
-        updateArrangementBooking.updateArrangementInCalendar();
+        updateCalendar(abook);
         //connection.close();
     }
 
@@ -367,8 +358,7 @@ public class BookingDataAccessor {
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
 
-        PostToGoogle postArrangement = new PostToGoogle(lbook);
-        postArrangement.updateLectureInCalendar();
+        updateCalendar(lbook);
 
         //connection.close();
 
