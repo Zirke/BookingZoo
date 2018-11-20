@@ -94,6 +94,7 @@ public class StatisticController {
 
     private void calculateButtonPressed(){
         calculateButton.setOnMouseClicked(e ->{
+            printButton.setVisible(true);
             startDate = startPicker.getValue();
             finishDate = finishPicker.getValue();
             if(listOfBookings.get(0) instanceof LectureBooking) {
