@@ -34,10 +34,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static enums.BookingStatus.*;
 import static postToCalendars.PostToGoogle.postToCalendar;
@@ -87,8 +85,6 @@ public class MainScreenController extends GeneralController {
     }
 
     @FXML
-    private MenuBar menuBar;
-    @FXML
     private Label chosenBookingTypeLabel, notificationLabel;
     @FXML
     private ToggleButton overviewButton, pendingBookingsButton, activeBookingsButton,
@@ -108,9 +104,9 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
     @FXML
-    private RadioMenuItem allBookingsMenuItem, arrangementBookingsMenuItem, lectureBooingsMenuItem;
-    @FXML
     private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
+    @FXML
+    private MenuButton searchBarSettingsMenuButton;
 
     //Nodes for booking information display area
     @FXML
@@ -145,7 +141,7 @@ public class MainScreenController extends GeneralController {
          *   Event handlers
          */
 
-
+        //TODO fjern inden vi afleverer
         deleteButton.setOnMouseClicked(e -> {
             deleteSelectedBookingFromDatabase();
             removeBookingFromTableView();
@@ -297,7 +293,6 @@ public class MainScreenController extends GeneralController {
                 result = listOfBookingStatusArrayList(listOfAllBookings);
                 break;
         }
-
         return result;
     }
 
@@ -366,14 +361,96 @@ public class MainScreenController extends GeneralController {
         }
     }
 
+    public void foo() {
+        for (MenuItem menuItem : searchBarSettingsMenuButton.getItems()) {
+            menuItem.setOnAction(ev -> {
+                List<String> selectedItems = new List<>();
+
+                searchBarSettingsMenuButton.getItems().stream()
+                        .filter(item -> RadioMenuItem.class.isInstance(item) && RadioMenuItem.class.cast(item).isSelected())
+                        .map(MenuItem::getText)
+                        .collect(Collectors.toList());
+                selectedItems.clear();
+                System.out.println(selectedItems);
+            });
+        }
+    }
+
+    private void setSearchBarSettings() {
+        if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+            searchBarSettingsMenuButton.getItems().clear();
+            RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
+            RadioMenuItem schoolNameMenuItem = new RadioMenuItem("Skolenavn");
+            RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
+            ToggleGroup searchBarLecGroup = new ToggleGroup();
+            searchBarLecGroup.getToggles().addAll(conctactPersonMenuItem, schoolNameMenuItem);
+            searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, schoolNameMenuItem, emailMenuItem);
+            conctactPersonMenuItem.setSelected(true);
+            foo();
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+            searchBarSettingsMenuButton.getItems().clear();
+            RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
+            RadioMenuItem birthdayChildNameMenuItem = new RadioMenuItem("Fødselsdagsbarn");
+            RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
+            ToggleGroup searchBarArrGroup = new ToggleGroup();
+            searchBarArrGroup.getToggles().addAll(conctactPersonMenuItem, birthdayChildNameMenuItem);
+            searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, birthdayChildNameMenuItem, emailMenuItem);
+            conctactPersonMenuItem.setSelected(true);
+            foo();
+        } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+            searchBarSettingsMenuButton.getItems().clear();
+            RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
+            RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
+            searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, emailMenuItem);
+            conctactPersonMenuItem.setSelected(true);
+            foo();
+        }
+    }
+
+    private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
+        setSearchBarSettings();
+
+        ArrayList<String> listOfContactPersonNames = new ArrayList<>();
+
+        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+            listOfContactPersonNames.clear();
+            for (Booking temp : listOfAllBookings) {
+                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                /*if(temp instanceof LectureBooking){
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                }*/
+            }
+        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
+            listOfContactPersonNames.clear();
+            for (Booking temp : listOfArrangementBookings) {
+                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                if (temp instanceof ArrangementBooking) {
+                    listOfContactPersonNames.add(((ArrangementBooking) temp).getBirthdayChildName());
+                }
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+            }
+        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+            listOfContactPersonNames.clear();
+            for (Booking temp : listOfLectureBookings) {
+                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+            }
+        }
+        return listOfContactPersonNames;
+    }
+
     //TODO fix to typeOfBooking
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
-
         for (Booking temp : listOfBookings) {
             String enteredBooking = searchField.getText();
+
             Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking)
                     || temp.getCustomer().getEmail().equals(enteredBooking);
+
             Boolean isLectureCustomer = false;
+
             if(temp instanceof LectureBooking) {
                 isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
                         || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
@@ -384,7 +461,7 @@ public class MainScreenController extends GeneralController {
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
-            }else if(isCustomer){
+            } else if (isCustomer) {
                 bookingTableView.getSelectionModel().clearSelection();
                 ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
@@ -470,7 +547,7 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
     }
 
-    public void fetchOnlyNewBookingsFromDataBase() {
+    void fetchOnlyNewBookingsFromDataBase() {
         try {
             listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
         } catch (SQLException e) {
@@ -621,39 +698,6 @@ public class MainScreenController extends GeneralController {
                 temp.getDateTime().minusDays(10).isEqual(LocalDateTime.now()))
                 && (temp.getBookingStatus() == BookingStatus.STATUS_ACTIVE || temp.getBookingStatus() == BookingStatus.STATUS_DONE)) &&
                 !temp.getDateTime().isBefore(LocalDateTime.now());
-    }
-
-    private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
-        ArrayList<String> listOfContactPersonNames = new ArrayList<>();
-
-        if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfAllBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                if(temp instanceof LectureBooking){
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
-                }
-            }
-        } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfArrangementBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-            }
-        } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfLectureBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
-            }
-        }
-        return listOfContactPersonNames;
     }
 
     private void createNewArrangementBooking() {
