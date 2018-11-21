@@ -6,14 +6,19 @@ import bookings.LectureBooking;
 import bookings.Lecturer;
 import builders.ArrangementBuilder;
 import builders.LectureBuilder;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 import org.junit.Test;
-import postToCalendars.PostToGoogle;
+import com.google.api.services.calendar.model.Event;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static postToCalendars.PostToGoogle.*;
 import static org.junit.Assert.assertEquals;
 
@@ -232,5 +237,135 @@ public class PostToCalendarTest {
         useCase = testBooking.build();
 
         assertEquals("aaaaaa999999999", idChecker(useCase));
+    }
+    @Test
+    public void isIdValid01(){
+        ArrangementBuilder arrangementBuilder = new ArrangementBuilder();
+        ArrangementBooking useCase;
+
+        arrangementBuilder.setId(351);
+        useCase = arrangementBuilder.build();
+        assertEquals(false, isIdValid(useCase.getId()));
+    }
+
+    @Test
+    public void postToCalendarTest01() {
+        ArrangementBuilder ArrangementBuilder = new ArrangementBuilder();
+        ArrangementBooking useCase = null;
+        int id = 8888888;
+
+        String expected = null;
+        if (!isIdValid(id)) {
+            ++id;
+        }
+
+        boolean tryCatch = true;
+        while(tryCatch) {
+            ArrangementBuilder.setBookingType(BookingType.ARRANGEMENTBOOKING)
+                    .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                    .setCustomer("contactperson", "1231341", "mail@mail.com")
+                    .setCreationDate(LocalDate.now())
+                    .setDate(LocalDateTime.of(2018, 11, 16, 14, 5))
+                    .setParticipants(58)
+                    .setCustomerComment("Basic comment")
+                    .setComment("They might be late")
+                    .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
+                    .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
+                    .setBirthdayChildName("testPerson")
+                    .setBirthdayChildAge(10)
+                    .setFormerParticipant("Ja")
+                    .setGuide("Jonas")
+                    .setId(id);
+
+            useCase = ArrangementBuilder.build();
+            expected = "aaaaaa" + id;
+
+            try {
+                postToCalendar(useCase);
+                tryCatch = false;
+            } catch (GoogleJsonResponseException e) {
+                id++;
+                tryCatch = true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Event testEvent = getEvent(useCase);
+
+        assertEquals(expected, testEvent.getId());
+        assertEquals("Fødselsdagsbarn: testPerson", testEvent.getSummary());
+        assertEquals("5", testEvent.getColorId());
+        assertNotNull(testEvent.getDescription());
+        assertNull(testEvent.getLocation());
+
+        try{
+        deleteBookingInCalendar(useCase);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void newArrangementEvent01(){
+        ArrangementBuilder testBooking = new ArrangementBuilder();
+        ArrangementBooking useCase;
+
+        testBooking.setBookingType(BookingType.ARRANGEMENTBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "1231341", "mail@mail.com")
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,9,16,14,0))
+                .setParticipants(58)
+                .setCustomerComment("Basic comment")
+                .setComment("They might be late")
+                .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
+                .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
+                .setBirthdayChildName("testPerson")
+                .setBirthdayChildAge(10)
+                .setFormerParticipant("Ja")
+                .setGuide("Jonas");
+        useCase = testBooking.build();
+
+        Event testEvent = newArrangementEvent(useCase);
+
+        assertEquals(Long.valueOf(1), Long.valueOf(testEvent.getSequence()));
+    }
+
+    @Test
+    public void newLectureEvent01(){
+        LectureBuilder testBooking = new LectureBuilder();
+        LectureBooking useCase;
+
+        testBooking.setBookingType(BookingType.LECTUREBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "123324234", "mail@mail.com","generic school", 7500,
+                        "Holstebro", "Nej", "45604965",456989486)
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,11,4,10,30))
+                .setParticipants(200)
+                .setCustomerComment("Comment")
+                .setComment("comment")
+                .setLectureRoom(new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE))
+                .setLecturer(new Lecturer("Magnus"))
+                .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
+                .setNoOfTeachers(2)
+                .setNoOfTeams(3)
+                .setGrade(Grade.TENTH);
+        useCase = testBooking.build();
+
+        Event testEvent = newLectureEvent(useCase);
+
+        assertEquals("Savannelokale", testEvent.getLocation());
+    }
+
+    @Test
+    public void updateArrangement01(){
+
+    }
+
+    @Test
+    public void updateLecture01(){
+
     }
 }

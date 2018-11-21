@@ -19,9 +19,9 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.Events;
 import customers.LectureBookingCustomer;
 import enums.BookingStatus;
-import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,31 +71,25 @@ public class PostToGoogle {
         return credential;
     }
 
-    public static void postToCalendar(Booking inputBooking) {
+    public static void postToCalendar(Booking inputBooking) throws IOException {
         Calendar calendar = connectToGoogleCalendar();
-        try {
-            if (inputBooking instanceof ArrangementBooking) {
-                calendar.events().insert(CALENDAR_ID, newArrangementEvent(inputBooking)).execute();
-            } else {
-                calendar.events().insert(CALENDAR_ID, newLectureEvent(inputBooking)).execute();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        if (inputBooking instanceof ArrangementBooking) {
+            calendar.events().insert(CALENDAR_ID, newArrangementEvent(inputBooking)).execute();
+        } else {
+            calendar.events().insert(CALENDAR_ID, newLectureEvent(inputBooking)).execute();
         }
     }
 
-    public static void updateCalendar(Booking inputBooking) {
+    public static void updateCalendar(Booking inputBooking) throws IOException {
         String idModifier = idAddition + inputBooking.getId();
         Calendar calendar = connectToGoogleCalendar();
-        try {
-            Event updateEvent = calendar.events().get(CALENDAR_ID, idModifier).execute();
-            if (inputBooking instanceof ArrangementBooking) {
-                calendar.events().update(CALENDAR_ID, idModifier, updateArrangementInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
-            } else {
-                calendar.events().update(CALENDAR_ID, idModifier, updateLectureInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        Event updateEvent = calendar.events().get(CALENDAR_ID, idModifier).execute();
+        if (inputBooking instanceof ArrangementBooking) {
+            calendar.events().update(CALENDAR_ID, idModifier, updateArrangementInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
+        } else {
+            calendar.events().update(CALENDAR_ID, idModifier, updateLectureInCalendar(updateEvent, inputBooking, idModifier, calendar)).execute();
         }
     }
 
@@ -156,14 +150,12 @@ public class PostToGoogle {
         return lecture_event;
     }
 
-    public static Event updateArrangementInCalendar(Event updatedArrangementEvent, Booking inputArrangementBooking, String idModifier, Calendar calendar) {
-        try {
-            updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
-                    .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
-                    .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static Event updateArrangementInCalendar(Event updatedArrangementEvent, Booking
+            inputArrangementBooking, String idModifier, Calendar calendar) throws IOException {
+
+        updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
+                .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
+                .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         String tempMonth = monthsLessThanTen(inputArrangementBooking);
@@ -183,20 +175,16 @@ public class PostToGoogle {
         if (inputArrangementBooking.getBookingStatus() == BookingStatus.STATUS_DELETED) {
             deleteBookingInCalendar(inputArrangementBooking);
         }
-
         return updatedArrangementEvent;
     }
 
-    public static Event updateLectureInCalendar(Event updatedLectureEvent, Booking inputLectureBooking, String idModifier, Calendar calendar) {
-        try {
+    private static Event updateLectureInCalendar(Event updatedLectureEvent, Booking inputLectureBooking, String idModifier, Calendar calendar) throws IOException {
             LectureBookingCustomer temp = (LectureBookingCustomer) inputLectureBooking.getCustomer();
 
             updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
                     .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
                     .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
         String tempMonth = monthsLessThanTen(inputLectureBooking);
@@ -299,11 +287,13 @@ public class PostToGoogle {
         return tempMinute;
     }
 
-    public static String beginTimeStringBuilder(Booking temp, String months, String days, String hours, String minutes) {
+    public static String beginTimeStringBuilder(Booking temp, String months, String days, String hours, String
+            minutes) {
         return String.valueOf(temp.getDateTime().getYear()) + "-" + months + "-" + days + "T" + hours + ":" + minutes + ":00+01:00";
     }
 
-    private static String endTimeStringBuilderArrCalculator(Booking inputArrangementBooking, String months, String days, String hours, String minutes) {
+    private static String endTimeStringBuilderArrCalculator(Booking inputArrangementBooking, String months, String
+            days, String hours, String minutes) {
         return String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" + months + "-" +
                 days + "T" + (String.valueOf(Integer.valueOf(hours) + 2)) + ":" + minutes + ":00+01:00";
 
@@ -315,7 +305,8 @@ public class PostToGoogle {
 
     }
 
-    private static String descriptionBuilderArrangement(Booking inputArrangementBooking, String customercomment, String comment) {
+    private static String descriptionBuilderArrangement(Booking inputArrangementBooking, String
+            customercomment, String comment) {
         return ("\n Fødselsdagsalder: " + String.valueOf(((ArrangementBooking) inputArrangementBooking).getBirthdayChildAge()) +
                 "\n Antal deltagere: " + String.valueOf(inputArrangementBooking.getParticipants()) +
                 "\n Rundviser: " + ((ArrangementBooking) inputArrangementBooking).getGuide()) +
@@ -328,7 +319,8 @@ public class PostToGoogle {
                 "\n E-mail: " + inputArrangementBooking.getCustomer().getEmail();
     }
 
-    private static String descriptionBuilderLecture(Booking inputLectureBooking, String customercomment, String comment) {
+    private static String descriptionBuilderLecture(Booking inputLectureBooking, String customercomment, String
+            comment) {
         return ("\n Valg af emne: " + String.valueOf(((LectureBooking) inputLectureBooking).getChoiceOfTopic().toString()) +
                 "\n Underviser: " + ((LectureBooking) inputLectureBooking).getLecturer() +
                 "\n Antal deltagere: " + String.valueOf(inputLectureBooking.getParticipants()) +
@@ -342,19 +334,16 @@ public class PostToGoogle {
                 "\n E-mail: " + inputLectureBooking.getCustomer().getEmail());
     }
 
-    public static void deleteBookingInCalendar(Booking temp) {
-        try {
-            String idModifier = idAddition + temp.getId();
-            Calendar calendar = connectToGoogleCalendar();
+    public static void deleteBookingInCalendar(Booking temp) throws IOException {
 
-            // Deletes an event
-            calendar.events().delete(CALENDAR_ID, idModifier).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String idModifier = idAddition + temp.getId();
+        Calendar calendar = connectToGoogleCalendar();
+
+        // Deletes an event
+        calendar.events().delete(CALENDAR_ID, idModifier).execute();
     }
 
-    public static Calendar connectToGoogleCalendar() {
+    private static Calendar connectToGoogleCalendar() {
         Calendar calendar = null;
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -366,5 +355,35 @@ public class PostToGoogle {
             e.printStackTrace();
         }
         return calendar;
+    }
+
+    public static Event getEvent(Booking temp) {
+
+        String idModifier = idAddition + temp.getId();
+        Calendar calendar = connectToGoogleCalendar();
+        Event getEvent = null;
+        try {
+            getEvent = calendar.events().get(CALENDAR_ID, idModifier).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return getEvent;
+    }
+
+    public static Boolean isIdValid(int id) {
+        String idModifier = idAddition + id;
+        Calendar calendar = connectToGoogleCalendar();
+        try {
+            Events events = calendar.events().list(CALENDAR_ID).execute();
+            List<Event> items = events.getItems();
+            for (Event event : items) {
+                if (idModifier.equals(event.getId())) {
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }

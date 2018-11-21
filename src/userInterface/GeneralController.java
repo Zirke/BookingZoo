@@ -16,7 +16,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-class GeneralController {
+public class GeneralController {
 
     private static GeneralController me;
 
@@ -72,7 +72,7 @@ class GeneralController {
         }
     }
 
-    static Alert showAlertBox(Alert.AlertType alertType, String title, String message) {
+    public static Alert showAlertBox(Alert.AlertType alertType, String title, String message) {
         Alert userCreationAlert = new Alert(alertType);
         userCreationAlert.setTitle(title);
         userCreationAlert.setHeaderText(null);

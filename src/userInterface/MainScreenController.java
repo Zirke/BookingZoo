@@ -813,10 +813,20 @@ public class MainScreenController extends GeneralController {
         if (alertChoice.get() == ButtonType.OK) {
             if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.ARRANGEMENTBOOKING)) {
                 SendEmail.sendConfirmationEmail((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
+                try {
+                    postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
+                }catch (IOException e){
+                    GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
+                            "Kontakt IT for at løse problemet.\n " + e.getMessage());
+                }
             } else if ((bookingTableView.getSelectionModel().getSelectedItem()).getBookingType() == (BookingType.LECTUREBOOKING)) {
                 SendEmail.sendConfirmationEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
-                postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
+                try {
+                    postToCalendar((bookingTableView.getSelectionModel().getSelectedItem()));
+                }catch (IOException e){
+                        GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
+                                "Kontakt IT for at løse problemet..\n " + e.getMessage());
+                }
             }
         }
         acceptSelectedBooking();
