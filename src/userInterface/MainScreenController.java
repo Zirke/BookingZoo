@@ -185,6 +185,7 @@ public class MainScreenController extends GeneralController {
 
         //Cancelling the selected booking when pressing cancelBookingButton
         cancelBookingButton.setOnMouseClicked(e -> cancelBookingDialog());
+
     }
 
     /*
@@ -361,19 +362,20 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    public void foo() {
+    public void getChosenSetting() {
+
         for (MenuItem menuItem : searchBarSettingsMenuButton.getItems()) {
             menuItem.setOnAction(ev -> {
-                List<String> selectedItems = new List<>();
-
-                searchBarSettingsMenuButton.getItems().stream()
+                List<String> selectedItems = searchBarSettingsMenuButton.getItems().stream()
                         .filter(item -> RadioMenuItem.class.isInstance(item) && RadioMenuItem.class.cast(item).isSelected())
                         .map(MenuItem::getText)
                         .collect(Collectors.toList());
+                String chosenSetting = "";
+                chosenSetting = selectedItems.get(1);
                 selectedItems.clear();
-                System.out.println(selectedItems);
             });
         }
+
     }
 
     private void setSearchBarSettings() {
@@ -386,7 +388,7 @@ public class MainScreenController extends GeneralController {
             searchBarLecGroup.getToggles().addAll(conctactPersonMenuItem, schoolNameMenuItem);
             searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, schoolNameMenuItem, emailMenuItem);
             conctactPersonMenuItem.setSelected(true);
-            foo();
+
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             searchBarSettingsMenuButton.getItems().clear();
             RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
@@ -396,49 +398,79 @@ public class MainScreenController extends GeneralController {
             searchBarArrGroup.getToggles().addAll(conctactPersonMenuItem, birthdayChildNameMenuItem);
             searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, birthdayChildNameMenuItem, emailMenuItem);
             conctactPersonMenuItem.setSelected(true);
-            foo();
+
         } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             searchBarSettingsMenuButton.getItems().clear();
             RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
             RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
             searchBarSettingsMenuButton.getItems().addAll(conctactPersonMenuItem, emailMenuItem);
             conctactPersonMenuItem.setSelected(true);
-            foo();
+
         }
     }
 
     private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
-        setSearchBarSettings();
 
-        ArrayList<String> listOfContactPersonNames = new ArrayList<>();
+        ArrayList<String> listOfSearchableItems = new ArrayList<>();
+
+
+        RadioMenuItem contactPersonMenuItem = new RadioMenuItem("Kontaktperson");
+        RadioMenuItem schoolNameMenuItem = new RadioMenuItem("Skolenavn");
+        RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
+        ToggleGroup searchBarLecGroup = new ToggleGroup();
+        searchBarLecGroup.getToggles().addAll(contactPersonMenuItem, schoolNameMenuItem, emailMenuItem);
+        searchBarSettingsMenuButton.getItems().addAll(contactPersonMenuItem, schoolNameMenuItem, emailMenuItem);
+        contactPersonMenuItem.setSelected(true);
+
+        //RadioMenuItem conctactPersonMenuItem = new RadioMenuItem("Kontaktperson");
+        RadioMenuItem birthdayChildNameMenuItem = new RadioMenuItem("Fødselsdagsbarn");
+        //RadioMenuItem emailMenuItem = new RadioMenuItem("Email");
+        ToggleGroup searchBarArrGroup = new ToggleGroup();
+        searchBarArrGroup.getToggles().addAll(contactPersonMenuItem, birthdayChildNameMenuItem, emailMenuItem);
+        searchBarSettingsMenuButton.getItems().addAll(contactPersonMenuItem, birthdayChildNameMenuItem, emailMenuItem);
+        contactPersonMenuItem.setSelected(true);
+
 
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-            listOfContactPersonNames.clear();
+            listOfSearchableItems.clear();
+
             for (Booking temp : listOfAllBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                listOfSearchableItems.add(temp.getCustomer().getContactPerson());
+                listOfSearchableItems.add(temp.getCustomer().getEmail());
                 /*if(temp instanceof LectureBooking){
                     listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
                 }*/
             }
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            listOfContactPersonNames.clear();
+            listOfSearchableItems.clear();
+            searchBarSettingsMenuButton.getItems().clear();
+
             for (Booking temp : listOfArrangementBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                if (temp instanceof ArrangementBooking) {
-                    listOfContactPersonNames.add(((ArrangementBooking) temp).getBirthdayChildName());
+                if (searchBarArrGroup.getSelectedToggle().equals(contactPersonMenuItem)) {
+                    contactPersonMenuItem.setOnAction(e -> setCorrectTypeOfBookingsToSearchFor());
+                    listOfSearchableItems.add(temp.getCustomer().getContactPerson());
+                } else if (searchBarArrGroup.getSelectedToggle().equals(birthdayChildNameMenuItem)) {
+                    birthdayChildNameMenuItem.setOnAction(e -> setCorrectTypeOfBookingsToSearchFor());
+                    listOfSearchableItems.add(((ArrangementBooking) temp).getBirthdayChildName());
+                } else {
+                    emailMenuItem.setOnAction(e -> setCorrectTypeOfBookingsToSearchFor());
+                    listOfSearchableItems.add(temp.getCustomer().getEmail());
                 }
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            listOfContactPersonNames.clear();
+            listOfSearchableItems.clear();
+            searchBarSettingsMenuButton.getItems().clear();
+            searchBarSettingsMenuButton.getItems().addAll(contactPersonMenuItem, emailMenuItem, birthdayChildNameMenuItem);
+
             for (Booking temp : listOfLectureBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                if (searchBarLecGroup.getSelectedToggle().equals(contactPersonMenuItem)) {
+                    listOfSearchableItems.add(temp.getCustomer().getContactPerson());
+                } else if (searchBarLecGroup.getSelectedToggle().equals(schoolNameMenuItem)) {
+                    listOfSearchableItems.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                } else listOfSearchableItems.add(temp.getCustomer().getEmail());
             }
         }
-        return listOfContactPersonNames;
+        return listOfSearchableItems;
     }
 
     //TODO fix to typeOfBooking
