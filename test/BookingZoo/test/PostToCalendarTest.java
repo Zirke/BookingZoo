@@ -359,13 +359,51 @@ public class PostToCalendarTest {
         assertEquals("Savannelokale", testEvent.getLocation());
     }
 
+   @Test
+    public void endArrangementTimeStringBuilder(){
+       ArrangementBuilder testBooking = new ArrangementBuilder();
+       ArrangementBooking useCase;
+
+       testBooking.setBookingType(BookingType.ARRANGEMENTBOOKING)
+               .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+               .setCustomer("contactperson", "1231341", "mail@mail.com")
+               .setCreationDate(LocalDate.now())
+               .setDate(LocalDateTime.of(2018,11,16,4,5))
+               .setParticipants(58)
+               .setCustomerComment("Basic comment")
+               .setComment("They might be late")
+               .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
+               .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
+               .setBirthdayChildName("testPerson")
+               .setBirthdayChildAge(10)
+               .setFormerParticipant("Ja")
+               .setGuide("Jonas");
+       useCase = testBooking.build();
+
+       assertEquals("2018-11-16T06:05:00+01:00",endTimeStringBuilderArrCalculator(useCase, monthsLessThanTen(useCase), daysLessThanTen(useCase), hoursLessThanTen(useCase),minutesLessThanTen(useCase)));
+   }
     @Test
-    public void updateArrangement01(){
+    public void endLectureTimeStringBuilder01(){
+        LectureBuilder testBooking = new LectureBuilder();
+        LectureBooking useCase;
 
-    }
+        testBooking.setBookingType(BookingType.LECTUREBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "123324234", "mail@mail.com","generic school", 7500,
+                        "Holstebro", "Nej", "45604965",456989486)
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,11,4,3,30))
+                .setParticipants(200)
+                .setCustomerComment("Comment")
+                .setComment("comment")
+                .setLectureRoom(new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE))
+                .setLecturer(new Lecturer("Magnus"))
+                .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
+                .setNoOfTeachers(2)
+                .setNoOfTeams(3)
+                .setGrade(Grade.TENTH);
+        useCase = testBooking.build();
 
-    @Test
-    public void updateLecture01(){
-
+        assertEquals("2018-11-04T04:30:00+01:00",endTimeStringBuilderLecCalculator(useCase, monthsLessThanTen(useCase), daysLessThanTen(useCase), hoursLessThanTen(useCase),minutesLessThanTen(useCase)));
     }
 }

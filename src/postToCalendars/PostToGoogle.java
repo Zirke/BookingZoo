@@ -292,14 +292,21 @@ public class PostToGoogle {
         return String.valueOf(temp.getDateTime().getYear()) + "-" + months + "-" + days + "T" + hours + ":" + minutes + ":00+01:00";
     }
 
-    private static String endTimeStringBuilderArrCalculator(Booking inputArrangementBooking, String months, String
-            days, String hours, String minutes) {
+    public static String endTimeStringBuilderArrCalculator(Booking inputArrangementBooking, String months, String days, String hours, String minutes) {
+        if (Integer.valueOf(hours) < 10){
+            return String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" + months + "-" +
+                    days + "T" + ("0" + (String.valueOf(Integer.valueOf(hours) + 2))) + ":" + minutes + ":00+01:00";
+        }
         return String.valueOf(inputArrangementBooking.getDateTime().getYear()) + "-" + months + "-" +
                 days + "T" + (String.valueOf(Integer.valueOf(hours) + 2)) + ":" + minutes + ":00+01:00";
 
     }
 
-    private static String endTimeStringBuilderLecCalculator(Booking inputLectureBooking, String months, String days, String hours, String minutes) {
+    public static String endTimeStringBuilderLecCalculator(Booking inputLectureBooking, String months, String days, String hours, String minutes) {
+        if (Integer.valueOf(hours) < 10){
+            return String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" + months + "-" +
+                    days + "T" + ("0" + (String.valueOf(Integer.valueOf(hours) + 1))) + ":" + minutes + ":00+01:00";
+        }
         return String.valueOf(inputLectureBooking.getDateTime().getYear()) + "-" + months + "-" +
                 days + "T" + (String.valueOf(Integer.valueOf(hours) + 1)) + ":" + minutes + ":00+01:00";
 
