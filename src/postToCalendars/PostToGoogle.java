@@ -102,21 +102,8 @@ public class PostToGoogle {
                 .setSequence(1)
                 .setId(idChecker(inputArrangementBooking));
 
-        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-        String tempMonth = monthsLessThanTen(inputArrangementBooking);
-        String tempDay = daysLessThanTen(inputArrangementBooking);
-        String tempHour = hoursLessThanTen(inputArrangementBooking);
-        String tempMinute = minutesLessThanTen(inputArrangementBooking);
-
-        // initiate the start hour of the event
-        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-        arrangement_event.setStart(begin);
-
-        // when the event ends
-        DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-        arrangement_event.setEnd(end);
+        arrangement_event.setStart(startOfEvent(inputArrangementBooking));
+        arrangement_event.setEnd(endOfArrangementEvent(inputArrangementBooking));
 
         return arrangement_event;
     }
@@ -133,19 +120,8 @@ public class PostToGoogle {
                 .setSequence(1)
                 .setId(idChecker(inputLectureBooking));
 
-        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-        String tempMonth = monthsLessThanTen(inputLectureBooking);
-        String tempDay = daysLessThanTen(inputLectureBooking);
-        String tempHour = hoursLessThanTen(inputLectureBooking);
-        String tempMinute = minutesLessThanTen(inputLectureBooking);
-
-        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-        lecture_event.setStart(begin);
-
-        DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-        lecture_event.setEnd(end);
+        lecture_event.setStart(startOfEvent(inputLectureBooking));
+        lecture_event.setEnd(endOfLectureEvent(inputLectureBooking));
 
         return lecture_event;
     }
@@ -157,20 +133,8 @@ public class PostToGoogle {
                 .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
                 .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
 
-        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-        String tempMonth = monthsLessThanTen(inputArrangementBooking);
-        String tempDay = daysLessThanTen(inputArrangementBooking);
-        String tempHour = hoursLessThanTen(inputArrangementBooking);
-        String tempMinute = minutesLessThanTen(inputArrangementBooking);
-
-        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-        updatedArrangementEvent.setStart(begin);
-
-        DateTime endDateTime = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-        updatedArrangementEvent.setEnd(end);
-
+        updatedArrangementEvent.setStart(startOfEvent(inputArrangementBooking));
+        updatedArrangementEvent.setEnd(endOfArrangementEvent(inputArrangementBooking));
 
         if (inputArrangementBooking.getBookingStatus() == BookingStatus.STATUS_DELETED) {
             deleteBookingInCalendar(inputArrangementBooking);
@@ -185,20 +149,8 @@ public class PostToGoogle {
                     .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
                     .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
 
-
-        //these statement checks whether some information is below 10, if it is "0" will be added infront of the integer
-        String tempMonth = monthsLessThanTen(inputLectureBooking);
-        String tempDay = daysLessThanTen(inputLectureBooking);
-        String tempHour = hoursLessThanTen(inputLectureBooking);
-        String tempMinute = minutesLessThanTen(inputLectureBooking);
-
-        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
-        updatedLectureEvent.setStart(begin);
-
-        DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
-        updatedLectureEvent.setEnd(end);
+        updatedLectureEvent.setStart(startOfEvent(inputLectureBooking));
+        updatedLectureEvent.setEnd(endOfLectureEvent(inputLectureBooking));
 
         if (inputLectureBooking.getBookingStatus() == BookingStatus.STATUS_DELETED) {
             deleteBookingInCalendar(inputLectureBooking);
@@ -211,7 +163,6 @@ public class PostToGoogle {
         if ((temp.getComment() != null) && !(temp.getComment().isEmpty())) {
             tempComment = temp.getComment();
         }
-
         return tempComment;
     }
 
@@ -245,7 +196,6 @@ public class PostToGoogle {
 
     public static String monthsLessThanTen(Booking temp) {
         String tempMonth = "0";
-
         if (temp.getDateTime().getMonthValue() < 10) {
             tempMonth += String.valueOf(temp.getDateTime().getMonthValue());
         } else {
@@ -256,7 +206,6 @@ public class PostToGoogle {
 
     public static String daysLessThanTen(Booking temp) {
         String tempDay = "0";
-
         if (temp.getDateTime().getDayOfMonth() < 10) {
             tempDay += String.valueOf(temp.getDateTime().getDayOfMonth());
         } else {
@@ -392,5 +341,38 @@ public class PostToGoogle {
             e.printStackTrace();
         }
         return true;
+    }
+    public static EventDateTime startOfEvent(Booking inputBooking) {
+        String tempMonth = monthsLessThanTen(inputBooking);
+        String tempDay = daysLessThanTen(inputBooking);
+        String tempHour = hoursLessThanTen(inputBooking);
+        String tempMinute = minutesLessThanTen(inputBooking);
+
+        DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputBooking,tempMonth,tempDay,tempHour,tempMinute));
+        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
+
+        return begin;
+    }
+    public static EventDateTime endOfArrangementEvent(Booking inputArrangementBooking){
+        String tempMonth = monthsLessThanTen(inputArrangementBooking);
+        String tempDay = daysLessThanTen(inputArrangementBooking);
+        String tempHour = hoursLessThanTen(inputArrangementBooking);
+        String tempMinute = minutesLessThanTen(inputArrangementBooking);
+
+        DateTime endOfEvent = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endOfEvent);
+
+        return end;
+    }
+    public static EventDateTime endOfLectureEvent(Booking inputLectureBooking){
+        String tempMonth = monthsLessThanTen(inputLectureBooking);
+        String tempDay = daysLessThanTen(inputLectureBooking);
+        String tempHour = hoursLessThanTen(inputLectureBooking);
+        String tempMinute = minutesLessThanTen(inputLectureBooking);
+
+        DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
+        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
+
+        return end;
     }
 }

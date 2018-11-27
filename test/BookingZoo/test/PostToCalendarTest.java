@@ -406,4 +406,6 @@ public class PostToCalendarTest {
 
         assertEquals("2018-11-04T04:30:00+01:00",endTimeStringBuilderLecCalculator(useCase, monthsLessThanTen(useCase), daysLessThanTen(useCase), hoursLessThanTen(useCase),minutesLessThanTen(useCase)));
     }
+
+
 }
