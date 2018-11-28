@@ -2,7 +2,6 @@ package userInterface;
 
 import enums.BookingType;
 import exception.IllegalBookingTypeException;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +28,6 @@ public class PromptScreenController {
     public void loadChosenBookingTypeToMainScreen(ActionEvent actionEvent) {
 
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
             Parent root = loader.load();
 
@@ -45,11 +43,9 @@ public class PromptScreenController {
             switch (textOfBtn) {
                 case "Børnefødselsdage":
                     controller.setTypeOfBooking(BookingType.ARRANGEMENTBOOKING);
-                    //controller.showArrangementStatisticsInfo();
                     break;
                 case "Skoletjenester":
                     controller.setTypeOfBooking(BookingType.LECTUREBOOKING);
-                    //controller.showStatisticInfo();
                     break;
                 case "Alle":
                     controller.setTypeOfBooking(BookingType.ALL_BOOKING_TYPES);
