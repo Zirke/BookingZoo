@@ -335,11 +335,13 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
 
-        try {
-            updateCalendar(abook);
-        } catch (IOException e) {
-            GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
-                    "Kontakt IT for at løse problemet.\n " + e.getMessage());
+        if (!abook.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED)) {
+            try {
+                updateCalendar(abook);
+            } catch (IOException e) {
+                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
+                        "Kontakt IT for at løse problemet.\n " + e.getMessage());
+            }
         }
         //connection.close();
     }
@@ -394,11 +396,13 @@ public class BookingDataAccessor {
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
 
-        try {
-            updateCalendar(lbook);
-        } catch (IOException e) {
-            GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
-                    "Kontakt IT for at løse problemet.\n " + e.getMessage());
+        if (!lbook.getBookingStatus().equals(BookingStatus.STATUS_ARCHIVED)) {
+            try {
+                updateCalendar(lbook);
+            } catch (IOException e) {
+                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
+                        "Kontakt IT for at løse problemet.\n " + e.getMessage());
+            }
         }
 
         //connection.close();
