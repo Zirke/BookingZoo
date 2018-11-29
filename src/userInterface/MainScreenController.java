@@ -138,10 +138,7 @@ public class MainScreenController extends GeneralController {
          *   Event handlers
          */
 
-        deleteButton.setOnMouseClicked(e -> {
-            deleteSelectedBookingFromDatabase();
-            removeBookingFromTableView();
-        });
+
 
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
@@ -189,6 +186,11 @@ public class MainScreenController extends GeneralController {
 
         //Cancelling the selected booking when pressing cancelBookingButton
         cancelBookingButton.setOnMouseClicked(e -> cancelBookingDialog());
+
+        deleteButton.setOnMouseClicked(e -> {
+            deleteSelectedBookingFromDatabase();
+            removeBookingFromTableView();
+        });
     }
 
     /*
@@ -341,10 +343,19 @@ public class MainScreenController extends GeneralController {
     }
 
     private void deleteSelectedBookingFromDatabase() {
-        try {
-            bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Vil du slette bookingen?");
+        alert.setContentText("Bookingen vil blive slettet fra hele systemet og kan ikke genoprettes");
+
+        Optional<ButtonType> alertChoice = alert.showAndWait();
+
+        if (alertChoice.get() == ButtonType.OK) {
+            try {
+                bda.deleteBooking(bookingTableView.getSelectionModel().getSelectedItem());
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            removeBookingFromTableView();
         }
     }
 
@@ -409,9 +420,6 @@ public class MainScreenController extends GeneralController {
         } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
                 archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
-            if (deletedBookingsButton.isSelected()) {
-                deleteButton.setVisible(true);
-            }
 
             switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES:
@@ -853,8 +861,8 @@ public class MainScreenController extends GeneralController {
 
     private void cancelBookingDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Vil du slette bookingen?");
-        alert.setContentText("Handlingen vil slette bookingen");
+        alert.setHeaderText("Vil du afvise bookingen?");
+        alert.setContentText("Handlingen vil flytte bookingen til kategorien 'Slettet'");
 
         Optional<ButtonType> alertChoice = alert.showAndWait();
 
