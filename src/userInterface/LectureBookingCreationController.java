@@ -26,10 +26,8 @@ public class LectureBookingCreationController {
 
     @FXML
     private Button createAndCloseButton, cancelButton;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
@@ -37,10 +35,8 @@ public class LectureBookingCreationController {
 
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
-
     @FXML
     private ToggleGroup communeGroup;
-
     @FXML
     private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox;
 
@@ -164,14 +160,12 @@ public class LectureBookingCreationController {
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
                 if (alertChoice2.get() == ButtonType.OK) {
-
                     try {
                         closeWindow();
                         createNewLectureBookingFromInput();
-                        LectureBooking temp = createdBooking;
                         msc.fetchOnlyNewBookingsFromDataBase();
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.getBookingTableView().getSelectionModel().select(createdBooking);
                     } catch (SQLException | ClassNotFoundException e1) {
                         try {
                             bda = BookingDataAccessor.connect();

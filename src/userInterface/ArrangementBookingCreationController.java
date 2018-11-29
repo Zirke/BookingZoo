@@ -71,14 +71,12 @@ public class ArrangementBookingCreationController extends GeneralController {
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
                 if (alertChoice2.get() == ButtonType.OK) {
-
                     try {
                         closeWindow();
                         createArrangementBookingFromInput();
-                        ArrangementBooking temp = createdBooking;
                         msc.fetchOnlyNewBookingsFromDataBase();
-                        msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
+                        msc.getBookingTableView().getSelectionModel().select(createdBooking);
                     } catch (SQLException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
@@ -89,6 +87,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                         e1.printStackTrace();
                     }
                 }
+
             }
         });
 

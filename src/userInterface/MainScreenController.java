@@ -63,10 +63,6 @@ public class MainScreenController extends GeneralController {
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
-    public TableView<Booking> getBookingTableView() {
-        return bookingTableView;
-    }
-
     void setTypeOfBooking(BookingType typeOfBooking) {
         this.typeOfBooking = typeOfBooking;
 
@@ -954,5 +950,9 @@ public class MainScreenController extends GeneralController {
                 }
             }
         }
+    }
+
+    public TableView<Booking> getBookingTableView() {
+        return bookingTableView;
     }
 }
