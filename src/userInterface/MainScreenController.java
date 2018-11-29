@@ -43,12 +43,7 @@ import static enums.BookingStatus.*;
 import static postToCalendars.PostToGoogle.postToCalendar;
 
 public class MainScreenController extends GeneralController {
-    private final BookingDataAccessor bda = new BookingDataAccessor(
-            "org.postgresql.Driver",
-            "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
-            "jyjczxth",
-            "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
-    );
+    private BookingDataAccessor bda = BookingDataAccessor.connect();
 
     private ArrayList<Booking> listOfAllBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedBookings = new ArrayList<>();
@@ -67,6 +62,8 @@ public class MainScreenController extends GeneralController {
 
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
+
+
 
     void setTypeOfBooking(BookingType typeOfBooking) {
         this.typeOfBooking = typeOfBooking;
@@ -166,7 +163,17 @@ public class MainScreenController extends GeneralController {
 
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
-            fetchOnlyNewBookingsFromDataBase();
+            try {
+                fetchOnlyNewBookingsFromDataBase();
+            } catch (SQLException e1) {
+                try {
+                    bda = BookingDataAccessor.connect();
+                } catch (SQLException | ClassNotFoundException e2) {
+                    e2.printStackTrace();
+                }
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
             moveConductedBookingToArchived();
         });
 
@@ -470,11 +477,11 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
     }
 
-    public void fetchOnlyNewBookingsFromDataBase() {
+    public void fetchOnlyNewBookingsFromDataBase() throws SQLException, ClassNotFoundException {
         try {
             listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
         } catch (SQLException e) {
-            e.printStackTrace();
+            bda = BookingDataAccessor.connect();
         }
         setChosenBookingTypeIntoTableView();
     }

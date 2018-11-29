@@ -133,7 +133,11 @@ public class LectureBookingCreationController {
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
         createdBooking = lbook;
-        bda.createLecBookManually(lbook);
+        try {
+            bda.createLecBookManually(lbook);
+        } catch (SQLException e){
+            bda = BookingDataAccessor.connect();
+        }
     }
 
     @FXML
@@ -171,7 +175,11 @@ public class LectureBookingCreationController {
                         msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
-                        e1.printStackTrace();
+                        try {
+                            bda = BookingDataAccessor.connect();
+                        } catch (SQLException | ClassNotFoundException e2) {
+                            e2.printStackTrace();
+                        }
                     }
                 }
             }

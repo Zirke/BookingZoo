@@ -32,6 +32,17 @@ public class BookingDataAccessor {
         this.connection = connection;
     }
 
+    public static BookingDataAccessor connect() throws SQLException, ClassNotFoundException {
+        BookingDataAccessor bda = new BookingDataAccessor(
+                "org.postgresql.Driver",
+                "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
+                "jyjczxth",
+                "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
+        );
+        System.out.println("Connected");
+        return bda;
+    }
+
     public ArrayList<Booking> fetchArrBooks() throws SQLException, NoBookingsInDatabaseException {
 
         ArrayList<Booking> arr = null;

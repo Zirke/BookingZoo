@@ -80,6 +80,12 @@ public class ArrangementBookingCreationController extends GeneralController {
                         msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
+                        try {
+                            bda = BookingDataAccessor.connect();
+                        } catch (SQLException | ClassNotFoundException e2) {
+                            e2.printStackTrace();
+                        }
+                    } catch (ClassNotFoundException e1) {
                         e1.printStackTrace();
                     }
                 }
@@ -101,7 +107,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
-    private void createArrangementBookingFromInput() throws SQLException {
+    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;
@@ -133,7 +139,11 @@ public class ArrangementBookingCreationController extends GeneralController {
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
         createdBooking = abook;
+        try{
         bda.createArrBookManually(abook);
+        } catch (SQLException e){
+            bda = BookingDataAccessor.connect();
+        }
     }
 
     private void closeWindow() {

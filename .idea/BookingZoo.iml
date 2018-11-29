@@ -75,5 +75,19 @@
     <orderEntry type="library" name="Jars" level="project" />
     <orderEntry type="library" name="controlsfx-9.0.0" level="project" />
     <orderEntry type="library" name="JarFiler" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/jaf-1.1.1" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://$USER_HOME$/Downloads/jaf-1.1.1/docs/javadocs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://$USER_HOME$/Downloads/jaf-1.1.1/demo" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/Downloads/jaf-1.1.1" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>

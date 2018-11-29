@@ -258,7 +258,11 @@ public class EditLectureBookingController {
                         msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
-                        e1.printStackTrace();
+                        try {
+                            bda = BookingDataAccessor.connect();
+                        } catch (SQLException | ClassNotFoundException e2) {
+                            e2.printStackTrace();
+                        }
                     }
                 }
             }
