@@ -9,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,7 +74,7 @@ public class LectureBookingCreationController {
     }
 
     @FXML
-    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException, IOException, GeneralSecurityException {
+    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
         //LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
         LocalTime tempTime;
@@ -172,9 +170,9 @@ public class LectureBookingCreationController {
                         createNewLectureBookingFromInput();
                         LectureBooking temp = createdBooking;
                         msc.fetchOnlyNewBookingsFromDataBase();
-                        msc.getBookingTableView().getSelectionModel().select(temp);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                    } catch (SQLException | ClassNotFoundException | IOException | GeneralSecurityException e1) {
+                        msc.getBookingTableView().getSelectionModel().select(temp);
+                    } catch (SQLException | ClassNotFoundException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
                         } catch (SQLException | ClassNotFoundException e2) {

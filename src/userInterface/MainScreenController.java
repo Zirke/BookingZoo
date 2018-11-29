@@ -63,7 +63,9 @@ public class MainScreenController extends GeneralController {
     public MainScreenController() throws SQLException, ClassNotFoundException {
     }
 
-
+    public TableView<Booking> getBookingTableView() {
+        return bookingTableView;
+    }
 
     void setTypeOfBooking(BookingType typeOfBooking) {
         this.typeOfBooking = typeOfBooking;
@@ -213,8 +215,12 @@ public class MainScreenController extends GeneralController {
             e.printStackTrace();
             System.out.println("No arrangement bookings in database"); //TODO Lav om til exception handling
         }
+        updateAllBookingLists(listOfAllBookings);
+    }
+
+    private void updateAllBookingLists(ArrayList<Booking> inputList) {
         //Categorised bookings
-        for (Booking tempBooking : listOfAllBookings) {
+        for (Booking tempBooking : inputList) {
             if (tempBooking.getBookingStatus().equals(STATUS_PENDING)) {
                 listOfPendingBookings.add(tempBooking);
             }
@@ -487,13 +493,15 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
     }
 
-    public void fetchOnlyNewBookingsFromDataBase() throws SQLException {
+    void fetchOnlyNewBookingsFromDataBase() throws SQLException {
+
+        updateAllBookingLists(bda.refreshBookings(listOfAllBookings));
+        setChosenBookingTypeIntoTableView();
+
         //try {
-            listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
         /*} catch (SQLException e) {
             bda = BookingDataAccessor.connect();
         }*/
-        setChosenBookingTypeIntoTableView();
     }
 
     //Changes text on all labels corresponding to the chosen booking in ListView
@@ -946,9 +954,5 @@ public class MainScreenController extends GeneralController {
                 }
             }
         }
-    }
-
-    public TableView<Booking> getBookingTableView() {
-        return bookingTableView;
     }
 }

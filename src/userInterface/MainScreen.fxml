@@ -5,7 +5,9 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.MainScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
+            prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
@@ -430,9 +432,10 @@
                         </ImageView>
                      </graphic>
                         </Button>
-                        <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="708.0" spacing="20.0">
+                        <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="708.0" spacing="15.0">
                             <children>
-                                <Button fx:id="editBookingButton" mnemonicParsing="false" text="Rediger booking" visible="false">
+                                <Button fx:id="editBookingButton" mnemonicParsing="false" prefWidth="170.0"
+                                        text="Rediger booking" visible="false">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
@@ -444,11 +447,19 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
-                                <Button fx:id="deleteButton" mnemonicParsing="false" text="Slet booking"
-                                        visible="false">
+                                <Button fx:id="deleteButton" alignment="BASELINE_LEFT" mnemonicParsing="false"
+                                        prefWidth="170.0" text="Slet booking" visible="false">
                                     <font>
                                         <Font size="16.0"/>
                                     </font>
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../imageView/dustbin.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
                                 </Button>
                             </children>
                         </VBox>
