@@ -169,10 +169,8 @@ public class MainScreenController extends GeneralController {
                 try {
                     bda = BookingDataAccessor.connect();
                 } catch (SQLException | ClassNotFoundException e2) {
-                    e2.printStackTrace();
+                    System.out.println("Can't connect, internet issues?");
                 }
-            } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();
             }
             moveConductedBookingToArchived();
         });
@@ -477,12 +475,12 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
     }
 
-    public void fetchOnlyNewBookingsFromDataBase() throws SQLException, ClassNotFoundException {
-        try {
+    public void fetchOnlyNewBookingsFromDataBase() throws SQLException {
+        //try {
             listOfAllBookings.addAll(bda.refreshBookings(listOfAllBookings));
-        } catch (SQLException e) {
+        /*} catch (SQLException e) {
             bda = BookingDataAccessor.connect();
-        }
+        }*/
         setChosenBookingTypeIntoTableView();
     }
 
@@ -903,20 +901,28 @@ public class MainScreenController extends GeneralController {
 
     private void moveConductedBookingToArchived() {
         for (Booking temp : listOfNonArchivedOrDeletedBookings) {
-            int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays());
+            int time = (int) (Duration.between(LocalDateTime.now(), temp.getDateTime()).toDays()) + 1;
             if (time <= 0 && (temp.getBookingType().equals(BookingType.LECTUREBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editLecBook((LectureBooking) temp);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    try {
+                        bda = BookingDataAccessor.connect();
+                    } catch (SQLException | ClassNotFoundException e1) {
+                        System.out.println("Internet issues?");
+                    }
                 }
             } else if (time <= 0 && (temp.getBookingType().equals(BookingType.ARRANGEMENTBOOKING))) {
                 try {
                     temp.setBookingStatus(BookingStatus.STATUS_ARCHIVED);
                     bda.editArrBook((ArrangementBooking) temp);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    try {
+                        bda = BookingDataAccessor.connect();
+                    } catch (SQLException | ClassNotFoundException e1) {
+                        System.out.println("Internet issues?");
+                    }
                 }
             }
         }

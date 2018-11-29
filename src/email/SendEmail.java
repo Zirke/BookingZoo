@@ -60,7 +60,7 @@ public class SendEmail {
             transport.sendMessage(message,message.getAllRecipients());
             transport.close();
 
-            System.out.println("Done");
+            //System.out.println("Done");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
