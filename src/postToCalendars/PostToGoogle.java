@@ -131,7 +131,7 @@ public class PostToGoogle {
 
         updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
                 .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
-                .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
+                .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence()+1);
 
         updatedArrangementEvent.setStart(startOfEvent(inputArrangementBooking));
         updatedArrangementEvent.setEnd(endOfArrangementEvent(inputArrangementBooking));
@@ -147,7 +147,7 @@ public class PostToGoogle {
 
             updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
                     .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
-                    .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence());
+                    .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence()+1);
 
         updatedLectureEvent.setStart(startOfEvent(inputLectureBooking));
         updatedLectureEvent.setEnd(endOfLectureEvent(inputLectureBooking));
@@ -349,9 +349,8 @@ public class PostToGoogle {
         String tempMinute = minutesLessThanTen(inputBooking);
 
         DateTime startOfEvent = new DateTime(beginTimeStringBuilder(inputBooking,tempMonth,tempDay,tempHour,tempMinute));
-        EventDateTime begin = new EventDateTime().setDateTime(startOfEvent);
 
-        return begin;
+        return new EventDateTime().setDateTime(startOfEvent);
     }
     public static EventDateTime endOfArrangementEvent(Booking inputArrangementBooking){
         String tempMonth = monthsLessThanTen(inputArrangementBooking);
@@ -360,9 +359,8 @@ public class PostToGoogle {
         String tempMinute = minutesLessThanTen(inputArrangementBooking);
 
         DateTime endOfEvent = new DateTime(endTimeStringBuilderArrCalculator(inputArrangementBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endOfEvent);
 
-        return end;
+        return new EventDateTime().setDateTime(endOfEvent);
     }
     public static EventDateTime endOfLectureEvent(Booking inputLectureBooking){
         String tempMonth = monthsLessThanTen(inputLectureBooking);
@@ -371,8 +369,7 @@ public class PostToGoogle {
         String tempMinute = minutesLessThanTen(inputLectureBooking);
 
         DateTime endDateTime = new DateTime(endTimeStringBuilderLecCalculator(inputLectureBooking, tempMonth, tempDay, tempHour, tempMinute));
-        EventDateTime end = new EventDateTime().setDateTime(endDateTime);
 
-        return end;
+        return new EventDateTime().setDateTime(endDateTime);
     }
 }
