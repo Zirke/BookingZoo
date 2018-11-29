@@ -13,6 +13,10 @@ public class CustomBookingComparator implements Comparator<Booking> {
         if (result != 0) {
             return result;
         }
-        return o1.getBookingType().toString().compareTo(o2.getBookingType().toString());
+        int result1 = o1.getBookingType().toString().compareTo(o2.getBookingType().toString());
+        if (result1 != 0) {
+            return result1;
+        }
+        return o1.getDateTime().compareTo(o2.getDateTime());
     }
 }

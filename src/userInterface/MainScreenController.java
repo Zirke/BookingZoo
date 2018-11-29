@@ -327,21 +327,6 @@ public class MainScreenController extends GeneralController {
         return result;
     }
 
-    //Takes an ArrayList of bookings to load into TableView of bookings
-    private void loadBookingsToTableView(ArrayList<Booking> listOfChosenBookings) {
-        bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
-        bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
-        bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
-        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
-
-        ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
-        //bookingsToShow.clear();
-        bookingsToShow.addAll(listOfChosenBookings);
-        bookingsToShow.sort(new CustomBookingComparator());
-        bookingTableView.setItems(bookingsToShow);
-    }
-
     private void acceptSelectedBooking() {
         try {
             bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
@@ -404,6 +389,7 @@ public class MainScreenController extends GeneralController {
         String nameOfChosenBtn = chosenCategoryBtn.getText();
 
         ObservableList<Booking> categorisedBookings = FXCollections.observableArrayList();
+
         if (overviewButton.isSelected()) {
             categorisedBookings.clear();
 
@@ -423,6 +409,9 @@ public class MainScreenController extends GeneralController {
         } else if (pendingBookingsButton.isSelected() || activeBookingsButton.isSelected() || finishedBookingsButton.isSelected() ||
                 archivedBookingsButton.isSelected() || deletedBookingsButton.isSelected()) {
             categorisedBookings.clear();
+            if (deletedBookingsButton.isSelected()) {
+                deleteButton.setVisible(true);
+            }
 
             switch (typeOfBooking) {
                 case ALL_BOOKING_TYPES:
@@ -457,8 +446,23 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(categorisedBookings);
     }
 
+    //Takes an ArrayList of bookings to load into TableView of bookings
+    private void loadBookingsToTableView(ArrayList<Booking> listOfChosenBookings) {
+        bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
+        bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
+        bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
+
+        ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
+        //bookingsToShow.clear();
+        bookingsToShow.addAll(listOfChosenBookings);
+        bookingsToShow.sort(new CustomBookingComparator());
+        bookingTableView.setItems(bookingsToShow);
+    }
+
     //TODO: Use getLastId to refresh TableView.
-    public void refetchBookingsFromDataBase() throws SQLException {
+    void refetchBookingsFromDataBase() throws SQLException {
         listOfAllBookings.clear();
         listOfNonArchivedOrDeletedBookings.clear();
         listOfPendingBookings.clear();
@@ -487,6 +491,7 @@ public class MainScreenController extends GeneralController {
     //Changes text on all labels corresponding to the chosen booking in ListView
     private void showLectureBookingInformation(LectureBooking selectedLectureBooking) {
         showPendingButtons(selectedLectureBooking.getBookingStatus());
+        showDeleteBookingButton(selectedLectureBooking.getBookingStatus());
 
         communeLabel.setVisible(true);
         cityLabel.setVisible(true);
@@ -537,6 +542,7 @@ public class MainScreenController extends GeneralController {
 
     private void showArrangementBookingInformation(ArrangementBooking selectedArrangementBooking) {
         showPendingButtons(selectedArrangementBooking.getBookingStatus());
+        showDeleteBookingButton(selectedArrangementBooking.getBookingStatus());
 
         cityLabel.setVisible(false);
         contactPersonLabel.setVisible(false);
@@ -587,6 +593,12 @@ public class MainScreenController extends GeneralController {
             cancelBookingButton.setVisible(false);
             editBookingButton.setVisible(true);
         }
+    }
+
+    private void showDeleteBookingButton(BookingStatus bookingStatus) {
+        if (bookingStatus.equals(STATUS_DELETED)) {
+            deleteButton.setVisible(true);
+        } else deleteButton.setVisible(false);
     }
 
     private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings) {
