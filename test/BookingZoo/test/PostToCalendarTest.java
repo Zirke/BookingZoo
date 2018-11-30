@@ -7,6 +7,8 @@ import bookings.Lecturer;
 import builders.ArrangementBuilder;
 import builders.LectureBuilder;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.EventDateTime;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
@@ -406,6 +408,83 @@ public class PostToCalendarTest {
 
         assertEquals("2018-11-04T04:30:00+01:00",endTimeStringBuilderLecCalculator(useCase, monthsLessThanTen(useCase), daysLessThanTen(useCase), hoursLessThanTen(useCase),minutesLessThanTen(useCase)));
     }
+    @Test
+    public void startOfEvent01(){
 
+        LectureBuilder testBooking = new LectureBuilder();
+        LectureBooking useCase;
 
+        testBooking.setBookingType(BookingType.LECTUREBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "123324234", "mail@mail.com","generic school", 7500,
+                        "Holstebro", "Nej", "45604965",456989486)
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,11,4,3,30))
+                .setParticipants(200)
+                .setCustomerComment("Comment")
+                .setComment("comment")
+                .setLectureRoom(new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE))
+                .setLecturer(new Lecturer("Magnus"))
+                .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
+                .setNoOfTeachers(2)
+                .setNoOfTeams(3)
+                .setGrade(Grade.TENTH);
+        useCase = testBooking.build();
+
+        DateTime expectedDateTime = new DateTime("2018-11-04T03:30:00.000+01:00");
+        EventDateTime expectedEventDateTime = new EventDateTime().setDateTime(expectedDateTime);
+        assertEquals(expectedEventDateTime,startOfEvent(useCase));
+    }
+    @Test
+    public void endOfLectureEvent01(){
+
+        LectureBuilder testBooking = new LectureBuilder();
+        LectureBooking useCase;
+
+        testBooking.setBookingType(BookingType.LECTUREBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "123324234", "mail@mail.com","generic school", 7500,
+                        "Holstebro", "Nej", "45604965",456989486)
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,11,4,3,30))
+                .setParticipants(200)
+                .setCustomerComment("Comment")
+                .setComment("comment")
+                .setLectureRoom(new LectureRoom(FacilityState.OCCUPIED, LectureRoomType.SAVANNAH_TYPE))
+                .setLecturer(new Lecturer("Magnus"))
+                .setChoiceOfTopic(ChoiceOfTopic.AFRIKAS_SAVANNER)
+                .setNoOfTeachers(2)
+                .setNoOfTeams(3)
+                .setGrade(Grade.TENTH);
+        useCase = testBooking.build();
+
+        DateTime expectedDateTime = new DateTime("2018-11-04T04:30:00.000+01:00");
+        EventDateTime expectedEventDateTime = new EventDateTime().setDateTime(expectedDateTime);
+        assertEquals(expectedEventDateTime,endOfLectureEvent(useCase));
+    }
+    @Test
+    public void endOfArrangementEvent01(){
+        ArrangementBuilder testBooking = new ArrangementBuilder();
+        ArrangementBooking useCase;
+
+        testBooking.setBookingType(BookingType.ARRANGEMENTBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCustomer("contactperson", "1231341", "mail@mail.com")
+                .setCreationDate(LocalDate.now())
+                .setDate(LocalDateTime.of(2018,11,16,4,5))
+                .setParticipants(58)
+                .setCustomerComment("Basic comment")
+                .setComment("They might be late")
+                .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
+                .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
+                .setBirthdayChildName("testPerson")
+                .setBirthdayChildAge(10)
+                .setFormerParticipant("Ja")
+                .setGuide("Jonas");
+        useCase = testBooking.build();
+
+        DateTime expectedDateTime = new DateTime("2018-11-16T06:05:00.000+01:00");
+        EventDateTime expectedEventDateTime = new EventDateTime().setDateTime(expectedDateTime);
+        assertEquals(expectedEventDateTime,endOfArrangementEvent(useCase));
+    }
 }
