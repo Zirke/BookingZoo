@@ -158,15 +158,10 @@ public class MainScreenController extends GeneralController {
 
         //Reloads the bookings from database into TableView
         refreshBookingsButton.setOnMouseClicked(e -> {
-            try {
+
                 fetchOnlyNewBookingsFromDataBase();
-            } catch (SQLException e1) {
-                try {
-                    bda = BookingDataAccessor.connect();
-                } catch (SQLException | ClassNotFoundException e2) {
-                    System.out.println("Can't connect, internet issues?");
-                }
-            }
+
+
             moveConductedBookingToArchived();
         });
 
@@ -489,15 +484,21 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
     }
 
-    void fetchOnlyNewBookingsFromDataBase() throws SQLException {
+    void fetchOnlyNewBookingsFromDataBase(){
 
-        updateAllBookingLists(bda.refreshBookings(listOfAllBookings));
+        try {
+            updateAllBookingLists(bda.refreshBookings(listOfAllBookings));
+        } catch (SQLException e) {
+            try {
+                bda = BookingDataAccessor.connect();
+            } catch (SQLException e1) {
+                cantConnect();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+        }
         setChosenBookingTypeIntoTableView();
 
-        //try {
-        /*} catch (SQLException e) {
-            bda = BookingDataAccessor.connect();
-        }*/
     }
 
     //Changes text on all labels corresponding to the chosen booking in ListView
@@ -954,5 +955,13 @@ public class MainScreenController extends GeneralController {
 
     public TableView<Booking> getBookingTableView() {
         return bookingTableView;
+    }
+
+    public static void cantConnect(){
+        Alert connectionAlert = new Alert(Alert.AlertType.WARNING);
+        connectionAlert.setHeaderText("Forbindelsesfejl");
+        connectionAlert.setContentText("Kan ikke oprette forbindelse til databasen. Tjek din internetforbindelse eller prøv igen senere");
+
+        Optional<ButtonType> connectionAlertChoice = connectionAlert.showAndWait();
     }
 }

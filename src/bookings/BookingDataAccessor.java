@@ -8,6 +8,7 @@ import facilities.LectureRoom;
 import facilities.Restaurant;
 import javafx.scene.control.Alert;
 import userInterface.GeneralController;
+import userInterface.MainScreenController;
 
 import java.io.IOException;
 import java.sql.*;
@@ -33,13 +34,17 @@ public class BookingDataAccessor {
     }
 
     public static BookingDataAccessor connect() throws SQLException, ClassNotFoundException {
-        BookingDataAccessor bda = new BookingDataAccessor(
+        BookingDataAccessor bda = null;
+        try{
+            bda = new BookingDataAccessor(
                 "org.postgresql.Driver",
                 "jdbc:postgresql://packy.db.elephantsql.com/jyjczxth",
                 "jyjczxth",
                 "nw51BNKhctporjIFT5Qhhm72jwGVJK95"
         );
-        System.out.println("Connected");
+        } catch (SQLException e){
+            MainScreenController.cantConnect();
+        }
         return bda;
     }
 
