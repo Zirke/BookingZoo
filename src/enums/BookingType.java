@@ -1,6 +1,6 @@
 package enums;
 
-import customExceptions.InvalidEnumException;
+import exception.InvalidEnumException;
 
 public enum BookingType {
     LECTUREBOOKING {

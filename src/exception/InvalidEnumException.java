@@ -1,4 +1,4 @@
-package customExceptions;
+package exception;
 
 public class InvalidEnumException extends RuntimeException {
 

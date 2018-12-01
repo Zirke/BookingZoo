@@ -713,6 +713,7 @@ public class MainScreenController extends GeneralController {
 
             LectureBookingCreationController controller = loader.getController();
             controller.setBda(bda);
+            controller.setLecRoomHashMapForCreation(LecRoomHashMap);
             controller.setMsc(this);
 
             Stage stage = new Stage();

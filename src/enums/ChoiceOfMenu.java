@@ -1,6 +1,6 @@
 package enums;
 
-import customExceptions.InvalidEnumException;
+import exception.InvalidEnumException;
 import javafx.scene.control.RadioButton;
 
 public enum ChoiceOfMenu {

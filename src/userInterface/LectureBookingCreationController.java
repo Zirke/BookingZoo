@@ -4,6 +4,7 @@ import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
 import enums.*;
+import facilities.FacilityChecker;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,12 +14,14 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 
 public class LectureBookingCreationController {
     private BookingDataAccessor bda;
     private LectureBooking createdBooking;
+    private HashMap<LocalDateTime, LectureBooking> lecRoomHashMap;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
@@ -70,7 +73,7 @@ public class LectureBookingCreationController {
     }
 
     @FXML
-    private void createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
+    private LectureBooking createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
         //LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
         LocalTime tempTime;
@@ -126,12 +129,23 @@ public class LectureBookingCreationController {
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
 
+        //Facility checker system.
+        FacilityChecker checker = new FacilityChecker(lecRoomHashMap, lbook);
+        Boolean isChosenFacilityOccupied = checker.isChosenFacilityOccupied(0);
+        Boolean isChosenFacilityOccupiedPlus1Minute = checker.isChosenFacilityOccupied(1);
+        if(isChosenFacilityOccupied || isChosenFacilityOccupiedPlus1Minute){
+            String facilityOccupiedString = "Det valgte lokale " + lbook.getLectureRoom().getType() + " er allerede optaget";
+            checker.alertWhenFacilityException(facilityOccupiedString);
+            return null;
+        }
+
         createdBooking = lbook;
         try {
             bda.createLecBookManually(lbook);
         } catch (SQLException e){
             bda = BookingDataAccessor.connect();
         }
+        return lbook;
     }
 
     @FXML
@@ -161,8 +175,10 @@ public class LectureBookingCreationController {
 
                 if (alertChoice2.get() == ButtonType.OK) {
                     try {
-                        closeWindow();
-                        createNewLectureBookingFromInput();
+                        LectureBooking i = createNewLectureBookingFromInput();
+                        if (i != null){
+                            closeWindow();
+                        }else{return;}
                         msc.fetchOnlyNewBookingsFromDataBase();
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                         msc.getBookingTableView().getSelectionModel().select(createdBooking);
@@ -188,5 +204,9 @@ public class LectureBookingCreationController {
 
     public void setMsc(MainScreenController msc) {
         this.msc = msc;
+    }
+
+    void setLecRoomHashMapForCreation(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
+        this.lecRoomHashMap = lecRoomHashMap;
     }
 }

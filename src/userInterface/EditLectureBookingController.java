@@ -5,7 +5,7 @@ import bookings.LectureBooking;
 import bookings.Lecturer;
 import customers.LectureBookingCustomer;
 import enums.*;
-import exception.IllegalFacilityException;
+import facilities.FacilityChecker;
 import facilities.LectureRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -162,35 +162,20 @@ public class EditLectureBookingController {
         selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedLectureBooking.setComment(commentTextArea.getText());
 
-        Boolean isChosenFacilityOccupied = isTimeAlreadyChosen(selectedLectureBooking.getDateTime()) &&
-                isFacilityOccupied(selectedLectureBooking.getDateTime());
-
-        Boolean isChosenFacilityOccupiedPlus1Minute = isTimeAlreadyChosen(selectedLectureBooking.getDateTime().plusMinutes(1)) &&
-                isFacilityOccupied(selectedLectureBooking.getDateTime().plusMinutes(1));
-
+        //Facility system
+        FacilityChecker checker = new FacilityChecker(lecRoomHashMap, selectedLectureBooking);
+        Boolean isChosenFacilityOccupied = checker.isChosenFacilityOccupied(0);
+        Boolean isChosenFacilityOccupiedPlus1Minute = checker.isChosenFacilityOccupied(1);
         if(isChosenFacilityOccupied || isChosenFacilityOccupiedPlus1Minute){
             String facilityOccupiedString = "Det valgte lokale " + selectedLectureBooking.getLectureRoom().getType() + " er allerede optaget";
-            alertWhenFacilityException(selectedLectureBooking, facilityOccupiedString);
+            checker.alertWhenFacilityException(facilityOccupiedString);
             return selectedLectureBooking;
         }
-
-        //when lecture room cannot be used for chosen topic.
-        isFacilityLegal(ChoiceOfTopic.GROENDLANDS_DYR, LectureRoomType.BIOLOGICAL_TYPE);
-        isFacilityLegal(ChoiceOfTopic.AFRIKAS_SAVANNER, LectureRoomType.BIOLOGICAL_TYPE);
-        isFacilityLegal(ChoiceOfTopic.EVOLUTION, LectureRoomType.SAVANNAH_TYPE);
+        checker.facilityCheckForUniqueTopics();
 
         selectedLectureBooking.setCustomer(createLectureBookingCustommer());
 
         return selectedLectureBooking;
-    }
-
-    private Boolean isTimeAlreadyChosen(LocalDateTime i){
-        return lecRoomHashMap.containsKey(i) && (!lecRoomHashMap.get(i).equals(selectedLectureBooking));
-    }
-
-    private Boolean isFacilityOccupied(LocalDateTime i){
-        return lecRoomHashMap.get(i).getLectureRoom().getState().equals(FacilityState.OCCUPIED) &&
-         lecRoomHashMap.get(i).getLectureRoom().getType().equals(selectedLectureBooking.getLectureRoom().getType());
     }
 
     private LectureBookingCustomer createLectureBookingCustommer(){
@@ -199,29 +184,6 @@ public class EditLectureBookingController {
                 emailTextField.getText(), schoolNameTextField.getText(), Integer.parseInt(zipCodeTextField.getText()),
                 cityTextField.getText(), selectedCommuneAnswer.getText(), schoolPhoneNumberTextField.getText(),
                 Long.parseLong(eanNumberTextField.getText()));
-    }
-
-    private void alertWhenFacilityException(LectureBooking lec, String msg){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText(msg);
-
-        Optional<ButtonType> alertChoice = alert.showAndWait();
-
-        if (alertChoice.get() == ButtonType.OK) {
-            lec.getLectureRoom().setType(LectureRoomType.WRONG_ROOM);
-        }
-    }
-
-    private void isFacilityLegal(ChoiceOfTopic topic, LectureRoomType room){
-        try {
-            if (selectedLectureBooking.getChoiceOfTopic().equals(topic) &&
-                    selectedLectureBooking.getLectureRoom().getType().equals(room)) {
-                throw new IllegalFacilityException(selectedLectureBooking.getLectureRoom());
-            }
-        }catch (IllegalFacilityException e){
-            String facilityIncompatible = topic.toString() + " kan ikke afholdes i\n" + room.toString();
-            alertWhenFacilityException(selectedLectureBooking, facilityIncompatible);
-        }
     }
 
     @FXML

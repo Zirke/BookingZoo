@@ -337,7 +337,6 @@ public class PostToCalendarTest {
     @Test
     public void newLectureEvent01(){
         LectureBuilder testBooking = new LectureBuilder();
-        LectureBooking useCase;
 
         testBooking.setBookingType(BookingType.LECTUREBOOKING)
                 .setBookingStatus(BookingStatus.STATUS_ACTIVE)
@@ -354,7 +353,7 @@ public class PostToCalendarTest {
                 .setNoOfTeachers(2)
                 .setNoOfTeams(3)
                 .setGrade(Grade.TENTH);
-        useCase = testBooking.build();
+        LectureBooking useCase = testBooking.build();
 
         Event testEvent = newLectureEvent(useCase);
 
