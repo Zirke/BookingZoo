@@ -178,7 +178,9 @@ public class LectureBookingCreationController {
                         LectureBooking i = createNewLectureBookingFromInput();
                         if (i != null){
                             closeWindow();
-                        }else{return;}
+                        }else{
+                            return;
+                        }
                         msc.fetchOnlyNewBookingsFromDataBase();
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                         msc.getBookingTableView().getSelectionModel().select(createdBooking);

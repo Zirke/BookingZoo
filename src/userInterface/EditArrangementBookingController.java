@@ -1,6 +1,7 @@
 package userInterface;
 
 import bookings.ArrangementBooking;
+import bookings.ArrangementTimeChecker;
 import bookings.BookingDataAccessor;
 import bookings.FoodOrder;
 import customers.Customer;
@@ -17,11 +18,13 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class    EditArrangementBookingController {
     private BookingDataAccessor bda;
     private ArrangementBooking selectedArrangementBooking;
+    private HashMap<LocalDateTime, ArrangementBooking> ArrTimeHashMap;
 
     void setSelectedArrangementBooking(ArrangementBooking selectedArrangementBooking) {
         this.selectedArrangementBooking = selectedArrangementBooking;
@@ -134,20 +137,24 @@ public class    EditArrangementBookingController {
 
                 Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
-                if (alertChoice2.get() == ButtonType.OK) {
+                ArrangementBooking t = overwriteSelectedArrangementBooking();
+                if(t != null) {
+                    if (alertChoice2.get() == ButtonType.OK) {
 
-                    try {
-                        closeWindow();
-                        bda.editArrBook(overwriteSelectedArrangementBooking());
-                        ArrangementBooking temp = selectedArrangementBooking;
-                        msc.refetchBookingsFromDataBase();
-                        msc.getBookingTableView().getSelectionModel().select(temp);
-                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                    } catch (SQLException e1) {
                         try {
-                            bda = BookingDataAccessor.connect();
-                        } catch (SQLException | ClassNotFoundException e2) {
-                            e2.printStackTrace();
+                            closeWindow();
+
+                            bda.editArrBook(t);
+                            ArrangementBooking temp = selectedArrangementBooking;
+                            msc.refetchBookingsFromDataBase();
+                            msc.getBookingTableView().getSelectionModel().select(temp);
+                            msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
+                        } catch (SQLException e1) {
+                            try {
+                                bda = BookingDataAccessor.connect();
+                            } catch (SQLException | ClassNotFoundException e2) {
+                                e2.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -156,8 +163,7 @@ public class    EditArrangementBookingController {
     }
 
     private ArrangementBooking overwriteSelectedArrangementBooking() {
-        BookingStatus statusChoice;
-        statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+        BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
         selectedArrangementBooking.setBookingStatus(statusChoice);
 
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
@@ -187,6 +193,18 @@ public class    EditArrangementBookingController {
         selectedArrangementBooking.setCustomer(temp);
         selectedArrangementBooking.getRestaurant().setType(RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString()));
 
+        /* Arrangement booking checker*/
+        ArrangementTimeChecker checker = new ArrangementTimeChecker(ArrTimeHashMap, selectedArrangementBooking);
+        if(checker.isChosenTimeOccupied(date)){
+            /*Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("For den valgte tidsrum og dato er der allerede \n2 børnefødselsdage");
+
+            Optional<ButtonType> alertChoice = alert.showAndWait();
+            if (alertChoice.isPresent() && alertChoice.get() == ButtonType.OK) {
+                return null;
+            }*/
+            return checker.alert();
+        }
         return selectedArrangementBooking;
     }
 
@@ -197,5 +215,9 @@ public class    EditArrangementBookingController {
 
     public void setMsc(MainScreenController msc) {
         this.msc = msc;
+    }
+
+    public void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
+        ArrTimeHashMap = arrTimeHashMap;
     }
 }

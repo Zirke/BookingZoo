@@ -1,6 +1,7 @@
 package userInterface;
 
 import bookings.ArrangementBooking;
+import bookings.ArrangementTimeChecker;
 import bookings.BookingDataAccessor;
 import bookings.FoodOrder;
 import enums.*;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class ArrangementBookingCreationController extends GeneralController {
@@ -20,6 +22,7 @@ public class ArrangementBookingCreationController extends GeneralController {
     private BookingDataAccessor bda;
     private ArrangementBooking createdBooking;
     private MainScreenController msc;
+    private HashMap<LocalDateTime, ArrangementBooking> ArrTimeHashMap;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
@@ -72,8 +75,12 @@ public class ArrangementBookingCreationController extends GeneralController {
 
                 if (alertChoice2.get() == ButtonType.OK) {
                     try {
-                        closeWindow();
-                        createArrangementBookingFromInput();
+                        ArrangementBooking i = createArrangementBookingFromInput(); //returns null when time check returns false.
+                        if (i != null){
+                            closeWindow();
+                        }else{
+                            return;
+                        }
                         msc.fetchOnlyNewBookingsFromDataBase();
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                         msc.getBookingTableView().getSelectionModel().select(createdBooking);
@@ -106,7 +113,7 @@ public class ArrangementBookingCreationController extends GeneralController {
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
-    private void createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
+    private ArrangementBooking createArrangementBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
         LocalTime tempTime;
@@ -137,16 +144,27 @@ public class ArrangementBookingCreationController extends GeneralController {
                 RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString())),
                 childName, childAge, participant, guide, contactPerson, phoneNumber, email);
 
-        createdBooking = abook;
-        try{
-        bda.createArrBookManually(abook);
-        } catch (SQLException e){
-            bda = BookingDataAccessor.connect();
+        //time check system
+        ArrangementTimeChecker checker = new ArrangementTimeChecker(ArrTimeHashMap, abook);
+        if (checker.isChosenTimeOccupied(date)){
+            return checker.alert();
+        }else {
+            createdBooking = abook;
+            try {
+                bda.createArrBookManually(abook);
+            } catch (SQLException e) {
+                bda = BookingDataAccessor.connect();
+            }
+            return abook;
         }
     }
 
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+    }
+
+    public void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
+        ArrTimeHashMap = arrTimeHashMap;
     }
 }

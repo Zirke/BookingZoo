@@ -57,6 +57,7 @@ public class MainScreenController extends GeneralController {
     private ArrayList<Booking> listOfNonArchivedOrDeletedLectureBookings = new ArrayList<>();
     private ArrayList<Booking> listOfNonArchivedOrDeletedArrangementBookings = new ArrayList<>();
     private HashMap<LocalDateTime, LectureBooking> LecRoomHashMap = new HashMap<>();
+    private HashMap<LocalDateTime, ArrangementBooking> ArrTimeHashMap = new HashMap<>();
     private BookingType typeOfBooking;
     private AutoCompletionBinding<String> autoCompletionBinding;
 
@@ -239,7 +240,7 @@ public class MainScreenController extends GeneralController {
                     listOfNonArchivedOrDeletedArrangementBookings.add(tempBooking);
                 }
             }
-            //TODO mangler en if.
+
             if (tempBooking instanceof LectureBooking) {
                 if (!LecRoomHashMap.containsKey(tempBooking.getDateTime())) {
                     LecRoomHashMap.put(tempBooking.getDateTime(), (LectureBooking) tempBooking);
@@ -247,6 +248,12 @@ public class MainScreenController extends GeneralController {
                 } else {
                     LecRoomHashMap.put(tempBooking.getDateTime().plusMinutes(1), (LectureBooking) tempBooking);
                     ((LectureBooking) tempBooking).getLectureRoom().setState(FacilityState.OCCUPIED);
+                }
+            }else if(tempBooking instanceof ArrangementBooking){
+                if (!ArrTimeHashMap.containsKey(tempBooking.getDateTime())) {
+                    ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
+                } else {
+                    ArrTimeHashMap.put(tempBooking.getDateTime().plusMinutes(1), (ArrangementBooking) tempBooking);
                 }
             }
         }
@@ -693,7 +700,7 @@ public class MainScreenController extends GeneralController {
 
             ArrangementBookingCreationController controller = loader.getController();
             controller.setBda(bda);
-
+            controller.setArrTimeHashMap(ArrTimeHashMap);
             controller.setMsc(this);
 
             Stage stage = new Stage();
@@ -756,6 +763,7 @@ public class MainScreenController extends GeneralController {
             EditArrangementBookingController controller = loader.getController();
             controller.setSelectedArrangementBooking(selectedArrangementBooking);
             controller.setBda(bda);
+            controller.setArrTimeHashMap(ArrTimeHashMap); //Used in edit arrangement for time check.
             controller.initData();
             controller.setMsc(this);
 
