@@ -336,6 +336,7 @@ public class MainScreenController extends GeneralController {
     private void acceptSelectedBooking() {
         try {
             bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_ACTIVE);
+            refetchBookingsFromDataBase();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -871,8 +872,8 @@ public class MainScreenController extends GeneralController {
             }
         }
         acceptSelectedBooking();
-
         removeBookingFromTableView();
+        bookingTableView.getSelectionModel().select(null);
     }
 
     private void cancelBookingDialog() {
