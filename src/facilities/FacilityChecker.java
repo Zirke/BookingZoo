@@ -44,6 +44,7 @@ public class FacilityChecker {
 
     public void alertWhenFacilityException(String msg){
         Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Ikke muligt");
         alert.setContentText(msg);
 
         Optional<ButtonType> alertChoice = alert.showAndWait();
