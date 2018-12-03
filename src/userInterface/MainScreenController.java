@@ -464,8 +464,10 @@ public class MainScreenController extends GeneralController {
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
-        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getDateTime().toLocalDate().toString()));
-
+        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(
+                cellData.getValue().getDateTime().getDayOfMonth()+"/"+
+                        cellData.getValue().getDateTime().getMonthValue()+"/"+
+                        cellData.getValue().getDateTime().getYear()));
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
         //bookingsToShow.clear();
         bookingsToShow.addAll(listOfChosenBookings);
