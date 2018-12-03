@@ -204,7 +204,9 @@ public class BookingDataAccessor {
 
 
             try {
-                deleteBookingInCalendar(book);
+                if(isIdValid(book.getId())) {
+                    deleteBookingInCalendar(book);
+                }
             } catch (IOException e) {
                 GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
                         "Kontakt IT for at løse problemet.\n " + e.getMessage());
