@@ -87,7 +87,6 @@ public class EditLectureBookingController {
 
         //Lecture information
         datePicker.setValue(selectedLectureBooking.getDateTime().toLocalDate());
-
         String tempTime;
         switch (selectedLectureBooking.getDateTime().toString()) {
             case "10:15 - 11:15":
@@ -126,7 +125,6 @@ public class EditLectureBookingController {
         contactPersonTextField.setText(temp.getContactPerson());
         phoneNumberTextField.setText(temp.getPhoneNumber());
         emailTextField.setText(temp.getEmail());
-
         customerCommentTextArea.setText(selectedLectureBooking.getCustomerComment());
         commentTextArea.setText(selectedLectureBooking.getComment());
     }
@@ -177,12 +175,12 @@ public class EditLectureBookingController {
         }
         checker.facilityCheckForUniqueTopics();
 
-        selectedLectureBooking.setCustomer(createLectureBookingCustommer());
+        selectedLectureBooking.setCustomer(createLectureBookingCustomer());
 
         return selectedLectureBooking;
     }
 
-    private LectureBookingCustomer createLectureBookingCustommer(){
+    private LectureBookingCustomer createLectureBookingCustomer() {
         RadioButton selectedCommuneAnswer = (RadioButton) communeGroup.getSelectedToggle();
         return new LectureBookingCustomer(contactPersonTextField.getText(), phoneNumberTextField.getText(),
                 emailTextField.getText(), schoolNameTextField.getText(), Integer.parseInt(zipCodeTextField.getText()),
@@ -207,15 +205,14 @@ public class EditLectureBookingController {
 
             Optional<ButtonType> alertChoice2 = alert2.showAndWait();
 
-            LectureBooking overWrite = overwriteSelectedLectureBooking();
-            if(overWrite.getLectureRoom().getType() != LectureRoomType.WRONG_ROOM) {
+            LectureBooking editedBooking = overwriteSelectedLectureBooking();
+            if (editedBooking.getLectureRoom().getType() != LectureRoomType.WRONG_ROOM) {
                 if (alertChoice2.get() == ButtonType.OK) {
                     try {
                         closeWindow();
-                        bda.editLecBook(overWrite);
-                        LectureBooking temp = selectedLectureBooking;
+                        bda.editLecBook(editedBooking);
                         msc.refetchBookingsFromDataBase();
-                        msc.getBookingTableView().getSelectionModel().select(temp);
+                        msc.getBookingTableView().getSelectionModel().select(null);
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                     } catch (SQLException e1) {
                         try {

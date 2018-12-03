@@ -142,11 +142,9 @@ public class EditArrangementBookingController {
                     if (alertChoice2.get() == ButtonType.OK) {
                         try {
                             closeWindow();
-
                             bda.editArrBook(t);
-                            ArrangementBooking temp = selectedArrangementBooking;
                             msc.refetchBookingsFromDataBase();
-                            msc.getBookingTableView().getSelectionModel().select(temp);
+                            msc.getBookingTableView().getSelectionModel().select(null);
                             msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
                         } catch (SQLException e1) {
                             try {

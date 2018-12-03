@@ -753,6 +753,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            //bookingTableView.getSelectionModel().select(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -775,6 +776,7 @@ public class MainScreenController extends GeneralController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+            bookingTableView.getSelectionModel().select(null);
         } catch (IOException e) {
             e.printStackTrace();
         }

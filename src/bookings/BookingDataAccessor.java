@@ -411,9 +411,6 @@ public class BookingDataAccessor {
                         "Kontakt IT for at løse problemet.\n " + e.getMessage());
             }
         }
-
-        //connection.close();
-
     }
     public int getLastID()throws SQLException{
         String getLastID = "SELECT bookingid,customerid FROM booking ORDER BY bookingid DESC LIMIT 1";
