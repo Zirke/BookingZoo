@@ -138,7 +138,7 @@ public class LectureBookingCreationController {
             checker.alertWhenFacilityException(facilityOccupiedString);
             return null;
         }
-
+        checker.facilityCheckForUniqueTopics();
         createdBooking = lbook;
         try {
             bda.createLecBookManually(lbook);
