@@ -32,6 +32,10 @@ public class ArrangementBookingCreationController extends GeneralController {
         this.msc = msc;
     }
 
+    void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
+        ArrTimeHashMap = arrTimeHashMap;
+    }
+
     @FXML
     private ChoiceBox restaurantChoiceBox;
 
@@ -52,64 +56,19 @@ public class ArrangementBookingCreationController extends GeneralController {
     private Button createAndCloseButton, cancelButton;
 
     public void initialize() {
+        createBookingButton();
+
         restaurantChoiceBox.setValue(RestaurantType.NO_CHOICE.toString());
 
         for(RestaurantType i : RestaurantType.values()){
             restaurantChoiceBox.getItems().add(i);
         }
 
-        createAndCloseButton.setOnMouseClicked(e -> {
-            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
-                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
-                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
-                Alert alert1 = new Alert(Alert.AlertType.WARNING);
-                alert1.setHeaderText("Tjek alle felter");
-                alert1.setContentText("Et eller flere felter mangler information");
+        restaurantChoiceBox.setValue("Ingen valgt");
 
-                Optional<ButtonType> alertChoice1 = alert1.showAndWait();
-            } else {
-                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert2.setContentText("Er den indtastede information korrekt?");
+        textfieldWithOnlyNumbers(noOfChildrenTextField);
+        textfieldWithOnlyNumbers(childAgeTextField);
 
-                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
-
-                if (alertChoice2.get() == ButtonType.OK) {
-                    try {
-                        ArrangementBooking i = createArrangementBookingFromInput(); //returns null when time check returns false.
-                        if (i != null){
-                            closeWindow();
-                        }else{
-                            return;
-                        }
-                        msc.fetchOnlyNewBookingsFromDataBase();
-                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                        msc.getBookingTableView().getSelectionModel().select(createdBooking);
-                    } catch (SQLException e1) {
-                        try {
-                            bda = BookingDataAccessor.connect();
-                        } catch (SQLException | ClassNotFoundException e2) {
-                            e2.printStackTrace();
-                        }
-                    } catch (ClassNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-        //TODO Make a static method for this (Also in lectureBookingCreationController)
-        noOfChildrenTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfChildrenTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
-        childAgeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                childAgeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
@@ -159,12 +118,50 @@ public class ArrangementBookingCreationController extends GeneralController {
         }
     }
 
+    private void createBookingButton() {
+        createAndCloseButton.setOnMouseClicked(e -> {
+            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
+                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
+                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setHeaderText("Tjek alle felter");
+                alert1.setContentText("Et eller flere felter mangler information");
+
+                Optional<ButtonType> alertChoice1 = alert1.showAndWait();
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setContentText("Er den indtastede information korrekt?");
+
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+                if (alertChoice2.get() == ButtonType.OK) {
+                    try {
+                        ArrangementBooking i = createArrangementBookingFromInput(); //returns null when time check returns false.
+                        if (i != null) {
+                            closeWindow();
+                        } else {
+                            return;
+                        }
+                        msc.fetchOnlyNewBookingsFromDataBase();
+                        msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
+                        msc.getBookingTableView().getSelectionModel().select(createdBooking);
+                    } catch (SQLException e1) {
+                        try {
+                            bda = BookingDataAccessor.connect();
+                        } catch (SQLException | ClassNotFoundException e2) {
+                            e2.printStackTrace();
+                        }
+                    } catch (ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+            }
+        });
+    }
+
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    public void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
-        ArrTimeHashMap = arrTimeHashMap;
     }
 }

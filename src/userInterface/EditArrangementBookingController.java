@@ -21,8 +21,11 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class    EditArrangementBookingController {
+import static userInterface.GeneralController.textfieldWithOnlyNumbers;
+
+public class EditArrangementBookingController {
     private BookingDataAccessor bda;
+    private MainScreenController msc;
     private ArrangementBooking selectedArrangementBooking;
     private HashMap<LocalDateTime, ArrangementBooking> ArrTimeHashMap;
 
@@ -32,6 +35,14 @@ public class    EditArrangementBookingController {
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
+    }
+
+    void setMsc(MainScreenController msc) {
+        this.msc = msc;
+    }
+
+    void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
+        ArrTimeHashMap = arrTimeHashMap;
     }
 
     @FXML
@@ -51,9 +62,6 @@ public class    EditArrangementBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
-    private MainScreenController msc;
-
-
     public void initialize() {
 
         categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
@@ -64,17 +72,9 @@ public class    EditArrangementBookingController {
 
         saveButtonPress();
 
-        noOfChildrenTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                noOfChildrenTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
+        textfieldWithOnlyNumbers(noOfChildrenTextField);
+        textfieldWithOnlyNumbers(childAgeTextField);
 
-        childAgeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                childAgeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
         cancelButton.setOnMouseClicked(e -> closeWindow());
     }
 
@@ -140,7 +140,6 @@ public class    EditArrangementBookingController {
                 ArrangementBooking t = overwriteSelectedArrangementBooking();
                 if(t != null) {
                     if (alertChoice2.get() == ButtonType.OK) {
-
                         try {
                             closeWindow();
 
@@ -211,13 +210,5 @@ public class    EditArrangementBookingController {
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    public void setMsc(MainScreenController msc) {
-        this.msc = msc;
-    }
-
-    public void setArrTimeHashMap(HashMap<LocalDateTime, ArrangementBooking> arrTimeHashMap) {
-        ArrTimeHashMap = arrTimeHashMap;
     }
 }

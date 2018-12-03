@@ -5,10 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -80,5 +77,13 @@ public class GeneralController {
         userCreationAlert.show();
 
         return userCreationAlert;
+    }
+
+    public static void textfieldWithOnlyNumbers(TextField var) {
+        var.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                var.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 }

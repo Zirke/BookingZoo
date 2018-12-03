@@ -17,14 +17,25 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Optional;
 
+import static userInterface.GeneralController.textfieldWithOnlyNumbers;
+
 
 public class LectureBookingCreationController {
     private BookingDataAccessor bda;
+    private MainScreenController msc;
     private LectureBooking createdBooking;
     private HashMap<LocalDateTime, LectureBooking> lecRoomHashMap;
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
+    }
+
+    void setMsc(MainScreenController msc) {
+        this.msc = msc;
+    }
+
+    void setLecRoomHashMapForCreation(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
+        this.lecRoomHashMap = lecRoomHashMap;
     }
 
     @FXML
@@ -35,7 +46,6 @@ public class LectureBookingCreationController {
     private TextField noOfPupilsTextField, noOfTeamsTextField, noOfTeachersTextField,
             lecturerChosenTextField, schoolNameTextField, zipCodeTextField, cityTextField, schoolPhoneNumberTextField,
             eanNumberTextField, contactPersonTextField, phoneNumberTextField, emailTextField;
-
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
@@ -43,12 +53,11 @@ public class LectureBookingCreationController {
     @FXML
     private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox;
 
-    private MainScreenController msc;
-
 
     @FXML
     public void initialize() {
         createBookingButton();
+
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale");
         gradeChoiceBox.getItems().addAll("Børnehaveklasse", "1. klasse", "2. klasse", "3. klasse", "4. klasse",
@@ -64,12 +73,6 @@ public class LectureBookingCreationController {
         textfieldWithOnlyNumbers(schoolPhoneNumberTextField);
         textfieldWithOnlyNumbers(zipCodeTextField);
         textfieldWithOnlyNumbers(eanNumberTextField);
-
-        /*
-        timeFieldCreation(hourSpinner,minuteSpinner);
-        hourSpinner.getValueFactory().setValue(10);
-        cancelButton.loadChosenBookingTypeToMainScreen(e -> closeWindow());
-        */
     }
 
     @FXML
@@ -194,21 +197,5 @@ public class LectureBookingCreationController {
                 }
             }
         });
-    }
-
-    private void textfieldWithOnlyNumbers(TextField var) {
-        var.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                var.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
-    public void setMsc(MainScreenController msc) {
-        this.msc = msc;
-    }
-
-    void setLecRoomHashMapForCreation(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
-        this.lecRoomHashMap = lecRoomHashMap;
     }
 }

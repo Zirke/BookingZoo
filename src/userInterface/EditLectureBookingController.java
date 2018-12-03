@@ -19,13 +19,15 @@ import java.util.Optional;
 
 import static enums.ChoiceOfTopic.topicChosen;
 import static enums.Grade.gradeChosen;
+import static userInterface.GeneralController.textfieldWithOnlyNumbers;
 
 public class EditLectureBookingController {
     private BookingDataAccessor bda;
+    private MainScreenController msc;
     private LectureBooking selectedLectureBooking;
     private HashMap<LocalDateTime, LectureBooking> lecRoomHashMap;
 
-    public void setLecRoomHashMap(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
+    void setLecRoomHashMap(HashMap<LocalDateTime, LectureBooking> lecRoomHashMap) {
         this.lecRoomHashMap = lecRoomHashMap;
     }
 
@@ -35,6 +37,10 @@ public class EditLectureBookingController {
 
     void setBda(BookingDataAccessor bda) {
         this.bda = bda;
+    }
+
+    void setMsc(MainScreenController msc) {
+        this.msc = msc;
     }
 
     @FXML
@@ -53,8 +59,6 @@ public class EditLectureBookingController {
     private RadioButton communeRadioBtnYes, communeRadioBtnNo;
     @FXML
     private Button saveAndCloseButton, cancelButton;
-
-    private MainScreenController msc;
 
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
@@ -186,12 +190,6 @@ public class EditLectureBookingController {
                 Long.parseLong(eanNumberTextField.getText()));
     }
 
-    @FXML
-    public void closeWindow() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
-    }
-
     private void saveButtonPress() {
         saveAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || noOfPupilsTextField.getText().isEmpty() ||
@@ -231,15 +229,9 @@ public class EditLectureBookingController {
         });
     }
 
-    private void textfieldWithOnlyNumbers(TextField var) {
-        var.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                var.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
-    public void setMsc(MainScreenController msc) {
-        this.msc = msc;
+    @FXML
+    public void closeWindow() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 }
