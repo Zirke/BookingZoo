@@ -25,15 +25,7 @@ public class BookingDataAccessor {
         connection = DriverManager.getConnection(host, user, password);
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public static BookingDataAccessor connect() throws SQLException, ClassNotFoundException {
+    public static BookingDataAccessor connect() throws ClassNotFoundException {
         BookingDataAccessor bda = null;
         try{
             bda = new BookingDataAccessor(
@@ -61,7 +53,6 @@ public class BookingDataAccessor {
             rsGeneral.previous();
             arr = fetchFromDatabase(rsGeneral);
         }
-        //connection.close();
         if (arr != null) {
             return arr;
         }
@@ -80,7 +71,6 @@ public class BookingDataAccessor {
             rsGeneral.previous();
             arr = fetchFromDatabase(rsGeneral);
         }
-        //connection.close();
         if (arr != null) {
             return arr;
         }
@@ -124,7 +114,6 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setString(6, abook.getFormerParticipant());
         pstmtTypeSpecific.setString(7, abook.getGuide());
 
-
         //Insert data into customer table
         String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
                 "VALUES ((?),(?),(?),(?))";
@@ -145,12 +134,9 @@ public class BookingDataAccessor {
             GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
                     "Kontakt IT for at løse problemet.\n" + e.getMessage());
         }
-
-        //connection.close();
     }
 
     public void deleteBooking(Booking book) throws SQLException {
-
         //Get CustomerID
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtCustomerID = connection.prepareStatement(getCustomerID);
@@ -202,7 +188,6 @@ public class BookingDataAccessor {
             pstmtCustomer.executeUpdate();
             pstmtBooking.executeUpdate();
 
-
             try {
                 if(isIdValid(book.getId())) {
                     deleteBookingInCalendar(book);
@@ -212,7 +197,6 @@ public class BookingDataAccessor {
                         "Kontakt IT for at løse problemet.\n " + e.getMessage());
             }
         }
-            //connection.close();
     }
 
     public void createLecBookManually(LectureBooking lbook) throws SQLException {
@@ -252,7 +236,6 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.setInt(6, lbook.getNoOfTeachers());
         pstmtTypeSpecific.setString(7, lbook.getGrade().name());
 
-
         //Insert data into customer table
         String customer = "INSERT INTO customer (customerid,contactperson,phonenumber,email)" +
                 "VALUES ((?),(?),(?),(?))";
@@ -262,7 +245,6 @@ public class BookingDataAccessor {
         pstmtCustomer.setString(2, lbook.getCustomer().getContactPerson());
         pstmtCustomer.setString(3, lbook.getCustomer().getPhoneNumber());
         pstmtCustomer.setString(4, lbook.getCustomer().getEmail());
-
 
         //Insert data into lecture_booking_customer table
         LectureBookingCustomer temp = (LectureBookingCustomer) lbook.getCustomer();
@@ -278,7 +260,6 @@ public class BookingDataAccessor {
         pstmtCustomerSpecific.setString(6, temp.getSchoolPhoneNumber());
         pstmtCustomerSpecific.setLong(7, temp.getEanNumber());
 
-
         //Execute updates
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
@@ -290,7 +271,6 @@ public class BookingDataAccessor {
             GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
                     "Kontakt IT for at løse problemet.\n " + e.getMessage());
         }
-        //connection.close();
     }
 
     public void changeBookingStatus(Booking book, BookingStatus status) throws SQLException {
@@ -350,11 +330,9 @@ public class BookingDataAccessor {
                         "Kontakt IT for at løse problemet.\n " + e.getMessage());
             }
         }
-        //connection.close();
     }
 
     public void editLecBook(LectureBooking lbook) throws SQLException {
-
         String getCustomerID = "SELECT customerid FROM booking WHERE bookingid=(?)";
         PreparedStatement pstmtGetCustomerID = connection.prepareStatement(getCustomerID);
         pstmtGetCustomerID.setInt(1,lbook.getId());
@@ -376,7 +354,6 @@ public class BookingDataAccessor {
         pstmtGeneral.setInt(2,lbook.getParticipants()); pstmtGeneral.setString(3,lbook.getCustomerComment());
         pstmtGeneral.setString(4,lbook.getComment()); pstmtGeneral.setString(5, lbook.getLectureRoom().getState().name());
         pstmtGeneral.setInt(6,lbook.getId());
-
 
         PreparedStatement pstmtTypeSpecific = connection.prepareStatement(editLectureBooking);
         pstmtTypeSpecific.setString(1,lbook.getLectureRoom().getType().name()); pstmtTypeSpecific.setString(2,lbook.getLecturer().toString());

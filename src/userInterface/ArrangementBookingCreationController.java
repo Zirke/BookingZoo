@@ -148,14 +148,13 @@ public class ArrangementBookingCreationController extends GeneralController {
                     } catch (SQLException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
-                        } catch (SQLException | ClassNotFoundException e2) {
+                        } catch (ClassNotFoundException e2) {
                             e2.printStackTrace();
                         }
                     } catch (ClassNotFoundException e1) {
                         e1.printStackTrace();
                     }
                 }
-
             }
         });
     }

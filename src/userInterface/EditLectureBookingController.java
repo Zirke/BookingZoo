@@ -52,18 +52,19 @@ public class EditLectureBookingController {
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
-    private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox, categoryChoiceBox;
+    private ChoiceBox timeChoiceBox, topicChoiceBox, gradeChoiceBox, lectureRoomChoiceBox;
     @FXML
-    private ToggleGroup communeGroup;
+    private ToggleGroup communeGroup, categoryGroup;
     @FXML
     private RadioButton communeRadioBtnYes, communeRadioBtnNo;
+    @FXML
+    private RadioButton activeRadioBtn, finishedRadioBtn, archivedRadioBtn;
     @FXML
     private Button saveAndCloseButton, cancelButton;
 
     public void initialize() {
         timeChoiceBox.getItems().addAll("10:15 - 11:15", "11:15 - 12:15", "12:15 - 13:15", "13:15 - 14:15");
         lectureRoomChoiceBox.getItems().addAll("Savannelokale", "Biologisk lokale", "Intet lokale valgt");
-        categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
         gradeChoiceBox.getItems().addAll("Børnehaveklasse", "1. klasse", "2. klasse", "3. klasse", "4. klasse",
                 "5. klasse", "6. klasse", "7. klasse", "8. klasse", "9. klasse", "10. klasse",
                 "1.G", "2.G", "3.G");
@@ -110,16 +111,26 @@ public class EditLectureBookingController {
         gradeChoiceBox.setValue(String.valueOf(selectedLectureBooking.getGrade()));
         lectureRoomChoiceBox.setValue(selectedLectureBooking.getLectureRoom().toString());
         lecturerChosenTextField.setText(selectedLectureBooking.getLecturer().toString());
-        categoryChoiceBox.setValue(selectedLectureBooking.getBookingStatus().toString());
-
+        switch (selectedLectureBooking.getBookingStatus().toString()) {
+            case "Aktiv":
+                activeRadioBtn.setSelected(true);
+                break;
+            case "Færdig":
+                finishedRadioBtn.setSelected(true);
+                break;
+            case "Arkiveret":
+                archivedRadioBtn.setSelected(true);
+                break;
+        }
         //Customer information
         schoolNameTextField.setText(temp.getSchoolName());
         zipCodeTextField.setText(String.valueOf(temp.getZipCode()));
         cityTextField.setText(temp.getCity());
-        if(temp.getCommune().equals("Ja")){
-            communeRadioBtnYes.setSelected(true); }
-            else if (temp.getCommune().equals("Nej")){
-            communeRadioBtnNo.setSelected(true); }
+        if (temp.getCommune().equals("Ja")) {
+            communeRadioBtnYes.setSelected(true);
+        } else if (temp.getCommune().equals("Nej")) {
+            communeRadioBtnNo.setSelected(true);
+        }
         schoolPhoneNumberTextField.setText(temp.getSchoolPhoneNumber());
         eanNumberTextField.setText(String.valueOf(temp.getEanNumber()));
         contactPersonTextField.setText(temp.getContactPerson());
@@ -159,7 +170,8 @@ public class EditLectureBookingController {
         selectedLectureBooking.setLectureRoom(foo);
         Lecturer bar = new Lecturer(lecturerChosenTextField.getText());
         selectedLectureBooking.setLecturer(bar);
-        BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+        RadioButton bookingStatus = (RadioButton) categoryGroup.getSelectedToggle();
+        BookingStatus statusChoice = BookingStatus.statusChosen(bookingStatus.getText());
         selectedLectureBooking.setBookingStatus(statusChoice);
         selectedLectureBooking.setCustomerComment(customerCommentTextArea.getText());
         selectedLectureBooking.setComment(commentTextArea.getText());
@@ -168,7 +180,7 @@ public class EditLectureBookingController {
         FacilityChecker checker = new FacilityChecker(lecRoomHashMap, selectedLectureBooking);
         Boolean isChosenFacilityOccupied = checker.isChosenFacilityOccupied(0);
         Boolean isChosenFacilityOccupiedPlus1Minute = checker.isChosenFacilityOccupied(1);
-        if(isChosenFacilityOccupied || isChosenFacilityOccupiedPlus1Minute){
+        if (isChosenFacilityOccupied || isChosenFacilityOccupiedPlus1Minute) {
             String facilityOccupiedString = "Det valgte lokale " + selectedLectureBooking.getLectureRoom().getType() + " er allerede optaget";
             checker.alertWhenFacilityException(facilityOccupiedString);
             return selectedLectureBooking;
@@ -217,7 +229,7 @@ public class EditLectureBookingController {
                     } catch (SQLException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
-                        } catch (SQLException | ClassNotFoundException e2) {
+                        } catch (ClassNotFoundException e2) {
                             e2.printStackTrace();
                         }
                     }

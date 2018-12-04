@@ -78,7 +78,6 @@ public class LectureBookingCreationController {
     @FXML
     private LectureBooking createNewLectureBookingFromInput() throws SQLException, ClassNotFoundException {
         LocalDate tempDate = datePicker.getValue();
-        //LocalTime tempTime = LocalTime.parse(hourSpinner.getValue().toString() + ":" + minuteSpinner.getValue().toString());
         LocalTime tempTime;
         switch (timeChoiceBox.getValue().toString()) {
             case "10:15 - 11:15":
@@ -94,7 +93,6 @@ public class LectureBookingCreationController {
                 tempTime = LocalTime.of(13, 15, 00);
                 break;
         }
-
         LocalDateTime date = LocalDateTime.of(tempDate,tempTime);
         int numberOfPupils = Integer.parseInt(noOfPupilsTextField.getText());
         int numberOfTeams = Integer.parseInt(noOfTeamsTextField.getText());
@@ -190,7 +188,7 @@ public class LectureBookingCreationController {
                     } catch (SQLException | ClassNotFoundException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
-                        } catch (SQLException | ClassNotFoundException e2) {
+                        } catch (ClassNotFoundException e2) {
                             e2.printStackTrace();
                         }
                     }

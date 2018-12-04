@@ -51,20 +51,20 @@ public class EditArrangementBookingController {
     private RadioButton timeOneRadioButton, timeTwoRadioButton, participantYesRadioButton, participantNoRadioButton,
             noFoodRadioButton, menuOneRadioButton, menuTwoRadioButton, menuThreeRadioButton, menuFourRadioButton;
     @FXML
-    private ToggleGroup timeGroup, participantGroup, menuGroup;
+    private RadioButton activeRadioBtn, finishedRadioBtn, archivedRadioBtn;
+    @FXML
+    private ToggleGroup timeGroup, participantGroup, menuGroup, categoryGroup;
     @FXML
     private TextField noOfChildrenTextField, childNameTextField, childAgeTextField, contactPersonTextField,
             phoneNumberTextField, emailTextField, guideTextField;
     @FXML
-    private ChoiceBox categoryChoiceBox, restaurantChoiceBox;
+    private ChoiceBox restaurantChoiceBox;
     @FXML
     private Button cancelButton, saveAndCloseButton;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
 
     public void initialize() {
-
-        categoryChoiceBox.getItems().addAll("Aktiv", "Færdig", "Arkiveret", "Slettet");
 
         for (RestaurantType i : RestaurantType.values()) {
             restaurantChoiceBox.getItems().add(i.toString());
@@ -96,7 +96,17 @@ public class EditArrangementBookingController {
         phoneNumberTextField.setText(String.valueOf(temp.getPhoneNumber()));
         emailTextField.setText(temp.getEmail());
         guideTextField.setText(selectedArrangementBooking.getGuide());
-        categoryChoiceBox.setValue(selectedArrangementBooking.getBookingStatus().toString());
+        switch (selectedArrangementBooking.getBookingStatus().toString()) {
+            case "Aktiv":
+                activeRadioBtn.setSelected(true);
+                break;
+            case "Færdig":
+                finishedRadioBtn.setSelected(true);
+                break;
+            case "Arkiveret":
+                archivedRadioBtn.setSelected(true);
+                break;
+        }
 
         if (selectedArrangementBooking.getFormerParticipant().equals("Ja")) {
             participantYesRadioButton.setSelected(true);
@@ -125,42 +135,9 @@ public class EditArrangementBookingController {
         commentTextArea.setText(selectedArrangementBooking.getComment());
     }
 
-    private void saveButtonPress() {
-        saveAndCloseButton.setOnMouseClicked(e -> {
-            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
-                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
-                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
-                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
-            } else {
-                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert2.setContentText("Er den indtastede information korrekt?");
-
-                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
-
-                ArrangementBooking t = overwriteSelectedArrangementBooking();
-                if(t != null) {
-                    if (alertChoice2.get() == ButtonType.OK) {
-                        try {
-                            closeWindow();
-                            bda.editArrBook(t);
-                            msc.refetchBookingsFromDataBase();
-                            msc.getBookingTableView().getSelectionModel().select(null);
-                            msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                        } catch (SQLException e1) {
-                            try {
-                                bda = BookingDataAccessor.connect();
-                            } catch (SQLException | ClassNotFoundException e2) {
-                                e2.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     private ArrangementBooking overwriteSelectedArrangementBooking() {
-        BookingStatus statusChoice = BookingStatus.statusChosen(categoryChoiceBox.getSelectionModel().getSelectedItem().toString());
+        RadioButton bookingStatus = (RadioButton) categoryGroup.getSelectedToggle();
+        BookingStatus statusChoice = BookingStatus.statusChosen(bookingStatus.getText());
         selectedArrangementBooking.setBookingStatus(statusChoice);
 
         RadioButton selectedTimeBtn = (RadioButton) timeGroup.getSelectedToggle();
@@ -193,16 +170,43 @@ public class EditArrangementBookingController {
         /* Arrangement booking checker*/
         ArrangementTimeChecker checker = new ArrangementTimeChecker(ArrTimeHashMap, selectedArrangementBooking);
         if(checker.isChosenTimeOccupied(date)){
-            /*Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("For den valgte tidsrum og dato er der allerede \n2 børnefødselsdage");
-
-            Optional<ButtonType> alertChoice = alert.showAndWait();
-            if (alertChoice.isPresent() && alertChoice.get() == ButtonType.OK) {
-                return null;
-            }*/
             return checker.alert();
         }
         return selectedArrangementBooking;
+    }
+
+    private void saveButtonPress() {
+        saveAndCloseButton.setOnMouseClicked(e -> {
+            if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
+                    childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
+                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
+                GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
+            } else {
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setContentText("Er den indtastede information korrekt?");
+
+                Optional<ButtonType> alertChoice2 = alert2.showAndWait();
+
+                ArrangementBooking t = overwriteSelectedArrangementBooking();
+                if (t != null) {
+                    if (alertChoice2.get() == ButtonType.OK) {
+                        try {
+                            closeWindow();
+                            bda.editArrBook(t);
+                            msc.refetchBookingsFromDataBase();
+                            msc.getBookingTableView().getSelectionModel().select(null);
+                            msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
+                        } catch (SQLException e1) {
+                            try {
+                                bda = BookingDataAccessor.connect();
+                            } catch (ClassNotFoundException e2) {
+                                e2.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void closeWindow() {
