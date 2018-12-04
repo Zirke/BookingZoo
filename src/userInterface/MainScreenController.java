@@ -379,6 +379,7 @@ public class MainScreenController extends GeneralController {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+            removeBookingFromAllBookingLists(bookingTableView.getSelectionModel().getSelectedItem());
             removeBookingFromTableView();
         }
     }
