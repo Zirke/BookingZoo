@@ -649,7 +649,7 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showDeleteBookingButton(BookingStatus bookingStatus) {
-        if (bookingStatus.equals(STATUS_DELETED)) {
+        if (bookingStatus.equals(STATUS_DELETED) || bookingStatus.equals(STATUS_PENDING)) {
             deleteButton.setVisible(false);
         } else deleteButton.setVisible(true);
     }
@@ -930,6 +930,7 @@ public class MainScreenController extends GeneralController {
     }
 
     void showPendingBookingPopUp() {
+        overviewButton.setSelected(true);
         int numberOfPendingBookings = 0;
         ArrayList<Booking> tempArray = new ArrayList<>();
 
