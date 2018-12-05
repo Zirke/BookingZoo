@@ -47,11 +47,10 @@ public class SendEmail {
         Session session = Session.getDefaultInstance(props, null);
 
         try {
-            String foo = "ds305e18@gmail.com";
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(foo));
+                    InternetAddress.parse(to));
             message.setSubject(subject);
             message.setContent(body, "text/html");
 
