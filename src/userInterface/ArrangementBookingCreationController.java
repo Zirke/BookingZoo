@@ -4,6 +4,7 @@ import bookings.ArrangementBooking;
 import bookings.ArrangementTimeChecker;
 import bookings.BookingDataAccessor;
 import bookings.FoodOrder;
+import builders.ArrangementBuilder;
 import enums.*;
 import facilities.Restaurant;
 import javafx.fxml.FXML;
@@ -97,11 +98,30 @@ public class ArrangementBookingCreationController extends GeneralController {
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
-        ArrangementBooking abook = new ArrangementBooking(
+        ArrangementBuilder arrangementBuilder = new ArrangementBuilder();
+        ArrangementBooking abook;
+        arrangementBuilder.setBookingType(BookingType.ARRANGEMENTBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCreationDate(LocalDate.now())
+                .setDate(date)
+                .setParticipants(noOfChildren)
+                .setCustomerComment(customerComment)
+                .setComment(comment)
+                .setMenuChosen(new FoodOrder(menuChoice))
+                .setRestaurant(new Restaurant(FacilityState.OCCUPIED, RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString())))
+                .setBirthdayChildName(childName)
+                .setBirthdayChildAge(childAge)
+                .setFormerParticipant(participant)
+                .setGuide(guide)
+                .setCustomer(contactPerson,phoneNumber,email);
+
+        abook = arrangementBuilder.build();
+
+        /*ArrangementBooking abook = new ArrangementBooking(
                 BookingType.ARRANGEMENTBOOKING, BookingStatus.STATUS_ACTIVE, LocalDate.now(), date,
                 noOfChildren, customerComment, comment, new FoodOrder(menuChoice), new Restaurant(FacilityState.OCCUPIED,
                 RestaurantType.roomTypeChoice(restaurantChoiceBox.getSelectionModel().getSelectedItem().toString())),
-                childName, childAge, participant, guide, contactPerson, phoneNumber, email);
+                childName, childAge, participant, guide, contactPerson, phoneNumber, email); */
 
         //time check system
         ArrangementTimeChecker checker = new ArrangementTimeChecker(ArrTimeHashMap, abook);

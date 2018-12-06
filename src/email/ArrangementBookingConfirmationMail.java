@@ -27,7 +27,7 @@ public class ArrangementBookingConfirmationMail {
                 "</div>" +
                 "</div>" +
                 "" +
-                "Vi bekræfter hermed, at der kommer " + arrangementBooking.getParticipants() + " til fødselsdag>\n" +
+                "Vi bekræfter hermed, at der kommer " + arrangementBooking.getParticipants() + " til fødselsdag\n" +
                 "\t<p style=\"padding-left: 4em;\">Dato: " + arrangementBooking.getDateTime().toLocalDate() + ". Kl. " + arrangementBooking.getDateTime().toLocalTime() + "</p>\n" +
                 "\n" +
                 "I bedes medbringe dette brev til Zoo\'s billetsalg," +
@@ -40,6 +40,5 @@ public class ArrangementBookingConfirmationMail {
 
         return body;
     }
-
 
 }

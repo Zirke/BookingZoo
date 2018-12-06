@@ -98,6 +98,7 @@ public class PostToGoogle {
                 .setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
                 .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
                 .setTransparency("transparent")
+                .setLocation(String.valueOf(((ArrangementBooking) inputArrangementBooking).getRestaurant().getType().toString()))
                 .setColorId("5") // Yellow
                 .setSequence(1)
                 .setId(idChecker(inputArrangementBooking));
@@ -131,6 +132,7 @@ public class PostToGoogle {
 
         updatedArrangementEvent.setSummary("Fødselsdagsbarn: " + ((ArrangementBooking) inputArrangementBooking).getBirthdayChildName())
                 .setDescription(descriptionBuilderArrangement(inputArrangementBooking, commentBookingCustomerChecker(inputArrangementBooking), commentBookingChecker(inputArrangementBooking)))
+                .setLocation(String.valueOf(((ArrangementBooking) inputArrangementBooking).getRestaurant().getType().toString()))
                 .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence()+1);
 
         updatedArrangementEvent.setStart(startOfEvent(inputArrangementBooking));
@@ -147,6 +149,7 @@ public class PostToGoogle {
 
             updatedLectureEvent.setSummary("Skoletjeneste: " + temp.getSchoolName())
                     .setDescription(descriptionBuilderLecture(inputLectureBooking, commentBookingCustomerChecker(inputLectureBooking), commentBookingChecker(inputLectureBooking)))
+                    .setLocation(String.valueOf(((LectureBooking) inputLectureBooking).getLectureRoom()))
                     .setSequence(calendar.events().get(CALENDAR_ID, idModifier).execute().getSequence()+1);
 
         updatedLectureEvent.setStart(startOfEvent(inputLectureBooking));

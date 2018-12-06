@@ -9,6 +9,7 @@ import facilities.Restaurant;
 import javafx.scene.control.Alert;
 import userInterface.GeneralController;
 import userInterface.MainScreenController;
+import email.SendEmail;
 
 import java.io.IOException;
 import java.sql.*;
@@ -128,6 +129,7 @@ public class BookingDataAccessor {
         pstmtTypeSpecific.executeUpdate();
         pstmtCustomer.executeUpdate();
 
+        SendEmail.sendConfirmationEmail(abook);
         try {
             postToCalendar(abook);
         } catch (IOException e) {
@@ -265,6 +267,7 @@ public class BookingDataAccessor {
         pstmtCustomer.executeUpdate();
         pstmtCustomerSpecific.executeUpdate();
 
+        SendEmail.sendConfirmationEmail(lbook);
         try {
             postToCalendar(lbook);
         } catch (IOException e) {

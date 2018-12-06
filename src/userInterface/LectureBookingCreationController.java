@@ -3,6 +3,7 @@ package userInterface;
 import bookings.BookingDataAccessor;
 import bookings.LectureBooking;
 import bookings.Lecturer;
+import builders.LectureBuilder;
 import enums.*;
 import facilities.FacilityChecker;
 import facilities.LectureRoom;
@@ -125,10 +126,31 @@ public class LectureBookingCreationController {
         String customerComment = customerCommentTextArea.getText();
         String comment = commentTextArea.getText();
 
-        LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
+        LectureBuilder lectureBuilder = new LectureBuilder();
+        LectureBooking lbook = new LectureBooking();
+        lectureBuilder.setBookingType(BookingType.LECTUREBOOKING)
+                .setBookingStatus(BookingStatus.STATUS_ACTIVE)
+                .setCreationDate(LocalDate.now())
+                .setDate(date)
+                .setParticipants(numberOfPupils)
+                .setCustomerComment(customerComment)
+                .setComment(comment)
+                .setLectureRoom(lectureRoomChosen)
+                .setLecturer(new Lecturer(lecturerChosen,LecturerStatus.OCCUPIED))
+                .setChoiceOfTopic(topicChoice)
+                .setNoOfTeams(numberOfTeams)
+                .setNoOfTeachers(numberOfTeachers)
+                .setGrade(grade)
+                .setCustomer(contactPerson,phoneNumber,email,schoolName,zipCode,city,commune,schoolPhoneNumber,eanNumber);
+
+        lbook = lectureBuilder.build();
+
+
+        /*LectureBooking lbook = new LectureBooking(BookingType.LECTUREBOOKING, BookingStatus.STATUS_ACTIVE,
                 LocalDate.now(), date, numberOfPupils, customerComment, comment, lectureRoomChosen,
                 new Lecturer(lecturerChosen, LecturerStatus.OCCUPIED), topicChoice, numberOfTeams, numberOfTeachers,
                 grade, contactPerson, phoneNumber, email, schoolName, zipCode, city, commune, schoolPhoneNumber, eanNumber);
+                */
 
         //Facility checker system.
         FacilityChecker checker = new FacilityChecker(lecRoomHashMap, lbook);
