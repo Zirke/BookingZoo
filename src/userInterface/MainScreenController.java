@@ -248,7 +248,7 @@ public class MainScreenController extends GeneralController {
                 }
             } else if (tempBooking instanceof ArrangementBooking) {
                 if (!ArrTimeHashMap.containsKey(tempBooking.getDateTime())) {
-                    ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
+                        ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
                 } else {
                     ArrTimeHashMap.put(tempBooking.getDateTime().plusMinutes(1), (ArrangementBooking) tempBooking);
                 }
@@ -393,28 +393,23 @@ public class MainScreenController extends GeneralController {
 
     //TODO fix to typeOfBooking
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
+        String enteredBooking = searchField.getText();
+        ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking temp : listOfBookings) {
-            String enteredBooking = searchField.getText();
-            Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking)
-                    || temp.getCustomer().getEmail().equals(enteredBooking);
+            Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking);
             Boolean isLectureCustomer = false;
             if (temp instanceof LectureBooking) {
-                isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
-                        || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
-                        || (((LectureBookingCustomer) temp.getCustomer()).getCity().equals(enteredBooking));
+                isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking));
             }
             if (temp instanceof LectureBooking && isCustomer || isLectureCustomer) {
-                bookingTableView.getSelectionModel().clearSelection();
-                ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
             } else if (isCustomer) {
-                bookingTableView.getSelectionModel().clearSelection();
-                ObservableList<Booking> bookings = FXCollections.observableArrayList();
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
             }
         }
+        bookingTableView.setItems(bookings);
     }
 
     @FXML
@@ -703,28 +698,29 @@ public class MainScreenController extends GeneralController {
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfAllBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                if (temp instanceof LectureBooking) {
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
+                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                    if (temp instanceof LectureBooking) {
+                        if (!(listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                            listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                        }
+                    }
                 }
             }
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfArrangementBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                }
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfLectureBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
+                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()) || !listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                }
             }
         }
         return listOfContactPersonNames;
