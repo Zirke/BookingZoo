@@ -130,13 +130,6 @@ public class MainScreenController extends GeneralController {
         //Makes sure that no ToggleButton can be unselected
         GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
 
-        //Hides booking information, when no booking is selected
-        bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                informationDisplayVBox.setVisible(true);
-            } else informationDisplayVBox.setVisible(false);
-        });
-
         /*
          *   Event handlers
          */
@@ -154,7 +147,12 @@ public class MainScreenController extends GeneralController {
 
         //Displays information contained in selected booking
         bookingTableView.setOnMouseClicked(e -> displayInformationOfSelectedBooking(bookingTableView));
-
+        //Hides booking information, when no booking is selected
+        bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                informationDisplayVBox.setVisible(true);
+            } else informationDisplayVBox.setVisible(false);
+        });
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> createNewLectureBooking());
         arrangementBookingItem.setOnAction(e -> createNewArrangementBooking());

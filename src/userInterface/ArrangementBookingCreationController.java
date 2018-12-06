@@ -144,7 +144,7 @@ public class ArrangementBookingCreationController extends GeneralController {
                         }
                         msc.fetchOnlyNewBookingsFromDataBase();
                         msc.displayInformationOfSelectedBooking(msc.getBookingTableView());
-                        msc.getBookingTableView().getSelectionModel().select(createdBooking);
+                        msc.getBookingTableView().getSelectionModel().select(i);
                     } catch (SQLException e1) {
                         try {
                             bda = BookingDataAccessor.connect();
