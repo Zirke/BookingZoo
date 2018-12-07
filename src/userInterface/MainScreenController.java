@@ -396,15 +396,12 @@ public class MainScreenController extends GeneralController {
         String enteredBooking = searchField.getText();
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking temp : listOfBookings) {
-            Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking);
-            Boolean isLectureCustomer = false;
+            Boolean isContactPerson = temp.getCustomer().getContactPerson().contains(enteredBooking);
+            Boolean isSchoolName = false;
             if (temp instanceof LectureBooking) {
-                isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking));
+                isSchoolName = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().contains(enteredBooking));
             }
-            if (temp instanceof LectureBooking && isCustomer || isLectureCustomer) {
-                bookings.add(temp);
-                bookingTableView.setItems(bookings);
-            } else if (isCustomer) {
+            if ((isContactPerson || isSchoolName)) {
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
             }
