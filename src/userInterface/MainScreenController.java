@@ -130,13 +130,6 @@ public class MainScreenController extends GeneralController {
         //Makes sure that no ToggleButton can be unselected
         GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
 
-        //Hides booking information, when no booking is selected
-        bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                informationDisplayVBox.setVisible(true);
-            } else informationDisplayVBox.setVisible(false);
-        });
-
         /*
          *   Event handlers
          */
@@ -154,7 +147,12 @@ public class MainScreenController extends GeneralController {
 
         //Displays information contained in selected booking
         bookingTableView.setOnMouseClicked(e -> displayInformationOfSelectedBooking(bookingTableView));
-
+        //Hides booking information, when no booking is selected
+        bookingTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                informationDisplayVBox.setVisible(true);
+            } else informationDisplayVBox.setVisible(false);
+        });
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> createNewLectureBooking());
         arrangementBookingItem.setOnAction(e -> createNewArrangementBooking());
@@ -250,7 +248,7 @@ public class MainScreenController extends GeneralController {
                 }
             } else if (tempBooking instanceof ArrangementBooking) {
                 if (!ArrTimeHashMap.containsKey(tempBooking.getDateTime())) {
-                    ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
+                        ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
                 } else {
                     ArrTimeHashMap.put(tempBooking.getDateTime().plusMinutes(1), (ArrangementBooking) tempBooking);
                 }
@@ -395,28 +393,20 @@ public class MainScreenController extends GeneralController {
 
     //TODO fix to typeOfBooking
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
+        String enteredBooking = searchField.getText();
+        ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking temp : listOfBookings) {
-            String enteredBooking = searchField.getText();
-            Boolean isCustomer = temp.getCustomer().getContactPerson().equals(enteredBooking)
-                    || temp.getCustomer().getEmail().equals(enteredBooking);
-            Boolean isLectureCustomer = false;
+            Boolean isContactPerson = temp.getCustomer().getContactPerson().contains(enteredBooking);
+            Boolean isSchoolName = false;
             if (temp instanceof LectureBooking) {
-                isLectureCustomer = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().equals(enteredBooking))
-                        || (((LectureBookingCustomer) temp.getCustomer()).getCommune().equals(enteredBooking))
-                        || (((LectureBookingCustomer) temp.getCustomer()).getCity().equals(enteredBooking));
+                isSchoolName = (((LectureBookingCustomer) temp.getCustomer()).getSchoolName().contains(enteredBooking));
             }
-            if (temp instanceof LectureBooking && isCustomer || isLectureCustomer) {
-                bookingTableView.getSelectionModel().clearSelection();
-                ObservableList<Booking> bookings = FXCollections.observableArrayList();
-                bookings.add(temp);
-                bookingTableView.setItems(bookings);
-            } else if (isCustomer) {
-                bookingTableView.getSelectionModel().clearSelection();
-                ObservableList<Booking> bookings = FXCollections.observableArrayList();
+            if ((isContactPerson || isSchoolName)) {
                 bookings.add(temp);
                 bookingTableView.setItems(bookings);
             }
         }
+        bookingTableView.setItems(bookings);
     }
 
     @FXML
@@ -649,7 +639,7 @@ public class MainScreenController extends GeneralController {
     }
 
     private void showDeleteBookingButton(BookingStatus bookingStatus) {
-        if (bookingStatus.equals(STATUS_DELETED)) {
+        if (bookingStatus.equals(STATUS_DELETED) || bookingStatus.equals(STATUS_PENDING)) {
             deleteButton.setVisible(false);
         } else deleteButton.setVisible(true);
     }
@@ -705,28 +695,29 @@ public class MainScreenController extends GeneralController {
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfAllBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                if (temp instanceof LectureBooking) {
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
+                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                    if (temp instanceof LectureBooking) {
+                        if (!(listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                            listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                        }
+                    }
                 }
             }
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfArrangementBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
+                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                }
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfLectureBookings) {
-                listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                listOfContactPersonNames.add(temp.getCustomer().getEmail());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCommune());
-                listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getCity());
+                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()) || !listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                }
             }
         }
         return listOfContactPersonNames;
@@ -930,6 +921,7 @@ public class MainScreenController extends GeneralController {
     }
 
     void showPendingBookingPopUp() {
+        overviewButton.setSelected(true);
         int numberOfPendingBookings = 0;
         ArrayList<Booking> tempArray = new ArrayList<>();
 

@@ -179,7 +179,8 @@ public class EditArrangementBookingController {
         saveAndCloseButton.setOnMouseClicked(e -> {
             if (datePicker.getValue() == null || !timeGroup.getSelectedToggle().isSelected() || noOfChildrenTextField.getText().isEmpty() || childNameTextField.getText().isEmpty() ||
                     childAgeTextField.getText().isEmpty() || contactPersonTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty() ||
-                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected()) {
+                    guideTextField.getText().isEmpty() || !participantGroup.getSelectedToggle().isSelected() || !menuGroup.getSelectedToggle().isSelected() ||
+                    !categoryGroup.getSelectedToggle().isSelected() || restaurantChoiceBox.getSelectionModel().getSelectedItem() == null) {
                 GeneralController.showAlertBox(Alert.AlertType.WARNING, "Tjek alle felter", "Et eller flere felter mangler input");
             } else {
                 Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);

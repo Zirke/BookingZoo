@@ -41,5 +41,4 @@ public class ArrangementBookingConfirmationMail {
         return body;
     }
 
-
 }

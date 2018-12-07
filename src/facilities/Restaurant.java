@@ -23,4 +23,5 @@ public class Restaurant extends Facility {
     public void setType(RestaurantType type) {
         this.type = type;
     }
+
 }
