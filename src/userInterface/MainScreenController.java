@@ -115,11 +115,15 @@ public class MainScreenController extends GeneralController {
     private Label commentLabel, customerCommentLabel, bookingTypeLabel, bookingStatusLabel, creationDateLabel, dateLabel,
             timeLabel, pupilNoLabel, teamNoLabel, teacherNoLabel, gradeLabel, topicChoiceLabel, schoolNameLabel,
             schoolPhoneNumberLabel, zipcodeLabel, cityLabel, communeLabel, phoneNumberLabel, contactPersonLabel,
-            emailLabel, eanLabel, guide_lecturerLabel, roomLabel;
+            emailLabel, eanLabel, guide_lecturerLabel, roomLabel, changeCategoryLabel;
     @FXML
     private TextArea customerCommentTextArea, commentTextArea;
     @FXML
     private Button acceptBookingButton, cancelBookingButton, editBookingButton, deleteButton, permDeleteButton;
+    @FXML
+    private ToggleButton changeActiveToggleBtn, changeFinishedToggleBtn, changeArchivedToggleBtn;
+    @FXML
+    private ToggleGroup categoryChangeToggleGroup;
 
 
     public void initialize() throws SQLException {
@@ -129,6 +133,7 @@ public class MainScreenController extends GeneralController {
 
         //Makes sure that no ToggleButton can be unselected
         GeneralController.get().addAlwaysOneSelectedSupport(categoryButtonsToggleGroup);
+        GeneralController.get().addAlwaysOneSelectedSupport(categoryChangeToggleGroup);
 
         /*
          *   Event handlers
@@ -248,7 +253,7 @@ public class MainScreenController extends GeneralController {
                 }
             } else if (tempBooking instanceof ArrangementBooking) {
                 if (!ArrTimeHashMap.containsKey(tempBooking.getDateTime())) {
-                        ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
+                    ArrTimeHashMap.put(tempBooking.getDateTime(), (ArrangementBooking) tempBooking);
                 } else {
                     ArrTimeHashMap.put(tempBooking.getDateTime().plusMinutes(1), (ArrangementBooking) tempBooking);
                 }
@@ -534,6 +539,8 @@ public class MainScreenController extends GeneralController {
         showPendingButtons(selectedLectureBooking.getBookingStatus());
         showDeleteBookingButton(selectedLectureBooking.getBookingStatus());
         showPermDeleteBookingButton(selectedLectureBooking.getBookingStatus());
+        showChangeCategoryToggleButtons(selectedLectureBooking.getBookingStatus());
+        showCategoryOfSelectedBooking(selectedLectureBooking);
 
         communeLabel.setVisible(true);
         cityLabel.setVisible(true);
@@ -586,6 +593,8 @@ public class MainScreenController extends GeneralController {
         showPendingButtons(selectedArrangementBooking.getBookingStatus());
         showDeleteBookingButton(selectedArrangementBooking.getBookingStatus());
         showPermDeleteBookingButton(selectedArrangementBooking.getBookingStatus());
+        showChangeCategoryToggleButtons(selectedArrangementBooking.getBookingStatus());
+        showCategoryOfSelectedBooking(selectedArrangementBooking);
 
         cityLabel.setVisible(false);
         contactPersonLabel.setVisible(false);
@@ -650,6 +659,64 @@ public class MainScreenController extends GeneralController {
         } else permDeleteButton.setVisible(false);
     }
 
+    private void showChangeCategoryToggleButtons(BookingStatus bookingStatus) {
+        if (bookingStatus.equals(STATUS_DELETED) || (bookingStatus.equals(STATUS_PENDING))) {
+            changeActiveToggleBtn.setVisible(false);
+            changeFinishedToggleBtn.setVisible(false);
+            changeArchivedToggleBtn.setVisible(false);
+            changeCategoryLabel.setVisible(false);
+        } else {
+            changeActiveToggleBtn.setVisible(true);
+            changeFinishedToggleBtn.setVisible(true);
+            changeArchivedToggleBtn.setVisible(true);
+            changeCategoryLabel.setVisible(true);
+        }
+    }
+
+    private void showCategoryOfSelectedBooking(Booking booking) {
+        if (booking.getBookingStatus().equals(STATUS_ACTIVE)) {
+            changeActiveToggleBtn.setSelected(true);
+        } else if (booking.getBookingStatus().equals(STATUS_DONE)) {
+            changeFinishedToggleBtn.setSelected(true);
+        } else if (booking.getBookingStatus().equals(STATUS_ARCHIVED)) {
+            changeArchivedToggleBtn.setSelected(true);
+        }
+    }
+
+    @FXML
+    private void changeCategoryOfSelectedBooking(ActionEvent event) {
+        ToggleButton chosenCategoryChangeBtn = (ToggleButton) event.getSource();
+        String nameOfChosenCategoryBtn = chosenCategoryChangeBtn.getText();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Vil du skifte kategori på den valgte booking?");
+        alert.setContentText("Bookingen vil blive flyttet til kategorien" + nameOfChosenCategoryBtn);
+
+        Optional<ButtonType> alertChoice = alert.showAndWait();
+
+        if (alertChoice.get() == ButtonType.OK) {
+            Booking temp = bookingTableView.getSelectionModel().getSelectedItem();
+
+            if (temp instanceof ArrangementBooking) {
+                try {
+                    temp.setBookingStatus(BookingStatus.statusChosen(nameOfChosenCategoryBtn));
+                    bda.editArrBook((ArrangementBooking) temp);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (temp instanceof LectureBooking) {
+                try {
+                    temp.setBookingStatus(BookingStatus.statusChosen(nameOfChosenCategoryBtn));
+                    bda.editLecBook((LectureBooking) temp);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            removeBookingFromTableView();
+        }
+    }
+
     private ArrayList<Booking> getNotificationBookings(ArrayList<Booking> allBookings) {
         Iterator iter = allBookings.iterator();
         ArrayList<Booking> notifiBookings = new ArrayList<>();
@@ -707,14 +774,14 @@ public class MainScreenController extends GeneralController {
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfArrangementBookings) {
-                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
+                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
                     listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
                 }
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
             listOfContactPersonNames.clear();
             for (Booking temp : listOfLectureBookings) {
-                if(!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()) || !listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()) || !listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
                     listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
                     listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
                 }

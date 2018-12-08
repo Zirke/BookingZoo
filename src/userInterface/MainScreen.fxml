@@ -479,6 +479,45 @@
                                         </ImageView>
                                     </graphic>
                                 </Button>
+                                <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="20.0">
+                                    <children>
+                                        <Label fx:id="changeCategoryLabel" text="Skift kategori:" visible="false">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <ToggleButton fx:id="changeActiveToggleBtn" minWidth="100.0"
+                                                      mnemonicParsing="false"
+                                                      onAction="#changeCategoryOfSelectedBooking"
+                                                      stylesheets="@button-selected-toggle.css" text="Aktiv"
+                                                      visible="false">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="categoryChangeToggleGroup"/>
+                                            </toggleGroup>
+                                        </ToggleButton>
+                                        <ToggleButton fx:id="changeFinishedToggleBtn" minWidth="100.0"
+                                                      mnemonicParsing="false"
+                                                      onAction="#changeCategoryOfSelectedBooking"
+                                                      stylesheets="@button-selected-toggle.css" text="Færdig"
+                                                      toggleGroup="$categoryChangeToggleGroup" visible="false">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </ToggleButton>
+                                        <ToggleButton fx:id="changeArchivedToggleBtn" minWidth="100.0"
+                                                      mnemonicParsing="false"
+                                                      onAction="#changeCategoryOfSelectedBooking"
+                                                      stylesheets="@button-selected-toggle.css" text="Arkiveret"
+                                                      toggleGroup="$categoryChangeToggleGroup" visible="false">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </ToggleButton>
+                                    </children>
+                                </HBox>
                             </children>
                         </VBox>
                     </children>
