@@ -5,9 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0"
-            prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="userInterface.MainScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
             <children>
@@ -134,38 +132,54 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
             <children>
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <children>
-                        <ImageView fitHeight="26.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 50;">
-                            <image>
-                                <Image url="@../imageView/active-search-symbol.png" />
-                            </image>
-                        </ImageView>
-                        <TextField fx:id="searchField" prefHeight="31.0" prefWidth="394.0" promptText="Søg efter booking (Kontaktperson)">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 50;">
+                     <image>
+                        <Image url="@../imageView/active-search-symbol.png" />
+                     </image>
+                  </ImageView>
+                  <HBox>
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="31.0" prefWidth="360.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
                         </TextField>
-                        <Button fx:id="notificationButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0">
-                     <graphic>
-                        <HBox alignment="CENTER_LEFT" minWidth="-Infinity" prefHeight="23.0" prefWidth="35.0">
-                           <children>
-                               <ImageView fitHeight="33.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <MenuButton fx:id="searchBarSettingsMenuButton" mnemonicParsing="false" prefHeight="31.0" stylesheets="@menuButtonArrow.css">
+                           <padding>
+                              <Insets left="-5.0" right="-21.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 50;">
                                  <image>
-                                     <Image url="@../imageView/notifications.png" />
+                                    <Image url="@../imageView/favicon-32x32.png" />
                                  </image>
                               </ImageView>
-                               <Label fx:id="notificationLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" textFill="RED">
-                                   <font>
-                                       <Font name="System Bold" size="12.0" />
-                                   </font>
-                               </Label>
+                           </graphic>
+                        </MenuButton>
+                     </children>
+                  </HBox>
+                  <Button fx:id="notificationButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0">
+                     <graphic>
+                        <HBox alignment="CENTER_LEFT" minWidth="-Infinity" prefHeight="23.0" prefWidth="25.0">
+                           <children>
+                              <ImageView fitHeight="33.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../imageView/notifications.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="notificationLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" textFill="RED">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </HBox>
                      </graphic>
                   </Button>
-                    </children>
-                </HBox>
+               </children>
+            </HBox>
                 <Separator prefWidth="200.0" />
                 <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0" tableMenuButtonVisible="true">
                     <placeholder>
@@ -436,31 +450,26 @@
                             <children>
                                 <HBox alignment="TOP_RIGHT" spacing="20.0">
                                     <children>
-                                        <Button fx:id="permDeleteButton" mnemonicParsing="false"
-                                                style="-fx-background-color: #ffa0a0;" text="Slet permanent"
-                                                visible="false">
+                                        <Button fx:id="permDeleteButton" mnemonicParsing="false" style="-fx-background-color: #ffa0a0;" text="Slet permanent" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                             <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true"
-                                                           preserveRatio="true">
+                                                <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../imageView/dustbin.png"/>
+                                                        <Image url="@../imageView/dustbin.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button fx:id="editBookingButton" mnemonicParsing="false" prefWidth="170.0"
-                                                text="Rediger booking" visible="false">
+                                        <Button fx:id="editBookingButton" mnemonicParsing="false" prefWidth="170.0" text="Rediger booking" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                             <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true"
-                                                           preserveRatio="true">
+                                                <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../imageView/edit.png"/>
+                                                        <Image url="@../imageView/edit.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
@@ -483,37 +492,25 @@
                                     <children>
                                         <Label fx:id="changeCategoryLabel" text="Skift kategori:" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <ToggleButton fx:id="changeActiveToggleBtn" minWidth="100.0"
-                                                      mnemonicParsing="false"
-                                                      onAction="#changeCategoryOfSelectedBooking"
-                                                      stylesheets="@button-selected-toggle.css" text="Aktiv"
-                                                      visible="false">
+                                        <ToggleButton fx:id="changeActiveToggleBtn" minWidth="100.0" mnemonicParsing="false" onAction="#changeCategoryOfSelectedBooking" stylesheets="@button-selected-toggle.css" text="Aktiv" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                             <toggleGroup>
-                                                <ToggleGroup fx:id="categoryChangeToggleGroup"/>
+                                                <ToggleGroup fx:id="categoryChangeToggleGroup" />
                                             </toggleGroup>
                                         </ToggleButton>
-                                        <ToggleButton fx:id="changeFinishedToggleBtn" minWidth="100.0"
-                                                      mnemonicParsing="false"
-                                                      onAction="#changeCategoryOfSelectedBooking"
-                                                      stylesheets="@button-selected-toggle.css" text="Færdig"
-                                                      toggleGroup="$categoryChangeToggleGroup" visible="false">
+                                        <ToggleButton fx:id="changeFinishedToggleBtn" minWidth="100.0" mnemonicParsing="false" onAction="#changeCategoryOfSelectedBooking" stylesheets="@button-selected-toggle.css" text="Færdig" toggleGroup="$categoryChangeToggleGroup" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                         </ToggleButton>
-                                        <ToggleButton fx:id="changeArchivedToggleBtn" minWidth="100.0"
-                                                      mnemonicParsing="false"
-                                                      onAction="#changeCategoryOfSelectedBooking"
-                                                      stylesheets="@button-selected-toggle.css" text="Arkiveret"
-                                                      toggleGroup="$categoryChangeToggleGroup" visible="false">
+                                        <ToggleButton fx:id="changeArchivedToggleBtn" minWidth="100.0" mnemonicParsing="false" onAction="#changeCategoryOfSelectedBooking" stylesheets="@button-selected-toggle.css" text="Arkiveret" toggleGroup="$categoryChangeToggleGroup" visible="false">
                                             <font>
-                                                <Font size="16.0"/>
+                                                <Font size="16.0" />
                                             </font>
                                         </ToggleButton>
                                     </children>

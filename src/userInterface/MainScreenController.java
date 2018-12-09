@@ -107,6 +107,8 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingDateColumn;
     @FXML
     private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
+    @FXML
+    private MenuButton searchBarSettingsMenuButton;
 
     //Nodes for booking information display area
     @FXML
@@ -396,7 +398,10 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    //TODO fix to typeOfBooking
+    private void setSearchBarSettings(){
+
+    }
+
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
         String enteredBooking = searchField.getText();
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
