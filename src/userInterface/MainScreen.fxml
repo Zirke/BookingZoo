@@ -450,7 +450,9 @@
                             <children>
                                 <HBox alignment="TOP_RIGHT" spacing="20.0">
                                     <children>
-                                        <Button fx:id="permDeleteButton" mnemonicParsing="false" style="-fx-background-color: #ffa0a0;" text="Slet permanent" visible="false">
+                                        <Button fx:id="permDeleteButton" minWidth="160.0" mnemonicParsing="false"
+                                                style="-fx-background-color: #ffa0a0;" text="Slet booking"
+                                                visible="false">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
@@ -462,7 +464,8 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button fx:id="editBookingButton" mnemonicParsing="false" prefWidth="170.0" text="Rediger booking" visible="false">
+                                        <Button fx:id="editBookingButton" minWidth="170.0" mnemonicParsing="false"
+                                                prefWidth="170.0" text="Rediger booking" visible="false">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
@@ -476,7 +479,8 @@
                                         </Button>
                                     </children>
                                 </HBox>
-                                <Button fx:id="deleteButton" alignment="BASELINE_LEFT" mnemonicParsing="false" prefWidth="170.0" text="Slet booking" visible="false">
+                                <Button fx:id="deleteButton" alignment="BASELINE_LEFT" minWidth="170.0"
+                                        mnemonicParsing="false" prefWidth="170.0" text="Aflys booking" visible="false">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
