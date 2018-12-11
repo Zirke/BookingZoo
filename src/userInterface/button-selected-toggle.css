@@ -5,3 +5,10 @@
 .toggle-button:selected:focused {
     -fx-background-color: lightblue
 }
+
+/*
+.toggle-button {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+*/

@@ -695,7 +695,7 @@ public class MainScreenController extends GeneralController {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Vil du skifte kategori på den valgte booking?");
-        alert.setContentText("Bookingen vil blive flyttet til kategorien" + nameOfChosenCategoryBtn);
+        alert.setContentText("Bookingen vil blive flyttet til kategorien " + "'" + nameOfChosenCategoryBtn + "'");
 
         Optional<ButtonType> alertChoice = alert.showAndWait();
 
@@ -720,6 +720,8 @@ public class MainScreenController extends GeneralController {
             }
             removeBookingFromTableView();
             bookingTableView.getSelectionModel().select(null);
+        } else {
+            showCategoryOfSelectedBooking(bookingTableView.getSelectionModel().getSelectedItem());
         }
     }
 
