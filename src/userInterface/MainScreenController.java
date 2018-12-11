@@ -105,8 +105,11 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
+    //Statistic MenuItems
     @FXML
     private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
+    @FXML
+    private MenuItem municipalityMenuItem1, gradeMenuItem1, choiceOfTopicMenuItem1, pupilsAndTeachersMenuItem1, chosenMenuesMenuItem1;
     @FXML
     private MenuButton searchBarSettingsMenuButton;
 
@@ -913,13 +916,11 @@ public class MainScreenController extends GeneralController {
             MenuItem chosenStatistic = (MenuItem) event.getSource();
             String menuItemText = chosenStatistic.getText();
 
-            if (chosenStatistic.equals(chosenMenuesMenuItem)) {
+            if (chosenStatistic.equals(chosenMenuesMenuItem) || chosenStatistic.equals(chosenMenuesMenuItem1)) {
                 controller.setListOfBookings(listOfArrangementBookings);
                 controller.setSetting(StatisticType.FOOD);
                 controller.initData();
-            }
-            if (chosenStatistic.equals(pupilsAndTeachersMenuItem) || chosenStatistic.equals(choiceOfTopicMenuItem) ||
-                    chosenStatistic.equals(gradeMenuItem) || chosenStatistic.equals(municipalityMenuItem)) {
+            } else {
                 controller.setListOfBookings((ArrayList<Booking>) listOfLectureBookings.clone());
                 switch (menuItemText) {
                     case "Over elever og lærere":

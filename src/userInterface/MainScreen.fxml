@@ -106,7 +106,8 @@
                </graphic>
             </ToggleButton>
                 <Separator prefWidth="200.0" />
-                <MenuButton mnemonicParsing="false" stylesheets="@application.css" text="Opret ny booking">
+                <MenuButton minWidth="205.0" mnemonicParsing="false" prefWidth="205.0" stylesheets="@application.css"
+                            text="Opret ny booking">
                     <items>
                         <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste" />
                         <MenuItem fx:id="arrangementBookingItem" mnemonicParsing="false" text="Børnefødselsdag" />
@@ -121,6 +122,39 @@
                             </image>
                         </ImageView>
                     </graphic>
+                </MenuButton>
+                <MenuButton minWidth="205.0" mnemonicParsing="false" stylesheets="@application.css"
+                            text="Åben statistik">
+                    <font>
+                        <Font size="16.0"/>
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="53.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../imageView/graph-286-84772.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <items>
+                        <Menu mnemonicParsing="false" text="Over Børnefødselsdage">
+                            <items>
+                                <MenuItem fx:id="chosenMenuesMenuItem1" mnemonicParsing="false"
+                                          onAction="#showStatisticWindow" text="Over valgte menuer"/>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Over Skoletjenester">
+                            <items>
+                                <MenuItem fx:id="pupilsAndTeachersMenuItem1" mnemonicParsing="false"
+                                          onAction="#showStatisticWindow" text="Over elever og lærere"/>
+                                <MenuItem fx:id="choiceOfTopicMenuItem1" mnemonicParsing="false"
+                                          onAction="#showStatisticWindow" text="Over emnevalg"/>
+                                <MenuItem fx:id="gradeMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow"
+                                          text="Over klassetrin"/>
+                                <MenuItem fx:id="municipalityMenuItem1" mnemonicParsing="false"
+                                          onAction="#showStatisticWindow" text="Over Aalborg Kommune"/>
+                            </items>
+                        </Menu>
+                    </items>
                 </MenuButton>
             </children>
             <padding>
