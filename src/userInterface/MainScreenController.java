@@ -719,6 +719,7 @@ public class MainScreenController extends GeneralController {
                 }
             }
             removeBookingFromTableView();
+            bookingTableView.getSelectionModel().select(null);
         }
     }
 
