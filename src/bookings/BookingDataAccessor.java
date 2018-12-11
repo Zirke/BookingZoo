@@ -78,7 +78,7 @@ public class BookingDataAccessor {
         throw new NoBookingsInDatabaseException();
     }
 
-    public void createArrBookManually(ArrangementBooking abook) throws SQLException {
+    public int createArrBookManually(ArrangementBooking abook) throws SQLException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment, facilitystate)" +
                 "VALUES ((2),(?),(?),(?),(?),(?),(?),(?))";
@@ -136,6 +136,7 @@ public class BookingDataAccessor {
             GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
                     "Kontakt IT for at løse problemet.\n" + e.getMessage());
         }
+        return currentBookingID;
     }
 
     public void deleteBooking(Booking book) throws SQLException {
@@ -201,7 +202,7 @@ public class BookingDataAccessor {
         }
     }
 
-    public void createLecBookManually(LectureBooking lbook) throws SQLException {
+    public int createLecBookManually(LectureBooking lbook) throws SQLException {
         //Insert data into booking table
         String general = "INSERT INTO booking (bookingtypeid, status, creationdate, datetime, participants, customercomment, usercomment,facilitystate)" +
                 "VALUES ((1),(?),(?),(?),(?),(?),(?),(?))";
@@ -274,6 +275,8 @@ public class BookingDataAccessor {
             GeneralController.showAlertBox(Alert.AlertType.WARNING, "Fejl med Google Calendar",
                     "Kontakt IT for at løse problemet.\n " + e.getMessage());
         }
+
+        return currentBookingID;
     }
 
     public void changeBookingStatus(Booking book, BookingStatus status) throws SQLException {
