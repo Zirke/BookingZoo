@@ -561,10 +561,29 @@ public class MainScreenController extends GeneralController {
                 return new ReadOnlyStringWrapper(lecCus.getSchoolName());
             }else return new ReadOnlyStringWrapper("");
         });
-        bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(
-                cellData.getValue().getDateTime().getDayOfMonth() + "/" +
-                        cellData.getValue().getDateTime().getMonthValue() + "/" +
-                        cellData.getValue().getDateTime().getYear()));
+        bookingDateColumn.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getDateTime().getDayOfMonth() < 10 && cellData.getValue().getDateTime().getMonthValue() < 10) {
+                return new ReadOnlyStringWrapper(
+                        "0" + cellData.getValue().getDateTime().getDayOfMonth() + "/" + "0" +
+                                cellData.getValue().getDateTime().getMonthValue() + "/" +
+                                cellData.getValue().getDateTime().getYear());
+            } else if (cellData.getValue().getDateTime().getDayOfMonth() < 10) {
+                return new ReadOnlyStringWrapper(
+                        "0" + cellData.getValue().getDateTime().getDayOfMonth() + "/" +
+                                cellData.getValue().getDateTime().getMonthValue() + "/" +
+                                cellData.getValue().getDateTime().getYear());
+            } else if (cellData.getValue().getDateTime().getMonthValue() < 10) {
+                return new ReadOnlyStringWrapper(
+                        cellData.getValue().getDateTime().getDayOfMonth() + "/" +
+                                "0" + cellData.getValue().getDateTime().getMonthValue() + "/" +
+                                cellData.getValue().getDateTime().getYear());
+            } else {
+                return new ReadOnlyStringWrapper(
+                        cellData.getValue().getDateTime().getDayOfMonth() + "/" +
+                                cellData.getValue().getDateTime().getMonthValue() + "/" +
+                                cellData.getValue().getDateTime().getYear());
+            }
+        });
         ObservableList<Booking> bookingsToShow = FXCollections.observableArrayList();
         bookingsToShow.addAll(listOfChosenBookings);
         bookingsToShow.sort(new CustomBookingComparator());
