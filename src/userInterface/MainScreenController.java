@@ -104,9 +104,7 @@ public class MainScreenController extends GeneralController {
     @FXML
     private TableView<Booking> bookingTableView;
     @FXML
-    private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
-    @FXML
-    private TableColumn<Booking, String> bookingDateColumn;
+    private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn, bookingBirthdayNameColumn, bookingSchoolNameColumn, bookingDateColumn;
     //Nodes for Statistic MenuItems
     @FXML
     private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
@@ -152,6 +150,7 @@ public class MainScreenController extends GeneralController {
 
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
+            showTableColumns(searchString());
             if (searchField.getText().isEmpty()) {
                 setChosenBookingTypeIntoTableView();
             } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
@@ -466,6 +465,26 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(bookings);
     }
 
+    private void showTableColumns(String chosenSetting) {
+        switch (chosenSetting) {
+            case "Kontaktperson":
+                bookingContactPersonColumn.setVisible(true);
+                bookingBirthdayNameColumn.setVisible(false);
+                bookingSchoolNameColumn.setVisible(false);
+
+            case "Fødselsdagsbarn":
+                bookingContactPersonColumn.setVisible(false);
+                bookingBirthdayNameColumn.setVisible(true);
+                bookingSchoolNameColumn.setVisible(false);
+                break;
+            case "Skolenavn":
+                bookingContactPersonColumn.setVisible(false);
+                bookingBirthdayNameColumn.setVisible(false);
+                bookingSchoolNameColumn.setVisible(true);
+                break;
+        }
+    }
+
     @FXML
     private void showChosenCategoryBookings(ActionEvent event) {
         ToggleButton chosenCategoryBtn = (ToggleButton) event.getSource();
@@ -531,6 +550,8 @@ public class MainScreenController extends GeneralController {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
+        bookingBirthdayNameColumn.setCellValueFactory(new PropertyValueFactory<>("birthdayChildName"));
+        bookingSchoolNameColumn.setCellValueFactory(new PropertyValueFactory<>("schoolName"));
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(
                 cellData.getValue().getDateTime().getDayOfMonth() + "/" +
                         cellData.getValue().getDateTime().getMonthValue() + "/" +
