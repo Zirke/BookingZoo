@@ -74,7 +74,7 @@ public class MainScreenController extends GeneralController {
         notificationLabel.setText("(" + Integer.toString(notificationBookings.size()) + ")");
         notificationButton.setOnMouseClicked(e -> showUpcomingBookingsWindow(notificationBookings));
 
-        ArrayList<String> temp = setCorrectTypeOfBookingsToSearchFor();
+        ArrayList<String> temp = setCorrectTypeOfBookingsToSearchFor(searchString());
         if (autoCompletionBinding != null) {
             autoCompletionBinding.dispose();
         }
@@ -155,10 +155,10 @@ public class MainScreenController extends GeneralController {
             if (searchField.getText().isEmpty()) {
                 setChosenBookingTypeIntoTableView();
             } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-                showSearchedForBookingsInTableView(listOfAllBookings);
+                showSearchedForBookingsInTableView(listOfAllBookings,searchString());
             } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-                showSearchedForBookingsInTableView(listOfLectureBookings);
-            } else showSearchedForBookingsInTableView(listOfArrangementBookings);
+                showSearchedForBookingsInTableView(listOfLectureBookings,searchString());
+            } else showSearchedForBookingsInTableView(listOfArrangementBookings,searchString());
         });
 
         //Displays information contained in selected booking
@@ -407,11 +407,11 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void setSearchBarSettings(){
+    private void setSearchBarSettings() {
         switch (typeOfBooking) {
             case ALL_BOOKING_TYPES:
-                searchSettingSchoolName.setVisible(false);
-                searchSettingChildName.setVisible(false);
+                searchSettingSchoolName.setVisible(true);
+                searchSettingChildName.setVisible(true);
                 break;
             case LECTUREBOOKING:
                 searchSettingSchoolName.setVisible(true);
@@ -424,18 +424,43 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-    private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
+
+    private String searchString() {
+        RadioMenuItem selectedSearch = (RadioMenuItem) searchBarSettingsGroup.getSelectedToggle();
+        return selectedSearch.getText();
+    }
+
+
+    private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings, String selectedSearch) {
         String enteredBooking = searchField.getText();
         ObservableList<Booking> bookings = FXCollections.observableArrayList();
         for (Booking temp : listOfBookings) {
             Boolean isContactPerson = (temp.getCustomer().getContactPerson().toLowerCase()).contains(enteredBooking.toLowerCase());
+            Boolean isBirthdayChild = false;
             Boolean isSchoolName = false;
-            if (temp instanceof LectureBooking) {
-                isSchoolName = ((((LectureBookingCustomer) temp.getCustomer()).getSchoolName().toLowerCase()).contains(enteredBooking.toLowerCase()));
+            if (selectedSearch.equals("Kontaktperson")) {
+                if (isContactPerson) {
+                    bookings.add(temp);
+                    bookingTableView.setItems(bookings);
+                }
             }
-            if ((isContactPerson || isSchoolName)) {
-                bookings.add(temp);
-                bookingTableView.setItems(bookings);
+            if (selectedSearch.equals("Skolenavn")) {
+                if (temp instanceof LectureBooking) {
+                    isSchoolName = ((((LectureBookingCustomer) temp.getCustomer()).getSchoolName().toLowerCase()).contains(enteredBooking.toLowerCase()));
+                }
+                if (isSchoolName) {
+                    bookings.add(temp);
+                    bookingTableView.setItems(bookings);
+                }
+            }
+            if(selectedSearch.equals("Fødselsdagsbarn")){
+                if(temp instanceof ArrangementBooking){
+                    isBirthdayChild = ((((ArrangementBooking) temp)).getBirthdayChildName().toLowerCase()).contains(enteredBooking.toLowerCase());
+                }
+                if(isBirthdayChild){
+                    bookings.add(temp);
+                    bookingTableView.setItems(bookings);
+                }
             }
         }
         bookingTableView.setItems(bookings);
@@ -786,38 +811,73 @@ public class MainScreenController extends GeneralController {
                 !temp.getDateTime().isBefore(LocalDateTime.now());
     }
 
-    private ArrayList<String> setCorrectTypeOfBookingsToSearchFor() {
-        ArrayList<String> listOfContactPersonNames = new ArrayList<>();
+    private ArrayList<String> setCorrectTypeOfBookingsToSearchFor(String selectedSearch) {
+        ArrayList<String> listOfSelectedSearch = new ArrayList<>();
 
         if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfAllBookings) {
-                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
-                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+            listOfSelectedSearch.clear();
+            if (selectedSearch.equals("Kontaktperson")) {
+                for (Booking temp : listOfAllBookings) {
+                    if (!(listOfSelectedSearch.contains(temp.getCustomer().getContactPerson()))) {
+                        listOfSelectedSearch.add(temp.getCustomer().getContactPerson());
+
+                    }
+                }
+            }
+            if (selectedSearch.equals("Skolenavn")) {
+                for (Booking temp : listOfAllBookings) {
                     if (temp instanceof LectureBooking) {
-                        if (!(listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
-                            listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                        if (!(listOfSelectedSearch.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
+                            listOfSelectedSearch.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                        }
+                    }
+                }
+            }
+            if (selectedSearch.equals("Fødselsdagsbarn")) {
+                for (Booking temp : listOfAllBookings) {
+                    if (temp instanceof ArrangementBooking) {
+                        if (!(listOfSelectedSearch.contains(((ArrangementBooking) temp).getBirthdayChildName()))) {
+                            listOfSelectedSearch.add(((ArrangementBooking) temp).getBirthdayChildName());
                         }
                     }
                 }
             }
         } else if (typeOfBooking.equals(BookingType.ARRANGEMENTBOOKING)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfArrangementBookings) {
-                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()))) {
-                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
+            listOfSelectedSearch.clear();
+            if (selectedSearch.equals("Kontaktperson")) {
+                for (Booking temp : listOfArrangementBookings) {
+                    if (!(listOfSelectedSearch.contains(temp.getCustomer().getContactPerson()))) {
+                        listOfSelectedSearch.add(temp.getCustomer().getContactPerson());
+                    }
+                }
+            }
+            if (selectedSearch.equals("Fødselsdagsbarn")) {
+                for (Booking temp : listOfAllBookings) {
+                    if (temp instanceof ArrangementBooking) {
+                        if (!(listOfSelectedSearch.contains(((ArrangementBooking) temp).getBirthdayChildName()))) {
+                            listOfSelectedSearch.add(((ArrangementBooking) temp).getBirthdayChildName());
+                        }
+                    }
                 }
             }
         } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-            listOfContactPersonNames.clear();
-            for (Booking temp : listOfLectureBookings) {
-                if (!(listOfContactPersonNames.contains(temp.getCustomer().getContactPerson()) || !listOfContactPersonNames.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName()))) {
-                    listOfContactPersonNames.add(temp.getCustomer().getContactPerson());
-                    listOfContactPersonNames.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+            listOfSelectedSearch.clear();
+            if (selectedSearch.equals("Kontaktperson")) {
+                for (Booking temp : listOfLectureBookings) {
+                    if (!(listOfSelectedSearch.contains(temp.getCustomer().getContactPerson()))) {
+                        listOfSelectedSearch.add(temp.getCustomer().getContactPerson());
+                    }
+                }
+            }
+            if (selectedSearch.equals("Skolenavn")) {
+                for (Booking temp : listOfLectureBookings) {
+                    if (!listOfSelectedSearch.contains(((LectureBookingCustomer) temp.getCustomer()).getSchoolName())) {
+                        listOfSelectedSearch.add(((LectureBookingCustomer) temp.getCustomer()).getSchoolName());
+                    }
                 }
             }
         }
-        return listOfContactPersonNames;
+        return listOfSelectedSearch;
     }
 
     private void createNewArrangementBooking() {

@@ -106,8 +106,7 @@
                </graphic>
             </ToggleButton>
                 <Separator prefWidth="200.0" />
-                <MenuButton minWidth="205.0" mnemonicParsing="false" prefWidth="205.0" stylesheets="@application.css"
-                            text="Opret ny booking">
+                <MenuButton minWidth="205.0" mnemonicParsing="false" prefWidth="205.0" stylesheets="@application.css" text="Opret ny booking">
                     <items>
                         <MenuItem fx:id="lectureBookingItem" mnemonicParsing="false" text="Skoletjeneste" />
                         <MenuItem fx:id="arrangementBookingItem" mnemonicParsing="false" text="Børnefødselsdag" />
@@ -123,35 +122,29 @@
                         </ImageView>
                     </graphic>
                 </MenuButton>
-                <MenuButton minWidth="205.0" mnemonicParsing="false" stylesheets="@application.css"
-                            text="Åben statistik">
+                <MenuButton minWidth="205.0" mnemonicParsing="false" stylesheets="@application.css" text="Åben statistik">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                     <graphic>
                         <ImageView fitHeight="53.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../imageView/graph-286-84772.png"/>
+                                <Image url="@../imageView/graph-286-84772.png" />
                             </image>
                         </ImageView>
                     </graphic>
                     <items>
                         <Menu mnemonicParsing="false" text="Over Børnefødselsdage">
                             <items>
-                                <MenuItem fx:id="chosenMenuesMenuItem1" mnemonicParsing="false"
-                                          onAction="#showStatisticWindow" text="Over valgte menuer"/>
+                                <MenuItem fx:id="chosenMenuesMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over valgte menuer" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Over Skoletjenester">
                             <items>
-                                <MenuItem fx:id="pupilsAndTeachersMenuItem1" mnemonicParsing="false"
-                                          onAction="#showStatisticWindow" text="Over elever og lærere"/>
-                                <MenuItem fx:id="choiceOfTopicMenuItem1" mnemonicParsing="false"
-                                          onAction="#showStatisticWindow" text="Over emnevalg"/>
-                                <MenuItem fx:id="gradeMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow"
-                                          text="Over klassetrin"/>
-                                <MenuItem fx:id="municipalityMenuItem1" mnemonicParsing="false"
-                                          onAction="#showStatisticWindow" text="Over Aalborg Kommune"/>
+                                <MenuItem fx:id="pupilsAndTeachersMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over elever og lærere" />
+                                <MenuItem fx:id="choiceOfTopicMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over emnevalg" />
+                                <MenuItem fx:id="gradeMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over klassetrin" />
+                                <MenuItem fx:id="municipalityMenuItem1" mnemonicParsing="false" onAction="#showStatisticWindow" text="Over Aalborg Kommune" />
                             </items>
                         </Menu>
                     </items>
@@ -192,16 +185,13 @@
                               </ImageView>
                            </graphic>
                             <items>
-                                <RadioMenuItem fx:id="searchSettingContactPerson" mnemonicParsing="false"
-                                               selected="true" text="Kontaktperson">
+                                <RadioMenuItem fx:id="searchSettingContactPerson" mnemonicParsing="false" selected="true" text="Kontaktperson">
                                     <toggleGroup>
-                                        <ToggleGroup fx:id="searchBarSettingsGroup"/>
+                                        <ToggleGroup fx:id="searchBarSettingsGroup" />
                                     </toggleGroup>
                                 </RadioMenuItem>
-                                <RadioMenuItem fx:id="searchSettingSchoolName" mnemonicParsing="false" text="Skolenavn"
-                                               toggleGroup="$searchBarSettingsGroup"/>
-                                <RadioMenuItem fx:id="searchSettingChildName" mnemonicParsing="false"
-                                               text="Fødselsdagsbarn" toggleGroup="$searchBarSettingsGroup"/>
+                                <RadioMenuItem fx:id="searchSettingSchoolName" mnemonicParsing="false" text="Skolenavn" toggleGroup="$searchBarSettingsGroup" />
+                                <RadioMenuItem fx:id="searchSettingChildName" mnemonicParsing="false" text="Fødselsdagsbarn" toggleGroup="$searchBarSettingsGroup" />
                             </items>
                         </MenuButton>
                      </children>
@@ -496,9 +486,7 @@
                             <children>
                                 <HBox alignment="TOP_RIGHT" spacing="20.0">
                                     <children>
-                                        <Button fx:id="permDeleteButton" minWidth="160.0" mnemonicParsing="false"
-                                                style="-fx-background-color: #ffa0a0;" text="Slet booking"
-                                                visible="false">
+                                        <Button fx:id="permDeleteButton" minWidth="160.0" mnemonicParsing="false" style="-fx-background-color: #ffa0a0;" text="Slet booking" visible="false">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
@@ -510,8 +498,7 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Button fx:id="editBookingButton" minWidth="170.0" mnemonicParsing="false"
-                                                prefWidth="170.0" text="Rediger booking" visible="false">
+                                        <Button fx:id="editBookingButton" minWidth="170.0" mnemonicParsing="false" prefWidth="170.0" text="Rediger booking" visible="false">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
@@ -525,8 +512,7 @@
                                         </Button>
                                     </children>
                                 </HBox>
-                                <Button fx:id="deleteButton" alignment="BASELINE_LEFT" minWidth="170.0"
-                                        mnemonicParsing="false" prefWidth="170.0" text="Aflys booking" visible="false">
+                                <Button fx:id="deleteButton" alignment="BASELINE_LEFT" minWidth="170.0" mnemonicParsing="false" prefWidth="170.0" text="Aflys booking" visible="false">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
