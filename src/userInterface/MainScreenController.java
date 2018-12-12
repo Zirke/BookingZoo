@@ -423,12 +423,10 @@ public class MainScreenController extends GeneralController {
         }
     }
 
-
     private String searchString() {
         RadioMenuItem selectedSearch = (RadioMenuItem) searchBarSettingsGroup.getSelectedToggle();
         return selectedSearch.getText();
     }
-
 
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings, String selectedSearch) {
         String enteredBooking = searchField.getText();
@@ -551,7 +549,10 @@ public class MainScreenController extends GeneralController {
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
         bookingBirthdayNameColumn.setCellValueFactory(new PropertyValueFactory<>("birthdayChildName"));
-        bookingSchoolNameColumn.setCellValueFactory(new PropertyValueFactory<>("schoolName"));
+        bookingSchoolNameColumn.setCellValueFactory(cellData -> {
+            LectureBookingCustomer lecCus = (LectureBookingCustomer) cellData.getValue().getCustomer();
+            return new ReadOnlyStringWrapper(lecCus.getSchoolName());
+        });
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(
                 cellData.getValue().getDateTime().getDayOfMonth() + "/" +
                         cellData.getValue().getDateTime().getMonthValue() + "/" +
