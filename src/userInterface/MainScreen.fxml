@@ -191,6 +191,18 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                            <items>
+                                <RadioMenuItem fx:id="searchSettingContactPerson" mnemonicParsing="false"
+                                               selected="true" text="Kontaktperson">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="searchBarSettingsGroup"/>
+                                    </toggleGroup>
+                                </RadioMenuItem>
+                                <RadioMenuItem fx:id="searchSettingSchoolName" mnemonicParsing="false" text="Skolenavn"
+                                               toggleGroup="$searchBarSettingsGroup"/>
+                                <RadioMenuItem fx:id="searchSettingChildName" mnemonicParsing="false"
+                                               text="Fødselsdagsbarn" toggleGroup="$searchBarSettingsGroup"/>
+                            </items>
                         </MenuButton>
                      </children>
                   </HBox>

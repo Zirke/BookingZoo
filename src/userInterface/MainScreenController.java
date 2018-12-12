@@ -80,6 +80,8 @@ public class MainScreenController extends GeneralController {
         }
         autoCompletionBinding = TextFields.bindAutoCompletion(searchField, temp);
         setChosenBookingTypeIntoTableView();
+
+        setSearchBarSettings();
     }
 
     TableView<Booking> getBookingTableView() {
@@ -105,14 +107,18 @@ public class MainScreenController extends GeneralController {
     private TableColumn<Booking, String> bookingStatusColumn, bookingTypeColumn, bookingContactPersonColumn;
     @FXML
     private TableColumn<Booking, String> bookingDateColumn;
-    //Statistic MenuItems
+    //Nodes for Statistic MenuItems
     @FXML
     private MenuItem municipalityMenuItem, gradeMenuItem, choiceOfTopicMenuItem, pupilsAndTeachersMenuItem, chosenMenuesMenuItem;
     @FXML
     private MenuItem municipalityMenuItem1, gradeMenuItem1, choiceOfTopicMenuItem1, pupilsAndTeachersMenuItem1, chosenMenuesMenuItem1;
+    //Nodes for search bar settings
     @FXML
     private MenuButton searchBarSettingsMenuButton;
-
+    @FXML
+    private MenuItem searchSettingContactPerson, searchSettingSchoolName, searchSettingChildName;
+    @FXML
+    private ToggleGroup searchBarSettingsGroup;
     //Nodes for booking information display area
     @FXML
     private VBox informationDisplayVBox;
@@ -402,7 +408,20 @@ public class MainScreenController extends GeneralController {
     }
 
     private void setSearchBarSettings(){
-
+        switch (typeOfBooking) {
+            case ALL_BOOKING_TYPES:
+                searchSettingSchoolName.setVisible(false);
+                searchSettingChildName.setVisible(false);
+                break;
+            case LECTUREBOOKING:
+                searchSettingSchoolName.setVisible(true);
+                searchSettingChildName.setVisible(false);
+                break;
+            case ARRANGEMENTBOOKING:
+                searchSettingSchoolName.setVisible(false);
+                searchSettingChildName.setVisible(true);
+                break;
+        }
     }
 
     private void showSearchedForBookingsInTableView(ArrayList<Booking> listOfBookings) {
