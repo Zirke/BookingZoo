@@ -150,14 +150,16 @@ public class MainScreenController extends GeneralController {
 
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
-            showTableColumns(searchString());
-            if (searchField.getText().isEmpty()) {
-                setChosenBookingTypeIntoTableView();
-            } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
-                showSearchedForBookingsInTableView(listOfAllBookings,searchString());
-            } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
-                showSearchedForBookingsInTableView(listOfLectureBookings,searchString());
-            } else showSearchedForBookingsInTableView(listOfArrangementBookings,searchString());
+            if(!searchField.getText().isEmpty()) {
+                showTableColumns(searchString());
+                if (searchField.getText().isEmpty()) {
+                    setChosenBookingTypeIntoTableView();
+                } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
+                    showSearchedForBookingsInTableView(listOfAllBookings, searchString());
+                } else if (typeOfBooking.equals(BookingType.LECTUREBOOKING)) {
+                    showSearchedForBookingsInTableView(listOfLectureBookings, searchString());
+                } else showSearchedForBookingsInTableView(listOfArrangementBookings, searchString());
+            }
         });
 
         //Displays information contained in selected booking
@@ -469,7 +471,7 @@ public class MainScreenController extends GeneralController {
                 bookingContactPersonColumn.setVisible(true);
                 bookingBirthdayNameColumn.setVisible(false);
                 bookingSchoolNameColumn.setVisible(false);
-
+                break;
             case "Fødselsdagsbarn":
                 bookingContactPersonColumn.setVisible(false);
                 bookingBirthdayNameColumn.setVisible(true);
@@ -548,10 +550,16 @@ public class MainScreenController extends GeneralController {
         bookingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
         bookingTypeColumn.setCellValueFactory(new PropertyValueFactory<>("bookingType"));
         bookingContactPersonColumn.setCellValueFactory(new PropertyValueFactory<>("customer"));
-        bookingBirthdayNameColumn.setCellValueFactory(new PropertyValueFactory<>("birthdayChildName"));
+        bookingBirthdayNameColumn.setCellValueFactory(cellData -> {
+            if(cellData.getValue() instanceof ArrangementBooking){
+                return new ReadOnlyStringWrapper(((ArrangementBooking) cellData.getValue()).getBirthdayChildName());
+            }else return new ReadOnlyStringWrapper("");
+        });
         bookingSchoolNameColumn.setCellValueFactory(cellData -> {
-            LectureBookingCustomer lecCus = (LectureBookingCustomer) cellData.getValue().getCustomer();
-            return new ReadOnlyStringWrapper(lecCus.getSchoolName());
+            if(cellData.getValue() instanceof LectureBooking) {
+                LectureBookingCustomer lecCus = (LectureBookingCustomer) cellData.getValue().getCustomer();
+                return new ReadOnlyStringWrapper(lecCus.getSchoolName());
+            }else return new ReadOnlyStringWrapper("");
         });
         bookingDateColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(
                 cellData.getValue().getDateTime().getDayOfMonth() + "/" +
