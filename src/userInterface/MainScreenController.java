@@ -82,6 +82,7 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
 
         setSearchBarSettings();
+        showTableColumns();
     }
 
     TableView<Booking> getBookingTableView() {
@@ -151,7 +152,6 @@ public class MainScreenController extends GeneralController {
         //Shows searched for booking in TableView
         searchField.setOnAction(e -> {
             if(!searchField.getText().isEmpty()) {
-                showTableColumns(searchString());
                 if (searchField.getText().isEmpty()) {
                     setChosenBookingTypeIntoTableView();
                 } else if (typeOfBooking.equals(BookingType.ALL_BOOKING_TYPES)) {
@@ -465,22 +465,29 @@ public class MainScreenController extends GeneralController {
         bookingTableView.setItems(bookings);
     }
 
-    private void showTableColumns(String chosenSetting) {
+    @FXML
+    private void showTableColumns() {
+        RadioMenuItem selectedSearch = (RadioMenuItem) searchBarSettingsGroup.getSelectedToggle();
+        String chosenSetting = selectedSearch.getText();
+
         switch (chosenSetting) {
             case "Kontaktperson":
                 bookingContactPersonColumn.setVisible(true);
                 bookingBirthdayNameColumn.setVisible(false);
                 bookingSchoolNameColumn.setVisible(false);
+                searchField.setPromptText("Søg efter kontaktperson");
                 break;
             case "Fødselsdagsbarn":
                 bookingContactPersonColumn.setVisible(false);
                 bookingBirthdayNameColumn.setVisible(true);
                 bookingSchoolNameColumn.setVisible(false);
+                searchField.setPromptText("Søg efter fødselsdagsbarn");
                 break;
             case "Skolenavn":
                 bookingContactPersonColumn.setVisible(false);
                 bookingBirthdayNameColumn.setVisible(false);
                 bookingSchoolNameColumn.setVisible(true);
+                searchField.setPromptText("Søg efter skolenavn");
                 break;
         }
     }

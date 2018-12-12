@@ -1,30 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="10.0" prefHeight="876.0" prefWidth="250.0" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="35.0">
@@ -205,13 +185,18 @@
                               </ImageView>
                            </graphic>
                             <items>
-                                <RadioMenuItem fx:id="searchSettingContactPerson" mnemonicParsing="false" selected="true" text="Kontaktperson">
+                                <RadioMenuItem fx:id="searchSettingContactPerson" mnemonicParsing="false"
+                                               onAction="#showTableColumns" selected="true" text="Kontaktperson">
                                     <toggleGroup>
                                         <ToggleGroup fx:id="searchBarSettingsGroup" />
                                     </toggleGroup>
                                 </RadioMenuItem>
-                                <RadioMenuItem fx:id="searchSettingSchoolName" mnemonicParsing="false" text="Skolenavn" toggleGroup="$searchBarSettingsGroup" />
-                                <RadioMenuItem fx:id="searchSettingChildName" mnemonicParsing="false" text="Fødselsdagsbarn" toggleGroup="$searchBarSettingsGroup" />
+                                <RadioMenuItem fx:id="searchSettingSchoolName" mnemonicParsing="false"
+                                               onAction="#showTableColumns" text="Skolenavn"
+                                               toggleGroup="$searchBarSettingsGroup"/>
+                                <RadioMenuItem fx:id="searchSettingChildName" mnemonicParsing="false"
+                                               onAction="#showTableColumns" text="Fødselsdagsbarn"
+                                               toggleGroup="$searchBarSettingsGroup"/>
                             </items>
                         </MenuButton>
                      </children>
@@ -237,7 +222,7 @@
                </children>
             </HBox>
                 <Separator prefWidth="200.0" />
-                <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0" tableMenuButtonVisible="true">
+                <TableView fx:id="bookingTableView" prefHeight="925.0" prefWidth="478.0">
                     <placeholder>
                         <Label text="Ingen bookings at vise i denne kategori" />
                     </placeholder>
