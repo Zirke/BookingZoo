@@ -12,6 +12,7 @@ import enums.BookingType;
 import enums.FacilityState;
 import enums.StatisticType;
 import exception.NoBookingsInDatabaseException;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -170,6 +171,9 @@ public class MainScreenController extends GeneralController {
                 informationDisplayVBox.setVisible(true);
             } else informationDisplayVBox.setVisible(false);
         });
+
+        rightClickSelectedBooking();
+
         //Opens pop-up window corresponding to chosen menu item (method used from GeneralController)
         lectureBookingItem.setOnAction(e -> createNewLectureBooking());
         arrangementBookingItem.setOnAction(e -> createNewArrangementBooking());
@@ -595,6 +599,37 @@ public class MainScreenController extends GeneralController {
         bookingsToShow.addAll(listOfChosenBookings);
         bookingsToShow.sort(new CustomBookingComparator());
         bookingTableView.setItems(bookingsToShow);
+    }
+
+    private void rightClickSelectedBooking() {
+        bookingTableView.setRowFactory(
+                tableView -> {
+                    final TableRow<Booking> row = new TableRow<>();
+                    final ContextMenu rowMenu = new ContextMenu();
+
+                    final ContextMenu tableMenu = tableView.getContextMenu();
+                    if (tableMenu != null) {
+                        rowMenu.getItems().addAll(tableMenu.getItems());
+                        rowMenu.getItems().add(new SeparatorMenuItem());
+                    }
+                    MenuItem editItem = new MenuItem("Rediger booking");
+                    editItem.setOnAction(event -> {
+                        Booking selectedBooking = tableView.getSelectionModel().getSelectedItem();
+                        if (selectedBooking instanceof ArrangementBooking) {
+                            editSelectedArrangementBooking((ArrangementBooking) selectedBooking);
+                        } else {
+                            editSelectedLectureBooking((LectureBooking) selectedBooking);
+                        }
+                    });
+                    rowMenu.getItems().addAll(editItem);
+
+                    // only display context menu for non-null items:
+                    row.contextMenuProperty().bind(
+                            Bindings.when(Bindings.isNotNull(row.itemProperty()))
+                                    .then(rowMenu)
+                                    .otherwise((ContextMenu) null));
+                    return row;
+                });
     }
 
     //TODO: Use getLastId to refresh TableView.
