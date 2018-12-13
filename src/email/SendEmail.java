@@ -52,7 +52,7 @@ public class SendEmail {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(to));
             message.setSubject(subject);
-            message.setContent(body, "text/html");
+            message.setContent(body, "text/html; charset=UTF-8");
 
             Transport transport = session.getTransport("smtp");
             transport.connect("smtp.gmail.com",username,password);
