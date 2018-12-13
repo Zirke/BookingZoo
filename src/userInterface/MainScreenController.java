@@ -83,6 +83,7 @@ public class MainScreenController extends GeneralController {
         setChosenBookingTypeIntoTableView();
 
         setSearchBarSettings();
+        searchBarSettingsGroup.selectToggle(searchSettingContactPerson);
         showTableColumns();
     }
 
@@ -116,7 +117,7 @@ public class MainScreenController extends GeneralController {
     @FXML
     private MenuButton searchBarSettingsMenuButton;
     @FXML
-    private MenuItem searchSettingContactPerson, searchSettingSchoolName, searchSettingChildName;
+    private RadioMenuItem searchSettingContactPerson, searchSettingSchoolName, searchSettingChildName;
     @FXML
     private ToggleGroup searchBarSettingsGroup;
     //Nodes for booking information display area
@@ -171,6 +172,7 @@ public class MainScreenController extends GeneralController {
                 informationDisplayVBox.setVisible(true);
             } else informationDisplayVBox.setVisible(false);
         });
+
 
         rightClickSelectedBooking();
 
