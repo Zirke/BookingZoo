@@ -616,9 +616,20 @@ public class MainScreenController extends GeneralController {
                     editItem.setOnAction(event -> {
                         Booking selectedBooking = tableView.getSelectionModel().getSelectedItem();
                         if (selectedBooking instanceof ArrangementBooking) {
-                            editSelectedArrangementBooking((ArrangementBooking) selectedBooking);
-                        } else {
-                            editSelectedLectureBooking((LectureBooking) selectedBooking);
+                            if (selectedBooking.getBookingStatus().equals(STATUS_PENDING)) {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.setHeaderText("Ikke muligt");
+                                alert.setContentText("En afventende booking kan ikke redigeres. Accepter bookingen for at redigere den");
+                                alert.showAndWait();
+                            } else editSelectedArrangementBooking((ArrangementBooking) selectedBooking);
+                        }
+                        if (selectedBooking instanceof LectureBooking) {
+                            if (selectedBooking.getBookingStatus().equals(STATUS_PENDING)) {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.setHeaderText("Ikke muligt");
+                                alert.setContentText("En afventende booking kan ikke redigeres. Accepteren booking for at redigere den");
+                                alert.showAndWait();
+                            } else editSelectedLectureBooking((LectureBooking) selectedBooking);
                         }
                     });
                     rowMenu.getItems().addAll(editItem);
