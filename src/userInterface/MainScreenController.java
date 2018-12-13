@@ -1172,6 +1172,13 @@ public class MainScreenController extends GeneralController {
         if (alertChoice.get() == ButtonType.OK) {
             try {
                 bda.changeBookingStatus(bookingTableView.getSelectionModel().getSelectedItem(), BookingStatus.STATUS_DELETED);
+                if (bookingTableView.getSelectionModel().getSelectedItem().getBookingType() == BookingType.LECTUREBOOKING) {
+                    SendEmail.sendRejectEmail((LectureBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                } else if (bookingTableView.getSelectionModel().getSelectedItem().getBookingType() == BookingType.ARRANGEMENTBOOKING) {
+                    SendEmail.sendRejectEmail((ArrangementBooking) (bookingTableView.getSelectionModel().getSelectedItem()));
+                }
+
+
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }

@@ -31,7 +31,7 @@ public class SendEmail {
 
     public static void sendRejectEmail(LectureBooking lectureBooking){
         String subject = LectureBookingMail.subject();
-        String body = LectureBookingMail.rejectBody();
+        String body = LectureBookingMail.rejectBody(lectureBooking);
         String to = lectureBooking.getCustomer().getEmail();
 
         setup(subject, body, to);
@@ -39,7 +39,7 @@ public class SendEmail {
 
     public static void sendRejectEmail(ArrangementBooking arrangementBooking){
         String subject = ArrangementBookingMail.subject();
-        String body = ArrangementBookingMail.rejectBody();
+        String body = ArrangementBookingMail.rejectBody(arrangementBooking);
         String to = arrangementBooking.getCustomer().getEmail();
 
         setup(subject, body, to);
