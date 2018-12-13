@@ -4,7 +4,7 @@ package email;
 import bookings.LectureBooking;
 import customers.LectureBookingCustomer;
 
-class LectureBookingConformationMail {
+class LectureBookingMail {
 
     static String subject() {
 
@@ -51,4 +51,32 @@ class LectureBookingConformationMail {
 
         return body;
     }
+
+    static String rejectBody(LectureBooking lectureBooking){
+        LectureBookingCustomer lectureBookingCustomer = (LectureBookingCustomer) lectureBooking.getCustomer();
+        String body;
+
+        body = "<div style=\"margin:0; padding:4%;\">" +
+                "<div class=\"head\" style=\"width: 100%; padding-bottom: 40px; overflow: hidden;\">" +
+                "\t<div class=\"afsender\" style=\"float:left; width:40%;\">" +
+                lectureBookingCustomer.getSchoolName() + "<br>" +
+                lectureBooking.getCustomer().getContactPerson() +
+                "</div>" +
+                "<div class=\"logo\" style=\"float:right; height: 75px; width:40%;\">" +
+                //"<img src=\"cid:Zoo\" alt=\"Aalborg Zoo\" align=\"right\">" +
+                "</div>" +
+                "</div>" +
+                "" +
+                "Vi har desværre ikke mulighed for at afholde undervisning i Aalborg Zoo\'s skoletjeneste den: " + lectureBooking.getDateTime().toLocalDate() + ". kl. " + lectureBooking.getDateTime().toLocalTime() + "</p>\n" +
+                "Hvis der er spørgsmål tag kontakt til os på telefon: " + "99 99 99 99" + " eller skriv en mail til zoo@mail.dk" +
+                "Vi håber at se jer på andet tidspunkt i Aalborg Zoo til spændende og lærerige oplevelser.<br>\n" +
+                "<br>\n" +
+                "Venlig hilsen<br>\n" +
+                "Aalborg Zoo<br>\n" +
+                "\n" +
+                "</div>'";
+
+        return body;
+    }
+
 }

@@ -14,16 +14,32 @@ import java.util.Properties;
 public class SendEmail {
 
     public static void sendConfirmationEmail(LectureBooking lectureBooking) {
-        String subject = LectureBookingConformationMail.subject();
-        String body = LectureBookingConformationMail.body(lectureBooking);
+        String subject = LectureBookingMail.subject();
+        String body = LectureBookingMail.body(lectureBooking);
         String to = lectureBooking.getCustomer().getEmail();
 
         setup(subject, body, to);
     }
 
     public static void sendConfirmationEmail(ArrangementBooking arrangementBooking) {
-        String subject = ArrangementBookingConfirmationMail.subject();
-        String body = ArrangementBookingConfirmationMail.body(arrangementBooking);
+        String subject = ArrangementBookingMail.subject();
+        String body = ArrangementBookingMail.body(arrangementBooking);
+        String to = arrangementBooking.getCustomer().getEmail();
+
+        setup(subject, body, to);
+    }
+
+    public static void sendRejectEmail(LectureBooking lectureBooking){
+        String subject = LectureBookingMail.subject();
+        String body = LectureBookingMail.rejectBody();
+        String to = lectureBooking.getCustomer().getEmail();
+
+        setup(subject, body, to);
+    }
+
+    public static void sendRejectEmail(ArrangementBooking arrangementBooking){
+        String subject = ArrangementBookingMail.subject();
+        String body = ArrangementBookingMail.rejectBody();
         String to = arrangementBooking.getCustomer().getEmail();
 
         setup(subject, body, to);
