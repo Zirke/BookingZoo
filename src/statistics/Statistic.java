@@ -2,15 +2,18 @@ package statistics;
 
 import bookings.ArrangementBooking;
 import bookings.Booking;
+import bookings.FoodOrder;
 import bookings.LectureBooking;
+import builders.ArrangementBuilder;
 import customers.LectureBookingCustomer;
 import enums.ChoiceOfMenu;
 import enums.ChoiceOfTopic;
-import enums.Grade;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import enums.Grade;
 public class Statistic {
 
     //number of participants from schools from Aalborg Municipality
@@ -23,7 +26,6 @@ public class Statistic {
             LectureBooking booking =(LectureBooking)iter.next();
             if(((LectureBookingCustomer)booking.getCustomer()).getCommune().equals("Ja")){
                 amount += booking.getParticipants();
-                amount += booking.getNoOfTeachers();
             }else {
                 removeList.add(booking);
             }

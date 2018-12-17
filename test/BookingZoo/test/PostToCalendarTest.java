@@ -8,20 +8,21 @@ import builders.ArrangementBuilder;
 import builders.LectureBuilder;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import enums.*;
 import facilities.LectureRoom;
 import facilities.Restaurant;
 import org.junit.Test;
+import com.google.api.services.calendar.model.Event;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static postToCalendars.PostToGoogle.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class PostToCalendarTest {
@@ -271,7 +272,7 @@ public class PostToCalendarTest {
                     .setCustomerComment("Basic comment")
                     .setComment("They might be late")
                     .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
-                    .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED,RestaurantType.CANTEEN))
+                    .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
                     .setBirthdayChildName("testPerson")
                     .setBirthdayChildAge(10)
                     .setFormerParticipant("Ja")
@@ -298,7 +299,7 @@ public class PostToCalendarTest {
         assertEquals("Fødselsdagsbarn: testPerson", testEvent.getSummary());
         assertEquals("5", testEvent.getColorId());
         assertNotNull(testEvent.getDescription());
-        assertEquals("Kantine", testEvent.getLocation());
+        assertNull(testEvent.getLocation());
 
         try{
         deleteBookingInCalendar(useCase);
@@ -321,7 +322,7 @@ public class PostToCalendarTest {
                 .setCustomerComment("Basic comment")
                 .setComment("They might be late")
                 .setMenuChosen(new FoodOrder("02/31-2018", ChoiceOfMenu.MENU_FOUR))
-                .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED,RestaurantType.CANTEEN))
+                .setRestaurant(new Restaurant(FacilityState.UNOCCUPIED))
                 .setBirthdayChildName("testPerson")
                 .setBirthdayChildAge(10)
                 .setFormerParticipant("Ja")
@@ -330,7 +331,7 @@ public class PostToCalendarTest {
 
         Event testEvent = newArrangementEvent(useCase);
 
-        assertEquals("Kantine", testEvent.getLocation());
+        assertEquals(Long.valueOf(1), Long.valueOf(testEvent.getSequence()));
     }
 
     @Test
